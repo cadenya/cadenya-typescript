@@ -11,12 +11,8 @@ export class Tools extends APIResource {
   /**
    * Creates a new tool in the tool set
    */
-  create(toolSetID: string, params: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { tool_set_id_or_callsign, ...body } = params;
-    return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, {
-      body: { toolSetId: tool_set_id_or_callsign, ...body },
-      ...options,
-    });
+  create(toolSetID: string, body: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
+    return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, { body, ...options });
   }
 
   /**
@@ -96,8 +92,6 @@ export interface ToolCreateParams {
   metadata?: AgentsAPI.ResourceMetadata;
 
   spec?: ToolSpec;
-
-  tool_set_id_or_callsign?: string;
 }
 
 export interface ToolRetrieveParams {
