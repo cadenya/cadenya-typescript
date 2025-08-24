@@ -31,11 +31,8 @@ export class Tools extends APIResource {
    * Updates a tool in the tool set
    */
   update(id: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { toolSetId, tool_id_or_callsign, tool_set_id_or_callsign, ...body } = params;
-    return this._client.put(path`/v1/tool_sets/${toolSetId}/tools/${id}`, {
-      body: { id: tool_id_or_callsign, toolSetId: tool_set_id_or_callsign, ...body },
-      ...options,
-    });
+    const { toolSetId, ...body } = params;
+    return this._client.put(path`/v1/tool_sets/${toolSetId}/tools/${id}`, { body, ...options });
   }
 
   /**
@@ -114,11 +111,6 @@ export interface ToolUpdateParams {
   toolSetId: string;
 
   /**
-   * Body param:
-   */
-  tool_id_or_callsign?: string;
-
-  /**
    * Body param: Standard metadata for all resources
    */
   metadata?: AgentsAPI.ResourceMetadata;
@@ -127,11 +119,6 @@ export interface ToolUpdateParams {
    * Body param:
    */
   spec?: ToolSpec;
-
-  /**
-   * Body param:
-   */
-  tool_set_id_or_callsign?: string;
 
   /**
    * Body param:

@@ -39,12 +39,8 @@ export class ToolSets extends APIResource {
   /**
    * Updates a tool set in the workspace
    */
-  update(id: string, params: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
-    const { tool_set_id_or_callsign, ...body } = params;
-    return this._client.put(path`/v1/tool_sets/${id}`, {
-      body: { id: tool_set_id_or_callsign, ...body },
-      ...options,
-    });
+  update(id: string, body: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
+    return this._client.put(path`/v1/tool_sets/${id}`, { body, ...options });
   }
 
   /**
@@ -99,8 +95,6 @@ export interface ToolSetCreateParams {
 }
 
 export interface ToolSetUpdateParams {
-  tool_set_id_or_callsign?: string;
-
   /**
    * Standard metadata for all resources
    */
