@@ -8,20 +8,32 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Tools extends APIResource {
+  /**
+   * Creates a new tool in the tool set
+   */
   create(toolSetID: string, body: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
     return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, { body, ...options });
   }
 
+  /**
+   * Retrieves a tool by ID from the workspace
+   */
   retrieve(id: string, params: ToolRetrieveParams, options?: RequestOptions): APIPromise<Tool> {
     const { toolSetId } = params;
     return this._client.get(path`/v1/tool_sets/${toolSetId}/tools/${id}`, options);
   }
 
+  /**
+   * Updates a tool in the tool set
+   */
   update(pathID: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
     const { path_toolSetId, ...body } = params;
     return this._client.put(path`/v1/tool_sets/${path_toolSetId}/tools/${pathID}`, { body, ...options });
   }
 
+  /**
+   * Lists all tools in the tool set
+   */
   list(
     toolSetID: string,
     query: ToolListParams | null | undefined = {},
@@ -30,6 +42,9 @@ export class Tools extends APIResource {
     return this._client.get(path`/v1/tool_sets/${toolSetID}/tools`, { query, ...options });
   }
 
+  /**
+   * Deletes a tool in the tool set
+   */
   delete(id: string, params: ToolDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { toolSetId } = params;
     return this._client.delete(path`/v1/tool_sets/${toolSetId}/tools/${id}`, {

@@ -8,20 +8,29 @@ import { path } from '../internal/utils/path';
 
 export class Agents extends APIResource {
   /**
-   * Agents
+   * Creates a new agent in the workspace
    */
   create(body: AgentCreateParams, options?: RequestOptions): APIPromise<Agent> {
     return this._client.post('/v1/agents', { body, ...options });
   }
 
+  /**
+   * Retrieves an agent by ID from the workspace
+   */
   retrieve(id: string, options?: RequestOptions): APIPromise<Agent> {
     return this._client.get(path`/v1/agents/${id}`, options);
   }
 
+  /**
+   * Updates an agent in the workspace
+   */
   update(pathID: string, body: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
     return this._client.patch(path`/v1/agents/${pathID}`, { body, ...options });
   }
 
+  /**
+   * Lists all agents in the workspace
+   */
   list(
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
@@ -29,6 +38,9 @@ export class Agents extends APIResource {
     return this._client.get('/v1/agents', { query, ...options });
   }
 
+  /**
+   * Deletes an agent from the workspace
+   */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/agents/${id}`, {
       ...options,
