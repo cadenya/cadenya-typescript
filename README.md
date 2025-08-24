@@ -25,9 +25,7 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Cadenya from 'cadenya';
 
-const client = new Cadenya({
-  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-});
+const client = new Cadenya();
 
 const agents = await client.agents.list();
 
@@ -42,9 +40,7 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Cadenya from 'cadenya';
 
-const client = new Cadenya({
-  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-});
+const client = new Cadenya();
 
 const agents: Cadenya.AgentListResponse = await client.agents.list();
 ```

@@ -23,20 +23,29 @@ export class ToolSets extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
 
   /**
-   * Tool Sets & Tools
+   * Creates a new tool set in the workspace
    */
   create(body: ToolSetCreateParams, options?: RequestOptions): APIPromise<ToolSet> {
     return this._client.post('/v1/tool_sets', { body, ...options });
   }
 
+  /**
+   * Retrieves a tool set by ID from the workspace
+   */
   retrieve(id: string, options?: RequestOptions): APIPromise<ToolSet> {
     return this._client.get(path`/v1/tool_sets/${id}`, options);
   }
 
+  /**
+   * Updates a tool set in the workspace
+   */
   update(pathID: string, body: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
     return this._client.put(path`/v1/tool_sets/${pathID}`, { body, ...options });
   }
 
+  /**
+   * Lists all tool sets in the workspace
+   */
   list(
     query: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
@@ -44,6 +53,9 @@ export class ToolSets extends APIResource {
     return this._client.get('/v1/tool_sets', { query, ...options });
   }
 
+  /**
+   * Deletes a tool set in the workspace
+   */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/tool_sets/${id}`, {
       ...options,
