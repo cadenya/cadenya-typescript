@@ -39,7 +39,7 @@ describe('resource tools', () => {
 
   // Prism tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.toolSets.tools.update('id', { path_toolSetId: 'toolSetId' });
+    const responsePromise = client.toolSets.tools.update('id', { toolSetId: 'toolSetId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,8 +52,8 @@ describe('resource tools', () => {
   // Prism tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.toolSets.tools.update('id', {
-      path_toolSetId: 'toolSetId',
-      body_id: 'id',
+      toolSetId: 'toolSetId',
+      tool_id_or_callsign: 'id',
       metadata: {
         id: 'id',
         callsign: 'callsign',
@@ -70,7 +70,7 @@ describe('resource tools', () => {
         status: 0,
         toolSetId: 'toolSetId',
       },
-      body_toolSetId: 'toolSetId',
+      tool_set_id_or_callsign: 'toolSetId',
       updateMask: 'updateMask',
     });
   });

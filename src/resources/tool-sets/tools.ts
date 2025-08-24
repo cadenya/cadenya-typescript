@@ -11,8 +11,12 @@ export class Tools extends APIResource {
   /**
    * Creates a new tool in the tool set
    */
-  create(toolSetID: string, body: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
-    return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, { body, ...options });
+  create(toolSetID: string, params: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
+    const { tool_set_id_or_callsign, ...body } = params;
+    return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, {
+      body: { toolSetId: tool_set_id_or_callsign, ...body },
+      ...options,
+    });
   }
 
   /**
@@ -26,9 +30,12 @@ export class Tools extends APIResource {
   /**
    * Updates a tool in the tool set
    */
-  update(pathID: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { path_toolSetId, ...body } = params;
-    return this._client.put(path`/v1/tool_sets/${path_toolSetId}/tools/${pathID}`, { body, ...options });
+  update(id: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
+    const { toolSetId, tool_id_or_callsign, tool_set_id_or_callsign, ...body } = params;
+    return this._client.put(path`/v1/tool_sets/${toolSetId}/tools/${id}`, {
+      body: { id: tool_id_or_callsign, toolSetId: tool_set_id_or_callsign, ...body },
+      ...options,
+    });
   }
 
   /**
@@ -93,7 +100,7 @@ export interface ToolCreateParams {
 
   spec?: ToolSpec;
 
-  body_toolSetId?: string;
+  tool_set_id_or_callsign?: string;
 }
 
 export interface ToolRetrieveParams {
@@ -104,12 +111,12 @@ export interface ToolUpdateParams {
   /**
    * Path param:
    */
-  path_toolSetId: string;
+  toolSetId: string;
 
   /**
    * Body param:
    */
-  body_id?: string;
+  tool_id_or_callsign?: string;
 
   /**
    * Body param: Standard metadata for all resources
@@ -124,7 +131,7 @@ export interface ToolUpdateParams {
   /**
    * Body param:
    */
-  body_toolSetId?: string;
+  tool_set_id_or_callsign?: string;
 
   /**
    * Body param:
