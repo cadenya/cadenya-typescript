@@ -54,7 +54,7 @@ export interface ClientOptions {
   /**
    * Defaults to process.env['CADENYA_API_KEY'].
    */
-  apiKey?: string | null | undefined;
+  apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -129,7 +129,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Cadenya API.
  */
 export class Cadenya {
-  apiKey: string | null;
+  apiKey: string;
 
   baseURL: string;
   maxRetries: number;
@@ -146,8 +146,8 @@ export class Cadenya {
   /**
    * API Client for interfacing with the Cadenya API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['CADENYA_API_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.example.com] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['CADENYA_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.cadenya.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -157,13 +157,19 @@ export class Cadenya {
    */
   constructor({
     baseURL = readEnv('CADENYA_BASE_URL'),
-    apiKey = readEnv('CADENYA_API_KEY') ?? null,
+    apiKey = readEnv('CADENYA_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
+    if (apiKey === undefined) {
+      throw new Errors.CadenyaError(
+        "The CADENYA_API_KEY environment variable is missing or empty; either provide it, or instantiate the Cadenya client with an apiKey option, like new Cadenya({ apiKey: 'My API Key' }).",
+      );
+    }
+
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.example.com`,
+      baseURL: baseURL || `https://api.cadenya.com`,
     };
 
     this.baseURL = options.baseURL!;
@@ -209,7 +215,7 @@ export class Cadenya {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.example.com';
+    return this.baseURL !== 'https://api.cadenya.com';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -217,22 +223,10 @@ export class Cadenya {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
-    throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
-    );
+    return;
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
-      return undefined;
-    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
