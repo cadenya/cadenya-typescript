@@ -24,12 +24,8 @@ export class Agents extends APIResource {
   /**
    * Updates an agent in the workspace
    */
-  update(id: string, params: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
-    const { agent_id_or_callsign, ...body } = params;
-    return this._client.patch(path`/v1/agents/${id}`, {
-      body: { id: agent_id_or_callsign, ...body },
-      ...options,
-    });
+  update(id: string, body: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
+    return this._client.patch(path`/v1/agents/${id}`, { body, ...options });
   }
 
   /**
@@ -135,11 +131,6 @@ export interface AgentCreateParams {
 }
 
 export interface AgentUpdateParams {
-  /**
-   * Agent ID (from path)
-   */
-  agent_id_or_callsign?: string;
-
   /**
    * Standard metadata for all resources
    */
