@@ -28,6 +28,7 @@ import {
   Pagination,
   ResourceMetadata,
 } from './resources/agents';
+import { WorkspaceListParams, WorkspaceListResponse, Workspaces } from './resources/workspaces';
 import {
   ToolSet,
   ToolSetCreateParams,
@@ -720,10 +721,12 @@ export class Cadenya {
 
   agents: API.Agents = new API.Agents(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
+  workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
 Cadenya.Agents = Agents;
 Cadenya.ToolSets = ToolSets;
+Cadenya.Workspaces = Workspaces;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -748,5 +751,11 @@ export declare namespace Cadenya {
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+  };
+
+  export {
+    Workspaces as Workspaces,
+    type WorkspaceListResponse as WorkspaceListResponse,
+    type WorkspaceListParams as WorkspaceListParams,
   };
 }
