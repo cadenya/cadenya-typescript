@@ -20,4 +20,10 @@ export {
   type ToolSetUpdateParams,
   type ToolSetListParams,
 } from './tool-sets/tool-sets';
-export { Workspaces, type WorkspaceListResponse, type WorkspaceListParams } from './workspaces';
+export {
+  Workspaces,
+  type WorkspaceCreateResponse,
+  type WorkspaceListResponse,
+  type WorkspaceCreateParams,
+  type WorkspaceListParams,
+} from './workspaces';

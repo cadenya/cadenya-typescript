@@ -28,7 +28,13 @@ import {
   Pagination,
   ResourceMetadata,
 } from './resources/agents';
-import { WorkspaceListParams, WorkspaceListResponse, Workspaces } from './resources/workspaces';
+import {
+  WorkspaceCreateParams,
+  WorkspaceCreateResponse,
+  WorkspaceListParams,
+  WorkspaceListResponse,
+  Workspaces,
+} from './resources/workspaces';
 import {
   ToolSet,
   ToolSetCreateParams,
@@ -755,7 +761,9 @@ export declare namespace Cadenya {
 
   export {
     Workspaces as Workspaces,
+    type WorkspaceCreateResponse as WorkspaceCreateResponse,
     type WorkspaceListResponse as WorkspaceListResponse,
+    type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
 }
