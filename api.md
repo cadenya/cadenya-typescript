@@ -52,8 +52,10 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/workspaces.ts">WorkspaceCreateResponse</a></code>
 - <code><a href="./src/resources/workspaces.ts">WorkspaceListResponse</a></code>
 
 Methods:
 
+- <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> WorkspaceCreateResponse</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspaceListResponse</code>

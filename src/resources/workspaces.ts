@@ -7,6 +7,13 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Workspaces extends APIResource {
   /**
+   * Creates a new workspace for the account
+   */
+  create(body: WorkspaceCreateParams, options?: RequestOptions): APIPromise<WorkspaceCreateResponse> {
+    return this._client.post('/v1/workspaces', { body, ...options });
+  }
+
+  /**
    * Lists all workspaces
    */
   list(
@@ -14,6 +21,21 @@ export class Workspaces extends APIResource {
     options?: RequestOptions,
   ): APIPromise<WorkspaceListResponse> {
     return this._client.get('/v1/workspaces', { query, ...options });
+  }
+}
+
+export interface WorkspaceCreateResponse {
+  /**
+   * Standard metadata for all resources
+   */
+  metadata?: AgentsAPI.ResourceMetadata;
+
+  spec?: WorkspaceCreateResponse.Spec;
+}
+
+export namespace WorkspaceCreateResponse {
+  export interface Spec {
+    description?: string;
   }
 }
 
@@ -40,6 +62,21 @@ export namespace WorkspaceListResponse {
   }
 }
 
+export interface WorkspaceCreateParams {
+  /**
+   * Standard metadata for all resources
+   */
+  metadata?: AgentsAPI.ResourceMetadata;
+
+  spec?: WorkspaceCreateParams.Spec;
+}
+
+export namespace WorkspaceCreateParams {
+  export interface Spec {
+    description?: string;
+  }
+}
+
 export interface WorkspaceListParams {
   page?: WorkspaceListParams.Page;
 }
@@ -60,7 +97,9 @@ export namespace WorkspaceListParams {
 
 export declare namespace Workspaces {
   export {
+    type WorkspaceCreateResponse as WorkspaceCreateResponse,
     type WorkspaceListResponse as WorkspaceListResponse,
+    type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
 }
