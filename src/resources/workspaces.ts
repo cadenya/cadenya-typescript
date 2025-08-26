@@ -14,7 +14,7 @@ export class Workspaces extends APIResource {
   }
 
   /**
-   * Lists all workspaces
+   * Lists all workspaces for the current account
    */
   list(
     query: WorkspaceListParams | null | undefined = {},
