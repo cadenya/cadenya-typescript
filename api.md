@@ -59,3 +59,13 @@ Methods:
 
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> WorkspaceCreateResponse</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspaceListResponse</code>
+
+# Account
+
+Types:
+
+- <code><a href="./src/resources/account.ts">AccountRetrieveCurrentResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieveCurrent</a>() -> AccountRetrieveCurrentResponse</code>
