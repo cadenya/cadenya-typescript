@@ -17,6 +17,7 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Account, AccountRetrieveCurrentResponse } from './resources/account';
 import {
   Agent,
   AgentCreateParams,
@@ -728,11 +729,13 @@ export class Cadenya {
   agents: API.Agents = new API.Agents(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
+  account: API.Account = new API.Account(this);
 }
 
 Cadenya.Agents = Agents;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
+Cadenya.Account = Account;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -766,4 +769,6 @@ export declare namespace Cadenya {
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
+
+  export { Account as Account, type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse };
 }
