@@ -55,6 +55,7 @@ describe('resource tools', () => {
       toolSetId: 'toolSetId',
       metadata: {
         id: 'id',
+        accountId: 'accountId',
         callsign: 'callsign',
         labels: { foo: 'string' },
         name: 'name',

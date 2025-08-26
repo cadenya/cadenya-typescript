@@ -95,6 +95,11 @@ export interface ResourceMetadata {
   id?: string;
 
   /**
+   * Account this resource belongs to
+   */
+  accountId?: string;
+
+  /**
    * Optional human-readable identifier (e.g., callsign for agents)
    */
   callsign?: string;
