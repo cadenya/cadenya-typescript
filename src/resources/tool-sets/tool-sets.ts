@@ -67,7 +67,7 @@ export class ToolSets extends APIResource {
 
 export interface ToolSet {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -88,7 +88,7 @@ export interface ToolSetListResponse {
 
 export interface ToolSetCreateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -97,7 +97,7 @@ export interface ToolSetCreateParams {
 
 export interface ToolSetUpdateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 

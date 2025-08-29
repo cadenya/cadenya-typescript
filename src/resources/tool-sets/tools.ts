@@ -57,7 +57,7 @@ export class Tools extends APIResource {
 
 export interface Tool {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -69,9 +69,9 @@ export interface ToolSpec {
 
   indexContent?: string;
 
-  inputSchema?: unknown;
-
   name?: string;
+
+  parameters?: unknown;
 
   requiresApproval?: boolean;
 
@@ -88,7 +88,7 @@ export interface ToolListResponse {
 
 export interface ToolCreateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -106,7 +106,8 @@ export interface ToolUpdateParams {
   toolSetId: string;
 
   /**
-   * Body param: Standard metadata for all resources
+   * Body param: Standard metadata for persistent, named resources (e.g., agents,
+   * tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 

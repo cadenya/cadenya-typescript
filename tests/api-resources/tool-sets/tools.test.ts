@@ -56,7 +56,9 @@ describe('resource tools', () => {
       metadata: {
         id: 'id',
         accountId: 'accountId',
+        actorId: 'actorId',
         callsign: 'callsign',
+        externalId: 'externalId',
         labels: { foo: 'string' },
         name: 'name',
         workspaceId: 'workspaceId',
@@ -64,8 +66,8 @@ describe('resource tools', () => {
       spec: {
         description: 'description',
         indexContent: 'indexContent',
-        inputSchema: {},
         name: 'name',
+        parameters: {},
         requiresApproval: true,
         status: 0,
         toolSetId: 'toolSetId',
