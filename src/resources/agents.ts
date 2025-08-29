@@ -55,7 +55,7 @@ export class Agents extends APIResource {
  */
 export interface Agent {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -97,7 +97,7 @@ export interface AgentListResponse {
 
 export interface AgentCreateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
@@ -109,7 +109,7 @@ export interface AgentCreateParams {
 
 export interface AgentUpdateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: AccountAPI.ResourceMetadata;
 
