@@ -99,6 +99,8 @@ export interface ResourceMetadata {
    */
   accountId?: string;
 
+  actorId?: string;
+
   /**
    * Optional human-readable identifier (e.g., callsign for agents)
    */

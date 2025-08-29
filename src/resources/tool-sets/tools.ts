@@ -68,9 +68,9 @@ export interface ToolSpec {
 
   indexContent?: string;
 
-  inputSchema?: unknown;
-
   name?: string;
+
+  parameters?: unknown;
 
   requiresApproval?: boolean;
 
