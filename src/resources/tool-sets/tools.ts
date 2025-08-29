@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
 import * as AgentsAPI from '../agents';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
@@ -58,7 +59,7 @@ export interface Tool {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   spec?: ToolSpec;
 }
@@ -68,9 +69,9 @@ export interface ToolSpec {
 
   indexContent?: string;
 
-  name?: string;
+  inputSchema?: unknown;
 
-  parameters?: unknown;
+  name?: string;
 
   requiresApproval?: boolean;
 
@@ -89,7 +90,7 @@ export interface ToolCreateParams {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   spec?: ToolSpec;
 }
@@ -107,7 +108,7 @@ export interface ToolUpdateParams {
   /**
    * Body param: Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   /**
    * Body param:

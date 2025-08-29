@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:cadenya-agents/typescript-sdk.git
+npm install git+ssh://git@github.com:stainless-sdks/cadenya-typescript.git
 ```
 
 > [!NOTE]
@@ -29,9 +29,9 @@ const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
 });
 
-const agents = await client.agents.list();
+const response = await client.account.retrieveCurrent();
 
-console.log(agents.items);
+console.log(response.metadata);
 ```
 
 ### Request & Response types
@@ -46,7 +46,7 @@ const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
 });
 
-const agents: Cadenya.AgentListResponse = await client.agents.list();
+const response: Cadenya.AccountRetrieveCurrentResponse = await client.account.retrieveCurrent();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,7 +59,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const agents = await client.agents.list().catch(async (err) => {
+const response = await client.account.retrieveCurrent().catch(async (err) => {
   if (err instanceof Cadenya.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -99,7 +99,7 @@ const client = new Cadenya({
 });
 
 // Or, configure per-request:
-await client.agents.list({
+await client.account.retrieveCurrent({
   maxRetries: 5,
 });
 ```
@@ -116,7 +116,7 @@ const client = new Cadenya({
 });
 
 // Override per-request:
-await client.agents.list({
+await client.account.retrieveCurrent({
   timeout: 5 * 1000,
 });
 ```
@@ -139,13 +139,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Cadenya();
 
-const response = await client.agents.list().asResponse();
+const response = await client.account.retrieveCurrent().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: agents, response: raw } = await client.agents.list().withResponse();
+const { data: response, response: raw } = await client.account.retrieveCurrent().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(agents.items);
+console.log(response.metadata);
 ```
 
 ### Logging
@@ -225,7 +225,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.agents.list({
+client.account.retrieveCurrent({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -335,7 +335,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/cadenya-agents/typescript-sdk/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/cadenya-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

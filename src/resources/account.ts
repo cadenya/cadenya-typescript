@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AgentsAPI from './agents';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -15,11 +14,40 @@ export class Account extends APIResource {
   }
 }
 
+/**
+ * Standard metadata for all resources
+ */
+export interface ResourceMetadata {
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
+
+  /**
+   * Account this resource belongs to
+   */
+  accountId?: string;
+
+  /**
+   * Optional human-readable identifier (e.g., callsign for agents)
+   */
+  callsign?: string;
+
+  labels?: { [key: string]: string };
+
+  name?: string;
+
+  /**
+   * Workspace this resource belongs to
+   */
+  workspaceId?: string;
+}
+
 export interface AccountRetrieveCurrentResponse {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: ResourceMetadata;
 
   spec?: AccountRetrieveCurrentResponse.Spec;
 }
@@ -35,5 +63,8 @@ export namespace AccountRetrieveCurrentResponse {
 }
 
 export declare namespace Account {
-  export { type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse };
+  export {
+    type ResourceMetadata as ResourceMetadata,
+    type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse,
+  };
 }

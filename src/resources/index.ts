@@ -1,12 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Account, type AccountRetrieveCurrentResponse } from './account';
+export { Account, type ResourceMetadata, type AccountRetrieveCurrentResponse } from './account';
 export {
   Agents,
   type Agent,
   type AgentSpec,
   type Pagination,
-  type ResourceMetadata,
   type AgentListResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
@@ -23,7 +22,8 @@ export {
 } from './tool-sets/tool-sets';
 export {
   Workspaces,
-  type WorkspaceCreateResponse,
+  type Workspace,
+  type WorkspaceSpec,
   type WorkspaceListResponse,
   type WorkspaceCreateParams,
   type WorkspaceListParams,
