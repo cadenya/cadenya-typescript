@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
 import * as AgentsAPI from '../agents';
 import * as ToolsAPI from './tools';
 import {
@@ -68,7 +69,7 @@ export interface ToolSet {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
@@ -89,7 +90,7 @@ export interface ToolSetCreateParams {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
@@ -98,7 +99,7 @@ export interface ToolSetUpdateParams {
   /**
    * Standard metadata for all resources
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   spec?: ToolSetSpec;
 

@@ -17,7 +17,7 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountRetrieveCurrentResponse } from './resources/account';
+import { Account, AccountRetrieveCurrentResponse, ResourceMetadata } from './resources/account';
 import {
   Agent,
   AgentCreateParams,
@@ -27,13 +27,13 @@ import {
   AgentUpdateParams,
   Agents,
   Pagination,
-  ResourceMetadata,
 } from './resources/agents';
 import {
+  Workspace,
   WorkspaceCreateParams,
-  WorkspaceCreateResponse,
   WorkspaceListParams,
   WorkspaceListResponse,
+  WorkspaceSpec,
   Workspaces,
 } from './resources/workspaces';
 import {
@@ -726,26 +726,31 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
+  account: API.Account = new API.Account(this);
   agents: API.Agents = new API.Agents(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
-  account: API.Account = new API.Account(this);
 }
 
+Cadenya.Account = Account;
 Cadenya.Agents = Agents;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.Account = Account;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
+
+  export {
+    Account as Account,
+    type ResourceMetadata as ResourceMetadata,
+    type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse,
+  };
 
   export {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
     type Pagination as Pagination,
-    type ResourceMetadata as ResourceMetadata,
     type AgentListResponse as AgentListResponse,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
@@ -764,11 +769,10 @@ export declare namespace Cadenya {
 
   export {
     Workspaces as Workspaces,
-    type WorkspaceCreateResponse as WorkspaceCreateResponse,
+    type Workspace as Workspace,
+    type WorkspaceSpec as WorkspaceSpec,
     type WorkspaceListResponse as WorkspaceListResponse,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
-
-  export { Account as Account, type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse };
 }

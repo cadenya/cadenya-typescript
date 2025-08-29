@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AccountAPI from './account';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -56,7 +57,7 @@ export interface Agent {
   /**
    * Standard metadata for all resources
    */
-  metadata?: ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   /**
    * Agent specification (user-provided configuration)
@@ -86,37 +87,6 @@ export interface Pagination {
 }
 
 /**
- * Standard metadata for all resources
- */
-export interface ResourceMetadata {
-  /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-
-  /**
-   * Account this resource belongs to
-   */
-  accountId?: string;
-
-  actorId?: string;
-
-  /**
-   * Optional human-readable identifier (e.g., callsign for agents)
-   */
-  callsign?: string;
-
-  labels?: { [key: string]: string };
-
-  name?: string;
-
-  /**
-   * Workspace this resource belongs to
-   */
-  workspaceId?: string;
-}
-
-/**
  * List agents response
  */
 export interface AgentListResponse {
@@ -129,7 +99,7 @@ export interface AgentCreateParams {
   /**
    * Standard metadata for all resources
    */
-  metadata?: ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   /**
    * Agent specification (user-provided configuration)
@@ -141,7 +111,7 @@ export interface AgentUpdateParams {
   /**
    * Standard metadata for all resources
    */
-  metadata?: ResourceMetadata;
+  metadata?: AccountAPI.ResourceMetadata;
 
   /**
    * Agent specification (user-provided configuration)
@@ -182,7 +152,6 @@ export declare namespace Agents {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
     type Pagination as Pagination,
-    type ResourceMetadata as ResourceMetadata,
     type AgentListResponse as AgentListResponse,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,

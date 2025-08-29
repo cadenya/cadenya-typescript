@@ -1,3 +1,14 @@
+# Account
+
+Types:
+
+- <code><a href="./src/resources/account.ts">ResourceMetadata</a></code>
+- <code><a href="./src/resources/account.ts">AccountRetrieveCurrentResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieveCurrent</a>() -> AccountRetrieveCurrentResponse</code>
+
 # Agents
 
 Types:
@@ -5,7 +16,6 @@ Types:
 - <code><a href="./src/resources/agents.ts">Agent</a></code>
 - <code><a href="./src/resources/agents.ts">AgentSpec</a></code>
 - <code><a href="./src/resources/agents.ts">Pagination</a></code>
-- <code><a href="./src/resources/agents.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
 
 Methods:
@@ -52,20 +62,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/workspaces.ts">WorkspaceCreateResponse</a></code>
+- <code><a href="./src/resources/workspaces.ts">Workspace</a></code>
+- <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
 - <code><a href="./src/resources/workspaces.ts">WorkspaceListResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> WorkspaceCreateResponse</code>
+- <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspaceListResponse</code>
-
-# Account
-
-Types:
-
-- <code><a href="./src/resources/account.ts">AccountRetrieveCurrentResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieveCurrent</a>() -> AccountRetrieveCurrentResponse</code>
