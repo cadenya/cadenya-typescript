@@ -65,6 +65,13 @@ export interface Tool {
 }
 
 export interface ToolSpec {
+  /**
+   * Adapter defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  adapter?: ToolSpec.Adapter;
+
   description?: string;
 
   indexContent?: string;
@@ -78,6 +85,41 @@ export interface ToolSpec {
   status?: number;
 
   toolSetId?: string;
+}
+
+export namespace ToolSpec {
+  /**
+   * Adapter defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  export interface Adapter {
+    http?: Adapter.HTTP;
+
+    inline?: Adapter.Inline;
+
+    mcp?: Adapter.Mcp;
+  }
+
+  export namespace Adapter {
+    export interface HTTP {
+      contentType?: string;
+
+      method?: string;
+
+      url?: string;
+    }
+
+    export interface Inline {
+      id?: string;
+    }
+
+    export interface Mcp {
+      toolName?: string;
+
+      url?: string;
+    }
+  }
 }
 
 export interface ToolListResponse {
