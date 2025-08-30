@@ -69,6 +69,8 @@ export interface Agent {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
+  constraints?: AgentSpec.Constraints;
+
   /**
    * Description of the agent's purpose
    */
@@ -78,6 +80,83 @@ export interface AgentSpec {
    * Status of the agent
    */
   status?: number;
+
+  systemPrompt?: AgentSpec.SystemPrompt;
+
+  toolSelection?: AgentSpec.ToolSelection;
+}
+
+export namespace AgentSpec {
+  export interface Constraints {
+    /**
+     * The maximum number of sub-objectives that can be created. 0 means no limit.
+     */
+    maxSubObjectives?: number;
+
+    /**
+     * The maximum number of tool calls that can be made. 0 means no limit.
+     */
+    maxToolCalls?: number;
+  }
+
+  export interface SystemPrompt {
+    promptId?: string;
+
+    selector?: SystemPrompt.Selector;
+
+    text?: string;
+  }
+
+  export namespace SystemPrompt {
+    export interface Selector {
+      fallbackPrompt?: string;
+
+      labels?: { [key: string]: string };
+    }
+  }
+
+  export interface ToolSelection {
+    auto?: ToolSelection.Auto;
+
+    explicit?: ToolSelection.Explicit;
+
+    toolSets?: ToolSelection.ToolSets;
+  }
+
+  export namespace ToolSelection {
+    export interface Auto {
+      /**
+       * Optional hints for tool search. These are used in conjunction with the
+       * context-aware tool search and can help select the best tools for the task.
+       */
+      hints?: Array<string>;
+
+      /**
+       * The maximum number of tools that can be discovered. Max is 25.
+       */
+      maxTools?: number;
+    }
+
+    export interface Explicit {
+      /**
+       * If set to true, the LLM can request additional tools if the ones provided are
+       * not sufficient.
+       */
+      allowDiscovery?: boolean;
+
+      toolIds?: Array<string>;
+    }
+
+    export interface ToolSets {
+      /**
+       * If set to true, the LLM can request additional tools if the ones provided are
+       * not sufficient.
+       */
+      allowDiscovery?: boolean;
+
+      setIds?: Array<string>;
+    }
+  }
 }
 
 export interface Pagination {

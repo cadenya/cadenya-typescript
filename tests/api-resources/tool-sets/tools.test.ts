@@ -64,6 +64,11 @@ describe('resource tools', () => {
         workspaceId: 'workspaceId',
       },
       spec: {
+        adapter: {
+          http: { contentType: 'contentType', method: 'method', url: 'url' },
+          inline: { id: 'id' },
+          mcp: { toolName: 'toolName', url: 'url' },
+        },
         description: 'description',
         indexContent: 'indexContent',
         name: 'name',
