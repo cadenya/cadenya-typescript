@@ -103,3 +103,13 @@ Methods:
 
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspaceListResponse</code>
+
+# Search
+
+Types:
+
+- <code><a href="./src/resources/search.ts">SearchSearchToolsResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchTools</a>({ ...params }) -> SearchSearchToolsResponse</code>

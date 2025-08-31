@@ -17,6 +17,7 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
 } from './agents/agents';
+export { Search, type SearchSearchToolsResponse, type SearchSearchToolsParams } from './search';
 export {
   ToolSets,
   type ToolSet,
