@@ -24,6 +24,7 @@ import {
   AccountSetupResponse,
   ResourceMetadata,
 } from './resources/account';
+import { Search, SearchSearchToolsParams, SearchSearchToolsResponse } from './resources/search';
 import {
   Workspace,
   WorkspaceCreateParams,
@@ -736,12 +737,14 @@ export class Cadenya {
   agents: API.Agents = new API.Agents(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
+  search: API.Search = new API.Search(this);
 }
 
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
+Cadenya.Search = Search;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -782,5 +785,11 @@ export declare namespace Cadenya {
     type WorkspaceListResponse as WorkspaceListResponse,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
+  };
+
+  export {
+    Search as Search,
+    type SearchSearchToolsResponse as SearchSearchToolsResponse,
+    type SearchSearchToolsParams as SearchSearchToolsParams,
   };
 }
