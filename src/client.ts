@@ -17,7 +17,15 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountRetrieveCurrentResponse, ResourceMetadata } from './resources/account';
+import { Account, AccountResource, AccountSetupParams, ResourceMetadata } from './resources/account';
+import {
+  Workspace,
+  WorkspaceCreateParams,
+  WorkspaceListParams,
+  WorkspaceListResponse,
+  WorkspaceSpec,
+  Workspaces,
+} from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
@@ -27,15 +35,7 @@ import {
   AgentUpdateParams,
   Agents,
   Pagination,
-} from './resources/agents';
-import {
-  Workspace,
-  WorkspaceCreateParams,
-  WorkspaceListParams,
-  WorkspaceListResponse,
-  WorkspaceSpec,
-  Workspaces,
-} from './resources/workspaces';
+} from './resources/agents/agents';
 import {
   ToolSet,
   ToolSetCreateParams,
@@ -726,13 +726,13 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
-  account: API.Account = new API.Account(this);
+  account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
-Cadenya.Account = Account;
+Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
@@ -741,9 +741,10 @@ export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
-    Account as Account,
+    AccountResource as AccountResource,
+    type Account as Account,
     type ResourceMetadata as ResourceMetadata,
-    type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse,
+    type AccountSetupParams as AccountSetupParams,
   };
 
   export {

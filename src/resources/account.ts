@@ -5,13 +5,42 @@ import * as WorkspacesAPI from './workspaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class Account extends APIResource {
+export class AccountResource extends APIResource {
   /**
    * Retrieves the current account for the token accessing the API. Useful to check
    * if the credentials are valid.
    */
-  retrieveCurrent(options?: RequestOptions): APIPromise<AccountRetrieveCurrentResponse> {
+  retrieve(options?: RequestOptions): APIPromise<Account> {
     return this._client.get('/v1/account', options);
+  }
+
+  /**
+   * Setup the account
+   */
+  setup(params: AccountSetupParams | null | undefined = {}, options?: RequestOptions): APIPromise<Account> {
+    const { email, externalUserId, name } = params ?? {};
+    return this._client.post('/v1/account/setup', { query: { email, externalUserId, name }, ...options });
+  }
+}
+
+export interface Account {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  metadata?: ResourceMetadata;
+
+  spec?: Account.Spec;
+}
+
+export namespace Account {
+  export interface Spec {
+    billingEmail?: string;
+
+    description?: string;
+
+    domain?: string;
+
+    workspaces?: Array<WorkspacesAPI.Workspace>;
   }
 }
 
@@ -64,30 +93,18 @@ export interface ResourceMetadata {
   workspaceId?: string;
 }
 
-export interface AccountRetrieveCurrentResponse {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  metadata?: ResourceMetadata;
+export interface AccountSetupParams {
+  email?: string;
 
-  spec?: AccountRetrieveCurrentResponse.Spec;
+  externalUserId?: string;
+
+  name?: string;
 }
 
-export namespace AccountRetrieveCurrentResponse {
-  export interface Spec {
-    billingEmail?: string;
-
-    description?: string;
-
-    domain?: string;
-
-    workspaces?: Array<WorkspacesAPI.Workspace>;
-  }
-}
-
-export declare namespace Account {
+export declare namespace AccountResource {
   export {
+    type Account as Account,
     type ResourceMetadata as ResourceMetadata,
-    type AccountRetrieveCurrentResponse as AccountRetrieveCurrentResponse,
+    type AccountSetupParams as AccountSetupParams,
   };
 }

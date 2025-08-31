@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentsAPI from '../agents';
+import * as AgentsAPI from '../agents/agents';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';

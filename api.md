@@ -2,29 +2,61 @@
 
 Types:
 
+- <code><a href="./src/resources/account.ts">Account</a></code>
 - <code><a href="./src/resources/account.ts">ResourceMetadata</a></code>
-- <code><a href="./src/resources/account.ts">AccountRetrieveCurrentResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieveCurrent</a>() -> AccountRetrieveCurrentResponse</code>
+- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
+- <code title="post /v1/account/setup">client.account.<a href="./src/resources/account.ts">setup</a>({ ...params }) -> Account</code>
 
 # Agents
 
 Types:
 
-- <code><a href="./src/resources/agents.ts">Agent</a></code>
-- <code><a href="./src/resources/agents.ts">AgentSpec</a></code>
-- <code><a href="./src/resources/agents.ts">Pagination</a></code>
-- <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
+- <code><a href="./src/resources/agents/agents.ts">Pagination</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/agents">client.agents.<a href="./src/resources/agents.ts">create</a>({ ...params }) -> Agent</code>
-- <code title="get /v1/agents/{id}">client.agents.<a href="./src/resources/agents.ts">retrieve</a>(id) -> Agent</code>
-- <code title="patch /v1/agents/{id}">client.agents.<a href="./src/resources/agents.ts">update</a>(id, { ...params }) -> Agent</code>
-- <code title="get /v1/agents">client.agents.<a href="./src/resources/agents.ts">list</a>({ ...params }) -> AgentListResponse</code>
-- <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents.ts">delete</a>(id) -> void</code>
+- <code title="post /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">create</a>({ ...params }) -> Agent</code>
+- <code title="get /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">retrieve</a>(id) -> Agent</code>
+- <code title="patch /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(id, { ...params }) -> Agent</code>
+- <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentListResponse</code>
+- <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
+
+## Objectives
+
+Types:
+
+- <code><a href="./src/resources/agents/objectives.ts">Objective</a></code>
+- <code><a href="./src/resources/agents/objectives.ts">ObjectiveSpec</a></code>
+- <code><a href="./src/resources/agents/objectives.ts">OperationMetadata</a></code>
+- <code><a href="./src/resources/agents/objectives.ts">ObjectiveListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/agents/{agentId}/objectives">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">create</a>(agentID, { ...params }) -> Objective</code>
+- <code title="get /v1/agents/{agentId}/objectives/{id}">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">retrieve</a>(id, { ...params }) -> Objective</code>
+- <code title="get /v1/agents/{agentId}/objectives">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">list</a>(agentID, { ...params }) -> ObjectiveListResponse</code>
+
+## Prompts
+
+Types:
+
+- <code><a href="./src/resources/agents/prompts.ts">Prompt</a></code>
+- <code><a href="./src/resources/agents/prompts.ts">PromptSpec</a></code>
+- <code><a href="./src/resources/agents/prompts.ts">PromptListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">create</a>(agentID, { ...params }) -> Prompt</code>
+- <code title="get /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">retrieve</a>(id, { ...params }) -> Prompt</code>
+- <code title="patch /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">update</a>(id, { ...params }) -> Prompt</code>
+- <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptListResponse</code>
+- <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
 
 # ToolSets
 

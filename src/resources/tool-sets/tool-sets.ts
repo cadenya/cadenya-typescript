@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentsAPI from '../agents';
+import * as AgentsAPI from '../agents/agents';
 import * as ToolsAPI from './tools';
 import {
   Tool,
