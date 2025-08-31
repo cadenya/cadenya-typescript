@@ -17,12 +17,8 @@ export class AccountResource extends APIResource {
   /**
    * Setup the account
    */
-  setup(
-    params: AccountSetupParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<AccountSetupResponse> {
-    const { email, externalUserId, name } = params ?? {};
-    return this._client.post('/v1/account/setup', { query: { email, externalUserId, name }, ...options });
+  setup(body: AccountSetupParams, options?: RequestOptions): APIPromise<AccountSetupResponse> {
+    return this._client.post('/v1/account/setup', { body, ...options });
   }
 }
 
