@@ -65,7 +65,7 @@ describe('resource tools', () => {
       },
       spec: {
         adapter: {
-          http: { contentType: 'contentType', method: 'method', url: 'url' },
+          http: { contentType: 'contentType', requestMethod: 'requestMethod', url: 'url' },
           inline: { id: 'id' },
           mcp: { toolName: 'toolName', url: 'url' },
         },

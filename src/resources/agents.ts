@@ -69,6 +69,8 @@ export interface Agent {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
+  agentTools?: Array<AgentSpec.AgentTool>;
+
   constraints?: AgentSpec.Constraints;
 
   /**
@@ -81,12 +83,16 @@ export interface AgentSpec {
    */
   status?: number;
 
-  systemPrompt?: AgentSpec.SystemPrompt;
-
   toolSelection?: AgentSpec.ToolSelection;
 }
 
 export namespace AgentSpec {
+  export interface AgentTool {
+    toolId?: string;
+
+    toolSetId?: string;
+  }
+
   export interface Constraints {
     /**
      * The maximum number of sub-objectives that can be created. 0 means no limit.
@@ -99,62 +105,45 @@ export namespace AgentSpec {
     maxToolCalls?: number;
   }
 
-  export interface SystemPrompt {
-    promptId?: string;
-
-    selector?: SystemPrompt.Selector;
-
-    text?: string;
-  }
-
-  export namespace SystemPrompt {
-    export interface Selector {
-      fallbackPrompt?: string;
-
-      labels?: { [key: string]: string };
-    }
-  }
-
   export interface ToolSelection {
-    auto?: ToolSelection.Auto;
+    /**
+     * AssignedTools is used to indicate that the agent should only use the tools/tool
+     * sets that are explicitly assigned to it. Allow discovery is used when the agent
+     * thinks it needs to discover more tools.
+     */
+    assignedTools?: ToolSelection.AssignedTools;
 
-    explicit?: ToolSelection.Explicit;
-
-    toolSets?: ToolSelection.ToolSets;
+    /**
+     * AutoDiscovery is used to indicate that the agent should automatically discover
+     * tools that are not explicitly assigned to it. Max tools is the maximum number of
+     * tools that can be discovered. Hints are optional hints for tool search. These
+     * are used in conjunction with the context-aware tool search and can help select
+     * the best tools for the task.
+     */
+    autoDiscovery?: ToolSelection.AutoDiscovery;
   }
 
   export namespace ToolSelection {
-    export interface Auto {
-      /**
-       * Optional hints for tool search. These are used in conjunction with the
-       * context-aware tool search and can help select the best tools for the task.
-       */
+    /**
+     * AssignedTools is used to indicate that the agent should only use the tools/tool
+     * sets that are explicitly assigned to it. Allow discovery is used when the agent
+     * thinks it needs to discover more tools.
+     */
+    export interface AssignedTools {
+      allowDiscovery?: boolean;
+    }
+
+    /**
+     * AutoDiscovery is used to indicate that the agent should automatically discover
+     * tools that are not explicitly assigned to it. Max tools is the maximum number of
+     * tools that can be discovered. Hints are optional hints for tool search. These
+     * are used in conjunction with the context-aware tool search and can help select
+     * the best tools for the task.
+     */
+    export interface AutoDiscovery {
       hints?: Array<string>;
 
-      /**
-       * The maximum number of tools that can be discovered. Max is 25.
-       */
       maxTools?: number;
-    }
-
-    export interface Explicit {
-      /**
-       * If set to true, the LLM can request additional tools if the ones provided are
-       * not sufficient.
-       */
-      allowDiscovery?: boolean;
-
-      toolIds?: Array<string>;
-    }
-
-    export interface ToolSets {
-      /**
-       * If set to true, the LLM can request additional tools if the ones provided are
-       * not sufficient.
-       */
-      allowDiscovery?: boolean;
-
-      setIds?: Array<string>;
     }
   }
 }

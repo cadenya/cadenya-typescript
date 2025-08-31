@@ -105,7 +105,7 @@ export namespace ToolSpec {
     export interface HTTP {
       contentType?: string;
 
-      method?: string;
+      requestMethod?: string;
 
       url?: string;
     }
