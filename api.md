@@ -4,11 +4,12 @@ Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
 - <code><a href="./src/resources/account.ts">ResourceMetadata</a></code>
+- <code><a href="./src/resources/account.ts">AccountSetupResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
-- <code title="post /v1/account/setup">client.account.<a href="./src/resources/account.ts">setup</a>({ ...params }) -> Account</code>
+- <code title="post /v1/account/setup">client.account.<a href="./src/resources/account.ts">setup</a>({ ...params }) -> AccountSetupResponse</code>
 
 # Agents
 
