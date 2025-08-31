@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WorkspacesAPI from './workspaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -79,6 +80,8 @@ export namespace AccountRetrieveCurrentResponse {
     description?: string;
 
     domain?: string;
+
+    workspaces?: Array<WorkspacesAPI.Workspace>;
   }
 }
 
