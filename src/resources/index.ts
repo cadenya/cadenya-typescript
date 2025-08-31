@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Account, type ResourceMetadata, type AccountRetrieveCurrentResponse } from './account';
+export { AccountResource, type Account, type ResourceMetadata, type AccountSetupParams } from './account';
 export {
   Agents,
   type Agent,
@@ -10,7 +10,7 @@ export {
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
-} from './agents';
+} from './agents/agents';
 export {
   ToolSets,
   type ToolSet,

@@ -29,9 +29,9 @@ const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.account.retrieveCurrent();
+const account = await client.account.retrieve();
 
-console.log(response.metadata);
+console.log(account.metadata);
 ```
 
 ### Request & Response types
@@ -46,7 +46,7 @@ const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
 });
 
-const response: Cadenya.AccountRetrieveCurrentResponse = await client.account.retrieveCurrent();
+const account: Cadenya.Account = await client.account.retrieve();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,7 +59,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.account.retrieveCurrent().catch(async (err) => {
+const account = await client.account.retrieve().catch(async (err) => {
   if (err instanceof Cadenya.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -99,7 +99,7 @@ const client = new Cadenya({
 });
 
 // Or, configure per-request:
-await client.account.retrieveCurrent({
+await client.account.retrieve({
   maxRetries: 5,
 });
 ```
@@ -116,7 +116,7 @@ const client = new Cadenya({
 });
 
 // Override per-request:
-await client.account.retrieveCurrent({
+await client.account.retrieve({
   timeout: 5 * 1000,
 });
 ```
@@ -139,13 +139,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Cadenya();
 
-const response = await client.account.retrieveCurrent().asResponse();
+const response = await client.account.retrieve().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.account.retrieveCurrent().withResponse();
+const { data: account, response: raw } = await client.account.retrieve().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.metadata);
+console.log(account.metadata);
 ```
 
 ### Logging
@@ -225,7 +225,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.account.retrieveCurrent({
+client.account.retrieve({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

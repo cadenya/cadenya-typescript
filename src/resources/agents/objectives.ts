@@ -1,0 +1,309 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../../core/resource';
+import * as AgentsAPI from './agents';
+import { APIPromise } from '../../core/api-promise';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
+
+export class Objectives extends APIResource {
+  /**
+   * Creates a new objective in the workspace
+   */
+  create(agentID: string, body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
+    return this._client.post(path`/v1/agents/${agentID}/objectives`, { body, ...options });
+  }
+
+  /**
+   * Retrieves an objective by ID from the workspace
+   */
+  retrieve(id: string, params: ObjectiveRetrieveParams, options?: RequestOptions): APIPromise<Objective> {
+    const { agentId } = params;
+    return this._client.get(path`/v1/agents/${agentId}/objectives/${id}`, options);
+  }
+
+  /**
+   * Lists all objectives in the workspace
+   */
+  list(
+    agentID: string,
+    query: ObjectiveListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveListResponse> {
+    return this._client.get(path`/v1/agents/${agentID}/objectives`, { query, ...options });
+  }
+}
+
+export interface Objective {
+  events?: Array<Objective.Event>;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: OperationMetadata;
+
+  spec?: ObjectiveSpec;
+
+  status?: Objective.Status;
+}
+
+export namespace Objective {
+  export interface Event {
+    id?: string;
+
+    actorId?: string;
+
+    createdAt?: string;
+
+    /**
+     * Message for a chat completion
+     */
+    message?: Event.Message;
+
+    objectiveId?: string;
+
+    /**
+     * Sub-objective branching
+     */
+    subObjective?: Event.SubObjective;
+
+    /**
+     * Human approval events
+     */
+    toolApproval?: Event.ToolApproval;
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    toolCall?: Event.ToolCall;
+
+    toolRejection?: Event.ToolRejection;
+  }
+
+  export namespace Event {
+    /**
+     * Message for a chat completion
+     */
+    export interface Message {
+      content?: string;
+
+      role?: number;
+    }
+
+    /**
+     * Sub-objective branching
+     */
+    export interface SubObjective {
+      rationale?: string;
+
+      subObjectiveId?: string;
+    }
+
+    /**
+     * Human approval events
+     */
+    export interface ToolApproval {
+      reason?: string;
+
+      toolCallId?: string;
+    }
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    export interface ToolCall {
+      /**
+       * The arguments sent to the tool
+       */
+      arguments?: unknown;
+
+      /**
+       * Error details when status = FAILED
+       */
+      error?: ToolCall.Error;
+
+      /**
+       * The ID of the tool call that the LLM generated for us to call
+       */
+      externalToolCallId?: string;
+
+      /**
+       * The result from the tool execution
+       */
+      result?: string;
+
+      /**
+       * Current status of the tool call
+       */
+      status?: number;
+
+      /**
+       * A reference to the tool that was called
+       */
+      toolId?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Error details when status = FAILED
+       */
+      export interface Error {
+        code?: string;
+
+        message?: string;
+      }
+    }
+
+    export interface ToolRejection {
+      alternative?: string;
+
+      reason?: string;
+
+      toolCallId?: string;
+    }
+  }
+
+  export interface Status {
+    message?: string;
+
+    state?: number;
+  }
+}
+
+export interface ObjectiveSpec {
+  /**
+   * Agent resource
+   */
+  agent?: AgentsAPI.Agent;
+
+  callbackUrl?: string;
+
+  documents?: Array<ObjectiveSpec.Document>;
+
+  objective?: string;
+
+  parentObjectiveId?: string;
+
+  /**
+   * prompt_ids can be an empty array on create, and the agent's prompts will be used
+   * to create assign the system prompt
+   */
+  promptIds?: Array<string>;
+
+  /**
+   * system_prompt is read-only, and is set by the agent's prompts
+   */
+  systemPrompt?: string;
+}
+
+export namespace ObjectiveSpec {
+  export interface Document {
+    content?: string;
+
+    contentType?: string;
+  }
+}
+
+/**
+ * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+ * runs)
+ */
+export interface OperationMetadata {
+  /**
+   * Unique identifier for the operation (UUID v7)
+   */
+  id?: string;
+
+  /**
+   * Account this operation belongs to for multi-tenant isolation (UUID v7)
+   */
+  accountId?: string;
+
+  /**
+   * ID of the actor (user or service account) that initiated this operation (UUID
+   * v7)
+   */
+  actorId?: string;
+
+  /**
+   * Timestamp when this operation was created UUID v7 includes timestamp
+   * information, but this explicit field enables easier querying
+   */
+  createdAt?: string;
+
+  /**
+   * External ID for the operation (e.g., a workflow ID from an external system)
+   */
+  externalId?: string;
+
+  /**
+   * Arbitrary key-value pairs for categorization and filtering Examples:
+   * {"priority": "high", "source": "api", "workflow": "onboarding"}
+   */
+  labels?: { [key: string]: string };
+
+  /**
+   * Workspace this operation belongs to for organizational grouping (UUID v7)
+   */
+  workspaceId?: string;
+}
+
+export interface ObjectiveListResponse {
+  items?: Array<Objective>;
+
+  pagination?: AgentsAPI.Pagination;
+}
+
+export interface ObjectiveCreateParams {
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: OperationMetadata;
+
+  spec?: ObjectiveSpec;
+}
+
+export interface ObjectiveRetrieveParams {
+  agentId: string;
+}
+
+export interface ObjectiveListParams {
+  actorId?: string;
+
+  page?: ObjectiveListParams.Page;
+
+  /**
+   * Optional filters
+   */
+  parentObjectiveId?: string;
+
+  state?: number;
+}
+
+export namespace ObjectiveListParams {
+  export interface Page {
+    /**
+     * Pagination cursor from previous response
+     */
+    cursor?: string;
+
+    /**
+     * Maximum number of results to return
+     */
+    limit?: number;
+  }
+}
+
+export declare namespace Objectives {
+  export {
+    type Objective as Objective,
+    type ObjectiveSpec as ObjectiveSpec,
+    type OperationMetadata as OperationMetadata,
+    type ObjectiveListResponse as ObjectiveListResponse,
+    type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
+    type ObjectiveListParams as ObjectiveListParams,
+  };
+}
