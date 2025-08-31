@@ -17,7 +17,13 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource, AccountSetupParams, ResourceMetadata } from './resources/account';
+import {
+  Account,
+  AccountResource,
+  AccountSetupParams,
+  AccountSetupResponse,
+  ResourceMetadata,
+} from './resources/account';
 import {
   Workspace,
   WorkspaceCreateParams,
@@ -744,6 +750,7 @@ export declare namespace Cadenya {
     AccountResource as AccountResource,
     type Account as Account,
     type ResourceMetadata as ResourceMetadata,
+    type AccountSetupResponse as AccountSetupResponse,
     type AccountSetupParams as AccountSetupParams,
   };
 

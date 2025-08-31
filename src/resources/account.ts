@@ -17,7 +17,10 @@ export class AccountResource extends APIResource {
   /**
    * Setup the account
    */
-  setup(params: AccountSetupParams | null | undefined = {}, options?: RequestOptions): APIPromise<Account> {
+  setup(
+    params: AccountSetupParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AccountSetupResponse> {
     const { email, externalUserId, name } = params ?? {};
     return this._client.post('/v1/account/setup', { query: { email, externalUserId, name }, ...options });
   }
@@ -93,6 +96,12 @@ export interface ResourceMetadata {
   workspaceId?: string;
 }
 
+export interface AccountSetupResponse {
+  account?: Account;
+
+  workspace?: WorkspacesAPI.Workspace;
+}
+
 export interface AccountSetupParams {
   email?: string;
 
@@ -105,6 +114,7 @@ export declare namespace AccountResource {
   export {
     type Account as Account,
     type ResourceMetadata as ResourceMetadata,
+    type AccountSetupResponse as AccountSetupResponse,
     type AccountSetupParams as AccountSetupParams,
   };
 }
