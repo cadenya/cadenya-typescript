@@ -116,7 +116,17 @@ export namespace AgentSpec {
   export interface AgentTool {
     toolId?: string;
 
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    toolMetadata?: AccountAPI.ResourceMetadata;
+
     toolSetId?: string;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    toolSetMetadata?: AccountAPI.ResourceMetadata;
   }
 
   export interface Constraints {
