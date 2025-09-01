@@ -10,16 +10,7 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
 } from './agents';
-export {
-  Objectives,
-  type Objective,
-  type ObjectiveSpec,
-  type OperationMetadata,
-  type ObjectiveListResponse,
-  type ObjectiveCreateParams,
-  type ObjectiveRetrieveParams,
-  type ObjectiveListParams,
-} from './objectives';
+export { Objectives, type Objective, type ObjectiveSpec, type OperationMetadata } from './objectives';
 export {
   Prompts,
   type Prompt,

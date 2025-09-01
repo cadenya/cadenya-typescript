@@ -35,13 +35,6 @@ Types:
 - <code><a href="./src/resources/agents/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/agents/objectives.ts">ObjectiveSpec</a></code>
 - <code><a href="./src/resources/agents/objectives.ts">OperationMetadata</a></code>
-- <code><a href="./src/resources/agents/objectives.ts">ObjectiveListResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/agents/{agentId}/objectives">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">create</a>(agentID, { ...params }) -> Objective</code>
-- <code title="get /v1/agents/{agentId}/objectives/{id}">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">retrieve</a>(id, { ...params }) -> Objective</code>
-- <code title="get /v1/agents/{agentId}/objectives">client.agents.objectives.<a href="./src/resources/agents/objectives.ts">list</a>(agentID, { ...params }) -> ObjectiveListResponse</code>
 
 ## Prompts
 

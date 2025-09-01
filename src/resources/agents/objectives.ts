@@ -2,37 +2,8 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentsAPI from './agents';
-import { APIPromise } from '../../core/api-promise';
-import { RequestOptions } from '../../internal/request-options';
-import { path } from '../../internal/utils/path';
 
-export class Objectives extends APIResource {
-  /**
-   * Creates a new objective in the workspace
-   */
-  create(agentID: string, body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
-    return this._client.post(path`/v1/agents/${agentID}/objectives`, { body, ...options });
-  }
-
-  /**
-   * Retrieves an objective by ID from the workspace
-   */
-  retrieve(id: string, params: ObjectiveRetrieveParams, options?: RequestOptions): APIPromise<Objective> {
-    const { agentId } = params;
-    return this._client.get(path`/v1/agents/${agentId}/objectives/${id}`, options);
-  }
-
-  /**
-   * Lists all objectives in the workspace
-   */
-  list(
-    agentID: string,
-    query: ObjectiveListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ObjectiveListResponse> {
-    return this._client.get(path`/v1/agents/${agentID}/objectives`, { query, ...options });
-  }
-}
+export class Objectives extends APIResource {}
 
 export interface Objective {
   events?: Array<Objective.Event>;
@@ -249,61 +220,10 @@ export interface OperationMetadata {
   workspaceId?: string;
 }
 
-export interface ObjectiveListResponse {
-  items?: Array<Objective>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
-export interface ObjectiveCreateParams {
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata?: OperationMetadata;
-
-  spec?: ObjectiveSpec;
-}
-
-export interface ObjectiveRetrieveParams {
-  agentId: string;
-}
-
-export interface ObjectiveListParams {
-  actorId?: string;
-
-  page?: ObjectiveListParams.Page;
-
-  /**
-   * Optional filters
-   */
-  parentObjectiveId?: string;
-
-  state?: number;
-}
-
-export namespace ObjectiveListParams {
-  export interface Page {
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
-
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-  }
-}
-
 export declare namespace Objectives {
   export {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
-    type ObjectiveListResponse as ObjectiveListResponse,
-    type ObjectiveCreateParams as ObjectiveCreateParams,
-    type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
-    type ObjectiveListParams as ObjectiveListParams,
   };
 }

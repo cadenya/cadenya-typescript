@@ -3,16 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
 import * as ObjectivesAPI from './objectives';
-import {
-  Objective,
-  ObjectiveCreateParams,
-  ObjectiveListParams,
-  ObjectiveListResponse,
-  ObjectiveRetrieveParams,
-  ObjectiveSpec,
-  Objectives,
-  OperationMetadata,
-} from './objectives';
+import { Objective, ObjectiveSpec, Objectives, OperationMetadata } from './objectives';
 import * as PromptsAPI from './prompts';
 import {
   Prompt,
@@ -229,26 +220,25 @@ export interface AgentUpdateParams {
 }
 
 export interface AgentListParams {
-  page?: AgentListParams.Page;
+  /**
+   * Pagination cursor from previous response
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results to return
+   */
+  limit?: number;
 
   /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;
-}
 
-export namespace AgentListParams {
-  export interface Page {
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
-
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-  }
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
 }
 
 Agents.Objectives = Objectives;
@@ -270,10 +260,6 @@ export declare namespace Agents {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
-    type ObjectiveListResponse as ObjectiveListResponse,
-    type ObjectiveCreateParams as ObjectiveCreateParams,
-    type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
-    type ObjectiveListParams as ObjectiveListParams,
   };
 
   export {
