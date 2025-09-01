@@ -99,7 +99,7 @@ describe('resource tools', () => {
     await expect(
       client.toolSets.tools.list(
         'toolSetId',
-        { page: { cursor: 'cursor', limit: 0 } },
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

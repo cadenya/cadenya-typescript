@@ -86,7 +86,7 @@ describe('resource prompts', () => {
     await expect(
       client.agents.prompts.list(
         'agentId',
-        { page: { cursor: 'cursor', limit: 0 } },
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

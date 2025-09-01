@@ -107,21 +107,20 @@ export interface ToolSetUpdateParams {
 }
 
 export interface ToolSetListParams {
-  page?: ToolSetListParams.Page;
-}
+  /**
+   * Pagination cursor from previous response
+   */
+  cursor?: string;
 
-export namespace ToolSetListParams {
-  export interface Page {
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
+  /**
+   * Maximum number of results to return
+   */
+  limit?: number;
 
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-  }
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
 }
 
 ToolSets.Tools = Tools;
