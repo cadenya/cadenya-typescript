@@ -10,7 +10,6 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
 } from './agents';
-export { Objectives, type Objective, type ObjectiveSpec, type OperationMetadata } from './objectives';
 export {
   Prompts,
   type Prompt,

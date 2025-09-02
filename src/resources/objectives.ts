@@ -1,9 +1,36 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
-import * as AgentsAPI from './agents';
+import { APIResource } from '../core/resource';
+import * as AgentsAPI from './agents/agents';
+import { APIPromise } from '../core/api-promise';
+import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
-export class Objectives extends APIResource {}
+export class Objectives extends APIResource {
+  /**
+   * Creates a new objective in the workspace
+   */
+  create(body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
+    return this._client.post('/v1/objectives', { body, ...options });
+  }
+
+  /**
+   * Retrieves an objective by ID from the workspace
+   */
+  retrieve(id: string, options?: RequestOptions): APIPromise<Objective> {
+    return this._client.get(path`/v1/objectives/${id}`, options);
+  }
+
+  /**
+   * Lists all objectives in the workspace
+   */
+  list(
+    query: ObjectiveListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveListResponse> {
+    return this._client.get('/v1/objectives', { query, ...options });
+  }
+}
 
 export interface Objective {
   events?: Array<Objective.Event>;
@@ -220,10 +247,62 @@ export interface OperationMetadata {
   workspaceId?: string;
 }
 
+export interface ObjectiveListResponse {
+  items?: Array<Objective>;
+
+  pagination?: AgentsAPI.Pagination;
+}
+
+export interface ObjectiveCreateParams {
+  agentId?: string;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: OperationMetadata;
+
+  spec?: ObjectiveSpec;
+}
+
+export interface ObjectiveListParams {
+  actorId?: string;
+
+  /**
+   * Agent ID for filtering
+   */
+  agentId?: string;
+
+  /**
+   * Pagination cursor from previous response
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results to return
+   */
+  limit?: number;
+
+  /**
+   * Optional filters
+   */
+  parentObjectiveId?: string;
+
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
+
+  state?: number;
+}
+
 export declare namespace Objectives {
   export {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
+    type ObjectiveListResponse as ObjectiveListResponse,
+    type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveListParams as ObjectiveListParams,
   };
 }
