@@ -28,14 +28,6 @@ Methods:
 - <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentListResponse</code>
 - <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
 
-## Objectives
-
-Types:
-
-- <code><a href="./src/resources/agents/objectives.ts">Objective</a></code>
-- <code><a href="./src/resources/agents/objectives.ts">ObjectiveSpec</a></code>
-- <code><a href="./src/resources/agents/objectives.ts">OperationMetadata</a></code>
-
 ## Prompts
 
 Types:
@@ -51,6 +43,41 @@ Methods:
 - <code title="patch /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">update</a>(id, { ...params }) -> Prompt</code>
 - <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptListResponse</code>
 - <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
+
+# Objectives
+
+Types:
+
+- <code><a href="./src/resources/objectives.ts">Objective</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
+- <code><a href="./src/resources/objectives.ts">OperationMetadata</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">create</a>({ ...params }) -> Objective</code>
+- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives.ts">retrieve</a>(id) -> Objective</code>
+- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">list</a>({ ...params }) -> ObjectiveListResponse</code>
+
+# Ping
+
+Types:
+
+- <code><a href="./src/resources/ping.ts">PingCheckResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/ping">client.ping.<a href="./src/resources/ping.ts">check</a>() -> PingCheckResponse</code>
+
+# Search
+
+Types:
+
+- <code><a href="./src/resources/search.ts">SearchSearchToolsResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchTools</a>({ ...params }) -> SearchSearchToolsResponse</code>
 
 # ToolSets
 
@@ -96,13 +123,3 @@ Methods:
 
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspaceListResponse</code>
-
-# Search
-
-Types:
-
-- <code><a href="./src/resources/search.ts">SearchSearchToolsResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchTools</a>({ ...params }) -> SearchSearchToolsResponse</code>

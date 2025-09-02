@@ -17,6 +17,16 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
 } from './agents/agents';
+export {
+  Objectives,
+  type Objective,
+  type ObjectiveSpec,
+  type OperationMetadata,
+  type ObjectiveListResponse,
+  type ObjectiveCreateParams,
+  type ObjectiveListParams,
+} from './objectives';
+export { Ping, type PingCheckResponse } from './ping';
 export { Search, type SearchSearchToolsResponse, type SearchSearchToolsParams } from './search';
 export {
   ToolSets,

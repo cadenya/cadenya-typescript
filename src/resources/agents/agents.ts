@@ -2,8 +2,6 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as ObjectivesAPI from './objectives';
-import { Objective, ObjectiveSpec, Objectives, OperationMetadata } from './objectives';
 import * as PromptsAPI from './prompts';
 import {
   Prompt,
@@ -22,7 +20,6 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Agents extends APIResource {
-  objectives: ObjectivesAPI.Objectives = new ObjectivesAPI.Objectives(this._client);
   prompts: PromptsAPI.Prompts = new PromptsAPI.Prompts(this._client);
 
   /**
@@ -241,7 +238,6 @@ export interface AgentListParams {
   sortOrder?: string;
 }
 
-Agents.Objectives = Objectives;
 Agents.Prompts = Prompts;
 
 export declare namespace Agents {
@@ -253,13 +249,6 @@ export declare namespace Agents {
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
-  };
-
-  export {
-    Objectives as Objectives,
-    type Objective as Objective,
-    type ObjectiveSpec as ObjectiveSpec,
-    type OperationMetadata as OperationMetadata,
   };
 
   export {

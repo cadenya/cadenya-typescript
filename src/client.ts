@@ -23,6 +23,16 @@ import {
   AccountSetupResponse,
   ResourceMetadata,
 } from './resources/account';
+import {
+  Objective,
+  ObjectiveCreateParams,
+  ObjectiveListParams,
+  ObjectiveListResponse,
+  ObjectiveSpec,
+  Objectives,
+  OperationMetadata,
+} from './resources/objectives';
+import { Ping, PingCheckResponse } from './resources/ping';
 import { Search, SearchSearchToolsParams, SearchSearchToolsResponse } from './resources/search';
 import {
   Workspace,
@@ -750,16 +760,20 @@ export class Cadenya {
 
   account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
+  objectives: API.Objectives = new API.Objectives(this);
+  ping: API.Ping = new API.Ping(this);
+  search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
-  search: API.Search = new API.Search(this);
 }
 
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
+Cadenya.Objectives = Objectives;
+Cadenya.Ping = Ping;
+Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.Search = Search;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -784,6 +798,24 @@ export declare namespace Cadenya {
   };
 
   export {
+    Objectives as Objectives,
+    type Objective as Objective,
+    type ObjectiveSpec as ObjectiveSpec,
+    type OperationMetadata as OperationMetadata,
+    type ObjectiveListResponse as ObjectiveListResponse,
+    type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveListParams as ObjectiveListParams,
+  };
+
+  export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
+
+  export {
+    Search as Search,
+    type SearchSearchToolsResponse as SearchSearchToolsResponse,
+    type SearchSearchToolsParams as SearchSearchToolsParams,
+  };
+
+  export {
     ToolSets as ToolSets,
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
@@ -800,11 +832,5 @@ export declare namespace Cadenya {
     type WorkspaceListResponse as WorkspaceListResponse,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
-  };
-
-  export {
-    Search as Search,
-    type SearchSearchToolsResponse as SearchSearchToolsResponse,
-    type SearchSearchToolsParams as SearchSearchToolsParams,
   };
 }
