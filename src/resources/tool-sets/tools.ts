@@ -2,8 +2,8 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentsAPI from '../agents/agents';
 import { APIPromise } from '../../core/api-promise';
+import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -39,8 +39,11 @@ export class Tools extends APIResource {
     toolSetID: string,
     query: ToolListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ToolListResponse> {
-    return this._client.get(path`/v1/tool_sets/${toolSetID}/tools`, { query, ...options });
+  ): PagePromise<ToolsPagination, Tool> {
+    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/tools`, Pagination<Tool>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -54,6 +57,8 @@ export class Tools extends APIResource {
     });
   }
 }
+
+export type ToolsPagination = Pagination<Tool>;
 
 export interface Tool {
   /**
@@ -122,12 +127,6 @@ export namespace ToolSpec {
   }
 }
 
-export interface ToolListResponse {
-  items?: Array<Tool>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
 export interface ToolCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -164,17 +163,7 @@ export interface ToolUpdateParams {
   updateMask?: string;
 }
 
-export interface ToolListParams {
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-
+export interface ToolListParams extends PaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -189,7 +178,7 @@ export declare namespace Tools {
   export {
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolListResponse as ToolListResponse,
+    type ToolsPagination as ToolsPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

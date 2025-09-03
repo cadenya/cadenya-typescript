@@ -8,13 +8,18 @@ import {
   PromptCreateParams,
   PromptDeleteParams,
   PromptListParams,
-  PromptListResponse,
   PromptRetrieveParams,
   PromptSpec,
   PromptUpdateParams,
   Prompts,
+  PromptsPagination,
 } from './prompts';
 import { APIPromise } from '../../core/api-promise';
+import {
+  PagePromise,
+  Pagination as PaginationPagination,
+  type PaginationParams,
+} from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -49,8 +54,8 @@ export class Agents extends APIResource {
   list(
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AgentListResponse> {
-    return this._client.get('/v1/agents', { query, ...options });
+  ): PagePromise<AgentsPagination, Agent> {
+    return this._client.getAPIList('/v1/agents', PaginationPagination<Agent>, { query, ...options });
   }
 
   /**
@@ -63,6 +68,8 @@ export class Agents extends APIResource {
     });
   }
 }
+
+export type AgentsPagination = PaginationPagination<Agent>;
 
 /**
  * Agent resource
@@ -178,15 +185,6 @@ export interface Pagination {
   total?: number;
 }
 
-/**
- * List agents response
- */
-export interface AgentListResponse {
-  items?: Array<Agent>;
-
-  pagination?: Pagination;
-}
-
 export interface AgentCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -216,17 +214,7 @@ export interface AgentUpdateParams {
   updateMask?: string;
 }
 
-export interface AgentListParams {
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-
+export interface AgentListParams extends PaginationParams {
   /**
    * Filter expression (query param: prefix)
    */
@@ -245,7 +233,7 @@ export declare namespace Agents {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
     type Pagination as Pagination,
-    type AgentListResponse as AgentListResponse,
+    type AgentsPagination as AgentsPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
@@ -255,7 +243,7 @@ export declare namespace Agents {
     Prompts as Prompts,
     type Prompt as Prompt,
     type PromptSpec as PromptSpec,
-    type PromptListResponse as PromptListResponse,
+    type PromptsPagination as PromptsPagination,
     type PromptCreateParams as PromptCreateParams,
     type PromptRetrieveParams as PromptRetrieveParams,
     type PromptUpdateParams as PromptUpdateParams,

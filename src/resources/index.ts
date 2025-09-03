@@ -12,19 +12,19 @@ export {
   type Agent,
   type AgentSpec,
   type Pagination,
-  type AgentListResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
+  type AgentsPagination,
 } from './agents/agents';
 export {
   Objectives,
   type Objective,
   type ObjectiveSpec,
   type OperationMetadata,
-  type ObjectiveListResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
+  type ObjectivesPagination,
 } from './objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export { Search, type SearchSearchToolsResponse, type SearchSearchToolsParams } from './search';
@@ -32,16 +32,16 @@ export {
   ToolSets,
   type ToolSet,
   type ToolSetSpec,
-  type ToolSetListResponse,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
+  type ToolSetsPagination,
 } from './tool-sets/tool-sets';
 export {
   Workspaces,
   type Workspace,
   type WorkspaceSpec,
-  type WorkspaceListResponse,
   type WorkspaceCreateParams,
   type WorkspaceListParams,
+  type WorkspacesPagination,
 } from './workspaces';
