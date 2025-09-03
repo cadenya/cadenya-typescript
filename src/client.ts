@@ -35,7 +35,11 @@ import {
   OperationMetadata,
 } from './resources/objectives';
 import { Ping, PingCheckResponse } from './resources/ping';
-import { Search, SearchSearchToolsParams, SearchSearchToolsResponse } from './resources/search';
+import {
+  Search,
+  SearchSearchToolsOrToolSetsParams,
+  SearchSearchToolsOrToolSetsResponse,
+} from './resources/search';
 import {
   Workspace,
   WorkspaceCreateParams,
@@ -52,6 +56,7 @@ import {
   AgentUpdateParams,
   Agents,
   AgentsCursorPagination,
+  Page,
 } from './resources/agents/agents';
 import {
   ToolSet,
@@ -816,6 +821,7 @@ export declare namespace Cadenya {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
+    type Page as Page,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
@@ -836,8 +842,8 @@ export declare namespace Cadenya {
 
   export {
     Search as Search,
-    type SearchSearchToolsResponse as SearchSearchToolsResponse,
-    type SearchSearchToolsParams as SearchSearchToolsParams,
+    type SearchSearchToolsOrToolSetsResponse as SearchSearchToolsOrToolSetsResponse,
+    type SearchSearchToolsOrToolSetsParams as SearchSearchToolsOrToolSetsParams,
   };
 
   export {

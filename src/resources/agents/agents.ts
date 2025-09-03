@@ -175,6 +175,12 @@ export namespace AgentSpec {
   }
 }
 
+export interface Page {
+  nextCursor?: string;
+
+  total?: number;
+}
+
 export interface AgentCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -222,6 +228,7 @@ export declare namespace Agents {
   export {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
+    type Page as Page,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,

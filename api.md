@@ -17,6 +17,7 @@ Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
+- <code><a href="./src/resources/agents/agents.ts">Page</a></code>
 
 Methods:
 
@@ -69,11 +70,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/search.ts">SearchSearchToolsResponse</a></code>
+- <code><a href="./src/resources/search.ts">SearchSearchToolsOrToolSetsResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchTools</a>({ ...params }) -> SearchSearchToolsResponse</code>
+- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchToolsOrToolSets</a>({ ...params }) -> SearchSearchToolsOrToolSetsResponse</code>
 
 # ToolSets
 
