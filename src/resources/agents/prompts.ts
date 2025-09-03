@@ -2,8 +2,8 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentsAPI from './agents';
 import { APIPromise } from '../../core/api-promise';
+import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -39,8 +39,11 @@ export class Prompts extends APIResource {
     agentID: string,
     query: PromptListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PromptListResponse> {
-    return this._client.get(path`/v1/agents/${agentID}/prompts`, { query, ...options });
+  ): PagePromise<PromptsPagination, Prompt> {
+    return this._client.getAPIList(path`/v1/agents/${agentID}/prompts`, Pagination<Prompt>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -54,6 +57,8 @@ export class Prompts extends APIResource {
     });
   }
 }
+
+export type PromptsPagination = Pagination<Prompt>;
 
 /**
  * Prompt resource
@@ -100,15 +105,6 @@ export interface PromptSpec {
   status?: number;
 }
 
-/**
- * List prompts response
- */
-export interface PromptListResponse {
-  items?: Array<Prompt>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
 export interface PromptCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -151,17 +147,7 @@ export interface PromptUpdateParams {
   updateMask?: string;
 }
 
-export interface PromptListParams {
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-
+export interface PromptListParams extends PaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -179,7 +165,7 @@ export declare namespace Prompts {
   export {
     type Prompt as Prompt,
     type PromptSpec as PromptSpec,
-    type PromptListResponse as PromptListResponse,
+    type PromptsPagination as PromptsPagination,
     type PromptCreateParams as PromptCreateParams,
     type PromptRetrieveParams as PromptRetrieveParams,
     type PromptUpdateParams as PromptUpdateParams,

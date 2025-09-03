@@ -4,19 +4,19 @@ export {
   ToolSets,
   type ToolSet,
   type ToolSetSpec,
-  type ToolSetListResponse,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
+  type ToolSetsPagination,
 } from './tool-sets';
 export {
   Tools,
   type Tool,
   type ToolSpec,
-  type ToolListResponse,
   type ToolCreateParams,
   type ToolRetrieveParams,
   type ToolUpdateParams,
   type ToolListParams,
   type ToolDeleteParams,
+  type ToolsPagination,
 } from './tools';

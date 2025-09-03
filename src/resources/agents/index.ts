@@ -5,19 +5,19 @@ export {
   type Agent,
   type AgentSpec,
   type Pagination,
-  type AgentListResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
+  type AgentsPagination,
 } from './agents';
 export {
   Prompts,
   type Prompt,
   type PromptSpec,
-  type PromptListResponse,
   type PromptCreateParams,
   type PromptRetrieveParams,
   type PromptUpdateParams,
   type PromptListParams,
   type PromptDeleteParams,
+  type PromptsPagination,
 } from './prompts';

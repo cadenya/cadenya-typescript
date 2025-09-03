@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
+import { PagePromise, Pagination, type PaginationParams } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -27,10 +28,12 @@ export class Objectives extends APIResource {
   list(
     query: ObjectiveListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ObjectiveListResponse> {
-    return this._client.get('/v1/objectives', { query, ...options });
+  ): PagePromise<ObjectivesPagination, Objective> {
+    return this._client.getAPIList('/v1/objectives', Pagination<Objective>, { query, ...options });
   }
 }
+
+export type ObjectivesPagination = Pagination<Objective>;
 
 export interface Objective {
   events?: Array<Objective.Event>;
@@ -247,12 +250,6 @@ export interface OperationMetadata {
   workspaceId?: string;
 }
 
-export interface ObjectiveListResponse {
-  items?: Array<Objective>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
 export interface ObjectiveCreateParams {
   agentId?: string;
 
@@ -265,23 +262,13 @@ export interface ObjectiveCreateParams {
   spec?: ObjectiveSpec;
 }
 
-export interface ObjectiveListParams {
+export interface ObjectiveListParams extends PaginationParams {
   actorId?: string;
 
   /**
    * Agent ID for filtering
    */
   agentId?: string;
-
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
 
   /**
    * Optional filters
@@ -301,7 +288,7 @@ export declare namespace Objectives {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
-    type ObjectiveListResponse as ObjectiveListResponse,
+    type ObjectivesPagination as ObjectivesPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
   };

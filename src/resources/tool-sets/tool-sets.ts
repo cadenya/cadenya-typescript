@@ -2,20 +2,20 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentsAPI from '../agents/agents';
 import * as ToolsAPI from './tools';
 import {
   Tool,
   ToolCreateParams,
   ToolDeleteParams,
   ToolListParams,
-  ToolListResponse,
   ToolRetrieveParams,
   ToolSpec,
   ToolUpdateParams,
   Tools,
+  ToolsPagination,
 } from './tools';
 import { APIPromise } from '../../core/api-promise';
+import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -50,8 +50,8 @@ export class ToolSets extends APIResource {
   list(
     query: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ToolSetListResponse> {
-    return this._client.get('/v1/tool_sets', { query, ...options });
+  ): PagePromise<ToolSetsPagination, ToolSet> {
+    return this._client.getAPIList('/v1/tool_sets', Pagination<ToolSet>, { query, ...options });
   }
 
   /**
@@ -64,6 +64,8 @@ export class ToolSets extends APIResource {
     });
   }
 }
+
+export type ToolSetsPagination = Pagination<ToolSet>;
 
 export interface ToolSet {
   /**
@@ -78,12 +80,6 @@ export interface ToolSetSpec {
   description?: string;
 
   status?: number;
-}
-
-export interface ToolSetListResponse {
-  items?: Array<ToolSet>;
-
-  pagination?: AgentsAPI.Pagination;
 }
 
 export interface ToolSetCreateParams {
@@ -106,17 +102,7 @@ export interface ToolSetUpdateParams {
   updateMask?: string;
 }
 
-export interface ToolSetListParams {
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-
+export interface ToolSetListParams extends PaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -129,7 +115,7 @@ export declare namespace ToolSets {
   export {
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
-    type ToolSetListResponse as ToolSetListResponse,
+    type ToolSetsPagination as ToolSetsPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
@@ -139,7 +125,7 @@ export declare namespace ToolSets {
     Tools as Tools,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolListResponse as ToolListResponse,
+    type ToolsPagination as ToolsPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

@@ -2,8 +2,8 @@
 
 import { APIResource } from '../core/resource';
 import * as AccountAPI from './account';
-import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
+import { PagePromise, Pagination, type PaginationParams } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 export class Workspaces extends APIResource {
@@ -20,10 +20,12 @@ export class Workspaces extends APIResource {
   list(
     query: WorkspaceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<WorkspaceListResponse> {
-    return this._client.get('/v1/workspaces', { query, ...options });
+  ): PagePromise<WorkspacesPagination, Workspace> {
+    return this._client.getAPIList('/v1/workspaces', Pagination<Workspace>, { query, ...options });
   }
 }
+
+export type WorkspacesPagination = Pagination<Workspace>;
 
 export interface Workspace {
   /**
@@ -38,12 +40,6 @@ export interface WorkspaceSpec {
   description?: string;
 }
 
-export interface WorkspaceListResponse {
-  items?: Array<Workspace>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
 export interface WorkspaceCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -53,17 +49,7 @@ export interface WorkspaceCreateParams {
   spec?: WorkspaceSpec;
 }
 
-export interface WorkspaceListParams {
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-
+export interface WorkspaceListParams extends PaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -74,7 +60,7 @@ export declare namespace Workspaces {
   export {
     type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspaceListResponse as WorkspaceListResponse,
+    type WorkspacesPagination as WorkspacesPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
