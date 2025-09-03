@@ -107,33 +107,33 @@ export class PagePromise<
   }
 }
 
-export interface PaginationResponse<Item> {
+export interface CursorPaginationResponse<Item> {
   items: Array<Item>;
 
-  pagination: PaginationResponse.Pagination;
+  pagination: CursorPaginationResponse.Pagination;
 }
 
-export namespace PaginationResponse {
+export namespace CursorPaginationResponse {
   export interface Pagination {
     next_cursor?: string;
   }
 }
 
-export interface PaginationParams {
+export interface CursorPaginationParams {
   cursor?: string;
 
   limit?: number;
 }
 
-export class Pagination<Item> extends AbstractPage<Item> implements PaginationResponse<Item> {
+export class CursorPagination<Item> extends AbstractPage<Item> implements CursorPaginationResponse<Item> {
   items: Array<Item>;
 
-  pagination: PaginationResponse.Pagination;
+  pagination: CursorPaginationResponse.Pagination;
 
   constructor(
     client: Cadenya,
     response: Response,
-    body: PaginationResponse<Item>,
+    body: CursorPaginationResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);

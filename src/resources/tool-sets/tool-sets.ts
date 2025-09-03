@@ -12,10 +12,10 @@ import {
   ToolSpec,
   ToolUpdateParams,
   Tools,
-  ToolsPagination,
+  ToolsCursorPagination,
 } from './tools';
 import { APIPromise } from '../../core/api-promise';
-import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -50,8 +50,8 @@ export class ToolSets extends APIResource {
   list(
     query: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ToolSetsPagination, ToolSet> {
-    return this._client.getAPIList('/v1/tool_sets', Pagination<ToolSet>, { query, ...options });
+  ): PagePromise<ToolSetsCursorPagination, ToolSet> {
+    return this._client.getAPIList('/v1/tool_sets', CursorPagination<ToolSet>, { query, ...options });
   }
 
   /**
@@ -65,7 +65,7 @@ export class ToolSets extends APIResource {
   }
 }
 
-export type ToolSetsPagination = Pagination<ToolSet>;
+export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 
 export interface ToolSet {
   /**
@@ -102,7 +102,7 @@ export interface ToolSetUpdateParams {
   updateMask?: string;
 }
 
-export interface ToolSetListParams extends PaginationParams {
+export interface ToolSetListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -115,7 +115,7 @@ export declare namespace ToolSets {
   export {
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
-    type ToolSetsPagination as ToolSetsPagination,
+    type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
@@ -125,7 +125,7 @@ export declare namespace ToolSets {
     Tools as Tools,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolsPagination as ToolsPagination,
+    type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

@@ -7,7 +7,7 @@ export {
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
-  type ToolSetsPagination,
+  type ToolSetsCursorPagination,
 } from './tool-sets';
 export {
   Tools,
@@ -18,5 +18,5 @@ export {
   type ToolUpdateParams,
   type ToolListParams,
   type ToolDeleteParams,
-  type ToolsPagination,
+  type ToolsCursorPagination,
 } from './tools';

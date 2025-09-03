@@ -11,11 +11,10 @@ export {
   Agents,
   type Agent,
   type AgentSpec,
-  type Pagination,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
-  type AgentsPagination,
+  type AgentsCursorPagination,
 } from './agents/agents';
 export {
   Objectives,
@@ -24,7 +23,7 @@ export {
   type OperationMetadata,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
-  type ObjectivesPagination,
+  type ObjectivesCursorPagination,
 } from './objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export { Search, type SearchSearchToolsResponse, type SearchSearchToolsParams } from './search';
@@ -35,7 +34,7 @@ export {
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
-  type ToolSetsPagination,
+  type ToolSetsCursorPagination,
 } from './tool-sets/tool-sets';
 export {
   Workspaces,
@@ -43,5 +42,5 @@ export {
   type WorkspaceSpec,
   type WorkspaceCreateParams,
   type WorkspaceListParams,
-  type WorkspacesPagination,
+  type WorkspacesCursorPagination,
 } from './workspaces';

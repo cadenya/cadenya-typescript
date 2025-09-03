@@ -13,8 +13,8 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
-import * as CorePagination from './core/pagination';
-import { AbstractPage, type PaginationParams, PaginationResponse } from './core/pagination';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -31,7 +31,7 @@ import {
   ObjectiveListParams,
   ObjectiveSpec,
   Objectives,
-  ObjectivesPagination,
+  ObjectivesCursorPagination,
   OperationMetadata,
 } from './resources/objectives';
 import { Ping, PingCheckResponse } from './resources/ping';
@@ -42,7 +42,7 @@ import {
   WorkspaceListParams,
   WorkspaceSpec,
   Workspaces,
-  WorkspacesPagination,
+  WorkspacesCursorPagination,
 } from './resources/workspaces';
 import {
   Agent,
@@ -51,8 +51,7 @@ import {
   AgentSpec,
   AgentUpdateParams,
   Agents,
-  AgentsPagination,
-  Pagination as AgentsAPIPagination,
+  AgentsCursorPagination,
 } from './resources/agents/agents';
 import {
   ToolSet,
@@ -61,7 +60,7 @@ import {
   ToolSetSpec,
   ToolSetUpdateParams,
   ToolSets,
-  ToolSetsPagination,
+  ToolSetsCursorPagination,
 } from './resources/tool-sets/tool-sets';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -528,23 +527,23 @@ export class Cadenya {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
-  getAPIList<Item, PageClass extends CorePagination.AbstractPage<Item> = CorePagination.AbstractPage<Item>>(
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     path: string,
     Page: new (...args: any[]) => PageClass,
     opts?: RequestOptions,
-  ): CorePagination.PagePromise<PageClass, Item> {
+  ): Pagination.PagePromise<PageClass, Item> {
     return this.requestAPIList(Page, { method: 'get', path, ...opts });
   }
 
   requestAPIList<
     Item = unknown,
-    PageClass extends CorePagination.AbstractPage<Item> = CorePagination.AbstractPage<Item>,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
   >(
-    Page: new (...args: ConstructorParameters<typeof CorePagination.AbstractPage>) => PageClass,
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
     options: FinalRequestOptions,
-  ): CorePagination.PagePromise<PageClass, Item> {
+  ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
-    return new CorePagination.PagePromise<PageClass, Item>(this as any as Cadenya, request, Page);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Cadenya, request, Page);
   }
 
   async fetchWithTimeout(
@@ -799,8 +798,11 @@ Cadenya.Workspaces = Workspaces;
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import Pagination = CorePagination.Pagination;
-  export { type PaginationParams as PaginationParams, type PaginationResponse as PaginationResponse };
+  export import CursorPagination = Pagination.CursorPagination;
+  export {
+    type CursorPaginationParams as CursorPaginationParams,
+    type CursorPaginationResponse as CursorPaginationResponse,
+  };
 
   export {
     AccountResource as AccountResource,
@@ -814,8 +816,7 @@ export declare namespace Cadenya {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type AgentsAPIPagination as Pagination,
-    type AgentsPagination as AgentsPagination,
+    type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
@@ -826,7 +827,7 @@ export declare namespace Cadenya {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
-    type ObjectivesPagination as ObjectivesPagination,
+    type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
   };
@@ -843,7 +844,7 @@ export declare namespace Cadenya {
     ToolSets as ToolSets,
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
-    type ToolSetsPagination as ToolSetsPagination,
+    type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
@@ -853,7 +854,7 @@ export declare namespace Cadenya {
     Workspaces as Workspaces,
     type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspacesPagination as WorkspacesPagination,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };

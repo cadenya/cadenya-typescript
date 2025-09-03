@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
 import { APIPromise } from '../../core/api-promise';
-import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -39,8 +39,8 @@ export class Tools extends APIResource {
     toolSetID: string,
     query: ToolListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ToolsPagination, Tool> {
-    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/tools`, Pagination<Tool>, {
+  ): PagePromise<ToolsCursorPagination, Tool> {
+    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/tools`, CursorPagination<Tool>, {
       query,
       ...options,
     });
@@ -58,7 +58,7 @@ export class Tools extends APIResource {
   }
 }
 
-export type ToolsPagination = Pagination<Tool>;
+export type ToolsCursorPagination = CursorPagination<Tool>;
 
 export interface Tool {
   /**
@@ -163,7 +163,7 @@ export interface ToolUpdateParams {
   updateMask?: string;
 }
 
-export interface ToolListParams extends PaginationParams {
+export interface ToolListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -178,7 +178,7 @@ export declare namespace Tools {
   export {
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolsPagination as ToolsPagination,
+    type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

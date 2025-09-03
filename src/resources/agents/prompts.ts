@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
 import { APIPromise } from '../../core/api-promise';
-import { PagePromise, Pagination, type PaginationParams } from '../../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -39,8 +39,8 @@ export class Prompts extends APIResource {
     agentID: string,
     query: PromptListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<PromptsPagination, Prompt> {
-    return this._client.getAPIList(path`/v1/agents/${agentID}/prompts`, Pagination<Prompt>, {
+  ): PagePromise<PromptsCursorPagination, Prompt> {
+    return this._client.getAPIList(path`/v1/agents/${agentID}/prompts`, CursorPagination<Prompt>, {
       query,
       ...options,
     });
@@ -58,7 +58,7 @@ export class Prompts extends APIResource {
   }
 }
 
-export type PromptsPagination = Pagination<Prompt>;
+export type PromptsCursorPagination = CursorPagination<Prompt>;
 
 /**
  * Prompt resource
@@ -147,7 +147,7 @@ export interface PromptUpdateParams {
   updateMask?: string;
 }
 
-export interface PromptListParams extends PaginationParams {
+export interface PromptListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -165,7 +165,7 @@ export declare namespace Prompts {
   export {
     type Prompt as Prompt,
     type PromptSpec as PromptSpec,
-    type PromptsPagination as PromptsPagination,
+    type PromptsCursorPagination as PromptsCursorPagination,
     type PromptCreateParams as PromptCreateParams,
     type PromptRetrieveParams as PromptRetrieveParams,
     type PromptUpdateParams as PromptUpdateParams,
