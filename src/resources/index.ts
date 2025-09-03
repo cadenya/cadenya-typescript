@@ -11,6 +11,7 @@ export {
   Agents,
   type Agent,
   type AgentSpec,
+  type Page,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
@@ -26,7 +27,11 @@ export {
   type ObjectivesCursorPagination,
 } from './objectives';
 export { Ping, type PingCheckResponse } from './ping';
-export { Search, type SearchSearchToolsResponse, type SearchSearchToolsParams } from './search';
+export {
+  Search,
+  type SearchSearchToolsOrToolSetsResponse,
+  type SearchSearchToolsOrToolSetsParams,
+} from './search';
 export {
   ToolSets,
   type ToolSet,

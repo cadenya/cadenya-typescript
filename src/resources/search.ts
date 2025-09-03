@@ -10,27 +10,27 @@ export class Search extends APIResource {
   /**
    * Searches for tools or tool sets in the workspace
    */
-  searchTools(
-    query: SearchSearchToolsParams | null | undefined = {},
+  searchToolsOrToolSets(
+    query: SearchSearchToolsOrToolSetsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<SearchSearchToolsResponse> {
+  ): APIPromise<SearchSearchToolsOrToolSetsResponse> {
     return this._client.get('/v1/search/tools_or_tool_sets', { query, ...options });
   }
 }
 
-export interface SearchSearchToolsResponse {
+export interface SearchSearchToolsOrToolSetsResponse {
   tools?: Array<ToolsAPI.Tool>;
 
   toolSets?: Array<ToolSetsAPI.ToolSet>;
 }
 
-export interface SearchSearchToolsParams {
+export interface SearchSearchToolsOrToolSetsParams {
   query?: string;
 }
 
 export declare namespace Search {
   export {
-    type SearchSearchToolsResponse as SearchSearchToolsResponse,
-    type SearchSearchToolsParams as SearchSearchToolsParams,
+    type SearchSearchToolsOrToolSetsResponse as SearchSearchToolsOrToolSetsResponse,
+    type SearchSearchToolsOrToolSetsParams as SearchSearchToolsOrToolSetsParams,
   };
 }

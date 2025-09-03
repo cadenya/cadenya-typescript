@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource search', () => {
   // Prism tests are disabled
-  test.skip('searchTools', async () => {
-    const responsePromise = client.search.searchTools();
+  test.skip('searchToolsOrToolSets', async () => {
+    const responsePromise = client.search.searchToolsOrToolSets();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,10 +21,10 @@ describe('resource search', () => {
   });
 
   // Prism tests are disabled
-  test.skip('searchTools: request options and params are passed correctly', async () => {
+  test.skip('searchToolsOrToolSets: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.search.searchTools({ query: 'query' }, { path: '/_stainless_unknown_path' }),
+      client.search.searchToolsOrToolSets({ query: 'query' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 });

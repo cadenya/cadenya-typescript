@@ -4,6 +4,7 @@ export {
   Agents,
   type Agent,
   type AgentSpec,
+  type Page,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
