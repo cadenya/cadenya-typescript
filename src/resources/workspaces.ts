@@ -3,7 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as AccountAPI from './account';
 import { APIPromise } from '../core/api-promise';
-import { PagePromise, Pagination, type PaginationParams } from '../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 export class Workspaces extends APIResource {
@@ -20,12 +20,12 @@ export class Workspaces extends APIResource {
   list(
     query: WorkspaceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<WorkspacesPagination, Workspace> {
-    return this._client.getAPIList('/v1/workspaces', Pagination<Workspace>, { query, ...options });
+  ): PagePromise<WorkspacesCursorPagination, Workspace> {
+    return this._client.getAPIList('/v1/workspaces', CursorPagination<Workspace>, { query, ...options });
   }
 }
 
-export type WorkspacesPagination = Pagination<Workspace>;
+export type WorkspacesCursorPagination = CursorPagination<Workspace>;
 
 export interface Workspace {
   /**
@@ -49,7 +49,7 @@ export interface WorkspaceCreateParams {
   spec?: WorkspaceSpec;
 }
 
-export interface WorkspaceListParams extends PaginationParams {
+export interface WorkspaceListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
@@ -60,7 +60,7 @@ export declare namespace Workspaces {
   export {
     type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspacesPagination as WorkspacesPagination,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };

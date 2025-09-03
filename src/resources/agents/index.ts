@@ -4,11 +4,10 @@ export {
   Agents,
   type Agent,
   type AgentSpec,
-  type Pagination,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
-  type AgentsPagination,
+  type AgentsCursorPagination,
 } from './agents';
 export {
   Prompts,
@@ -19,5 +18,5 @@ export {
   type PromptUpdateParams,
   type PromptListParams,
   type PromptDeleteParams,
-  type PromptsPagination,
+  type PromptsCursorPagination,
 } from './prompts';

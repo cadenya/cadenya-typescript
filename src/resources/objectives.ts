@@ -3,7 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
-import { PagePromise, Pagination, type PaginationParams } from '../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -28,12 +28,12 @@ export class Objectives extends APIResource {
   list(
     query: ObjectiveListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ObjectivesPagination, Objective> {
-    return this._client.getAPIList('/v1/objectives', Pagination<Objective>, { query, ...options });
+  ): PagePromise<ObjectivesCursorPagination, Objective> {
+    return this._client.getAPIList('/v1/objectives', CursorPagination<Objective>, { query, ...options });
   }
 }
 
-export type ObjectivesPagination = Pagination<Objective>;
+export type ObjectivesCursorPagination = CursorPagination<Objective>;
 
 export interface Objective {
   events?: Array<Objective.Event>;
@@ -262,7 +262,7 @@ export interface ObjectiveCreateParams {
   spec?: ObjectiveSpec;
 }
 
-export interface ObjectiveListParams extends PaginationParams {
+export interface ObjectiveListParams extends CursorPaginationParams {
   actorId?: string;
 
   /**
@@ -288,7 +288,7 @@ export declare namespace Objectives {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
-    type ObjectivesPagination as ObjectivesPagination,
+    type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
   };

@@ -12,14 +12,10 @@ import {
   PromptSpec,
   PromptUpdateParams,
   Prompts,
-  PromptsPagination,
+  PromptsCursorPagination,
 } from './prompts';
 import { APIPromise } from '../../core/api-promise';
-import {
-  PagePromise,
-  Pagination as PaginationPagination,
-  type PaginationParams,
-} from '../../core/pagination';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -54,8 +50,8 @@ export class Agents extends APIResource {
   list(
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<AgentsPagination, Agent> {
-    return this._client.getAPIList('/v1/agents', PaginationPagination<Agent>, { query, ...options });
+  ): PagePromise<AgentsCursorPagination, Agent> {
+    return this._client.getAPIList('/v1/agents', CursorPagination<Agent>, { query, ...options });
   }
 
   /**
@@ -69,7 +65,7 @@ export class Agents extends APIResource {
   }
 }
 
-export type AgentsPagination = PaginationPagination<Agent>;
+export type AgentsCursorPagination = CursorPagination<Agent>;
 
 /**
  * Agent resource
@@ -179,12 +175,6 @@ export namespace AgentSpec {
   }
 }
 
-export interface Pagination {
-  nextCursor?: string;
-
-  total?: number;
-}
-
 export interface AgentCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -214,7 +204,7 @@ export interface AgentUpdateParams {
   updateMask?: string;
 }
 
-export interface AgentListParams extends PaginationParams {
+export interface AgentListParams extends CursorPaginationParams {
   /**
    * Filter expression (query param: prefix)
    */
@@ -232,8 +222,7 @@ export declare namespace Agents {
   export {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type Pagination as Pagination,
-    type AgentsPagination as AgentsPagination,
+    type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
@@ -243,7 +232,7 @@ export declare namespace Agents {
     Prompts as Prompts,
     type Prompt as Prompt,
     type PromptSpec as PromptSpec,
-    type PromptsPagination as PromptsPagination,
+    type PromptsCursorPagination as PromptsCursorPagination,
     type PromptCreateParams as PromptCreateParams,
     type PromptRetrieveParams as PromptRetrieveParams,
     type PromptUpdateParams as PromptUpdateParams,
