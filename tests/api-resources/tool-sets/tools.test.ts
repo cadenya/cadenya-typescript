@@ -64,11 +64,11 @@ describe('resource tools', () => {
         workspaceId: 'workspaceId',
       },
       spec: {
-        adapter: {
-          http: { contentType: 'contentType', requestMethod: 'requestMethod', url: 'url' },
-          inline: { id: 'id' },
-          mcp: { toolName: 'toolName', url: 'url' },
+        config: {
+          http: { headers: 'headers', path: 'path', query: 'query', requestMethod: 'requestMethod' },
+          mcp: { toolName: 'toolName' },
         },
+        contentFilter: { jq: 'jq', regex: 'regex' },
         description: 'description',
         indexContent: 'indexContent',
         name: 'name',
