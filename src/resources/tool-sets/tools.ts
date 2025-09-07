@@ -114,7 +114,7 @@ export namespace ToolSpec {
 
       query?: string;
 
-      requestMethod?: string;
+      requestMethod?: number;
     }
 
     export interface Mcp {
