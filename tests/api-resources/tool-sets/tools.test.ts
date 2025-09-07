@@ -65,7 +65,7 @@ describe('resource tools', () => {
       },
       spec: {
         config: {
-          http: { headers: 'headers', path: 'path', query: 'query', requestMethod: 'requestMethod' },
+          http: { headers: 'headers', path: 'path', query: 'query', requestMethod: 0 },
           mcp: { toolName: 'toolName' },
         },
         contentFilter: { jq: 'jq', regex: 'regex' },
