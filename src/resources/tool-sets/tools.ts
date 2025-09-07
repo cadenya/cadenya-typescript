@@ -108,7 +108,7 @@ export namespace ToolSpec {
 
   export namespace Config {
     export interface HTTP {
-      headers?: string;
+      headers?: { [key: string]: string };
 
       path?: string;
 
