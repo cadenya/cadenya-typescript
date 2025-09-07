@@ -71,11 +71,13 @@ export interface Tool {
 
 export interface ToolSpec {
   /**
-   * Adapter defines the adapter to use for the tool. This is used to determine how
+   * Config defines the adapter to use for the tool. This is used to determine how
    * the tool is called. For example, if the tool is an HTTP tool, the adapter will
    * be Http. If the tool is an inline tool, the adapter will be Inline.
    */
-  adapter?: ToolSpec.Adapter;
+  config?: ToolSpec.Config;
+
+  contentFilter?: ToolSpec.ContentFilter;
 
   description?: string;
 
@@ -94,36 +96,36 @@ export interface ToolSpec {
 
 export namespace ToolSpec {
   /**
-   * Adapter defines the adapter to use for the tool. This is used to determine how
+   * Config defines the adapter to use for the tool. This is used to determine how
    * the tool is called. For example, if the tool is an HTTP tool, the adapter will
    * be Http. If the tool is an inline tool, the adapter will be Inline.
    */
-  export interface Adapter {
-    http?: Adapter.HTTP;
+  export interface Config {
+    http?: Config.HTTP;
 
-    inline?: Adapter.Inline;
-
-    mcp?: Adapter.Mcp;
+    mcp?: Config.Mcp;
   }
 
-  export namespace Adapter {
+  export namespace Config {
     export interface HTTP {
-      contentType?: string;
+      headers?: string;
+
+      path?: string;
+
+      query?: string;
 
       requestMethod?: string;
-
-      url?: string;
-    }
-
-    export interface Inline {
-      id?: string;
     }
 
     export interface Mcp {
       toolName?: string;
-
-      url?: string;
     }
+  }
+
+  export interface ContentFilter {
+    jq?: string;
+
+    regex?: string;
   }
 }
 

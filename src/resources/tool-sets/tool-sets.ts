@@ -77,9 +77,51 @@ export interface ToolSet {
 }
 
 export interface ToolSetSpec {
+  adapter?: ToolSetSpec.Adapter;
+
   description?: string;
 
   status?: number;
+}
+
+export namespace ToolSetSpec {
+  export interface Adapter {
+    http?: Adapter.HTTP;
+
+    mcp?: Adapter.Mcp;
+  }
+
+  export namespace Adapter {
+    export interface HTTP {
+      baseUrl?: string;
+
+      headers?: { [key: string]: string };
+    }
+
+    export interface Mcp {
+      excludeTools?: Mcp.ExcludeTools;
+
+      headers?: { [key: string]: string };
+
+      includeTools?: Mcp.IncludeTools;
+
+      url?: string;
+    }
+
+    export namespace Mcp {
+      export interface ExcludeTools {
+        contains?: string;
+
+        startsWith?: string;
+      }
+
+      export interface IncludeTools {
+        contains?: string;
+
+        startsWith?: string;
+      }
+    }
+  }
 }
 
 export interface ToolSetCreateParams {
