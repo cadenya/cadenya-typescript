@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as ObjectivesAPI from './objectives';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
@@ -51,117 +52,129 @@ export interface Objective {
 
 export namespace Objective {
   export interface Event {
-    id?: string;
-
-    actorId?: string;
-
-    createdAt?: string;
-
     /**
-     * Message for a chat completion
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
      */
-    message?: Event.Message;
+    metadata?: ObjectivesAPI.OperationMetadata;
 
-    objectiveId?: string;
-
-    /**
-     * Sub-objective branching
-     */
-    subObjective?: Event.SubObjective;
-
-    /**
-     * Human approval events
-     */
-    toolApproval?: Event.ToolApproval;
-
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    toolCall?: Event.ToolCall;
-
-    toolRejection?: Event.ToolRejection;
+    spec?: Event.Spec;
   }
 
   export namespace Event {
-    /**
-     * Message for a chat completion
-     */
-    export interface Message {
-      content?: string;
+    export interface Spec {
+      id?: string;
 
-      role?: number;
+      actorId?: string;
+
+      createdAt?: string;
+
+      /**
+       * Message for a chat completion
+       */
+      message?: Spec.Message;
+
+      objectiveId?: string;
+
+      /**
+       * Sub-objective branching
+       */
+      subObjective?: Spec.SubObjective;
+
+      /**
+       * Human approval events
+       */
+      toolApproval?: Spec.ToolApproval;
+
+      /**
+       * Tool call that the LLM generated for us to call
+       */
+      toolCall?: Spec.ToolCall;
+
+      toolRejection?: Spec.ToolRejection;
     }
 
-    /**
-     * Sub-objective branching
-     */
-    export interface SubObjective {
-      rationale?: string;
-
-      subObjectiveId?: string;
-    }
-
-    /**
-     * Human approval events
-     */
-    export interface ToolApproval {
-      reason?: string;
-
-      toolCallId?: string;
-    }
-
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    export interface ToolCall {
+    export namespace Spec {
       /**
-       * The arguments sent to the tool
+       * Message for a chat completion
        */
-      arguments?: unknown;
+      export interface Message {
+        content?: string;
 
-      /**
-       * Error details when status = FAILED
-       */
-      error?: ToolCall.Error;
-
-      /**
-       * The ID of the tool call that the LLM generated for us to call
-       */
-      externalToolCallId?: string;
-
-      /**
-       * The result from the tool execution
-       */
-      result?: string;
-
-      /**
-       * Current status of the tool call
-       */
-      status?: number;
-
-      /**
-       * A reference to the tool that was called
-       */
-      toolId?: string;
-    }
-
-    export namespace ToolCall {
-      /**
-       * Error details when status = FAILED
-       */
-      export interface Error {
-        code?: string;
-
-        message?: string;
+        role?: number;
       }
-    }
 
-    export interface ToolRejection {
-      alternative?: string;
+      /**
+       * Sub-objective branching
+       */
+      export interface SubObjective {
+        rationale?: string;
 
-      reason?: string;
+        subObjectiveId?: string;
+      }
 
-      toolCallId?: string;
+      /**
+       * Human approval events
+       */
+      export interface ToolApproval {
+        reason?: string;
+
+        toolCallId?: string;
+      }
+
+      /**
+       * Tool call that the LLM generated for us to call
+       */
+      export interface ToolCall {
+        /**
+         * The arguments sent to the tool
+         */
+        arguments?: unknown;
+
+        /**
+         * Error details when status = FAILED
+         */
+        error?: ToolCall.Error;
+
+        /**
+         * The ID of the tool call that the LLM generated for us to call
+         */
+        externalToolCallId?: string;
+
+        /**
+         * The result from the tool execution
+         */
+        result?: string;
+
+        /**
+         * Current status of the tool call
+         */
+        status?: number;
+
+        /**
+         * A reference to the tool that was called
+         */
+        toolId?: string;
+      }
+
+      export namespace ToolCall {
+        /**
+         * Error details when status = FAILED
+         */
+        export interface Error {
+          code?: string;
+
+          message?: string;
+        }
+      }
+
+      export interface ToolRejection {
+        alternative?: string;
+
+        reason?: string;
+
+        toolCallId?: string;
+      }
     }
   }
 
