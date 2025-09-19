@@ -25,7 +25,7 @@ export {
   type ObjectiveCreateParams,
   type ObjectiveListParams,
   type ObjectivesCursorPagination,
-} from './objectives';
+} from './objectives/objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export {
   Search,

@@ -25,15 +25,6 @@ import {
   AccountSetupResponse,
   ResourceMetadata,
 } from './resources/account';
-import {
-  Objective,
-  ObjectiveCreateParams,
-  ObjectiveListParams,
-  ObjectiveSpec,
-  Objectives,
-  ObjectivesCursorPagination,
-  OperationMetadata,
-} from './resources/objectives';
 import { Ping, PingCheckResponse } from './resources/ping';
 import {
   Search,
@@ -58,6 +49,15 @@ import {
   AgentsCursorPagination,
   Page,
 } from './resources/agents/agents';
+import {
+  Objective,
+  ObjectiveCreateParams,
+  ObjectiveListParams,
+  ObjectiveSpec,
+  Objectives,
+  ObjectivesCursorPagination,
+  OperationMetadata,
+} from './resources/objectives/objectives';
 import {
   ToolSet,
   ToolSetCreateParams,
