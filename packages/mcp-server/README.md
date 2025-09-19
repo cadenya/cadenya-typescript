@@ -278,3 +278,11 @@ The following tools are available in this MCP server.
 
 - `create_workspaces` (`write`): Creates a new workspace for the account
 - `list_workspaces` (`read`): Lists all workspaces for the current account
+
+### Resource `workspace_secrets`:
+
+- `create_workspace_secrets` (`write`): Creates a new workspace secret in the workspace
+- `retrieve_workspace_secrets` (`read`): Retrieves a workspace secret by ID from the workspace
+- `update_workspace_secrets` (`write`): Updates a workspace secret in the workspace
+- `list_workspace_secrets` (`read`): Lists all workspace secrets in the workspace
+- `delete_workspace_secrets` (`write`): Deletes a workspace secret from the workspace

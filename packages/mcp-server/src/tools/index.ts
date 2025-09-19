@@ -34,6 +34,11 @@ import list_tool_sets_tools from './tool-sets/tools/list-tool-sets-tools';
 import delete_tool_sets_tools from './tool-sets/tools/delete-tool-sets-tools';
 import create_workspaces from './workspaces/create-workspaces';
 import list_workspaces from './workspaces/list-workspaces';
+import create_workspace_secrets from './workspace-secrets/create-workspace-secrets';
+import retrieve_workspace_secrets from './workspace-secrets/retrieve-workspace-secrets';
+import update_workspace_secrets from './workspace-secrets/update-workspace-secrets';
+import list_workspace_secrets from './workspace-secrets/list-workspace-secrets';
+import delete_workspace_secrets from './workspace-secrets/delete-workspace-secrets';
 
 export const endpoints: Endpoint[] = [];
 
@@ -71,6 +76,11 @@ addEndpoint(list_tool_sets_tools);
 addEndpoint(delete_tool_sets_tools);
 addEndpoint(create_workspaces);
 addEndpoint(list_workspaces);
+addEndpoint(create_workspace_secrets);
+addEndpoint(retrieve_workspace_secrets);
+addEndpoint(update_workspace_secrets);
+addEndpoint(list_workspace_secrets);
+addEndpoint(delete_workspace_secrets);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

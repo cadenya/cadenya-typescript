@@ -32,6 +32,15 @@ import {
   SearchSearchToolsOrToolSetsResponse,
 } from './resources/search';
 import {
+  WorkspaceSecret,
+  WorkspaceSecretCreateParams,
+  WorkspaceSecretListParams,
+  WorkspaceSecretSpec,
+  WorkspaceSecretUpdateParams,
+  WorkspaceSecrets,
+  WorkspaceSecretsCursorPagination,
+} from './resources/workspace-secrets';
+import {
   Workspace,
   WorkspaceCreateParams,
   WorkspaceListParams,
@@ -790,6 +799,7 @@ export class Cadenya {
   search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
+  workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -799,6 +809,7 @@ Cadenya.Ping = Ping;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.Workspaces = Workspaces;
+Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -863,5 +874,15 @@ export declare namespace Cadenya {
     type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
+  };
+
+  export {
+    WorkspaceSecrets as WorkspaceSecrets,
+    type WorkspaceSecret as WorkspaceSecret,
+    type WorkspaceSecretSpec as WorkspaceSecretSpec,
+    type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
+    type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
+    type WorkspaceSecretUpdateParams as WorkspaceSecretUpdateParams,
+    type WorkspaceSecretListParams as WorkspaceSecretListParams,
   };
 }
