@@ -46,15 +46,26 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/objectives.ts">Objective</a></code>
-- <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
-- <code><a href="./src/resources/objectives.ts">OperationMetadata</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSpec</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">OperationMetadata</a></code>
 
 Methods:
 
-- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">create</a>({ ...params }) -> Objective</code>
-- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives.ts">retrieve</a>(id) -> Objective</code>
-- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
+- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">create</a>({ ...params }) -> Objective</code>
+- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieve</a>(id) -> Objective</code>
+- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
+
+## Events
+
+Types:
+
+- <code><a href="./src/resources/objectives/events.ts">ObjectiveEvent</a></code>
+- <code><a href="./src/resources/objectives/events.ts">ObjectiveEventSpec</a></code>
+
+Methods:
+
+- <code title="get /v1/objectives/{objectiveId}/events">client.objectives.events.<a href="./src/resources/objectives/events.ts">list</a>(objectiveID, { ...params }) -> ObjectiveEventsCursorPagination</code>
 
 # Ping
 
