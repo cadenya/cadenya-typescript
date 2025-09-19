@@ -42,6 +42,15 @@ export {
   type ToolSetsCursorPagination,
 } from './tool-sets/tool-sets';
 export {
+  WorkspaceSecrets,
+  type WorkspaceSecret,
+  type WorkspaceSecretSpec,
+  type WorkspaceSecretCreateParams,
+  type WorkspaceSecretUpdateParams,
+  type WorkspaceSecretListParams,
+  type WorkspaceSecretsCursorPagination,
+} from './workspace-secrets';
+export {
   Workspaces,
   type Workspace,
   type WorkspaceSpec,
