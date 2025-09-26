@@ -114,6 +114,13 @@ export namespace ToolSpec {
 
       query?: string;
 
+      requestBodyContentType?: string;
+
+      /**
+       * These are only used when the request method is a POST, PUT, or PATCH
+       */
+      requestBodyTemplate?: string;
+
       requestMethod?: number;
     }
 
