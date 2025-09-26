@@ -87,6 +87,8 @@ export interface ObjectiveSpec {
    */
   promptIds?: Array<string>;
 
+  secrets?: Array<ObjectiveSpec.Secret>;
+
   /**
    * system_prompt is read-only, and is set by the agent's prompts
    */
@@ -98,6 +100,12 @@ export namespace ObjectiveSpec {
     content?: string;
 
     contentType?: string;
+  }
+
+  export interface Secret {
+    name?: string;
+
+    value?: string;
   }
 }
 

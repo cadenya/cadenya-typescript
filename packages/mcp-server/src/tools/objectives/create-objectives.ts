@@ -107,6 +107,20 @@ export const tool: Tool = {
               type: 'string',
             },
           },
+          secrets: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                },
+                value: {
+                  type: 'string',
+                },
+              },
+            },
+          },
           systemPrompt: {
             type: 'string',
             description: "system_prompt is read-only, and is set by the agent's prompts",
