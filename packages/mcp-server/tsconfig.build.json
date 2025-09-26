@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "cadenya-mcp-server/*": ["dist/src/*"],
-      "cadenya-mcp-server": ["dist/src/index.ts"]
+      "cadenya-mcp-server/*": ["./dist/src/*"],
+      "cadenya-mcp-server": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
