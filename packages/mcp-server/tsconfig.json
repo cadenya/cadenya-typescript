@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "cadenya-mcp-server/*": ["src/*"],
-      "cadenya-mcp-server": ["src/index.ts"]
+      "cadenya-mcp-server/*": ["./src/*"],
+      "cadenya-mcp-server": ["./src/index.ts"]
     },
     "noEmit": true,
 
