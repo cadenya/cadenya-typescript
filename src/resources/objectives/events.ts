@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ObjectivesAPI from './objectives';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -25,128 +24,234 @@ export class Events extends APIResource {
 
 export type ObjectiveEventsCursorPagination = CursorPagination<ObjectiveEvent>;
 
+/**
+ * ObjectiveEvent is a union of all the possible event types that can be sent to
+ * the objective. It also contains events for tool approvals, and events for when
+ * the objective is completed. It is used to construct the complete timeline for an
+ * objective.
+ */
 export interface ObjectiveEvent {
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata?: ObjectivesAPI.OperationMetadata;
-
-  spec?: ObjectiveEventSpec;
-}
-
-export interface ObjectiveEventSpec {
   id?: string;
 
-  actorId?: string;
-
-  createdAt?: string;
+  /**
+   * Individual message in the conversation
+   */
+  assistantMessage?: ObjectiveEvent.AssistantMessage;
 
   /**
-   * Message for a chat completion
+   * Must match one of the event_type keys below. IE: "assistant_message" This is so
+   * API callers can distinguish between the different event types when accessing the
+   * JSON payload
    */
-  message?: ObjectiveEventSpec.Message;
-
-  objectiveId?: string;
+  eventType?: string;
 
   /**
-   * Sub-objective branching
+   * Individual message in the conversation
    */
-  subObjective?: ObjectiveEventSpec.SubObjective;
+  systemMessage?: ObjectiveEvent.SystemMessage;
 
   /**
-   * Human approval events
+   * Individual message in the conversation
    */
-  toolApproval?: ObjectiveEventSpec.ToolApproval;
+  toolMessage?: ObjectiveEvent.ToolMessage;
 
   /**
-   * Tool call that the LLM generated for us to call
+   * Individual message in the conversation
    */
-  toolCall?: ObjectiveEventSpec.ToolCall;
-
-  toolRejection?: ObjectiveEventSpec.ToolRejection;
+  userMessage?: ObjectiveEvent.UserMessage;
 }
 
-export namespace ObjectiveEventSpec {
+export namespace ObjectiveEvent {
   /**
-   * Message for a chat completion
+   * Individual message in the conversation
    */
-  export interface Message {
+  export interface AssistantMessage {
     content?: string;
 
-    role?: number;
+    reasoning?: string;
+
+    refusal?: string;
+
+    role?: string;
+
+    tool_call_id?: string;
+
+    /**
+     * We're overwriding the keys for JSON so that it is compatible with the OpenRouter
+     * API
+     */
+    tool_calls?: Array<AssistantMessage.ToolCall>;
   }
 
-  /**
-   * Sub-objective branching
-   */
-  export interface SubObjective {
-    rationale?: string;
-
-    subObjectiveId?: string;
-  }
-
-  /**
-   * Human approval events
-   */
-  export interface ToolApproval {
-    reason?: string;
-
-    toolCallId?: string;
-  }
-
-  /**
-   * Tool call that the LLM generated for us to call
-   */
-  export interface ToolCall {
+  export namespace AssistantMessage {
     /**
-     * The arguments sent to the tool
+     * Tool call made by assistant
      */
-    arguments?: unknown;
+    export interface ToolCall {
+      id?: string;
 
-    /**
-     * Error details when status = FAILED
-     */
-    error?: ToolCall.Error;
+      /**
+       * Function details within a tool call
+       */
+      function?: ToolCall.Function;
 
-    /**
-     * The ID of the tool call that the LLM generated for us to call
-     */
-    externalToolCallId?: string;
+      type?: string;
+    }
 
-    /**
-     * The result from the tool execution
-     */
-    result?: string;
+    export namespace ToolCall {
+      /**
+       * Function details within a tool call
+       */
+      export interface Function {
+        arguments?: string;
 
-    /**
-     * Current status of the tool call
-     */
-    status?: number;
-
-    /**
-     * A reference to the tool that was called
-     */
-    toolId?: string;
-  }
-
-  export namespace ToolCall {
-    /**
-     * Error details when status = FAILED
-     */
-    export interface Error {
-      code?: string;
-
-      message?: string;
+        name?: string;
+      }
     }
   }
 
-  export interface ToolRejection {
-    alternative?: string;
+  /**
+   * Individual message in the conversation
+   */
+  export interface SystemMessage {
+    content?: string;
 
-    reason?: string;
+    reasoning?: string;
 
-    toolCallId?: string;
+    refusal?: string;
+
+    role?: string;
+
+    tool_call_id?: string;
+
+    /**
+     * We're overwriding the keys for JSON so that it is compatible with the OpenRouter
+     * API
+     */
+    tool_calls?: Array<SystemMessage.ToolCall>;
+  }
+
+  export namespace SystemMessage {
+    /**
+     * Tool call made by assistant
+     */
+    export interface ToolCall {
+      id?: string;
+
+      /**
+       * Function details within a tool call
+       */
+      function?: ToolCall.Function;
+
+      type?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Function details within a tool call
+       */
+      export interface Function {
+        arguments?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  /**
+   * Individual message in the conversation
+   */
+  export interface ToolMessage {
+    content?: string;
+
+    reasoning?: string;
+
+    refusal?: string;
+
+    role?: string;
+
+    tool_call_id?: string;
+
+    /**
+     * We're overwriding the keys for JSON so that it is compatible with the OpenRouter
+     * API
+     */
+    tool_calls?: Array<ToolMessage.ToolCall>;
+  }
+
+  export namespace ToolMessage {
+    /**
+     * Tool call made by assistant
+     */
+    export interface ToolCall {
+      id?: string;
+
+      /**
+       * Function details within a tool call
+       */
+      function?: ToolCall.Function;
+
+      type?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Function details within a tool call
+       */
+      export interface Function {
+        arguments?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  /**
+   * Individual message in the conversation
+   */
+  export interface UserMessage {
+    content?: string;
+
+    reasoning?: string;
+
+    refusal?: string;
+
+    role?: string;
+
+    tool_call_id?: string;
+
+    /**
+     * We're overwriding the keys for JSON so that it is compatible with the OpenRouter
+     * API
+     */
+    tool_calls?: Array<UserMessage.ToolCall>;
+  }
+
+  export namespace UserMessage {
+    /**
+     * Tool call made by assistant
+     */
+    export interface ToolCall {
+      id?: string;
+
+      /**
+       * Function details within a tool call
+       */
+      function?: ToolCall.Function;
+
+      type?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Function details within a tool call
+       */
+      export interface Function {
+        arguments?: string;
+
+        name?: string;
+      }
+    }
   }
 }
 
@@ -160,7 +265,6 @@ export interface EventListParams extends CursorPaginationParams {
 export declare namespace Events {
   export {
     type ObjectiveEvent as ObjectiveEvent,
-    type ObjectiveEventSpec as ObjectiveEventSpec,
     type ObjectiveEventsCursorPagination as ObjectiveEventsCursorPagination,
     type EventListParams as EventListParams,
   };

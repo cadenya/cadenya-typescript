@@ -61,7 +61,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/objectives/events.ts">ObjectiveEvent</a></code>
-- <code><a href="./src/resources/objectives/events.ts">ObjectiveEventSpec</a></code>
 
 Methods:
 
