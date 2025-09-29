@@ -2,6 +2,7 @@
 
 export {
   ToolSets,
+  type McpToolFilter,
   type ToolSet,
   type ToolSetSpec,
   type ToolSetCreateParams,

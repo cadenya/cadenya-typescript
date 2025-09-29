@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ToolSetsAPI from './tool-sets';
 import * as AccountAPI from '../account';
 import * as ToolsAPI from './tools';
 import {
@@ -67,6 +68,12 @@ export class ToolSets extends APIResource {
 
 export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 
+export interface McpToolFilter {
+  contains?: string;
+
+  startsWith?: string;
+}
+
 export interface ToolSet {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -99,27 +106,13 @@ export namespace ToolSetSpec {
     }
 
     export interface Mcp {
-      excludeTools?: Mcp.ExcludeTools;
+      excludeTools?: ToolSetsAPI.McpToolFilter;
 
       headers?: { [key: string]: string };
 
-      includeTools?: Mcp.IncludeTools;
+      includeTools?: ToolSetsAPI.McpToolFilter;
 
       url?: string;
-    }
-
-    export namespace Mcp {
-      export interface ExcludeTools {
-        contains?: string;
-
-        startsWith?: string;
-      }
-
-      export interface IncludeTools {
-        contains?: string;
-
-        startsWith?: string;
-      }
     }
   }
 }
@@ -155,6 +148,7 @@ ToolSets.Tools = Tools;
 
 export declare namespace ToolSets {
   export {
+    type McpToolFilter as McpToolFilter,
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,

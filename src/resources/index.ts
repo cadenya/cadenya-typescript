@@ -19,13 +19,17 @@ export {
 } from './agents/agents';
 export {
   Objectives,
+  type Message,
   type Objective,
   type ObjectiveSpec,
   type OperationMetadata,
+  type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
+  type ObjectiveListEventsParams,
   type ObjectivesCursorPagination,
-} from './objectives/objectives';
+  type ObjectiveListEventsResponsesCursorPagination,
+} from './objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export {
   Search,
@@ -34,6 +38,7 @@ export {
 } from './search';
 export {
   ToolSets,
+  type McpToolFilter,
   type ToolSet,
   type ToolSetSpec,
   type ToolSetCreateParams,
