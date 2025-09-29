@@ -26,7 +26,6 @@ import {
   ResourceMetadata,
 } from './resources/account';
 import {
-  Message,
   Objective,
   ObjectiveCreateParams,
   ObjectiveListEventsParams,
@@ -859,7 +858,6 @@ export declare namespace Cadenya {
 
   export {
     Objectives as Objectives,
-    type Message as Message,
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,

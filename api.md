@@ -51,7 +51,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/objectives.ts">Message</a></code>
 - <code><a href="./src/resources/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
 - <code><a href="./src/resources/objectives.ts">OperationMetadata</a></code>
