@@ -25,6 +25,19 @@ import {
   AccountSetupResponse,
   ResourceMetadata,
 } from './resources/account';
+import {
+  Message,
+  Objective,
+  ObjectiveCreateParams,
+  ObjectiveListEventsParams,
+  ObjectiveListEventsResponse,
+  ObjectiveListEventsResponsesCursorPagination,
+  ObjectiveListParams,
+  ObjectiveSpec,
+  Objectives,
+  ObjectivesCursorPagination,
+  OperationMetadata,
+} from './resources/objectives';
 import { Ping, PingCheckResponse } from './resources/ping';
 import {
   Search,
@@ -59,15 +72,7 @@ import {
   Page,
 } from './resources/agents/agents';
 import {
-  Objective,
-  ObjectiveCreateParams,
-  ObjectiveListParams,
-  ObjectiveSpec,
-  Objectives,
-  ObjectivesCursorPagination,
-  OperationMetadata,
-} from './resources/objectives/objectives';
-import {
+  McpToolFilter,
   ToolSet,
   ToolSetCreateParams,
   ToolSetListParams,
@@ -798,8 +803,8 @@ export class Cadenya {
   ping: API.Ping = new API.Ping(this);
   search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
-  workspaces: API.Workspaces = new API.Workspaces(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
+  workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -808,8 +813,8 @@ Cadenya.Objectives = Objectives;
 Cadenya.Ping = Ping;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
-Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
+Cadenya.Workspaces = Workspaces;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -841,12 +846,16 @@ export declare namespace Cadenya {
 
   export {
     Objectives as Objectives,
+    type Message as Message,
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
+    type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
+    type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 
   export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
@@ -859,21 +868,13 @@ export declare namespace Cadenya {
 
   export {
     ToolSets as ToolSets,
+    type McpToolFilter as McpToolFilter,
     type ToolSet as ToolSet,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
-  };
-
-  export {
-    Workspaces as Workspaces,
-    type Workspace as Workspace,
-    type WorkspaceSpec as WorkspaceSpec,
-    type WorkspacesCursorPagination as WorkspacesCursorPagination,
-    type WorkspaceCreateParams as WorkspaceCreateParams,
-    type WorkspaceListParams as WorkspaceListParams,
   };
 
   export {
@@ -884,5 +885,14 @@ export declare namespace Cadenya {
     type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
     type WorkspaceSecretUpdateParams as WorkspaceSecretUpdateParams,
     type WorkspaceSecretListParams as WorkspaceSecretListParams,
+  };
+
+  export {
+    Workspaces as Workspaces,
+    type Workspace as Workspace,
+    type WorkspaceSpec as WorkspaceSpec,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
+    type WorkspaceCreateParams as WorkspaceCreateParams,
+    type WorkspaceListParams as WorkspaceListParams,
   };
 }
