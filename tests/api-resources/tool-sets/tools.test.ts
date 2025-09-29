@@ -79,7 +79,7 @@ describe('resource tools', () => {
         description: 'description',
         indexContent: 'indexContent',
         name: 'name',
-        parameters: {},
+        parameters: { foo: 'bar' },
         requiresApproval: true,
         status: 0,
         toolSetId: 'toolSetId',
