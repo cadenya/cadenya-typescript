@@ -86,9 +86,9 @@ export interface Agent {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
-  agentTools?: Array<AgentSpec.AgentTool>;
+  agentTools?: Array<AgentSpecAgentTool>;
 
-  constraints?: AgentSpec.Constraints;
+  constraints?: AgentSpecConstraints;
 
   /**
    * Description of the agent's purpose
@@ -100,85 +100,81 @@ export interface AgentSpec {
    */
   status?: number;
 
-  toolSelection?: AgentSpec.ToolSelection;
+  toolSelection?: AgentSpecToolSelection;
 }
 
-export namespace AgentSpec {
-  export interface AgentTool {
-    toolId?: string;
+export interface AgentSpecAgentTool {
+  toolId?: string;
 
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    toolMetadata?: AccountAPI.ResourceMetadata;
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  toolMetadata?: AccountAPI.ResourceMetadata;
 
-    toolSetId?: string;
+  toolSetId?: string;
 
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    toolSetMetadata?: AccountAPI.ResourceMetadata;
-  }
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  toolSetMetadata?: AccountAPI.ResourceMetadata;
+}
 
-  export interface Constraints {
-    /**
-     * The maximum number of sub-objectives that can be created. 0 means no limit.
-     */
-    maxSubObjectives?: number;
+export interface AgentSpecConstraints {
+  /**
+   * The maximum number of sub-objectives that can be created. 0 means no limit.
+   */
+  maxSubObjectives?: number;
 
-    /**
-     * The maximum number of tool calls that can be made. 0 means no limit.
-     */
-    maxToolCalls?: number;
-  }
+  /**
+   * The maximum number of tool calls that can be made. 0 means no limit.
+   */
+  maxToolCalls?: number;
+}
 
-  export interface ToolSelection {
-    /**
-     * AssignedTools is used to indicate that the agent should only use the tools/tool
-     * sets that are explicitly assigned to it. Allow discovery is used when the agent
-     * thinks it needs to discover more tools.
-     */
-    assignedTools?: ToolSelection.AssignedTools;
+export interface AgentSpecToolSelection {
+  /**
+   * AssignedTools is used to indicate that the agent should only use the tools/tool
+   * sets that are explicitly assigned to it. Allow discovery is used when the agent
+   * thinks it needs to discover more tools.
+   */
+  assignedTools?: ToolSelectionAssignedTools;
 
-    /**
-     * AutoDiscovery is used to indicate that the agent should automatically discover
-     * tools that are not explicitly assigned to it. Max tools is the maximum number of
-     * tools that can be discovered. Hints are optional hints for tool search. These
-     * are used in conjunction with the context-aware tool search and can help select
-     * the best tools for the task.
-     */
-    autoDiscovery?: ToolSelection.AutoDiscovery;
-  }
-
-  export namespace ToolSelection {
-    /**
-     * AssignedTools is used to indicate that the agent should only use the tools/tool
-     * sets that are explicitly assigned to it. Allow discovery is used when the agent
-     * thinks it needs to discover more tools.
-     */
-    export interface AssignedTools {
-      allowDiscovery?: boolean;
-    }
-
-    /**
-     * AutoDiscovery is used to indicate that the agent should automatically discover
-     * tools that are not explicitly assigned to it. Max tools is the maximum number of
-     * tools that can be discovered. Hints are optional hints for tool search. These
-     * are used in conjunction with the context-aware tool search and can help select
-     * the best tools for the task.
-     */
-    export interface AutoDiscovery {
-      hints?: Array<string>;
-
-      maxTools?: number;
-    }
-  }
+  /**
+   * AutoDiscovery is used to indicate that the agent should automatically discover
+   * tools that are not explicitly assigned to it. Max tools is the maximum number of
+   * tools that can be discovered. Hints are optional hints for tool search. These
+   * are used in conjunction with the context-aware tool search and can help select
+   * the best tools for the task.
+   */
+  autoDiscovery?: ToolSelectionAutoDiscovery;
 }
 
 export interface Page {
   nextCursor?: string;
 
   total?: number;
+}
+
+/**
+ * AssignedTools is used to indicate that the agent should only use the tools/tool
+ * sets that are explicitly assigned to it. Allow discovery is used when the agent
+ * thinks it needs to discover more tools.
+ */
+export interface ToolSelectionAssignedTools {
+  allowDiscovery?: boolean;
+}
+
+/**
+ * AutoDiscovery is used to indicate that the agent should automatically discover
+ * tools that are not explicitly assigned to it. Max tools is the maximum number of
+ * tools that can be discovered. Hints are optional hints for tool search. These
+ * are used in conjunction with the context-aware tool search and can help select
+ * the best tools for the task.
+ */
+export interface ToolSelectionAutoDiscovery {
+  hints?: Array<string>;
+
+  maxTools?: number;
 }
 
 export interface AgentCreateParams {
@@ -228,7 +224,12 @@ export declare namespace Agents {
   export {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
+    type AgentSpecAgentTool as AgentSpecAgentTool,
+    type AgentSpecConstraints as AgentSpecConstraints,
+    type AgentSpecToolSelection as AgentSpecToolSelection,
     type Page as Page,
+    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
+    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,

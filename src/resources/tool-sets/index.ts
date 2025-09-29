@@ -4,6 +4,9 @@ export {
   ToolSets,
   type McpToolFilter,
   type ToolSet,
+  type ToolSetAdapter,
+  type ToolSetAdapterHTTP,
+  type ToolSetAdapterMcp,
   type ToolSetSpec,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
@@ -12,8 +15,12 @@ export {
 } from './tool-sets';
 export {
   Tools,
+  type ConfigHTTP,
+  type ConfigMcp,
   type Tool,
   type ToolSpec,
+  type ToolSpecConfig,
+  type ToolSpecContentFilter,
   type ToolCreateParams,
   type ToolRetrieveParams,
   type ToolUpdateParams,

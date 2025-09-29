@@ -1,16 +1,19 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ToolSetsAPI from './tool-sets';
 import * as AccountAPI from '../account';
 import * as ToolsAPI from './tools';
 import {
+  ConfigHTTP,
+  ConfigMcp,
   Tool,
   ToolCreateParams,
   ToolDeleteParams,
   ToolListParams,
   ToolRetrieveParams,
   ToolSpec,
+  ToolSpecConfig,
+  ToolSpecContentFilter,
   ToolUpdateParams,
   Tools,
   ToolsCursorPagination,
@@ -83,38 +86,34 @@ export interface ToolSet {
   spec?: ToolSetSpec;
 }
 
+export interface ToolSetAdapter {
+  http?: ToolSetAdapterHTTP;
+
+  mcp?: ToolSetAdapterMcp;
+}
+
+export interface ToolSetAdapterHTTP {
+  baseUrl?: string;
+
+  headers?: { [key: string]: string };
+}
+
+export interface ToolSetAdapterMcp {
+  excludeTools?: McpToolFilter;
+
+  headers?: { [key: string]: string };
+
+  includeTools?: McpToolFilter;
+
+  url?: string;
+}
+
 export interface ToolSetSpec {
-  adapter?: ToolSetSpec.Adapter;
+  adapter?: ToolSetAdapter;
 
   description?: string;
 
   status?: number;
-}
-
-export namespace ToolSetSpec {
-  export interface Adapter {
-    http?: Adapter.HTTP;
-
-    mcp?: Adapter.Mcp;
-  }
-
-  export namespace Adapter {
-    export interface HTTP {
-      baseUrl?: string;
-
-      headers?: { [key: string]: string };
-    }
-
-    export interface Mcp {
-      excludeTools?: ToolSetsAPI.McpToolFilter;
-
-      headers?: { [key: string]: string };
-
-      includeTools?: ToolSetsAPI.McpToolFilter;
-
-      url?: string;
-    }
-  }
 }
 
 export interface ToolSetCreateParams {
@@ -150,6 +149,9 @@ export declare namespace ToolSets {
   export {
     type McpToolFilter as McpToolFilter,
     type ToolSet as ToolSet,
+    type ToolSetAdapter as ToolSetAdapter,
+    type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
+    type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
@@ -159,8 +161,12 @@ export declare namespace ToolSets {
 
   export {
     Tools as Tools,
+    type ConfigHTTP as ConfigHTTP,
+    type ConfigMcp as ConfigMcp,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
+    type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecContentFilter as ToolSpecContentFilter,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

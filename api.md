@@ -17,7 +17,12 @@ Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentSpecAgentTool</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentSpecConstraints</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentSpecToolSelection</a></code>
 - <code><a href="./src/resources/agents/agents.ts">Page</a></code>
+- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAssignedTools</a></code>
+- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAutoDiscovery</a></code>
 
 Methods:
 
@@ -85,6 +90,9 @@ Types:
 
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">McpToolFilter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSet</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTP</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
 
 Methods:
@@ -99,8 +107,12 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/tool-sets/tools.ts">ConfigHTTP</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ConfigMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">Tool</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfig</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecContentFilter</a></code>
 
 Methods:
 

@@ -60,6 +60,27 @@ export class Tools extends APIResource {
 
 export type ToolsCursorPagination = CursorPagination<Tool>;
 
+export interface ConfigHTTP {
+  headers?: { [key: string]: string };
+
+  path?: string;
+
+  query?: string;
+
+  requestBodyContentType?: string;
+
+  /**
+   * These are only used when the request method is a POST, PUT, or PATCH
+   */
+  requestBodyTemplate?: string;
+
+  requestMethod?: number;
+}
+
+export interface ConfigMcp {
+  toolName?: string;
+}
+
 export interface Tool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -75,9 +96,9 @@ export interface ToolSpec {
    * the tool is called. For example, if the tool is an HTTP tool, the adapter will
    * be Http. If the tool is an inline tool, the adapter will be Inline.
    */
-  config?: ToolSpec.Config;
+  config?: ToolSpecConfig;
 
-  contentFilter?: ToolSpec.ContentFilter;
+  contentFilter?: ToolSpecContentFilter;
 
   description?: string;
 
@@ -94,46 +115,21 @@ export interface ToolSpec {
   toolSetId?: string;
 }
 
-export namespace ToolSpec {
-  /**
-   * Config defines the adapter to use for the tool. This is used to determine how
-   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
-   * be Http. If the tool is an inline tool, the adapter will be Inline.
-   */
-  export interface Config {
-    http?: Config.HTTP;
+/**
+ * Config defines the adapter to use for the tool. This is used to determine how
+ * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+ * be Http. If the tool is an inline tool, the adapter will be Inline.
+ */
+export interface ToolSpecConfig {
+  http?: ConfigHTTP;
 
-    mcp?: Config.Mcp;
-  }
+  mcp?: ConfigMcp;
+}
 
-  export namespace Config {
-    export interface HTTP {
-      headers?: { [key: string]: string };
+export interface ToolSpecContentFilter {
+  jq?: string;
 
-      path?: string;
-
-      query?: string;
-
-      requestBodyContentType?: string;
-
-      /**
-       * These are only used when the request method is a POST, PUT, or PATCH
-       */
-      requestBodyTemplate?: string;
-
-      requestMethod?: number;
-    }
-
-    export interface Mcp {
-      toolName?: string;
-    }
-  }
-
-  export interface ContentFilter {
-    jq?: string;
-
-    regex?: string;
-  }
+  regex?: string;
 }
 
 export interface ToolCreateParams {
@@ -185,8 +181,12 @@ export interface ToolDeleteParams {
 
 export declare namespace Tools {
   export {
+    type ConfigHTTP as ConfigHTTP,
+    type ConfigMcp as ConfigMcp,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
+    type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecContentFilter as ToolSpecContentFilter,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
