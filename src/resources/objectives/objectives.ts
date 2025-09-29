@@ -3,13 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AgentsAPI from '../agents/agents';
 import * as EventsAPI from './events';
-import {
-  EventListParams,
-  Events,
-  ObjectiveEvent,
-  ObjectiveEventSpec,
-  ObjectiveEventsCursorPagination,
-} from './events';
+import { EventListParams, Events, ObjectiveEvent, ObjectiveEventsCursorPagination } from './events';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -46,8 +40,6 @@ export class Objectives extends APIResource {
 export type ObjectivesCursorPagination = CursorPagination<Objective>;
 
 export interface Objective {
-  events?: Array<EventsAPI.ObjectiveEvent>;
-
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
@@ -73,12 +65,33 @@ export interface ObjectiveSpec {
    */
   agent?: AgentsAPI.Agent;
 
+  /**
+   * The objective's events will be sent as an HTTP POST request to this endpoint
+   */
   callbackUrl?: string;
 
+  /**
+   * Represents a dynamically typed value which can be either null, a number, a
+   * string, a boolean, a recursive struct value, or a list of values.
+   */
+  data?: unknown;
+
+  /**
+   * Documents that can be accessed during the objective's iterations. These are not
+   * included in the agent's objective unless requested.
+   */
   documents?: Array<ObjectiveSpec.Document>;
 
+  /**
+   * Contains the objective to be completed. For example: "Respond to the users
+   * request"
+   */
   objective?: string;
 
+  /**
+   * A parent objective means the objective was spawned off using a separate agent to
+   * complete an objective
+   */
   parentObjectiveId?: string;
 
   /**
@@ -87,6 +100,10 @@ export interface ObjectiveSpec {
    */
   promptIds?: Array<string>;
 
+  /**
+   * Secrets that can be used in the headers for tool calls using the secret
+   * interpolation format.
+   */
   secrets?: Array<ObjectiveSpec.Secret>;
 
   /**
@@ -201,7 +218,6 @@ export declare namespace Objectives {
   export {
     Events as Events,
     type ObjectiveEvent as ObjectiveEvent,
-    type ObjectiveEventSpec as ObjectiveEventSpec,
     type ObjectiveEventsCursorPagination as ObjectiveEventsCursorPagination,
     type EventListParams as EventListParams,
   };

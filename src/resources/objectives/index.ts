@@ -3,7 +3,6 @@
 export {
   Events,
   type ObjectiveEvent,
-  type ObjectiveEventSpec,
   type EventListParams,
   type ObjectiveEventsCursorPagination,
 } from './events';
