@@ -106,7 +106,7 @@ export interface ToolSpec {
 
   name?: string;
 
-  parameters?: unknown;
+  parameters?: { [key: string]: unknown };
 
   requiresApproval?: boolean;
 
