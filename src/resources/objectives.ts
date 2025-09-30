@@ -64,54 +64,6 @@ export type ObjectivesCursorPagination = CursorPagination<Objective>;
 
 export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<ObjectiveListEventsResponse>;
 
-/**
- * Individual message in the conversation
- */
-export interface Message {
-  content?: string;
-
-  reasoning?: string;
-
-  refusal?: string;
-
-  role?: string;
-
-  tool_call_id?: string;
-
-  /**
-   * We're overwriding the keys for JSON so that it is compatible with the OpenRouter
-   * API
-   */
-  tool_calls?: Array<Message.ToolCall>;
-}
-
-export namespace Message {
-  /**
-   * Tool call made by assistant
-   */
-  export interface ToolCall {
-    id?: string;
-
-    /**
-     * Function details within a tool call
-     */
-    function?: ToolCall.Function;
-
-    type?: string;
-  }
-
-  export namespace ToolCall {
-    /**
-     * Function details within a tool call
-     */
-    export interface Function {
-      arguments?: string;
-
-      name?: string;
-    }
-  }
-}
-
 export interface Objective {
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -243,41 +195,131 @@ export interface OperationMetadata {
   workspaceId?: string;
 }
 
-/**
- * ObjectiveEvent is a union of all the possible event types that can be sent to
- * the objective. It also contains events for tool approvals, and events for when
- * the objective is completed. It is used to construct the complete timeline for an
- * objective.
- */
 export interface ObjectiveListEventsResponse {
-  id?: string;
-
   /**
-   * Individual message in the conversation
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
    */
-  assistantMessage?: Message;
+  metadata?: OperationMetadata;
 
-  /**
-   * Must match one of the event_type keys below. IE: "assistant_message" This is so
-   * API callers can distinguish between the different event types when accessing the
-   * JSON payload
-   */
-  eventType?: string;
+  spec?: ObjectiveListEventsResponse.Spec;
+}
 
-  /**
-   * Individual message in the conversation
-   */
-  systemMessage?: Message;
+export namespace ObjectiveListEventsResponse {
+  export interface Spec {
+    id?: string;
 
-  /**
-   * Individual message in the conversation
-   */
-  toolMessage?: Message;
+    actorId?: string;
 
-  /**
-   * Individual message in the conversation
-   */
-  userMessage?: Message;
+    createdAt?: string;
+
+    /**
+     * Message for a chat completion
+     */
+    message?: Spec.Message;
+
+    objectiveId?: string;
+
+    /**
+     * Sub-objective branching
+     */
+    subObjective?: Spec.SubObjective;
+
+    /**
+     * Human approval events
+     */
+    toolApproval?: Spec.ToolApproval;
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    toolCall?: Spec.ToolCall;
+
+    toolRejection?: Spec.ToolRejection;
+  }
+
+  export namespace Spec {
+    /**
+     * Message for a chat completion
+     */
+    export interface Message {
+      content?: string;
+
+      role?: number;
+    }
+
+    /**
+     * Sub-objective branching
+     */
+    export interface SubObjective {
+      rationale?: string;
+
+      subObjectiveId?: string;
+    }
+
+    /**
+     * Human approval events
+     */
+    export interface ToolApproval {
+      reason?: string;
+
+      toolCallId?: string;
+    }
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    export interface ToolCall {
+      /**
+       * The arguments sent to the tool
+       */
+      arguments?: unknown;
+
+      /**
+       * Error details when status = FAILED
+       */
+      error?: ToolCall.Error;
+
+      /**
+       * The ID of the tool call that the LLM generated for us to call
+       */
+      externalToolCallId?: string;
+
+      /**
+       * The result from the tool execution
+       */
+      result?: string;
+
+      /**
+       * Current status of the tool call
+       */
+      status?: number;
+
+      /**
+       * A reference to the tool that was called
+       */
+      toolId?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Error details when status = FAILED
+       */
+      export interface Error {
+        code?: string;
+
+        message?: string;
+      }
+    }
+
+    export interface ToolRejection {
+      alternative?: string;
+
+      reason?: string;
+
+      toolCallId?: string;
+    }
+  }
 }
 
 export interface ObjectiveCreateParams {
@@ -336,7 +378,6 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
 
 export declare namespace Objectives {
   export {
-    type Message as Message,
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
