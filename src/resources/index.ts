@@ -27,6 +27,7 @@ export {
   type Objective,
   type ObjectiveSpec,
   type OperationMetadata,
+  type ObjectiveContinueResponse,
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,

@@ -4,7 +4,6 @@ import { APIResource } from '../core/resource';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -36,12 +35,12 @@ export class Objectives extends APIResource {
   /**
    * Continues an objective that has completed
    */
-  continue(objectiveID: string, body: ObjectiveContinueParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/v1/objectives/${objectiveID}/continue`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  continue(
+    objectiveID: string,
+    body: ObjectiveContinueParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveContinueResponse> {
+    return this._client.post(path`/v1/objectives/${objectiveID}/continue`, { body, ...options });
   }
 
   /**
@@ -193,6 +192,133 @@ export interface OperationMetadata {
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
   workspaceId?: string;
+}
+
+export interface ObjectiveContinueResponse {
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: OperationMetadata;
+
+  spec?: ObjectiveContinueResponse.Spec;
+}
+
+export namespace ObjectiveContinueResponse {
+  export interface Spec {
+    id?: string;
+
+    actorId?: string;
+
+    createdAt?: string;
+
+    /**
+     * Message for a chat completion
+     */
+    message?: Spec.Message;
+
+    objectiveId?: string;
+
+    /**
+     * Sub-objective branching
+     */
+    subObjective?: Spec.SubObjective;
+
+    /**
+     * Human approval events
+     */
+    toolApproval?: Spec.ToolApproval;
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    toolCall?: Spec.ToolCall;
+
+    toolRejection?: Spec.ToolRejection;
+  }
+
+  export namespace Spec {
+    /**
+     * Message for a chat completion
+     */
+    export interface Message {
+      content?: string;
+
+      role?: number;
+    }
+
+    /**
+     * Sub-objective branching
+     */
+    export interface SubObjective {
+      rationale?: string;
+
+      subObjectiveId?: string;
+    }
+
+    /**
+     * Human approval events
+     */
+    export interface ToolApproval {
+      reason?: string;
+
+      toolCallId?: string;
+    }
+
+    /**
+     * Tool call that the LLM generated for us to call
+     */
+    export interface ToolCall {
+      /**
+       * The arguments sent to the tool
+       */
+      arguments?: unknown;
+
+      /**
+       * Error details when status = FAILED
+       */
+      error?: ToolCall.Error;
+
+      /**
+       * The ID of the tool call that the LLM generated for us to call
+       */
+      externalToolCallId?: string;
+
+      /**
+       * The result from the tool execution
+       */
+      result?: string;
+
+      /**
+       * Current status of the tool call
+       */
+      status?: number;
+
+      /**
+       * A reference to the tool that was called
+       */
+      toolId?: string;
+    }
+
+    export namespace ToolCall {
+      /**
+       * Error details when status = FAILED
+       */
+      export interface Error {
+        code?: string;
+
+        message?: string;
+      }
+    }
+
+    export interface ToolRejection {
+      alternative?: string;
+
+      reason?: string;
+
+      toolCallId?: string;
+    }
+  }
 }
 
 export interface ObjectiveListEventsResponse {
@@ -381,6 +507,7 @@ export declare namespace Objectives {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
+    type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,

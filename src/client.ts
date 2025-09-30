@@ -28,6 +28,7 @@ import {
 import {
   Objective,
   ObjectiveContinueParams,
+  ObjectiveContinueResponse,
   ObjectiveCreateParams,
   ObjectiveListEventsParams,
   ObjectiveListEventsResponse,
@@ -862,6 +863,7 @@ export declare namespace Cadenya {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
+    type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
