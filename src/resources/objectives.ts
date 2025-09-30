@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -30,6 +31,17 @@ export class Objectives extends APIResource {
     options?: RequestOptions,
   ): PagePromise<ObjectivesCursorPagination, Objective> {
     return this._client.getAPIList('/v1/objectives', CursorPagination<Objective>, { query, ...options });
+  }
+
+  /**
+   * Continues an objective that has completed
+   */
+  continue(objectiveID: string, body: ObjectiveContinueParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/v1/objectives/${objectiveID}/continue`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -301,6 +313,20 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   state?: number;
 }
 
+export interface ObjectiveContinueParams {
+  /**
+   * The ID of the objective. If you have assigned an external ID to the objective,
+   * you can prefix the ID with "eid:". For example, "eid:1234567890". Otherwise, the
+   * ID assigned by Cadenya should be used.
+   */
+  id?: string;
+
+  /**
+   * The message to continue an objective that has completed.
+   */
+  message?: string;
+}
+
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
@@ -319,6 +345,7 @@ export declare namespace Objectives {
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 }

@@ -28,6 +28,7 @@ import {
 import {
   Message,
   Objective,
+  ObjectiveContinueParams,
   ObjectiveCreateParams,
   ObjectiveListEventsParams,
   ObjectiveListEventsResponse,
@@ -868,6 +869,7 @@ export declare namespace Cadenya {
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 
