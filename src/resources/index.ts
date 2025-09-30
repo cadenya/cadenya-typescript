@@ -31,6 +31,7 @@ export {
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
+  type ObjectiveContinueParams,
   type ObjectiveListEventsParams,
   type ObjectivesCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
