@@ -24,6 +24,7 @@ export {
 } from './agents/agents';
 export {
   Objectives,
+  type Message,
   type Objective,
   type ObjectiveSpec,
   type OperationMetadata,
