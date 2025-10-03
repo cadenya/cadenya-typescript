@@ -31,7 +31,7 @@ export namespace PingCheckResponse {
     export interface Metadata {
       id?: string;
 
-      labels?: { [key: string]: string };
+      name?: string;
     }
 
     export interface Spec {
