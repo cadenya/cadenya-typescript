@@ -312,8 +312,6 @@ export namespace ObjectiveContinueResponse {
     }
 
     export interface ToolRejection {
-      alternative?: string;
-
       reason?: string;
 
       toolCallId?: string;
@@ -439,8 +437,6 @@ export namespace ObjectiveListEventsResponse {
     }
 
     export interface ToolRejection {
-      alternative?: string;
-
       reason?: string;
 
       toolCallId?: string;
