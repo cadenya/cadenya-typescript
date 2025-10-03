@@ -54,7 +54,6 @@ Types:
 - <code><a href="./src/resources/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
 - <code><a href="./src/resources/objectives.ts">OperationMetadata</a></code>
-- <code><a href="./src/resources/objectives.ts">ObjectiveContinueResponse</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveListEventsResponse</a></code>
 
 Methods:
@@ -62,7 +61,6 @@ Methods:
 - <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">create</a>({ ...params }) -> Objective</code>
 - <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives.ts">retrieve</a>(id) -> Objective</code>
 - <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
-- <code title="post /v1/objectives/{objective_id}/continue">client.objectives.<a href="./src/resources/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
 - <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
 # Ping
