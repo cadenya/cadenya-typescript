@@ -1,7 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AccountAPI from './account';
 import * as AgentsAPI from './agents/agents';
+import * as ToolsAPI from './tool-sets/tools';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -195,251 +197,431 @@ export interface OperationMetadata {
 }
 
 export interface ObjectiveContinueResponse {
+  actor?: ObjectiveContinueResponse.Actor;
+
+  event?: ObjectiveContinueResponse.Event;
+
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
   metadata?: OperationMetadata;
 
-  spec?: ObjectiveContinueResponse.Spec;
+  objective?: Objective;
 }
 
 export namespace ObjectiveContinueResponse {
-  export interface Spec {
-    id?: string;
+  export interface Actor {
+    metadata?: Actor.Metadata;
 
-    actorId?: string;
-
-    createdAt?: string;
-
-    /**
-     * Message for a chat completion
-     */
-    message?: Spec.Message;
-
-    objectiveId?: string;
-
-    /**
-     * Sub-objective branching
-     */
-    subObjective?: Spec.SubObjective;
-
-    /**
-     * Human approval events
-     */
-    toolApproval?: Spec.ToolApproval;
-
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    toolCall?: Spec.ToolCall;
-
-    toolRejection?: Spec.ToolRejection;
+    spec?: Actor.Spec;
   }
 
-  export namespace Spec {
-    /**
-     * Message for a chat completion
-     */
+  export namespace Actor {
+    export interface Metadata {
+      id?: string;
+
+      name?: string;
+    }
+
+    export interface Spec {
+      /**
+       * API Keys
+       */
+      apiKey?: Spec.APIKey;
+
+      profile?: Spec.Profile;
+    }
+
+    export namespace Spec {
+      /**
+       * API Keys
+       */
+      export interface APIKey {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        metadata?: AccountAPI.ResourceMetadata;
+
+        spec?: APIKey.Spec;
+      }
+
+      export namespace APIKey {
+        export interface Spec {
+          token?: string;
+        }
+      }
+
+      export interface Profile {
+        email?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  export interface Event {
+    message?: Event.Message;
+
+    toolApprovalRequested?: Event.ToolApprovalRequested;
+
+    toolApproved?: Event.ToolApproved;
+
+    toolCalled?: Event.ToolCalled;
+
+    toolDenied?: Event.ToolDenied;
+
+    type?: string;
+  }
+
+  export namespace Event {
     export interface Message {
       content?: string;
 
-      role?: number;
+      role?: string;
     }
 
-    /**
-     * Sub-objective branching
-     */
-    export interface SubObjective {
-      rationale?: string;
+    export interface ToolApprovalRequested {
+      arguments?: { [key: string]: unknown };
 
-      subObjectiveId?: string;
+      tool?: ToolsAPI.Tool;
     }
 
-    /**
-     * Human approval events
-     */
-    export interface ToolApproval {
-      reason?: string;
+    export interface ToolApproved {
+      actor?: ToolApproved.Actor;
 
-      toolCallId?: string;
+      tool?: ToolsAPI.Tool;
     }
 
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    export interface ToolCall {
-      /**
-       * The arguments sent to the tool
-       */
-      arguments?: unknown;
+    export namespace ToolApproved {
+      export interface Actor {
+        metadata?: Actor.Metadata;
 
-      /**
-       * Error details when status = FAILED
-       */
-      error?: ToolCall.Error;
+        spec?: Actor.Spec;
+      }
 
-      /**
-       * The ID of the tool call that the LLM generated for us to call
-       */
-      externalToolCallId?: string;
+      export namespace Actor {
+        export interface Metadata {
+          id?: string;
 
-      /**
-       * The result from the tool execution
-       */
-      result?: string;
+          name?: string;
+        }
 
-      /**
-       * Current status of the tool call
-       */
-      status?: number;
+        export interface Spec {
+          /**
+           * API Keys
+           */
+          apiKey?: Spec.APIKey;
 
-      /**
-       * A reference to the tool that was called
-       */
-      toolId?: string;
-    }
+          profile?: Spec.Profile;
+        }
 
-    export namespace ToolCall {
-      /**
-       * Error details when status = FAILED
-       */
-      export interface Error {
-        code?: string;
+        export namespace Spec {
+          /**
+           * API Keys
+           */
+          export interface APIKey {
+            /**
+             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+             */
+            metadata?: AccountAPI.ResourceMetadata;
 
-        message?: string;
+            spec?: APIKey.Spec;
+          }
+
+          export namespace APIKey {
+            export interface Spec {
+              token?: string;
+            }
+          }
+
+          export interface Profile {
+            email?: string;
+
+            name?: string;
+          }
+        }
       }
     }
 
-    export interface ToolRejection {
+    export interface ToolCalled {
+      content?: string;
+
+      tool?: ToolsAPI.Tool;
+    }
+
+    export interface ToolDenied {
+      actor?: ToolDenied.Actor;
+
       reason?: string;
 
-      toolCallId?: string;
+      tool?: ToolsAPI.Tool;
+    }
+
+    export namespace ToolDenied {
+      export interface Actor {
+        metadata?: Actor.Metadata;
+
+        spec?: Actor.Spec;
+      }
+
+      export namespace Actor {
+        export interface Metadata {
+          id?: string;
+
+          name?: string;
+        }
+
+        export interface Spec {
+          /**
+           * API Keys
+           */
+          apiKey?: Spec.APIKey;
+
+          profile?: Spec.Profile;
+        }
+
+        export namespace Spec {
+          /**
+           * API Keys
+           */
+          export interface APIKey {
+            /**
+             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+             */
+            metadata?: AccountAPI.ResourceMetadata;
+
+            spec?: APIKey.Spec;
+          }
+
+          export namespace APIKey {
+            export interface Spec {
+              token?: string;
+            }
+          }
+
+          export interface Profile {
+            email?: string;
+
+            name?: string;
+          }
+        }
+      }
     }
   }
 }
 
 export interface ObjectiveListEventsResponse {
+  actor?: ObjectiveListEventsResponse.Actor;
+
+  event?: ObjectiveListEventsResponse.Event;
+
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
   metadata?: OperationMetadata;
 
-  spec?: ObjectiveListEventsResponse.Spec;
+  objective?: Objective;
 }
 
 export namespace ObjectiveListEventsResponse {
-  export interface Spec {
-    id?: string;
+  export interface Actor {
+    metadata?: Actor.Metadata;
 
-    actorId?: string;
-
-    createdAt?: string;
-
-    /**
-     * Message for a chat completion
-     */
-    message?: Spec.Message;
-
-    objectiveId?: string;
-
-    /**
-     * Sub-objective branching
-     */
-    subObjective?: Spec.SubObjective;
-
-    /**
-     * Human approval events
-     */
-    toolApproval?: Spec.ToolApproval;
-
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    toolCall?: Spec.ToolCall;
-
-    toolRejection?: Spec.ToolRejection;
+    spec?: Actor.Spec;
   }
 
-  export namespace Spec {
-    /**
-     * Message for a chat completion
-     */
+  export namespace Actor {
+    export interface Metadata {
+      id?: string;
+
+      name?: string;
+    }
+
+    export interface Spec {
+      /**
+       * API Keys
+       */
+      apiKey?: Spec.APIKey;
+
+      profile?: Spec.Profile;
+    }
+
+    export namespace Spec {
+      /**
+       * API Keys
+       */
+      export interface APIKey {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        metadata?: AccountAPI.ResourceMetadata;
+
+        spec?: APIKey.Spec;
+      }
+
+      export namespace APIKey {
+        export interface Spec {
+          token?: string;
+        }
+      }
+
+      export interface Profile {
+        email?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  export interface Event {
+    message?: Event.Message;
+
+    toolApprovalRequested?: Event.ToolApprovalRequested;
+
+    toolApproved?: Event.ToolApproved;
+
+    toolCalled?: Event.ToolCalled;
+
+    toolDenied?: Event.ToolDenied;
+
+    type?: string;
+  }
+
+  export namespace Event {
     export interface Message {
       content?: string;
 
-      role?: number;
+      role?: string;
     }
 
-    /**
-     * Sub-objective branching
-     */
-    export interface SubObjective {
-      rationale?: string;
+    export interface ToolApprovalRequested {
+      arguments?: { [key: string]: unknown };
 
-      subObjectiveId?: string;
+      tool?: ToolsAPI.Tool;
     }
 
-    /**
-     * Human approval events
-     */
-    export interface ToolApproval {
-      reason?: string;
+    export interface ToolApproved {
+      actor?: ToolApproved.Actor;
 
-      toolCallId?: string;
+      tool?: ToolsAPI.Tool;
     }
 
-    /**
-     * Tool call that the LLM generated for us to call
-     */
-    export interface ToolCall {
-      /**
-       * The arguments sent to the tool
-       */
-      arguments?: unknown;
+    export namespace ToolApproved {
+      export interface Actor {
+        metadata?: Actor.Metadata;
 
-      /**
-       * Error details when status = FAILED
-       */
-      error?: ToolCall.Error;
+        spec?: Actor.Spec;
+      }
 
-      /**
-       * The ID of the tool call that the LLM generated for us to call
-       */
-      externalToolCallId?: string;
+      export namespace Actor {
+        export interface Metadata {
+          id?: string;
 
-      /**
-       * The result from the tool execution
-       */
-      result?: string;
+          name?: string;
+        }
 
-      /**
-       * Current status of the tool call
-       */
-      status?: number;
+        export interface Spec {
+          /**
+           * API Keys
+           */
+          apiKey?: Spec.APIKey;
 
-      /**
-       * A reference to the tool that was called
-       */
-      toolId?: string;
-    }
+          profile?: Spec.Profile;
+        }
 
-    export namespace ToolCall {
-      /**
-       * Error details when status = FAILED
-       */
-      export interface Error {
-        code?: string;
+        export namespace Spec {
+          /**
+           * API Keys
+           */
+          export interface APIKey {
+            /**
+             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+             */
+            metadata?: AccountAPI.ResourceMetadata;
 
-        message?: string;
+            spec?: APIKey.Spec;
+          }
+
+          export namespace APIKey {
+            export interface Spec {
+              token?: string;
+            }
+          }
+
+          export interface Profile {
+            email?: string;
+
+            name?: string;
+          }
+        }
       }
     }
 
-    export interface ToolRejection {
+    export interface ToolCalled {
+      content?: string;
+
+      tool?: ToolsAPI.Tool;
+    }
+
+    export interface ToolDenied {
+      actor?: ToolDenied.Actor;
+
       reason?: string;
 
-      toolCallId?: string;
+      tool?: ToolsAPI.Tool;
+    }
+
+    export namespace ToolDenied {
+      export interface Actor {
+        metadata?: Actor.Metadata;
+
+        spec?: Actor.Spec;
+      }
+
+      export namespace Actor {
+        export interface Metadata {
+          id?: string;
+
+          name?: string;
+        }
+
+        export interface Spec {
+          /**
+           * API Keys
+           */
+          apiKey?: Spec.APIKey;
+
+          profile?: Spec.Profile;
+        }
+
+        export namespace Spec {
+          /**
+           * API Keys
+           */
+          export interface APIKey {
+            /**
+             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+             */
+            metadata?: AccountAPI.ResourceMetadata;
+
+            spec?: APIKey.Spec;
+          }
+
+          export namespace APIKey {
+            export interface Spec {
+              token?: string;
+            }
+          }
+
+          export interface Profile {
+            email?: string;
+
+            name?: string;
+          }
+        }
+      }
     }
   }
 }
