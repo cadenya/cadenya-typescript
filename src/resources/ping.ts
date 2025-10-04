@@ -22,18 +22,15 @@ export interface PingCheckResponse {
 
 export namespace PingCheckResponse {
   export interface Actor {
-    metadata?: Actor.Metadata;
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    metadata?: AccountAPI.ResourceMetadata;
 
     spec?: Actor.Spec;
   }
 
   export namespace Actor {
-    export interface Metadata {
-      id?: string;
-
-      name?: string;
-    }
-
     export interface Spec {
       /**
        * API Keys

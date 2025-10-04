@@ -201,18 +201,15 @@ export interface ObjectiveListEventsResponse {
 
 export namespace ObjectiveListEventsResponse {
   export interface Actor {
-    metadata?: Actor.Metadata;
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    metadata?: AccountAPI.ResourceMetadata;
 
     spec?: Actor.Spec;
   }
 
   export namespace Actor {
-    export interface Metadata {
-      id?: string;
-
-      name?: string;
-    }
-
     export interface Spec {
       /**
        * API Keys
@@ -284,18 +281,15 @@ export namespace ObjectiveListEventsResponse {
 
     export namespace ToolApproved {
       export interface Actor {
-        metadata?: Actor.Metadata;
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        metadata?: AccountAPI.ResourceMetadata;
 
         spec?: Actor.Spec;
       }
 
       export namespace Actor {
-        export interface Metadata {
-          id?: string;
-
-          name?: string;
-        }
-
         export interface Spec {
           /**
            * API Keys
@@ -349,18 +343,15 @@ export namespace ObjectiveListEventsResponse {
 
     export namespace ToolDenied {
       export interface Actor {
-        metadata?: Actor.Metadata;
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        metadata?: AccountAPI.ResourceMetadata;
 
         spec?: Actor.Spec;
       }
 
       export namespace Actor {
-        export interface Metadata {
-          id?: string;
-
-          name?: string;
-        }
-
         export interface Spec {
           /**
            * API Keys
