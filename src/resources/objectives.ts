@@ -3,7 +3,6 @@
 import { APIResource } from '../core/resource';
 import * as AccountAPI from './account';
 import * as AgentsAPI from './agents/agents';
-import * as ToolsAPI from './tool-sets/tools';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -270,123 +269,45 @@ export namespace ObjectiveListEventsResponse {
     export interface ToolApprovalRequested {
       arguments?: { [key: string]: unknown };
 
-      tool?: ToolsAPI.Tool;
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
     }
 
     export interface ToolApproved {
-      actor?: ToolApproved.Actor;
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: AccountAPI.ResourceMetadata;
 
-      tool?: ToolsAPI.Tool;
-    }
-
-    export namespace ToolApproved {
-      export interface Actor {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        metadata?: AccountAPI.ResourceMetadata;
-
-        spec?: Actor.Spec;
-      }
-
-      export namespace Actor {
-        export interface Spec {
-          /**
-           * API Keys
-           */
-          apiKey?: Spec.APIKey;
-
-          profile?: Spec.Profile;
-        }
-
-        export namespace Spec {
-          /**
-           * API Keys
-           */
-          export interface APIKey {
-            /**
-             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-             */
-            metadata?: AccountAPI.ResourceMetadata;
-
-            spec?: APIKey.Spec;
-          }
-
-          export namespace APIKey {
-            export interface Spec {
-              token?: string;
-            }
-          }
-
-          export interface Profile {
-            email?: string;
-
-            name?: string;
-          }
-        }
-      }
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
     }
 
     export interface ToolCalled {
       content?: string;
 
-      tool?: ToolsAPI.Tool;
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      toolMetadata?: AccountAPI.ResourceMetadata;
     }
 
     export interface ToolDenied {
-      actor?: ToolDenied.Actor;
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: AccountAPI.ResourceMetadata;
 
       reason?: string;
 
-      tool?: ToolsAPI.Tool;
-    }
-
-    export namespace ToolDenied {
-      export interface Actor {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        metadata?: AccountAPI.ResourceMetadata;
-
-        spec?: Actor.Spec;
-      }
-
-      export namespace Actor {
-        export interface Spec {
-          /**
-           * API Keys
-           */
-          apiKey?: Spec.APIKey;
-
-          profile?: Spec.Profile;
-        }
-
-        export namespace Spec {
-          /**
-           * API Keys
-           */
-          export interface APIKey {
-            /**
-             * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-             */
-            metadata?: AccountAPI.ResourceMetadata;
-
-            spec?: APIKey.Spec;
-          }
-
-          export namespace APIKey {
-            export interface Spec {
-              token?: string;
-            }
-          }
-
-          export interface Profile {
-            email?: string;
-
-            name?: string;
-          }
-        }
-      }
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
     }
   }
 }
