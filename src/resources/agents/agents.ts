@@ -101,9 +101,23 @@ export interface AgentSpec {
   status?: number;
 
   toolSelection?: AgentSpecToolSelection;
+
+  /**
+   * The URL that Cadenya will send events for any objective assigned to the agent.
+   */
+  webhookEventsUrl?: string;
+
+  webhookEventsUrlSecret?: string;
 }
 
 export interface AgentSpecAgentTool {
+  agentId?: string;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agentMetadata?: AccountAPI.ResourceMetadata;
+
   toolId?: string;
 
   /**
