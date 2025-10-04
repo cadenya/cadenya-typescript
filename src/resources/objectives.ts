@@ -34,6 +34,17 @@ export class Objectives extends APIResource {
   }
 
   /**
+   * Continues an objective that has completed
+   */
+  continue(
+    objectiveID: string,
+    body: ObjectiveContinueParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveContinueResponse> {
+    return this._client.post(path`/v1/objectives/${objectiveID}/continue`, { body, ...options });
+  }
+
+  /**
    * Lists all events for an objective
    */
   listEvents(
@@ -182,6 +193,134 @@ export interface OperationMetadata {
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
   workspaceId?: string;
+}
+
+export interface ObjectiveContinueResponse {
+  actor?: ObjectiveContinueResponse.Actor;
+
+  event?: ObjectiveContinueResponse.Event;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: OperationMetadata;
+
+  objective?: Objective;
+}
+
+export namespace ObjectiveContinueResponse {
+  export interface Actor {
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    metadata?: AccountAPI.ResourceMetadata;
+
+    spec?: Actor.Spec;
+  }
+
+  export namespace Actor {
+    export interface Spec {
+      /**
+       * API Keys
+       */
+      apiKey?: Spec.APIKey;
+
+      profile?: Spec.Profile;
+    }
+
+    export namespace Spec {
+      /**
+       * API Keys
+       */
+      export interface APIKey {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        metadata?: AccountAPI.ResourceMetadata;
+
+        spec?: APIKey.Spec;
+      }
+
+      export namespace APIKey {
+        export interface Spec {
+          token?: string;
+        }
+      }
+
+      export interface Profile {
+        email?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  export interface Event {
+    message?: Event.Message;
+
+    toolApprovalRequested?: Event.ToolApprovalRequested;
+
+    toolApproved?: Event.ToolApproved;
+
+    toolCalled?: Event.ToolCalled;
+
+    toolDenied?: Event.ToolDenied;
+
+    type?: string;
+  }
+
+  export namespace Event {
+    export interface Message {
+      content?: string;
+
+      role?: string;
+    }
+
+    export interface ToolApprovalRequested {
+      arguments?: { [key: string]: unknown };
+
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
+    }
+
+    export interface ToolApproved {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: AccountAPI.ResourceMetadata;
+
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
+    }
+
+    export interface ToolCalled {
+      content?: string;
+
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      toolMetadata?: AccountAPI.ResourceMetadata;
+    }
+
+    export interface ToolDenied {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: AccountAPI.ResourceMetadata;
+
+      reason?: string;
+
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      tool?: AccountAPI.ResourceMetadata;
+    }
+  }
 }
 
 export interface ObjectiveListEventsResponse {
@@ -345,6 +484,20 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   state?: number;
 }
 
+export interface ObjectiveContinueParams {
+  /**
+   * The message to continue an objective that has completed.
+   */
+  message?: string;
+
+  /**
+   * The ID of the objective. If you have assigned an external ID to the objective,
+   * you can prefix the ID with "eid:". For example, "eid:1234567890". Otherwise, the
+   * ID assigned by Cadenya should be used.
+   */
+  body_objectiveId?: string;
+}
+
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
@@ -357,11 +510,13 @@ export declare namespace Objectives {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
     type OperationMetadata as OperationMetadata,
+    type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 }
