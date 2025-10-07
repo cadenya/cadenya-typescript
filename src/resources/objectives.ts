@@ -281,9 +281,37 @@ export namespace ObjectiveContinueResponse {
       arguments?: { [key: string]: unknown };
 
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolApprovalRequested.Callable;
+    }
+
+    export namespace ToolApprovalRequested {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolApproved {
@@ -293,18 +321,74 @@ export namespace ObjectiveContinueResponse {
       actor?: AccountAPI.ResourceMetadata;
 
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolApproved.Callable;
+    }
+
+    export namespace ToolApproved {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolCalled {
-      content?: string;
-
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      toolMetadata?: AccountAPI.ResourceMetadata;
+      callable?: ToolCalled.Callable;
+
+      content?: string;
+    }
+
+    export namespace ToolCalled {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolDenied {
@@ -313,12 +397,40 @@ export namespace ObjectiveContinueResponse {
        */
       actor?: AccountAPI.ResourceMetadata;
 
-      reason?: string;
-
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolDenied.Callable;
+
+      reason?: string;
+    }
+
+    export namespace ToolDenied {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
   }
 }
@@ -409,9 +521,37 @@ export namespace ObjectiveListEventsResponse {
       arguments?: { [key: string]: unknown };
 
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolApprovalRequested.Callable;
+    }
+
+    export namespace ToolApprovalRequested {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolApproved {
@@ -421,18 +561,74 @@ export namespace ObjectiveListEventsResponse {
       actor?: AccountAPI.ResourceMetadata;
 
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolApproved.Callable;
+    }
+
+    export namespace ToolApproved {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolCalled {
-      content?: string;
-
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      toolMetadata?: AccountAPI.ResourceMetadata;
+      callable?: ToolCalled.Callable;
+
+      content?: string;
+    }
+
+    export namespace ToolCalled {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
 
     export interface ToolDenied {
@@ -441,12 +637,40 @@ export namespace ObjectiveListEventsResponse {
        */
       actor?: AccountAPI.ResourceMetadata;
 
-      reason?: string;
-
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      tool?: AccountAPI.ResourceMetadata;
+      callable?: ToolDenied.Callable;
+
+      reason?: string;
+    }
+
+    export namespace ToolDenied {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      export interface Callable {
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        agent?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+
+        /**
+         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+         */
+        tool?: AccountAPI.ResourceMetadata;
+      }
     }
   }
 }
