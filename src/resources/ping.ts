@@ -17,7 +17,17 @@ export interface PingCheckResponse {
 
   actor?: PingCheckResponse.Actor;
 
-  workspace?: WorkspacesAPI.Workspace;
+  /**
+   * Has the currently assigned workspace for the request. If need to know which
+   * workspace a token is for, reference this field.
+   */
+  currentWorkspace?: WorkspacesAPI.Workspace;
+
+  /**
+   * Indicates if an account needs setup. If you are calling this API with an API
+   * key, this will always be true. If it isn't, something has gone horribly wrong.
+   */
+  needsSetup?: boolean;
 }
 
 export namespace PingCheckResponse {
