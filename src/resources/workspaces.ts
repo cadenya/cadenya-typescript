@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
+import { WorkspacesCursorPagination } from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -10,7 +11,7 @@ export class Workspaces extends APIResource {
   /**
    * Creates a new workspace for the account
    */
-  create(body: WorkspaceCreateParams, options?: RequestOptions): APIPromise<Workspace> {
+  create(body: WorkspaceCreateParams, options?: RequestOptions): APIPromise<Shared.Workspace> {
     return this._client.post('/v1/workspaces', { body, ...options });
   }
 
@@ -20,20 +21,12 @@ export class Workspaces extends APIResource {
   list(
     query: WorkspaceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<WorkspacesCursorPagination, Workspace> {
-    return this._client.getAPIList('/v1/workspaces', CursorPagination<Workspace>, { query, ...options });
+  ): PagePromise<WorkspacesCursorPagination, Shared.Workspace> {
+    return this._client.getAPIList('/v1/workspaces', CursorPagination<Shared.Workspace>, {
+      query,
+      ...options,
+    });
   }
-}
-
-export type WorkspacesCursorPagination = CursorPagination<Workspace>;
-
-export interface Workspace {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  metadata?: Shared.ResourceMetadata;
-
-  spec?: WorkspaceSpec;
 }
 
 export interface WorkspaceSpec {
@@ -58,10 +51,10 @@ export interface WorkspaceListParams extends CursorPaginationParams {
 
 export declare namespace Workspaces {
   export {
-    type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
 }
+
+export { type WorkspacesCursorPagination };

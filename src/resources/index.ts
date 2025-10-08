@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { AccountResource, type Account, type AccountSetupResponse, type AccountSetupParams } from './account';
+export { Account, type AccountSetupResponse, type AccountSetupParams } from './account';
 export {
   Agents,
   type Agent,
@@ -21,7 +21,6 @@ export {
   Objectives,
   type Objective,
   type ObjectiveSpec,
-  type OperationMetadata,
   type ObjectiveContinueResponse,
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
@@ -61,9 +60,7 @@ export {
 } from './workspace-secrets';
 export {
   Workspaces,
-  type Workspace,
   type WorkspaceSpec,
   type WorkspaceCreateParams,
   type WorkspaceListParams,
-  type WorkspacesCursorPagination,
 } from './workspaces';

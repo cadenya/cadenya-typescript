@@ -13,7 +13,6 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/account.ts">Account</a></code>
 - <code><a href="./src/resources/account.ts">AccountSetupResponse</a></code>
 
 Methods:
@@ -63,7 +62,6 @@ Types:
 
 - <code><a href="./src/resources/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
-- <code><a href="./src/resources/objectives.ts">OperationMetadata</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveContinueResponse</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveListEventsResponse</a></code>
 
@@ -152,7 +150,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/workspaces.ts">Workspace</a></code>
 - <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
 
 Methods:
