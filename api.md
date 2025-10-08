@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Account</a></code>
 - <code><a href="./src/resources/shared.ts">Actor</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
@@ -14,6 +13,7 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/account.ts">Account</a></code>
 - <code><a href="./src/resources/account.ts">AccountSetupResponse</a></code>
 
 Methods:

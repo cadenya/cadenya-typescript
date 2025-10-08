@@ -4,27 +4,6 @@ import * as Shared from './shared';
 import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
-export interface Account {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  metadata?: ResourceMetadata;
-
-  spec?: Account.Spec;
-}
-
-export namespace Account {
-  export interface Spec {
-    billingEmail?: string;
-
-    description?: string;
-
-    domain?: string;
-
-    workspaces?: Array<Shared.Workspace>;
-  }
-}
-
 export interface Actor {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
