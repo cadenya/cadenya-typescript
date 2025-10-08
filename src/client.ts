@@ -18,7 +18,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountSetupParams, AccountSetupResponse } from './resources/account';
+import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
 import {
   Objective,
   ObjectiveApproveToolCallParams,
@@ -801,7 +801,7 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
-  account: API.Account = new API.Account(this);
+  account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
   ping: API.Ping = new API.Ping(this);
@@ -811,7 +811,7 @@ export class Cadenya {
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
-Cadenya.Account = Account;
+Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.Ping = Ping;
@@ -830,7 +830,8 @@ export declare namespace Cadenya {
   };
 
   export {
-    Account as Account,
+    AccountResource as AccountResource,
+    type Account as Account,
     type AccountSetupResponse as AccountSetupResponse,
     type AccountSetupParams as AccountSetupParams,
   };
@@ -908,7 +909,6 @@ export declare namespace Cadenya {
     type WorkspaceListParams as WorkspaceListParams,
   };
 
-  export type Account = API.Account;
   export type Actor = API.Actor;
   export type CallableTool = API.CallableTool;
   export type OperationMetadata = API.OperationMetadata;
