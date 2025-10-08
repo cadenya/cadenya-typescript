@@ -64,6 +64,30 @@ describe('resource objectives', () => {
   });
 
   // Prism tests are disabled
+  test.skip('approveToolCall: only required params', async () => {
+    const responsePromise = client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('approveToolCall: required and optional params', async () => {
+    const response = await client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('continue', async () => {
     const responsePromise = client.objectives.continue('objectiveId', {});
     const rawResponse = await responsePromise.asResponse();
@@ -73,6 +97,30 @@ describe('resource objectives', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('denyToolCall: only required params', async () => {
+    const responsePromise = client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('denyToolCall: required and optional params', async () => {
+    const response = await client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
   });
 
   // Prism tests are disabled
