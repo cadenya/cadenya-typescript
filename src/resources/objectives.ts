@@ -210,6 +210,8 @@ export namespace ObjectiveApproveToolCallResponse {
 
     toolCalled?: Event.ToolCalled;
 
+    toolCallStatus?: Event.ToolCallStatus;
+
     toolDenied?: Event.ToolDenied;
 
     type?: string;
@@ -259,6 +261,14 @@ export namespace ObjectiveApproveToolCallResponse {
       callable?: Shared.CallableTool;
 
       content?: string;
+    }
+
+    export interface ToolCallStatus {
+      approved?: boolean;
+
+      message?: string;
+
+      modifiedBy?: Shared.Actor;
     }
 
     export interface ToolDenied {
@@ -304,6 +314,8 @@ export namespace ObjectiveContinueResponse {
 
     toolCalled?: Event.ToolCalled;
 
+    toolCallStatus?: Event.ToolCallStatus;
+
     toolDenied?: Event.ToolDenied;
 
     type?: string;
@@ -353,6 +365,14 @@ export namespace ObjectiveContinueResponse {
       callable?: Shared.CallableTool;
 
       content?: string;
+    }
+
+    export interface ToolCallStatus {
+      approved?: boolean;
+
+      message?: string;
+
+      modifiedBy?: Shared.Actor;
     }
 
     export interface ToolDenied {
@@ -398,6 +418,8 @@ export namespace ObjectiveDenyToolCallResponse {
 
     toolCalled?: Event.ToolCalled;
 
+    toolCallStatus?: Event.ToolCallStatus;
+
     toolDenied?: Event.ToolDenied;
 
     type?: string;
@@ -447,6 +469,14 @@ export namespace ObjectiveDenyToolCallResponse {
       callable?: Shared.CallableTool;
 
       content?: string;
+    }
+
+    export interface ToolCallStatus {
+      approved?: boolean;
+
+      message?: string;
+
+      modifiedBy?: Shared.Actor;
     }
 
     export interface ToolDenied {
@@ -492,6 +522,8 @@ export namespace ObjectiveListEventsResponse {
 
     toolCalled?: Event.ToolCalled;
 
+    toolCallStatus?: Event.ToolCallStatus;
+
     toolDenied?: Event.ToolDenied;
 
     type?: string;
@@ -541,6 +573,14 @@ export namespace ObjectiveListEventsResponse {
       callable?: Shared.CallableTool;
 
       content?: string;
+    }
+
+    export interface ToolCallStatus {
+      approved?: boolean;
+
+      message?: string;
+
+      modifiedBy?: Shared.Actor;
     }
 
     export interface ToolDenied {
