@@ -1,12 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export {
-  AccountResource,
-  type Account,
-  type ResourceMetadata,
-  type AccountSetupResponse,
-  type AccountSetupParams,
-} from './account';
+export * from './shared';
+export { AccountResource, type Account, type AccountSetupResponse, type AccountSetupParams } from './account';
 export {
   Agents,
   type Agent,

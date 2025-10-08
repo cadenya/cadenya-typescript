@@ -1,9 +1,19 @@
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">Account</a></code>
+- <code><a href="./src/resources/shared.ts">Actor</a></code>
+- <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">Profile</a></code>
+- <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">Workspace</a></code>
+
 # Account
 
 Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
-- <code><a href="./src/resources/account.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/account.ts">AccountSetupResponse</a></code>
 
 Methods:

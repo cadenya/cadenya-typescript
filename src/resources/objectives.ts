@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AccountAPI from './account';
+import * as Shared from './shared';
 import * as AgentsAPI from './agents/agents';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
@@ -179,6 +179,13 @@ export interface OperationMetadata {
   createdAt?: string;
 
   /**
+   * ResourceReference is used when you only need the bare-bones of data about
+   * something. Used for things like associations to keep API payloads/responses
+   * lighter.
+   */
+  createdBy?: OperationMetadata.CreatedBy;
+
+  /**
    * External ID for the operation (e.g., a workflow ID from an external system)
    */
   externalId?: string;
@@ -190,13 +197,43 @@ export interface OperationMetadata {
   labels?: { [key: string]: string };
 
   /**
+   * If a resource is marked as managed, it indicates that it should only be modified
+   * the actor that created it in the first place
+   */
+  managed?: boolean;
+
+  /**
+   * Some resources only allow certain fields to be modified after they are created
+   * (like a tool set backed by an MCP server) You'll still be able to send other
+   * fields in an update request, but don't expect them to be updated if they are not
+   * included in this list. An empty/null list indicates that any field (except
+   * read-only fields) can be updated on the resource.
+   */
+  modifiableFields?: string;
+
+  /**
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
   workspaceId?: string;
 }
 
+export namespace OperationMetadata {
+  /**
+   * ResourceReference is used when you only need the bare-bones of data about
+   * something. Used for things like associations to keep API payloads/responses
+   * lighter.
+   */
+  export interface CreatedBy {
+    id?: string;
+
+    name?: string;
+
+    type?: string;
+  }
+}
+
 export interface ObjectiveContinueResponse {
-  actor?: ObjectiveContinueResponse.Actor;
+  actor?: Shared.Actor;
 
   event?: ObjectiveContinueResponse.Event;
 
@@ -210,52 +247,6 @@ export interface ObjectiveContinueResponse {
 }
 
 export namespace ObjectiveContinueResponse {
-  export interface Actor {
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    metadata?: AccountAPI.ResourceMetadata;
-
-    spec?: Actor.Spec;
-  }
-
-  export namespace Actor {
-    export interface Spec {
-      /**
-       * API Keys
-       */
-      apiKey?: Spec.APIKey;
-
-      profile?: Spec.Profile;
-    }
-
-    export namespace Spec {
-      /**
-       * API Keys
-       */
-      export interface APIKey {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        metadata?: AccountAPI.ResourceMetadata;
-
-        spec?: APIKey.Spec;
-      }
-
-      export namespace APIKey {
-        export interface Spec {
-          token?: string;
-        }
-      }
-
-      export interface Profile {
-        email?: string;
-
-        name?: string;
-      }
-    }
-  }
-
   export interface Event {
     message?: Event.Message;
 
@@ -300,17 +291,17 @@ export namespace ObjectiveContinueResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -318,7 +309,7 @@ export namespace ObjectiveContinueResponse {
       /**
        * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
        */
-      actor?: AccountAPI.ResourceMetadata;
+      actor?: Shared.ResourceMetadata;
 
       /**
        * CallableTool is a union that represents a tool that can be called by an agent.
@@ -340,17 +331,17 @@ export namespace ObjectiveContinueResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -377,17 +368,17 @@ export namespace ObjectiveContinueResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -395,7 +386,7 @@ export namespace ObjectiveContinueResponse {
       /**
        * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
        */
-      actor?: AccountAPI.ResourceMetadata;
+      actor?: Shared.ResourceMetadata;
 
       /**
        * CallableTool is a union that represents a tool that can be called by an agent.
@@ -419,24 +410,24 @@ export namespace ObjectiveContinueResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
   }
 }
 
 export interface ObjectiveListEventsResponse {
-  actor?: ObjectiveListEventsResponse.Actor;
+  actor?: Shared.Actor;
 
   event?: ObjectiveListEventsResponse.Event;
 
@@ -450,52 +441,6 @@ export interface ObjectiveListEventsResponse {
 }
 
 export namespace ObjectiveListEventsResponse {
-  export interface Actor {
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    metadata?: AccountAPI.ResourceMetadata;
-
-    spec?: Actor.Spec;
-  }
-
-  export namespace Actor {
-    export interface Spec {
-      /**
-       * API Keys
-       */
-      apiKey?: Spec.APIKey;
-
-      profile?: Spec.Profile;
-    }
-
-    export namespace Spec {
-      /**
-       * API Keys
-       */
-      export interface APIKey {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        metadata?: AccountAPI.ResourceMetadata;
-
-        spec?: APIKey.Spec;
-      }
-
-      export namespace APIKey {
-        export interface Spec {
-          token?: string;
-        }
-      }
-
-      export interface Profile {
-        email?: string;
-
-        name?: string;
-      }
-    }
-  }
-
   export interface Event {
     message?: Event.Message;
 
@@ -540,17 +485,17 @@ export namespace ObjectiveListEventsResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -558,7 +503,7 @@ export namespace ObjectiveListEventsResponse {
       /**
        * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
        */
-      actor?: AccountAPI.ResourceMetadata;
+      actor?: Shared.ResourceMetadata;
 
       /**
        * CallableTool is a union that represents a tool that can be called by an agent.
@@ -580,17 +525,17 @@ export namespace ObjectiveListEventsResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -617,17 +562,17 @@ export namespace ObjectiveListEventsResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
 
@@ -635,7 +580,7 @@ export namespace ObjectiveListEventsResponse {
       /**
        * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
        */
-      actor?: AccountAPI.ResourceMetadata;
+      actor?: Shared.ResourceMetadata;
 
       /**
        * CallableTool is a union that represents a tool that can be called by an agent.
@@ -659,17 +604,17 @@ export namespace ObjectiveListEventsResponse {
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        agent?: AccountAPI.ResourceMetadata;
+        agent?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        cadenyaProvidedTool?: AccountAPI.ResourceMetadata;
+        cadenyaProvidedTool?: Shared.ResourceMetadata;
 
         /**
          * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
          */
-        tool?: AccountAPI.ResourceMetadata;
+        tool?: Shared.ResourceMetadata;
       }
     }
   }
