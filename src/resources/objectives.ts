@@ -69,7 +69,7 @@ export interface Objective {
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: OperationMetadata;
+  metadata?: Shared.OperationMetadata;
 
   spec?: ObjectiveSpec;
 
@@ -151,87 +151,6 @@ export namespace ObjectiveSpec {
   }
 }
 
-/**
- * Metadata for ephemeral operations and activities (e.g., objectives, executions,
- * runs)
- */
-export interface OperationMetadata {
-  /**
-   * Unique identifier for the operation (UUID v7)
-   */
-  id?: string;
-
-  /**
-   * Account this operation belongs to for multi-tenant isolation (UUID v7)
-   */
-  accountId?: string;
-
-  /**
-   * ID of the actor (user or service account) that initiated this operation (UUID
-   * v7)
-   */
-  actorId?: string;
-
-  /**
-   * Timestamp when this operation was created UUID v7 includes timestamp
-   * information, but this explicit field enables easier querying
-   */
-  createdAt?: string;
-
-  /**
-   * ResourceReference is used when you only need the bare-bones of data about
-   * something. Used for things like associations to keep API payloads/responses
-   * lighter.
-   */
-  createdBy?: OperationMetadata.CreatedBy;
-
-  /**
-   * External ID for the operation (e.g., a workflow ID from an external system)
-   */
-  externalId?: string;
-
-  /**
-   * Arbitrary key-value pairs for categorization and filtering Examples:
-   * {"priority": "high", "source": "api", "workflow": "onboarding"}
-   */
-  labels?: { [key: string]: string };
-
-  /**
-   * If a resource is marked as managed, it indicates that it should only be modified
-   * the actor that created it in the first place
-   */
-  managed?: boolean;
-
-  /**
-   * Some resources only allow certain fields to be modified after they are created
-   * (like a tool set backed by an MCP server) You'll still be able to send other
-   * fields in an update request, but don't expect them to be updated if they are not
-   * included in this list. An empty/null list indicates that any field (except
-   * read-only fields) can be updated on the resource.
-   */
-  modifiableFields?: string;
-
-  /**
-   * Workspace this operation belongs to for organizational grouping (UUID v7)
-   */
-  workspaceId?: string;
-}
-
-export namespace OperationMetadata {
-  /**
-   * ResourceReference is used when you only need the bare-bones of data about
-   * something. Used for things like associations to keep API payloads/responses
-   * lighter.
-   */
-  export interface CreatedBy {
-    id?: string;
-
-    name?: string;
-
-    type?: string;
-  }
-}
-
 export interface ObjectiveContinueResponse {
   actor?: Shared.Actor;
 
@@ -241,7 +160,7 @@ export interface ObjectiveContinueResponse {
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: OperationMetadata;
+  metadata?: Shared.OperationMetadata;
 
   objective?: Objective;
 }
@@ -435,7 +354,7 @@ export interface ObjectiveListEventsResponse {
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: OperationMetadata;
+  metadata?: Shared.OperationMetadata;
 
   objective?: Objective;
 }
@@ -627,7 +546,7 @@ export interface ObjectiveCreateParams {
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: OperationMetadata;
+  metadata?: Shared.OperationMetadata;
 
   spec?: ObjectiveSpec;
 }
@@ -678,7 +597,6 @@ export declare namespace Objectives {
   export {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
-    type OperationMetadata as OperationMetadata,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,

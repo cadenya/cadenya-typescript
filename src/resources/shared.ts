@@ -2,6 +2,7 @@
 
 import * as Shared from './shared';
 import * as WorkspacesAPI from './workspaces';
+import { CursorPagination } from '../core/pagination';
 
 export interface Account {
   /**
@@ -20,7 +21,7 @@ export namespace Account {
 
     domain?: string;
 
-    workspaces?: Array<WorkspacesAPI.Workspace>;
+    workspaces?: Array<Shared.Workspace>;
   }
 }
 
@@ -208,3 +209,5 @@ export interface Workspace {
 
   spec?: WorkspacesAPI.WorkspaceSpec;
 }
+
+export type WorkspacesCursorPagination = CursorPagination<Workspace>;

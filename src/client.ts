@@ -18,7 +18,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
+import { Account, AccountSetupParams, AccountSetupResponse } from './resources/account';
 import {
   Objective,
   ObjectiveContinueParams,
@@ -52,7 +52,6 @@ import {
   WorkspaceListParams,
   WorkspaceSpec,
   Workspaces,
-  WorkspacesCursorPagination,
 } from './resources/workspaces';
 import {
   Agent,
@@ -798,7 +797,7 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
-  account: API.AccountResource = new API.AccountResource(this);
+  account: API.Account = new API.Account(this);
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
   ping: API.Ping = new API.Ping(this);
@@ -808,7 +807,7 @@ export class Cadenya {
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
-Cadenya.AccountResource = AccountResource;
+Cadenya.Account = Account;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.Ping = Ping;
@@ -827,8 +826,7 @@ export declare namespace Cadenya {
   };
 
   export {
-    AccountResource as AccountResource,
-    type Account as Account,
+    Account as Account,
     type AccountSetupResponse as AccountSetupResponse,
     type AccountSetupParams as AccountSetupParams,
   };
@@ -853,7 +851,6 @@ export declare namespace Cadenya {
     Objectives as Objectives,
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
-    type OperationMetadata as OperationMetadata,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
@@ -898,9 +895,7 @@ export declare namespace Cadenya {
 
   export {
     Workspaces as Workspaces,
-    type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };

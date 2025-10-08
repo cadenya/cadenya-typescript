@@ -2,16 +2,15 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import * as WorkspacesAPI from './workspaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class AccountResource extends APIResource {
+export class Account extends APIResource {
   /**
    * Retrieves the current account for the token accessing the API. Useful to check
    * if the credentials are valid.
    */
-  retrieve(options?: RequestOptions): APIPromise<Account> {
+  retrieve(options?: RequestOptions): APIPromise<Shared.Account> {
     return this._client.get('/v1/account', options);
   }
 
@@ -23,31 +22,10 @@ export class AccountResource extends APIResource {
   }
 }
 
-export interface Account {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  metadata?: Shared.ResourceMetadata;
-
-  spec?: Account.Spec;
-}
-
-export namespace Account {
-  export interface Spec {
-    billingEmail?: string;
-
-    description?: string;
-
-    domain?: string;
-
-    workspaces?: Array<WorkspacesAPI.Workspace>;
-  }
-}
-
 export interface AccountSetupResponse {
-  account?: Account;
+  account?: Shared.Account;
 
-  workspace?: WorkspacesAPI.Workspace;
+  workspace?: Shared.Workspace;
 }
 
 export interface AccountSetupParams {
@@ -58,10 +36,6 @@ export interface AccountSetupParams {
   name?: string;
 }
 
-export declare namespace AccountResource {
-  export {
-    type Account as Account,
-    type AccountSetupResponse as AccountSetupResponse,
-    type AccountSetupParams as AccountSetupParams,
-  };
+export declare namespace Account {
+  export { type AccountSetupResponse as AccountSetupResponse, type AccountSetupParams as AccountSetupParams };
 }
