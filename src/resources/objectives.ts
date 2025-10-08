@@ -34,6 +34,23 @@ export class Objectives extends APIResource {
   }
 
   /**
+   * When an agent attempts to use a tool that requires approval, use this endpoint
+   * to mark it as approved. You may optionally include a message in the approval as
+   * well.
+   */
+  approveToolCall(
+    objectiveEventID: string,
+    params: ObjectiveApproveToolCallParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveApproveToolCallResponse> {
+    const { path_objectiveId, ...body } = params;
+    return this._client.put(path`/v1/objectives/${path_objectiveId}/approve_tool_call/${objectiveEventID}`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
    * Continues an objective that has completed
    */
   continue(
@@ -42,6 +59,24 @@ export class Objectives extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ObjectiveContinueResponse> {
     return this._client.post(path`/v1/objectives/${objectiveID}/continue`, { body, ...options });
+  }
+
+  /**
+   * When an agent attempts to use a tool that requires approval, use this endpoint
+   * to mark it as denied. You may optionally include a message in the denial as
+   * well. If provided, the message is passed to the agent when a rejection occurs so
+   * you may provide further instructions.
+   */
+  denyToolCall(
+    objectiveEventID: string,
+    params: ObjectiveDenyToolCallParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveDenyToolCallResponse> {
+    const { path_objectiveId, ...body } = params;
+    return this._client.put(path`/v1/objectives/${path_objectiveId}/deny_tool_call/${objectiveEventID}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -151,6 +186,100 @@ export namespace ObjectiveSpec {
   }
 }
 
+export interface ObjectiveApproveToolCallResponse {
+  actor?: Shared.Actor;
+
+  event?: ObjectiveApproveToolCallResponse.Event;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: Shared.OperationMetadata;
+
+  objective?: Objective;
+}
+
+export namespace ObjectiveApproveToolCallResponse {
+  export interface Event {
+    message?: Event.Message;
+
+    toolApprovalRequested?: Event.ToolApprovalRequested;
+
+    toolApproved?: Event.ToolApproved;
+
+    toolCalled?: Event.ToolCalled;
+
+    toolDenied?: Event.ToolDenied;
+
+    type?: string;
+  }
+
+  export namespace Event {
+    export interface Message {
+      content?: string;
+
+      role?: string;
+    }
+
+    export interface ToolApprovalRequested {
+      arguments?: { [key: string]: unknown };
+
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+    }
+
+    export interface ToolApproved {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: Shared.ResourceMetadata;
+
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+    }
+
+    export interface ToolCalled {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+
+      content?: string;
+    }
+
+    export interface ToolDenied {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: Shared.ResourceMetadata;
+
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+
+      reason?: string;
+    }
+  }
+}
+
 export interface ObjectiveContinueResponse {
   actor?: Shared.Actor;
 
@@ -196,32 +325,7 @@ export namespace ObjectiveContinueResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolApprovalRequested.Callable;
-    }
-
-    export namespace ToolApprovalRequested {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
+      callable?: Shared.CallableTool;
     }
 
     export interface ToolApproved {
@@ -236,32 +340,7 @@ export namespace ObjectiveContinueResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolApproved.Callable;
-    }
-
-    export namespace ToolApproved {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
+      callable?: Shared.CallableTool;
     }
 
     export interface ToolCalled {
@@ -271,34 +350,9 @@ export namespace ObjectiveContinueResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolCalled.Callable;
+      callable?: Shared.CallableTool;
 
       content?: string;
-    }
-
-    export namespace ToolCalled {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
     }
 
     export interface ToolDenied {
@@ -313,34 +367,103 @@ export namespace ObjectiveContinueResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolDenied.Callable;
+      callable?: Shared.CallableTool;
 
       reason?: string;
     }
+  }
+}
 
-    export namespace ToolDenied {
+export interface ObjectiveDenyToolCallResponse {
+  actor?: Shared.Actor;
+
+  event?: ObjectiveDenyToolCallResponse.Event;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: Shared.OperationMetadata;
+
+  objective?: Objective;
+}
+
+export namespace ObjectiveDenyToolCallResponse {
+  export interface Event {
+    message?: Event.Message;
+
+    toolApprovalRequested?: Event.ToolApprovalRequested;
+
+    toolApproved?: Event.ToolApproved;
+
+    toolCalled?: Event.ToolCalled;
+
+    toolDenied?: Event.ToolDenied;
+
+    type?: string;
+  }
+
+  export namespace Event {
+    export interface Message {
+      content?: string;
+
+      role?: string;
+    }
+
+    export interface ToolApprovalRequested {
+      arguments?: { [key: string]: unknown };
+
       /**
        * CallableTool is a union that represents a tool that can be called by an agent.
        * In Cadenya, a tool that is used within an agent objective might be a
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
+      callable?: Shared.CallableTool;
+    }
 
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
+    export interface ToolApproved {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: Shared.ResourceMetadata;
 
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+    }
+
+    export interface ToolCalled {
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+
+      content?: string;
+    }
+
+    export interface ToolDenied {
+      /**
+       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+       */
+      actor?: Shared.ResourceMetadata;
+
+      /**
+       * CallableTool is a union that represents a tool that can be called by an agent.
+       * In Cadenya, a tool that is used within an agent objective might be a
+       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+       * and a Cadenya Tool (one Cadenya provides). These tools
+       */
+      callable?: Shared.CallableTool;
+
+      reason?: string;
     }
   }
 }
@@ -390,32 +513,7 @@ export namespace ObjectiveListEventsResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolApprovalRequested.Callable;
-    }
-
-    export namespace ToolApprovalRequested {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
+      callable?: Shared.CallableTool;
     }
 
     export interface ToolApproved {
@@ -430,32 +528,7 @@ export namespace ObjectiveListEventsResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolApproved.Callable;
-    }
-
-    export namespace ToolApproved {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
+      callable?: Shared.CallableTool;
     }
 
     export interface ToolCalled {
@@ -465,34 +538,9 @@ export namespace ObjectiveListEventsResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolCalled.Callable;
+      callable?: Shared.CallableTool;
 
       content?: string;
-    }
-
-    export namespace ToolCalled {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
     }
 
     export interface ToolDenied {
@@ -507,34 +555,9 @@ export namespace ObjectiveListEventsResponse {
        * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
        * and a Cadenya Tool (one Cadenya provides). These tools
        */
-      callable?: ToolDenied.Callable;
+      callable?: Shared.CallableTool;
 
       reason?: string;
-    }
-
-    export namespace ToolDenied {
-      /**
-       * CallableTool is a union that represents a tool that can be called by an agent.
-       * In Cadenya, a tool that is used within an agent objective might be a
-       * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-       * and a Cadenya Tool (one Cadenya provides). These tools
-       */
-      export interface Callable {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        agent?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        cadenyaProvidedTool?: Shared.ResourceMetadata;
-
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        tool?: Shared.ResourceMetadata;
-      }
     }
   }
 }
@@ -572,6 +595,32 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   state?: number;
 }
 
+export interface ObjectiveApproveToolCallParams {
+  /**
+   * Path param: The ID of the objective. If you have assigned an external ID to the
+   * objective, you can prefix the ID with "eid:". For example, "eid:1234567890".
+   * Otherwise, the ID assigned by Cadenya should be used.
+   */
+  path_objectiveId: string;
+
+  /**
+   * Body param: A message to associate to the tool call approval
+   */
+  message?: string;
+
+  /**
+   * Body param: The objective event associated with the tool call approval requested
+   */
+  body_objectiveEventId?: string;
+
+  /**
+   * Body param: The ID of the objective. If you have assigned an external ID to the
+   * objective, you can prefix the ID with "eid:". For example, "eid:1234567890".
+   * Otherwise, the ID assigned by Cadenya should be used.
+   */
+  body_objectiveId?: string;
+}
+
 export interface ObjectiveContinueParams {
   /**
    * The message to continue an objective that has completed.
@@ -582,6 +631,32 @@ export interface ObjectiveContinueParams {
    * The ID of the objective. If you have assigned an external ID to the objective,
    * you can prefix the ID with "eid:". For example, "eid:1234567890". Otherwise, the
    * ID assigned by Cadenya should be used.
+   */
+  body_objectiveId?: string;
+}
+
+export interface ObjectiveDenyToolCallParams {
+  /**
+   * Path param: The ID of the objective. If you have assigned an external ID to the
+   * objective, you can prefix the ID with "eid:". For example, "eid:1234567890".
+   * Otherwise, the ID assigned by Cadenya should be used.
+   */
+  path_objectiveId: string;
+
+  /**
+   * Body param: A message to associate to the tool call denial
+   */
+  message?: string;
+
+  /**
+   * Body param: The objective event associated with the tool call approval requested
+   */
+  body_objectiveEventId?: string;
+
+  /**
+   * Body param: The ID of the objective. If you have assigned an external ID to the
+   * objective, you can prefix the ID with "eid:". For example, "eid:1234567890".
+   * Otherwise, the ID assigned by Cadenya should be used.
    */
   body_objectiveId?: string;
 }
@@ -597,13 +672,17 @@ export declare namespace Objectives {
   export {
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
+    type ObjectiveApproveToolCallResponse as ObjectiveApproveToolCallResponse,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
+    type ObjectiveDenyToolCallResponse as ObjectiveDenyToolCallResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveApproveToolCallParams as ObjectiveApproveToolCallParams,
     type ObjectiveContinueParams as ObjectiveContinueParams,
+    type ObjectiveDenyToolCallParams as ObjectiveDenyToolCallParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 }
