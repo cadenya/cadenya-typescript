@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as AccountAPI from './account';
+import * as Shared from './shared';
 import * as WorkspacesAPI from './workspaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
@@ -15,7 +16,7 @@ export class Ping extends APIResource {
 export interface PingCheckResponse {
   account?: AccountAPI.Account;
 
-  actor?: PingCheckResponse.Actor;
+  actor?: Shared.Actor;
 
   /**
    * Has the currently assigned workspace for the request. If need to know which
@@ -28,54 +29,6 @@ export interface PingCheckResponse {
    * key, this will always be true. If it isn't, something has gone horribly wrong.
    */
   needsSetup?: boolean;
-}
-
-export namespace PingCheckResponse {
-  export interface Actor {
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    metadata?: AccountAPI.ResourceMetadata;
-
-    spec?: Actor.Spec;
-  }
-
-  export namespace Actor {
-    export interface Spec {
-      /**
-       * API Keys
-       */
-      apiKey?: Spec.APIKey;
-
-      profile?: Spec.Profile;
-    }
-
-    export namespace Spec {
-      /**
-       * API Keys
-       */
-      export interface APIKey {
-        /**
-         * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-         */
-        metadata?: AccountAPI.ResourceMetadata;
-
-        spec?: APIKey.Spec;
-      }
-
-      export namespace APIKey {
-        export interface Spec {
-          token?: string;
-        }
-      }
-
-      export interface Profile {
-        email?: string;
-
-        name?: string;
-      }
-    }
-  }
 }
 
 export declare namespace Ping {

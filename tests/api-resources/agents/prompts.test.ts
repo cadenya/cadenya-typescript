@@ -53,16 +53,7 @@ describe('resource prompts', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.agents.prompts.update('id', {
       agentId: 'agentId',
-      metadata: {
-        id: 'id',
-        accountId: 'accountId',
-        actorId: 'actorId',
-        callsign: 'callsign',
-        externalId: 'externalId',
-        labels: { foo: 'string' },
-        name: 'name',
-        workspaceId: 'workspaceId',
-      },
+      metadata: { callsign: 'callsign', externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
       spec: { content: 'content', default: true, objectiveLabelsSelector: { foo: 'string' }, status: 0 },
       updateMask: 'updateMask',
     });

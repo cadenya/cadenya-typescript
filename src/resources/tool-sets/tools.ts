@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AccountAPI from '../account';
+import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -85,7 +85,7 @@ export interface Tool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSpec;
 }
@@ -136,7 +136,7 @@ export interface ToolCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSpec;
 }
@@ -155,7 +155,7 @@ export interface ToolUpdateParams {
    * Body param: Standard metadata for persistent, named resources (e.g., agents,
    * tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   /**
    * Body param:

@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AccountAPI from '../account';
+import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
   ConfigHTTP,
@@ -81,7 +81,7 @@ export interface ToolSet {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
@@ -120,7 +120,7 @@ export interface ToolSetCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
@@ -129,7 +129,7 @@ export interface ToolSetUpdateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AccountAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 
