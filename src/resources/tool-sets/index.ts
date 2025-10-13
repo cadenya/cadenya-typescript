@@ -2,21 +2,29 @@
 
 export {
   ToolSets,
+  type McpToolFilter,
   type ToolSet,
+  type ToolSetAdapter,
+  type ToolSetAdapterHTTP,
+  type ToolSetAdapterMcp,
   type ToolSetSpec,
-  type ToolSetListResponse,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
+  type ToolSetsCursorPagination,
 } from './tool-sets';
 export {
   Tools,
+  type ConfigHTTP,
+  type ConfigMcp,
   type Tool,
   type ToolSpec,
-  type ToolListResponse,
+  type ToolSpecConfig,
+  type ToolSpecContentFilter,
   type ToolCreateParams,
   type ToolRetrieveParams,
   type ToolUpdateParams,
   type ToolListParams,
   type ToolDeleteParams,
+  type ToolsCursorPagination,
 } from './tools';

@@ -1,8 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AgentsAPI from '../agents';
+import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -38,8 +39,11 @@ export class Tools extends APIResource {
     toolSetID: string,
     query: ToolListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ToolListResponse> {
-    return this._client.get(path`/v1/tool_sets/${toolSetID}/tools`, { query, ...options });
+  ): PagePromise<ToolsCursorPagination, Tool> {
+    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/tools`, CursorPagination<Tool>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -54,23 +58,55 @@ export class Tools extends APIResource {
   }
 }
 
+export type ToolsCursorPagination = CursorPagination<Tool>;
+
+export interface ConfigHTTP {
+  headers?: { [key: string]: string };
+
+  path?: string;
+
+  query?: string;
+
+  requestBodyContentType?: string;
+
+  /**
+   * These are only used when the request method is a POST, PUT, or PATCH
+   */
+  requestBodyTemplate?: string;
+
+  requestMethod?: number;
+}
+
+export interface ConfigMcp {
+  toolName?: string;
+}
+
 export interface Tool {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSpec;
 }
 
 export interface ToolSpec {
+  /**
+   * Config defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  config?: ToolSpecConfig;
+
+  contentFilter?: ToolSpecContentFilter;
+
   description?: string;
 
   indexContent?: string;
 
-  inputSchema?: unknown;
-
   name?: string;
+
+  parameters?: { [key: string]: unknown };
 
   requiresApproval?: boolean;
 
@@ -79,17 +115,28 @@ export interface ToolSpec {
   toolSetId?: string;
 }
 
-export interface ToolListResponse {
-  items?: Array<Tool>;
+/**
+ * Config defines the adapter to use for the tool. This is used to determine how
+ * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+ * be Http. If the tool is an inline tool, the adapter will be Inline.
+ */
+export interface ToolSpecConfig {
+  http?: ConfigHTTP;
 
-  pagination?: AgentsAPI.Pagination;
+  mcp?: ConfigMcp;
+}
+
+export interface ToolSpecContentFilter {
+  jq?: string;
+
+  regex?: string;
 }
 
 export interface ToolCreateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSpec;
 }
@@ -105,9 +152,10 @@ export interface ToolUpdateParams {
   toolSetId: string;
 
   /**
-   * Body param: Standard metadata for all resources
+   * Body param: Standard metadata for persistent, named resources (e.g., agents,
+   * tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   /**
    * Body param:
@@ -120,22 +168,11 @@ export interface ToolUpdateParams {
   updateMask?: string;
 }
 
-export interface ToolListParams {
-  page?: ToolListParams.Page;
-}
-
-export namespace ToolListParams {
-  export interface Page {
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
-
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-  }
+export interface ToolListParams extends CursorPaginationParams {
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
 }
 
 export interface ToolDeleteParams {
@@ -144,9 +181,13 @@ export interface ToolDeleteParams {
 
 export declare namespace Tools {
   export {
+    type ConfigHTTP as ConfigHTTP,
+    type ConfigMcp as ConfigMcp,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolListResponse as ToolListResponse,
+    type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecContentFilter as ToolSpecContentFilter,
+    type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

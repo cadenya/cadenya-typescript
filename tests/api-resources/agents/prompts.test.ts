@@ -7,10 +7,10 @@ const client = new Cadenya({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource agents', () => {
+describe('resource prompts', () => {
   // Prism tests are disabled
   test.skip('create', async () => {
-    const responsePromise = client.agents.create({});
+    const responsePromise = client.agents.prompts.create('agentId', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,8 @@ describe('resource agents', () => {
   });
 
   // Prism tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.agents.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.agents.prompts.retrieve('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -33,8 +33,13 @@ describe('resource agents', () => {
   });
 
   // Prism tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.agents.update('id', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.agents.prompts.retrieve('id', { agentId: 'agentId' });
+  });
+
+  // Prism tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.agents.prompts.update('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -42,11 +47,21 @@ describe('resource agents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.agents.prompts.update('id', {
+      agentId: 'agentId',
+      metadata: { callsign: 'callsign', externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
+      spec: { content: 'content', default: true, objectiveLabelsSelector: { foo: 'string' }, status: 0 },
+      updateMask: 'updateMask',
+    });
   });
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.agents.list();
+    const responsePromise = client.agents.prompts.list('agentId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,16 +75,17 @@ describe('resource agents', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.agents.list(
-        { page: { cursor: 'cursor', limit: 0 }, prefix: 'prefix' },
+      client.agents.prompts.list(
+        'agentId',
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 
   // Prism tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.agents.delete('id');
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.agents.prompts.delete('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,5 +93,10 @@ describe('resource agents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.agents.prompts.delete('id', { agentId: 'agentId' });
   });
 });

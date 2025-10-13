@@ -1,20 +1,25 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AgentsAPI from '../agents';
+import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
+  ConfigHTTP,
+  ConfigMcp,
   Tool,
   ToolCreateParams,
   ToolDeleteParams,
   ToolListParams,
-  ToolListResponse,
   ToolRetrieveParams,
   ToolSpec,
+  ToolSpecConfig,
+  ToolSpecContentFilter,
   ToolUpdateParams,
   Tools,
+  ToolsCursorPagination,
 } from './tools';
 import { APIPromise } from '../../core/api-promise';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -49,8 +54,8 @@ export class ToolSets extends APIResource {
   list(
     query: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ToolSetListResponse> {
-    return this._client.get('/v1/tool_sets', { query, ...options });
+  ): PagePromise<ToolSetsCursorPagination, ToolSet> {
+    return this._client.getAPIList('/v1/tool_sets', CursorPagination<ToolSet>, { query, ...options });
   }
 
   /**
@@ -64,72 +69,91 @@ export class ToolSets extends APIResource {
   }
 }
 
+export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
+
+export interface McpToolFilter {
+  contains?: string;
+
+  startsWith?: string;
+}
+
 export interface ToolSet {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
 
+export interface ToolSetAdapter {
+  http?: ToolSetAdapterHTTP;
+
+  mcp?: ToolSetAdapterMcp;
+}
+
+export interface ToolSetAdapterHTTP {
+  baseUrl?: string;
+
+  headers?: { [key: string]: string };
+}
+
+export interface ToolSetAdapterMcp {
+  excludeTools?: McpToolFilter;
+
+  headers?: { [key: string]: string };
+
+  includeTools?: McpToolFilter;
+
+  url?: string;
+}
+
 export interface ToolSetSpec {
+  adapter?: ToolSetAdapter;
+
   description?: string;
 
   status?: number;
 }
 
-export interface ToolSetListResponse {
-  items?: Array<ToolSet>;
-
-  pagination?: AgentsAPI.Pagination;
-}
-
 export interface ToolSetCreateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 }
 
 export interface ToolSetUpdateParams {
   /**
-   * Standard metadata for all resources
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: AgentsAPI.ResourceMetadata;
+  metadata?: Shared.ResourceMetadata;
 
   spec?: ToolSetSpec;
 
   updateMask?: string;
 }
 
-export interface ToolSetListParams {
-  page?: ToolSetListParams.Page;
-}
-
-export namespace ToolSetListParams {
-  export interface Page {
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
-
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-  }
+export interface ToolSetListParams extends CursorPaginationParams {
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
 }
 
 ToolSets.Tools = Tools;
 
 export declare namespace ToolSets {
   export {
+    type McpToolFilter as McpToolFilter,
     type ToolSet as ToolSet,
+    type ToolSetAdapter as ToolSetAdapter,
+    type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
+    type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetSpec as ToolSetSpec,
-    type ToolSetListResponse as ToolSetListResponse,
+    type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
@@ -137,9 +161,13 @@ export declare namespace ToolSets {
 
   export {
     Tools as Tools,
+    type ConfigHTTP as ConfigHTTP,
+    type ConfigMcp as ConfigMcp,
     type Tool as Tool,
     type ToolSpec as ToolSpec,
-    type ToolListResponse as ToolListResponse,
+    type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecContentFilter as ToolSpecContentFilter,
+    type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
     type ToolUpdateParams as ToolUpdateParams,

@@ -7,10 +7,10 @@ const client = new Cadenya({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource tools', () => {
+describe('resource agents', () => {
   // Prism tests are disabled
   test.skip('create', async () => {
-    const responsePromise = client.toolSets.tools.create('toolSetId', {});
+    const responsePromise = client.agents.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,8 @@ describe('resource tools', () => {
   });
 
   // Prism tests are disabled
-  test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.toolSets.tools.retrieve('id', { toolSetId: 'toolSetId' });
+  test.skip('retrieve', async () => {
+    const responsePromise = client.agents.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -33,13 +33,8 @@ describe('resource tools', () => {
   });
 
   // Prism tests are disabled
-  test.skip('retrieve: required and optional params', async () => {
-    const response = await client.toolSets.tools.retrieve('id', { toolSetId: 'toolSetId' });
-  });
-
-  // Prism tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.toolSets.tools.update('id', { toolSetId: 'toolSetId' });
+  test.skip('update', async () => {
+    const responsePromise = client.agents.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -47,41 +42,11 @@ describe('resource tools', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.toolSets.tools.update('id', {
-      toolSetId: 'toolSetId',
-      metadata: { callsign: 'callsign', externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
-      spec: {
-        config: {
-          http: {
-            headers: { foo: 'string' },
-            path: 'path',
-            query: 'query',
-            requestBodyContentType: 'requestBodyContentType',
-            requestBodyTemplate: 'requestBodyTemplate',
-            requestMethod: 0,
-          },
-          mcp: { toolName: 'toolName' },
-        },
-        contentFilter: { jq: 'jq', regex: 'regex' },
-        description: 'description',
-        indexContent: 'indexContent',
-        name: 'name',
-        parameters: { foo: 'bar' },
-        requiresApproval: true,
-        status: 0,
-        toolSetId: 'toolSetId',
-      },
-      updateMask: 'updateMask',
-    });
   });
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.toolSets.tools.list('toolSetId');
+    const responsePromise = client.agents.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -95,17 +60,16 @@ describe('resource tools', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.toolSets.tools.list(
-        'toolSetId',
-        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
+      client.agents.list(
+        { cursor: 'cursor', limit: 0, prefix: 'prefix', sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 
   // Prism tests are disabled
-  test.skip('delete: only required params', async () => {
-    const responsePromise = client.toolSets.tools.delete('id', { toolSetId: 'toolSetId' });
+  test.skip('delete', async () => {
+    const responsePromise = client.agents.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -113,10 +77,5 @@ describe('resource tools', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('delete: required and optional params', async () => {
-    const response = await client.toolSets.tools.delete('id', { toolSetId: 'toolSetId' });
   });
 });

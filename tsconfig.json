@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "cadenya/*": ["src/*"],
-      "cadenya": ["src/index.ts"]
+      "cadenya/*": ["./src/*"],
+      "cadenya": ["./src/index.ts"]
     },
     "noEmit": true,
 

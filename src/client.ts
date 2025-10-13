@@ -11,31 +11,79 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
-import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
+import {
+  Objective,
+  ObjectiveApproveToolCallParams,
+  ObjectiveApproveToolCallResponse,
+  ObjectiveContinueParams,
+  ObjectiveContinueResponse,
+  ObjectiveCreateParams,
+  ObjectiveDenyToolCallParams,
+  ObjectiveDenyToolCallResponse,
+  ObjectiveListEventsParams,
+  ObjectiveListEventsResponse,
+  ObjectiveListEventsResponsesCursorPagination,
+  ObjectiveListParams,
+  ObjectiveSpec,
+  Objectives,
+  ObjectivesCursorPagination,
+} from './resources/objectives';
+import { Ping, PingCheckResponse } from './resources/ping';
+import {
+  Search,
+  SearchSearchToolsOrToolSetsParams,
+  SearchSearchToolsOrToolSetsResponse,
+} from './resources/search';
+import {
+  WorkspaceSecret,
+  WorkspaceSecretCreateParams,
+  WorkspaceSecretListParams,
+  WorkspaceSecretSpec,
+  WorkspaceSecretUpdateParams,
+  WorkspaceSecrets,
+  WorkspaceSecretsCursorPagination,
+} from './resources/workspace-secrets';
+import {
+  WorkspaceCreateParams,
+  WorkspaceListParams,
+  WorkspaceSpec,
+  Workspaces,
+} from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
   AgentListParams,
-  AgentListResponse,
   AgentSpec,
+  AgentSpecAgentTool,
+  AgentSpecConstraints,
+  AgentSpecToolSelection,
   AgentUpdateParams,
   Agents,
-  Pagination,
-  ResourceMetadata,
-} from './resources/agents';
+  AgentsCursorPagination,
+  Page,
+  ToolSelectionAssignedTools,
+  ToolSelectionAutoDiscovery,
+} from './resources/agents/agents';
 import {
+  McpToolFilter,
   ToolSet,
+  ToolSetAdapter,
+  ToolSetAdapterHTTP,
+  ToolSetAdapterMcp,
   ToolSetCreateParams,
   ToolSetListParams,
-  ToolSetListResponse,
   ToolSetSpec,
   ToolSetUpdateParams,
   ToolSets,
+  ToolSetsCursorPagination,
 } from './resources/tool-sets/tool-sets';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -230,8 +278,24 @@ export class Cadenya {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
+  /**
+   * Basic re-implementation of `qs.stringify` for primitive types.
+   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return qs.stringify(query, { arrayFormat: 'comma' });
+    return Object.entries(query)
+      .filter(([_, value]) => typeof value !== 'undefined')
+      .map(([key, value]) => {
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+        if (value === null) {
+          return `${encodeURIComponent(key)}=`;
+        }
+        throw new Errors.CadenyaError(
+          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
+        );
+      })
+      .join('&');
   }
 
   private getUserAgent(): string {
@@ -372,7 +436,7 @@ export class Cadenya {
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
-    if (response instanceof Error) {
+    if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
         throw new Errors.APIUserAbortError();
@@ -484,6 +548,25 @@ export class Cadenya {
     );
 
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+  }
+
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Cadenya, request, Page);
   }
 
   async fetchWithTimeout(
@@ -718,35 +801,118 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
+  account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
+  objectives: API.Objectives = new API.Objectives(this);
+  ping: API.Ping = new API.Ping(this);
+  search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
+  workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
+  workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
+Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
+Cadenya.Objectives = Objectives;
+Cadenya.Ping = Ping;
+Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
+Cadenya.WorkspaceSecrets = WorkspaceSecrets;
+Cadenya.Workspaces = Workspaces;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
+
+  export import CursorPagination = Pagination.CursorPagination;
+  export {
+    type CursorPaginationParams as CursorPaginationParams,
+    type CursorPaginationResponse as CursorPaginationResponse,
+  };
+
+  export {
+    AccountResource as AccountResource,
+    type Account as Account,
+    type AccountSetupResponse as AccountSetupResponse,
+    type AccountSetupParams as AccountSetupParams,
+  };
 
   export {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type Pagination as Pagination,
-    type ResourceMetadata as ResourceMetadata,
-    type AgentListResponse as AgentListResponse,
+    type AgentSpecAgentTool as AgentSpecAgentTool,
+    type AgentSpecConstraints as AgentSpecConstraints,
+    type AgentSpecToolSelection as AgentSpecToolSelection,
+    type Page as Page,
+    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
+    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
+    type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
   };
 
   export {
+    Objectives as Objectives,
+    type Objective as Objective,
+    type ObjectiveSpec as ObjectiveSpec,
+    type ObjectiveApproveToolCallResponse as ObjectiveApproveToolCallResponse,
+    type ObjectiveContinueResponse as ObjectiveContinueResponse,
+    type ObjectiveDenyToolCallResponse as ObjectiveDenyToolCallResponse,
+    type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
+    type ObjectivesCursorPagination as ObjectivesCursorPagination,
+    type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
+    type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveApproveToolCallParams as ObjectiveApproveToolCallParams,
+    type ObjectiveContinueParams as ObjectiveContinueParams,
+    type ObjectiveDenyToolCallParams as ObjectiveDenyToolCallParams,
+    type ObjectiveListEventsParams as ObjectiveListEventsParams,
+  };
+
+  export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
+
+  export {
+    Search as Search,
+    type SearchSearchToolsOrToolSetsResponse as SearchSearchToolsOrToolSetsResponse,
+    type SearchSearchToolsOrToolSetsParams as SearchSearchToolsOrToolSetsParams,
+  };
+
+  export {
     ToolSets as ToolSets,
+    type McpToolFilter as McpToolFilter,
     type ToolSet as ToolSet,
+    type ToolSetAdapter as ToolSetAdapter,
+    type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
+    type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetSpec as ToolSetSpec,
-    type ToolSetListResponse as ToolSetListResponse,
+    type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
   };
+
+  export {
+    WorkspaceSecrets as WorkspaceSecrets,
+    type WorkspaceSecret as WorkspaceSecret,
+    type WorkspaceSecretSpec as WorkspaceSecretSpec,
+    type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
+    type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
+    type WorkspaceSecretUpdateParams as WorkspaceSecretUpdateParams,
+    type WorkspaceSecretListParams as WorkspaceSecretListParams,
+  };
+
+  export {
+    Workspaces as Workspaces,
+    type WorkspaceSpec as WorkspaceSpec,
+    type WorkspaceCreateParams as WorkspaceCreateParams,
+    type WorkspaceListParams as WorkspaceListParams,
+  };
+
+  export type Actor = API.Actor;
+  export type CallableTool = API.CallableTool;
+  export type OperationMetadata = API.OperationMetadata;
+  export type Profile = API.Profile;
+  export type ResourceMetadata = API.ResourceMetadata;
+  export type Workspace = API.Workspace;
 }
