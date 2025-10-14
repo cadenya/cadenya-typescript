@@ -110,7 +110,7 @@ export interface ToolSpec {
 
   requiresApproval?: boolean;
 
-  status?: number;
+  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 
   toolSetId?: string;
 }

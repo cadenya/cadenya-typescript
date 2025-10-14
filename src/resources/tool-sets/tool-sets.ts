@@ -113,7 +113,7 @@ export interface ToolSetSpec {
 
   description?: string;
 
-  status?: number;
+  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 }
 
 export interface ToolSetCreateParams {
