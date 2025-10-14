@@ -102,7 +102,7 @@ export interface PromptSpec {
   /**
    * Status of the prompt
    */
-  status?: number;
+  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 }
 
 export interface PromptCreateParams {
