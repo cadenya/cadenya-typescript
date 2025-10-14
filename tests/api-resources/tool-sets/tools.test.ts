@@ -72,7 +72,7 @@ describe('resource tools', () => {
         name: 'name',
         parameters: { foo: 'bar' },
         requiresApproval: true,
-        status: 0,
+        status: 'STATUS_ENABLED',
         toolSetId: 'toolSetId',
       },
       updateMask: 'updateMask',

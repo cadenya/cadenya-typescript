@@ -54,7 +54,12 @@ describe('resource prompts', () => {
     const response = await client.agents.prompts.update('id', {
       agentId: 'agentId',
       metadata: { callsign: 'callsign', externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
-      spec: { content: 'content', default: true, objectiveLabelsSelector: { foo: 'string' }, status: 0 },
+      spec: {
+        content: 'content',
+        default: true,
+        objectiveLabelsSelector: { foo: 'string' },
+        status: 'STATUS_ENABLED',
+      },
       updateMask: 'updateMask',
     });
   });

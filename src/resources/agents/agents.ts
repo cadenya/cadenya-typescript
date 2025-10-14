@@ -98,7 +98,7 @@ export interface AgentSpec {
   /**
    * Status of the agent
    */
-  status?: number;
+  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 
   toolSelection?: AgentSpecToolSelection;
 
