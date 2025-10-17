@@ -64,7 +64,7 @@ describe('resource tools', () => {
             requestBodyTemplate: 'requestBodyTemplate',
             requestMethod: 0,
           },
-          mcp: { toolName: 'toolName' },
+          mcp: { toolDescription: 'toolDescription', toolName: 'toolName', toolTitle: 'toolTitle' },
         },
         contentFilter: { jq: 'jq', regex: 'regex' },
         description: 'description',

@@ -78,7 +78,11 @@ export interface ConfigHTTP {
 }
 
 export interface ConfigMcp {
+  toolDescription?: string;
+
   toolName?: string;
+
+  toolTitle?: string;
 }
 
 export interface Tool {
