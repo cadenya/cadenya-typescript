@@ -71,10 +71,46 @@ export class ToolSets extends APIResource {
 
 export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 
+/**
+ * Top-level filter with simple boolean logic (no nesting)
+ */
 export interface McpToolFilter {
-  contains?: string;
+  filters?: Array<McpToolFilter.Filter>;
 
-  startsWith?: string;
+  operator?: 'OPERATOR_AND' | 'OPERATOR_OR';
+}
+
+export namespace McpToolFilter {
+  /**
+   * Single attribute filter
+   */
+  export interface Filter {
+    attribute?: 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+
+    /**
+     * String matching operations
+     */
+    matcher?: Filter.Matcher;
+  }
+
+  export namespace Filter {
+    /**
+     * String matching operations
+     */
+    export interface Matcher {
+      caseSensitive?: boolean;
+
+      contains?: string;
+
+      endsWith?: string;
+
+      exact?: string;
+
+      regex?: string;
+
+      startsWith?: string;
+    }
+  }
 }
 
 export interface ToolSet {
@@ -99,10 +135,16 @@ export interface ToolSetAdapterHTTP {
 }
 
 export interface ToolSetAdapterMcp {
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
   excludeTools?: McpToolFilter;
 
   headers?: { [key: string]: string };
 
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
   includeTools?: McpToolFilter;
 
   url?: string;
