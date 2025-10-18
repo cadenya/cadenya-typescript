@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AgentsAPI from './agents/agents';
 import * as ToolSetsAPI from './tool-sets/tool-sets';
 import * as ToolsAPI from './tool-sets/tools';
 import { APIPromise } from '../core/api-promise';
@@ -19,6 +20,8 @@ export class Search extends APIResource {
 }
 
 export interface SearchSearchToolsOrToolSetsResponse {
+  agents?: Array<AgentsAPI.Agent>;
+
   tools?: Array<ToolsAPI.Tool>;
 
   toolSets?: Array<ToolSetsAPI.ToolSet>;
