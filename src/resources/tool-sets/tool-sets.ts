@@ -168,7 +168,7 @@ export namespace ToolSetAdapterMcp {
     /**
      * Top-level filter with simple boolean logic (no nesting)
      */
-    filter?: ToolSetsAPI.McpToolFilter;
+    only?: ToolSetsAPI.McpToolFilter;
   }
 }
 
