@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ToolSetsAPI from './tool-sets';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
@@ -147,7 +148,28 @@ export interface ToolSetAdapterMcp {
    */
   includeTools?: McpToolFilter;
 
+  /**
+   * Approval filters that will automatically set the approval requirement on the
+   * tools synced from the MCP server
+   */
+  toolApprovals?: ToolSetAdapterMcp.ToolApprovals;
+
   url?: string;
+}
+
+export namespace ToolSetAdapterMcp {
+  /**
+   * Approval filters that will automatically set the approval requirement on the
+   * tools synced from the MCP server
+   */
+  export interface ToolApprovals {
+    always?: boolean;
+
+    /**
+     * Top-level filter with simple boolean logic (no nesting)
+     */
+    filter?: ToolSetsAPI.McpToolFilter;
+  }
 }
 
 export interface ToolSetSpec {
