@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 (2025-10-18)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** api update ([de2be53](https://github.com/cadenya-agents/typescript-sdk/commit/de2be53b42de49f3b49e878ab2856b9d42ec782d))
+* **api:** api update ([d2212dd](https://github.com/cadenya-agents/typescript-sdk/commit/d2212dd928ae0204edad84635f7b2f374472613a))
+
 ## 0.3.0 (2025-10-17)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.2.0...v0.3.0)
