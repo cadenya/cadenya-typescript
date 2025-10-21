@@ -20,6 +20,15 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
 import {
+  APIKey,
+  APIKeyCreateParams,
+  APIKeyListParams,
+  APIKeySpec,
+  APIKeyUpdateParams,
+  APIKeys,
+  APIKeysCursorPagination,
+} from './resources/api-keys';
+import {
   Objective,
   ObjectiveApproveToolCallParams,
   ObjectiveApproveToolCallResponse,
@@ -807,6 +816,7 @@ export class Cadenya {
   ping: API.Ping = new API.Ping(this);
   search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
+  apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
@@ -817,6 +827,7 @@ Cadenya.Objectives = Objectives;
 Cadenya.Ping = Ping;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
+Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
 
@@ -890,6 +901,16 @@ export declare namespace Cadenya {
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+  };
+
+  export {
+    APIKeys as APIKeys,
+    type APIKey as APIKey,
+    type APIKeySpec as APIKeySpec,
+    type APIKeysCursorPagination as APIKeysCursorPagination,
+    type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyUpdateParams as APIKeyUpdateParams,
+    type APIKeyListParams as APIKeyListParams,
   };
 
   export {
