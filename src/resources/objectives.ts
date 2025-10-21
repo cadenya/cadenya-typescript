@@ -228,11 +228,6 @@ export namespace ObjectiveApproveToolCallResponse {
 
     export interface SubObjectiveCreated {
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-       */
-      agent?: Shared.ResourceMetadata;
-
-      /**
        * Metadata for ephemeral operations and activities (e.g., objectives, executions,
        * runs)
        */
@@ -346,11 +341,6 @@ export namespace ObjectiveContinueResponse {
     }
 
     export interface SubObjectiveCreated {
-      /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-       */
-      agent?: Shared.ResourceMetadata;
-
       /**
        * Metadata for ephemeral operations and activities (e.g., objectives, executions,
        * runs)
@@ -466,11 +456,6 @@ export namespace ObjectiveDenyToolCallResponse {
 
     export interface SubObjectiveCreated {
       /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-       */
-      agent?: Shared.ResourceMetadata;
-
-      /**
        * Metadata for ephemeral operations and activities (e.g., objectives, executions,
        * runs)
        */
@@ -584,11 +569,6 @@ export namespace ObjectiveListEventsResponse {
     }
 
     export interface SubObjectiveCreated {
-      /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-       */
-      agent?: Shared.ResourceMetadata;
-
       /**
        * Metadata for ephemeral operations and activities (e.g., objectives, executions,
        * runs)
