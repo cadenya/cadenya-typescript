@@ -22,9 +22,9 @@ export class Search extends APIResource {
 export interface SearchSearchToolsOrToolSetsResponse {
   agents?: Array<AgentsAPI.Agent>;
 
-  tools?: Array<ToolsAPI.Tool>;
+  tool_sets?: Array<ToolSetsAPI.ToolSet>;
 
-  toolSets?: Array<ToolSetsAPI.ToolSet>;
+  tools?: Array<ToolsAPI.Tool>;
 }
 
 export interface SearchSearchToolsOrToolSetsParams {
