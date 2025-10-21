@@ -115,7 +115,13 @@ export namespace Objective {
   export interface Status {
     message?: string;
 
-    state?: number;
+    state?:
+      | 'STATE_PENDING'
+      | 'STATE_RUNNING'
+      | 'STATE_PAUSED'
+      | 'STATE_COMPLETED'
+      | 'STATE_FAILED'
+      | 'STATE_CANCELLED';
   }
 }
 
