@@ -46,7 +46,7 @@ export interface WorkspaceListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
-  sort_order?: string;
+  sortOrder?: string;
 }
 
 export declare namespace Workspaces {

@@ -50,14 +50,98 @@ describe('resource objectives', () => {
     await expect(
       client.objectives.list(
         {
-          actor_id: 'actor_id',
-          agent_id: 'agent_id',
+          actorId: 'actorId',
+          agentId: 'agentId',
           cursor: 'cursor',
           limit: 0,
-          parent_objective_id: 'parent_objective_id',
-          sort_order: 'sort_order',
+          parentObjectiveId: 'parentObjectiveId',
+          sortOrder: 'sortOrder',
           state: 'STATE_UNSPECIFIED',
         },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Cadenya.NotFoundError);
+  });
+
+  // Prism tests are disabled
+  test.skip('approveToolCall: only required params', async () => {
+    const responsePromise = client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('approveToolCall: required and optional params', async () => {
+    const response = await client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('continue', async () => {
+    const responsePromise = client.objectives.continue('objectiveId', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('denyToolCall: only required params', async () => {
+    const responsePromise = client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('denyToolCall: required and optional params', async () => {
+    const response = await client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('listEvents', async () => {
+    const responsePromise = client.objectives.listEvents('objectiveId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('listEvents: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.objectives.listEvents(
+        'objectiveId',
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

@@ -61,7 +61,7 @@ describe('resource toolSets', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.toolSets.list(
-        { cursor: 'cursor', limit: 0, sort_order: 'sort_order' },
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

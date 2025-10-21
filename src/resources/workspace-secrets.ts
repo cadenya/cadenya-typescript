@@ -95,7 +95,7 @@ export interface WorkspaceSecretUpdateParams {
   /**
    * Fields to update
    */
-  update_mask?: string;
+  updateMask?: string;
 }
 
 export interface WorkspaceSecretListParams extends CursorPaginationParams {
@@ -107,7 +107,7 @@ export interface WorkspaceSecretListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
-  sort_order?: string;
+  sortOrder?: string;
 }
 
 export declare namespace WorkspaceSecrets {

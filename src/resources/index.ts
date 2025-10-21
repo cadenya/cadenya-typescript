@@ -21,9 +21,18 @@ export {
   Objectives,
   type Objective,
   type ObjectiveSpec,
+  type ObjectiveApproveToolCallResponse,
+  type ObjectiveContinueResponse,
+  type ObjectiveDenyToolCallResponse,
+  type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
+  type ObjectiveApproveToolCallParams,
+  type ObjectiveContinueParams,
+  type ObjectiveDenyToolCallParams,
+  type ObjectiveListEventsParams,
   type ObjectivesCursorPagination,
+  type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export {

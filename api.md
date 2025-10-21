@@ -49,18 +49,34 @@ Types:
 - <code><a href="./src/resources/agents/prompts.ts">Prompt</a></code>
 - <code><a href="./src/resources/agents/prompts.ts">PromptSpec</a></code>
 
+Methods:
+
+- <code title="post /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">create</a>(agentID, { ...params }) -> Prompt</code>
+- <code title="get /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">retrieve</a>(id, { ...params }) -> Prompt</code>
+- <code title="patch /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">update</a>(id, { ...params }) -> Prompt</code>
+- <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptsCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
+
 # Objectives
 
 Types:
 
 - <code><a href="./src/resources/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveApproveToolCallResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveContinueResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveDenyToolCallResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveListEventsResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">create</a>({ ...params }) -> Objective</code>
 - <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives.ts">retrieve</a>(id) -> Objective</code>
 - <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
+- <code title="put /v1/objectives/{objectiveId}/approve_tool_call/{objectiveEventId}">client.objectives.<a href="./src/resources/objectives.ts">approveToolCall</a>(objectiveEventID, { ...params }) -> ObjectiveApproveToolCallResponse</code>
+- <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
+- <code title="put /v1/objectives/{objectiveId}/deny_tool_call/{objectiveEventId}">client.objectives.<a href="./src/resources/objectives.ts">denyToolCall</a>(objectiveEventID, { ...params }) -> ObjectiveDenyToolCallResponse</code>
+- <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
 # Ping
 
@@ -111,6 +127,14 @@ Types:
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfig</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecContentFilter</a></code>
+
+Methods:
+
+- <code title="post /v1/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">create</a>(toolSetID, { ...params }) -> Tool</code>
+- <code title="get /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">retrieve</a>(id, { ...params }) -> Tool</code>
+- <code title="put /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">update</a>(id, { ...params }) -> Tool</code>
+- <code title="get /v1/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">list</a>(toolSetID, { ...params }) -> ToolsCursorPagination</code>
+- <code title="delete /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">delete</a>(id, { ...params }) -> void</code>
 
 # WorkspaceSecrets
 
