@@ -67,6 +67,10 @@ export interface APIKey {
 
 export interface APIKeySpec {
   token?: string;
+
+  description?: string;
+
+  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 }
 
 export interface APIKeyCreateParams {
