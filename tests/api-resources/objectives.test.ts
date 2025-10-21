@@ -56,7 +56,7 @@ describe('resource objectives', () => {
           limit: 0,
           parentObjectiveId: 'parentObjectiveId',
           sortOrder: 'sortOrder',
-          state: 0,
+          state: 'STATE_UNSPECIFIED',
         },
         { path: '/_stainless_unknown_path' },
       ),

@@ -78,7 +78,7 @@ export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 export interface McpToolFilter {
   filters?: Array<McpToolFilter.Filter>;
 
-  operator?: 'OPERATOR_AND' | 'OPERATOR_OR';
+  operator?: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
 }
 
 export namespace McpToolFilter {
@@ -86,7 +86,7 @@ export namespace McpToolFilter {
    * Single attribute filter
    */
   export interface Filter {
-    attribute?: 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+    attribute?: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
 
     /**
      * String matching operations

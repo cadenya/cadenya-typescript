@@ -74,7 +74,7 @@ export interface ConfigHTTP {
    */
   requestBodyTemplate?: string;
 
-  requestMethod?: number;
+  requestMethod?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 }
 
 export interface ConfigMcp {

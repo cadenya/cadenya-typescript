@@ -116,6 +116,7 @@ export namespace Objective {
     message?: string;
 
     state?:
+      | 'STATE_UNSPECIFIED'
       | 'STATE_PENDING'
       | 'STATE_RUNNING'
       | 'STATE_PAUSED'
@@ -678,7 +679,17 @@ export interface ObjectiveListParams extends CursorPaginationParams {
    */
   sortOrder?: string;
 
-  state?: number;
+  /**
+   * Filter by state
+   */
+  state?:
+    | 'STATE_UNSPECIFIED'
+    | 'STATE_PENDING'
+    | 'STATE_RUNNING'
+    | 'STATE_PAUSED'
+    | 'STATE_COMPLETED'
+    | 'STATE_FAILED'
+    | 'STATE_CANCELLED';
 }
 
 export interface ObjectiveApproveToolCallParams {
