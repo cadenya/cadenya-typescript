@@ -4,7 +4,21 @@ import { APIResource } from '../../core/resource';
 import * as ToolSetsAPI from './tool-sets';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
-import { ConfigHTTP, ConfigMcp, Tool, ToolSpec, ToolSpecConfig, ToolSpecContentFilter, Tools } from './tools';
+import {
+  ConfigHTTP,
+  ConfigMcp,
+  Tool,
+  ToolCreateParams,
+  ToolDeleteParams,
+  ToolListParams,
+  ToolRetrieveParams,
+  ToolSpec,
+  ToolSpecConfig,
+  ToolSpecContentFilter,
+  ToolUpdateParams,
+  Tools,
+  ToolsCursorPagination,
+} from './tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -85,17 +99,17 @@ export namespace McpToolFilter {
      * String matching operations
      */
     export interface Matcher {
-      case_sensitive?: boolean;
+      caseSensitive?: boolean;
 
       contains?: string;
 
-      ends_with?: string;
+      endsWith?: string;
 
       exact?: string;
 
       regex?: string;
 
-      starts_with?: string;
+      startsWith?: string;
     }
   }
 }
@@ -116,7 +130,7 @@ export interface ToolSetAdapter {
 }
 
 export interface ToolSetAdapterHTTP {
-  base_url?: string;
+  baseUrl?: string;
 
   headers?: { [key: string]: string };
 }
@@ -125,20 +139,20 @@ export interface ToolSetAdapterMcp {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  exclude_tools?: McpToolFilter;
+  excludeTools?: McpToolFilter;
 
   headers?: { [key: string]: string };
 
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  include_tools?: McpToolFilter;
+  includeTools?: McpToolFilter;
 
   /**
    * Approval filters that will automatically set the approval requirement on the
    * tools synced from the MCP server
    */
-  tool_approvals?: ToolSetAdapterMcp.ToolApprovals;
+  toolApprovals?: ToolSetAdapterMcp.ToolApprovals;
 
   url?: string;
 }
@@ -183,14 +197,14 @@ export interface ToolSetUpdateParams {
 
   spec?: ToolSetSpec;
 
-  update_mask?: string;
+  updateMask?: string;
 }
 
 export interface ToolSetListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
-  sort_order?: string;
+  sortOrder?: string;
 }
 
 ToolSets.Tools = Tools;
@@ -217,5 +231,11 @@ export declare namespace ToolSets {
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
     type ToolSpecContentFilter as ToolSpecContentFilter,
+    type ToolsCursorPagination as ToolsCursorPagination,
+    type ToolCreateParams as ToolCreateParams,
+    type ToolRetrieveParams as ToolRetrieveParams,
+    type ToolUpdateParams as ToolUpdateParams,
+    type ToolListParams as ToolListParams,
+    type ToolDeleteParams as ToolDeleteParams,
   };
 }

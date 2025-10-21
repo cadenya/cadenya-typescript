@@ -33,7 +33,7 @@ export interface Account {
 
 export namespace Account {
   export interface Spec {
-    billing_email?: string;
+    billingEmail?: string;
 
     description?: string;
 
@@ -52,7 +52,7 @@ export interface AccountSetupResponse {
 export interface AccountSetupParams {
   email?: string;
 
-  external_user_id?: string;
+  externalUserId?: string;
 
   name?: string;
 }

@@ -15,4 +15,14 @@ export {
   type AgentListParams,
   type AgentsCursorPagination,
 } from './agents';
-export { Prompts, type Prompt, type PromptSpec } from './prompts';
+export {
+  Prompts,
+  type Prompt,
+  type PromptSpec,
+  type PromptCreateParams,
+  type PromptRetrieveParams,
+  type PromptUpdateParams,
+  type PromptListParams,
+  type PromptDeleteParams,
+  type PromptsCursorPagination,
+} from './prompts';

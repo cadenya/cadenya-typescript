@@ -21,4 +21,10 @@ export {
   type ToolSpec,
   type ToolSpecConfig,
   type ToolSpecContentFilter,
+  type ToolCreateParams,
+  type ToolRetrieveParams,
+  type ToolUpdateParams,
+  type ToolListParams,
+  type ToolDeleteParams,
+  type ToolsCursorPagination,
 } from './tools';

@@ -21,7 +21,16 @@ import { APIPromise } from './core/api-promise';
 import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
 import {
   Objective,
+  ObjectiveApproveToolCallParams,
+  ObjectiveApproveToolCallResponse,
+  ObjectiveContinueParams,
+  ObjectiveContinueResponse,
   ObjectiveCreateParams,
+  ObjectiveDenyToolCallParams,
+  ObjectiveDenyToolCallResponse,
+  ObjectiveListEventsParams,
+  ObjectiveListEventsResponse,
+  ObjectiveListEventsResponsesCursorPagination,
   ObjectiveListParams,
   ObjectiveSpec,
   Objectives,
@@ -847,9 +856,18 @@ export declare namespace Cadenya {
     Objectives as Objectives,
     type Objective as Objective,
     type ObjectiveSpec as ObjectiveSpec,
+    type ObjectiveApproveToolCallResponse as ObjectiveApproveToolCallResponse,
+    type ObjectiveContinueResponse as ObjectiveContinueResponse,
+    type ObjectiveDenyToolCallResponse as ObjectiveDenyToolCallResponse,
+    type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
+    type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
+    type ObjectiveApproveToolCallParams as ObjectiveApproveToolCallParams,
+    type ObjectiveContinueParams as ObjectiveContinueParams,
+    type ObjectiveDenyToolCallParams as ObjectiveDenyToolCallParams,
+    type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 
   export { Ping as Ping, type PingCheckResponse as PingCheckResponse };

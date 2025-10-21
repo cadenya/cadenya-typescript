@@ -18,7 +18,7 @@ export namespace Actor {
     /**
      * API Keys
      */
-    api_key?: Spec.APIKey;
+    apiKey?: Spec.APIKey;
 
     profile?: Shared.Profile;
   }
@@ -59,7 +59,7 @@ export interface CallableTool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  cadenya_provided_tool?: ResourceMetadata;
+  cadenyaProvidedTool?: ResourceMetadata;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -80,31 +80,31 @@ export interface OperationMetadata {
   /**
    * Account this operation belongs to for multi-tenant isolation (UUID v7)
    */
-  account_id?: string;
+  accountId?: string;
 
   /**
    * ID of the actor (user or service account) that initiated this operation (UUID
    * v7)
    */
-  actor_id?: string;
+  actorId?: string;
 
   /**
    * Timestamp when this operation was created UUID v7 includes timestamp
    * information, but this explicit field enables easier querying
    */
-  created_at?: string;
+  createdAt?: string;
 
   /**
    * ResourceReference is used when you only need the bare-bones of data about
    * something. Used for things like associations to keep API payloads/responses
    * lighter.
    */
-  created_by?: OperationMetadata.CreatedBy;
+  createdBy?: OperationMetadata.CreatedBy;
 
   /**
    * External ID for the operation (e.g., a workflow ID from an external system)
    */
-  external_id?: string;
+  externalId?: string;
 
   /**
    * Arbitrary key-value pairs for categorization and filtering Examples:
@@ -125,12 +125,12 @@ export interface OperationMetadata {
    * included in this list. An empty/null list indicates that any field (except
    * read-only fields) can be updated on the resource.
    */
-  modifiable_fields?: string;
+  modifiableFields?: string;
 
   /**
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
-  workspace_id?: string;
+  workspaceId?: string;
 }
 
 export namespace OperationMetadata {
@@ -166,13 +166,13 @@ export interface ResourceMetadata {
   /**
    * Account this resource belongs to for multi-tenant isolation (UUID v7)
    */
-  account_id?: string;
+  accountId?: string;
 
   /**
    * ID of the actor (user or service account) that created or last modified this
    * resource (UUID v7)
    */
-  actor_id?: string;
+  actorId?: string;
 
   /**
    * Optional short identifier for quick reference (e.g., "CSA-1", "email-v2") Useful
@@ -183,7 +183,7 @@ export interface ResourceMetadata {
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
-  external_id?: string;
+  externalId?: string;
 
   /**
    * Arbitrary key-value pairs for categorization and filtering Examples:
@@ -200,7 +200,7 @@ export interface ResourceMetadata {
   /**
    * Workspace this resource belongs to for organizational grouping (UUID v7)
    */
-  workspace_id?: string;
+  workspaceId?: string;
 }
 
 export interface Workspace {
