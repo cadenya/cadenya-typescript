@@ -678,6 +678,9 @@ export interface ObjectiveListParams extends CursorPaginationParams {
    */
   sortOrder?: string;
 
+  /**
+   * Filter by state
+   */
   state?: number;
 }
 
