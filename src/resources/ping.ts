@@ -21,13 +21,13 @@ export interface PingCheckResponse {
    * Has the currently assigned workspace for the request. If need to know which
    * workspace a token is for, reference this field.
    */
-  currentWorkspace?: Shared.Workspace;
+  current_workspace?: Shared.Workspace;
 
   /**
    * Indicates if an account needs setup. If you are calling this API with an API
    * key, this will always be true. If it isn't, something has gone horribly wrong.
    */
-  needsSetup?: boolean;
+  needs_setup?: boolean;
 }
 
 export declare namespace Ping {

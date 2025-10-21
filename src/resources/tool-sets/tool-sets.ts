@@ -4,21 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as ToolSetsAPI from './tool-sets';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
-import {
-  ConfigHTTP,
-  ConfigMcp,
-  Tool,
-  ToolCreateParams,
-  ToolDeleteParams,
-  ToolListParams,
-  ToolRetrieveParams,
-  ToolSpec,
-  ToolSpecConfig,
-  ToolSpecContentFilter,
-  ToolUpdateParams,
-  Tools,
-  ToolsCursorPagination,
-} from './tools';
+import { ConfigHTTP, ConfigMcp, Tool, ToolSpec, ToolSpecConfig, ToolSpecContentFilter, Tools } from './tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -78,7 +64,7 @@ export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 export interface McpToolFilter {
   filters?: Array<McpToolFilter.Filter>;
 
-  operator?: 'OPERATOR_AND' | 'OPERATOR_OR';
+  operator?: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
 }
 
 export namespace McpToolFilter {
@@ -86,7 +72,7 @@ export namespace McpToolFilter {
    * Single attribute filter
    */
   export interface Filter {
-    attribute?: 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+    attribute?: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
 
     /**
      * String matching operations
@@ -99,17 +85,17 @@ export namespace McpToolFilter {
      * String matching operations
      */
     export interface Matcher {
-      caseSensitive?: boolean;
+      case_sensitive?: boolean;
 
       contains?: string;
 
-      endsWith?: string;
+      ends_with?: string;
 
       exact?: string;
 
       regex?: string;
 
-      startsWith?: string;
+      starts_with?: string;
     }
   }
 }
@@ -130,7 +116,7 @@ export interface ToolSetAdapter {
 }
 
 export interface ToolSetAdapterHTTP {
-  baseUrl?: string;
+  base_url?: string;
 
   headers?: { [key: string]: string };
 }
@@ -139,20 +125,20 @@ export interface ToolSetAdapterMcp {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  excludeTools?: McpToolFilter;
+  exclude_tools?: McpToolFilter;
 
   headers?: { [key: string]: string };
 
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  includeTools?: McpToolFilter;
+  include_tools?: McpToolFilter;
 
   /**
    * Approval filters that will automatically set the approval requirement on the
    * tools synced from the MCP server
    */
-  toolApprovals?: ToolSetAdapterMcp.ToolApprovals;
+  tool_approvals?: ToolSetAdapterMcp.ToolApprovals;
 
   url?: string;
 }
@@ -197,14 +183,14 @@ export interface ToolSetUpdateParams {
 
   spec?: ToolSetSpec;
 
-  updateMask?: string;
+  update_mask?: string;
 }
 
 export interface ToolSetListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
-  sortOrder?: string;
+  sort_order?: string;
 }
 
 ToolSets.Tools = Tools;
@@ -231,11 +217,5 @@ export declare namespace ToolSets {
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
     type ToolSpecContentFilter as ToolSpecContentFilter,
-    type ToolsCursorPagination as ToolsCursorPagination,
-    type ToolCreateParams as ToolCreateParams,
-    type ToolRetrieveParams as ToolRetrieveParams,
-    type ToolUpdateParams as ToolUpdateParams,
-    type ToolListParams as ToolListParams,
-    type ToolDeleteParams as ToolDeleteParams,
   };
 }

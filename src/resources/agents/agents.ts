@@ -3,17 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as PromptsAPI from './prompts';
-import {
-  Prompt,
-  PromptCreateParams,
-  PromptDeleteParams,
-  PromptListParams,
-  PromptRetrieveParams,
-  PromptSpec,
-  PromptUpdateParams,
-  Prompts,
-  PromptsCursorPagination,
-} from './prompts';
+import { Prompt, PromptSpec, Prompts } from './prompts';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -86,7 +76,7 @@ export interface Agent {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
-  agentTools?: Array<AgentSpecAgentTool>;
+  agent_tools?: Array<AgentSpecAgentTool>;
 
   constraints?: AgentSpecConstraints;
 
@@ -100,49 +90,49 @@ export interface AgentSpec {
    */
   status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 
-  toolSelection?: AgentSpecToolSelection;
+  tool_selection?: AgentSpecToolSelection;
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
-  webhookEventsUrl?: string;
+  webhook_events_url?: string;
 
-  webhookEventsUrlSecret?: string;
+  webhook_events_url_secret?: string;
 }
 
 export interface AgentSpecAgentTool {
-  agentId?: string;
+  agent_id?: string;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agentMetadata?: Shared.ResourceMetadata;
+  agent_metadata?: Shared.ResourceMetadata;
 
-  toolId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  toolMetadata?: Shared.ResourceMetadata;
-
-  toolSetId?: string;
+  tool_id?: string;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  toolSetMetadata?: Shared.ResourceMetadata;
+  tool_metadata?: Shared.ResourceMetadata;
+
+  tool_set_id?: string;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  tool_set_metadata?: Shared.ResourceMetadata;
 }
 
 export interface AgentSpecConstraints {
   /**
    * The maximum number of sub-objectives that can be created. 0 means no limit.
    */
-  maxSubObjectives?: number;
+  max_sub_objectives?: number;
 
   /**
    * The maximum number of tool calls that can be made. 0 means no limit.
    */
-  maxToolCalls?: number;
+  max_tool_calls?: number;
 }
 
 export interface AgentSpecToolSelection {
@@ -151,7 +141,7 @@ export interface AgentSpecToolSelection {
    * sets that are explicitly assigned to it. Allow discovery is used when the agent
    * thinks it needs to discover more tools.
    */
-  assignedTools?: ToolSelectionAssignedTools;
+  assigned_tools?: ToolSelectionAssignedTools;
 
   /**
    * AutoDiscovery is used to indicate that the agent should automatically discover
@@ -160,11 +150,11 @@ export interface AgentSpecToolSelection {
    * are used in conjunction with the context-aware tool search and can help select
    * the best tools for the task.
    */
-  autoDiscovery?: ToolSelectionAutoDiscovery;
+  auto_discovery?: ToolSelectionAutoDiscovery;
 }
 
 export interface Page {
-  nextCursor?: string;
+  next_cursor?: string;
 
   total?: number;
 }
@@ -175,7 +165,7 @@ export interface Page {
  * thinks it needs to discover more tools.
  */
 export interface ToolSelectionAssignedTools {
-  allowDiscovery?: boolean;
+  allow_discovery?: boolean;
 }
 
 /**
@@ -188,7 +178,7 @@ export interface ToolSelectionAssignedTools {
 export interface ToolSelectionAutoDiscovery {
   hints?: Array<string>;
 
-  maxTools?: number;
+  max_tools?: number;
 }
 
 export interface AgentCreateParams {
@@ -217,7 +207,7 @@ export interface AgentUpdateParams {
   /**
    * Fields to update
    */
-  updateMask?: string;
+  update_mask?: string;
 }
 
 export interface AgentListParams extends CursorPaginationParams {
@@ -229,7 +219,7 @@ export interface AgentListParams extends CursorPaginationParams {
   /**
    * Sort order for results (asc or desc by creation time)
    */
-  sortOrder?: string;
+  sort_order?: string;
 }
 
 Agents.Prompts = Prompts;
@@ -250,15 +240,5 @@ export declare namespace Agents {
     type AgentListParams as AgentListParams,
   };
 
-  export {
-    Prompts as Prompts,
-    type Prompt as Prompt,
-    type PromptSpec as PromptSpec,
-    type PromptsCursorPagination as PromptsCursorPagination,
-    type PromptCreateParams as PromptCreateParams,
-    type PromptRetrieveParams as PromptRetrieveParams,
-    type PromptUpdateParams as PromptUpdateParams,
-    type PromptListParams as PromptListParams,
-    type PromptDeleteParams as PromptDeleteParams,
-  };
+  export { Prompts as Prompts, type Prompt as Prompt, type PromptSpec as PromptSpec };
 }
