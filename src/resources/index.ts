@@ -1,6 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
+export {
+  APIKeys,
+  type APIKey,
+  type APIKeySpec,
+  type APIKeyCreateParams,
+  type APIKeyUpdateParams,
+  type APIKeyListParams,
+  type APIKeysCursorPagination,
+} from './api-keys';
 export { AccountResource, type Account, type AccountSetupResponse, type AccountSetupParams } from './account';
 export {
   Agents,

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import * as Shared from './shared';
+import * as APIKeysAPI from './api-keys';
 import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
@@ -18,29 +19,9 @@ export namespace Actor {
     /**
      * API Keys
      */
-    apiKey?: Spec.APIKey;
+    apiKey?: APIKeysAPI.APIKey;
 
     profile?: Shared.Profile;
-  }
-
-  export namespace Spec {
-    /**
-     * API Keys
-     */
-    export interface APIKey {
-      /**
-       * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-       */
-      metadata?: Shared.ResourceMetadata;
-
-      spec?: APIKey.Spec;
-    }
-
-    export namespace APIKey {
-      export interface Spec {
-        token?: string;
-      }
-    }
   }
 }
 
