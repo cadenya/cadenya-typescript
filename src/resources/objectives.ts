@@ -204,6 +204,8 @@ export namespace ObjectiveApproveToolCallResponse {
   export interface Event {
     message?: Event.Message;
 
+    subObjectiveCreated?: Event.SubObjectiveCreated;
+
     toolApprovalRequested?: Event.ToolApprovalRequested;
 
     toolApproved?: Event.ToolApproved;
@@ -222,6 +224,14 @@ export namespace ObjectiveApproveToolCallResponse {
       content?: string;
 
       role?: string;
+    }
+
+    export interface SubObjectiveCreated {
+      /**
+       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+       * runs)
+       */
+      objective?: Shared.OperationMetadata;
     }
 
     export interface ToolApprovalRequested {
@@ -308,6 +318,8 @@ export namespace ObjectiveContinueResponse {
   export interface Event {
     message?: Event.Message;
 
+    subObjectiveCreated?: Event.SubObjectiveCreated;
+
     toolApprovalRequested?: Event.ToolApprovalRequested;
 
     toolApproved?: Event.ToolApproved;
@@ -326,6 +338,14 @@ export namespace ObjectiveContinueResponse {
       content?: string;
 
       role?: string;
+    }
+
+    export interface SubObjectiveCreated {
+      /**
+       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+       * runs)
+       */
+      objective?: Shared.OperationMetadata;
     }
 
     export interface ToolApprovalRequested {
@@ -412,6 +432,8 @@ export namespace ObjectiveDenyToolCallResponse {
   export interface Event {
     message?: Event.Message;
 
+    subObjectiveCreated?: Event.SubObjectiveCreated;
+
     toolApprovalRequested?: Event.ToolApprovalRequested;
 
     toolApproved?: Event.ToolApproved;
@@ -430,6 +452,14 @@ export namespace ObjectiveDenyToolCallResponse {
       content?: string;
 
       role?: string;
+    }
+
+    export interface SubObjectiveCreated {
+      /**
+       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+       * runs)
+       */
+      objective?: Shared.OperationMetadata;
     }
 
     export interface ToolApprovalRequested {
@@ -516,6 +546,8 @@ export namespace ObjectiveListEventsResponse {
   export interface Event {
     message?: Event.Message;
 
+    subObjectiveCreated?: Event.SubObjectiveCreated;
+
     toolApprovalRequested?: Event.ToolApprovalRequested;
 
     toolApproved?: Event.ToolApproved;
@@ -534,6 +566,14 @@ export namespace ObjectiveListEventsResponse {
       content?: string;
 
       role?: string;
+    }
+
+    export interface SubObjectiveCreated {
+      /**
+       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+       * runs)
+       */
+      objective?: Shared.OperationMetadata;
     }
 
     export interface ToolApprovalRequested {
