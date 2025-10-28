@@ -209,6 +209,8 @@ export interface ObjectiveApproveToolCallResponse {
 
 export namespace ObjectiveApproveToolCallResponse {
   export interface Event {
+    error?: Event.Error;
+
     message?: Event.Message;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
@@ -227,6 +229,12 @@ export namespace ObjectiveApproveToolCallResponse {
   }
 
   export namespace Event {
+    export interface Error {
+      message?: string;
+
+      type?: string;
+    }
+
     export interface Message {
       content?: string;
 
@@ -323,6 +331,8 @@ export interface ObjectiveContinueResponse {
 
 export namespace ObjectiveContinueResponse {
   export interface Event {
+    error?: Event.Error;
+
     message?: Event.Message;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
@@ -341,6 +351,12 @@ export namespace ObjectiveContinueResponse {
   }
 
   export namespace Event {
+    export interface Error {
+      message?: string;
+
+      type?: string;
+    }
+
     export interface Message {
       content?: string;
 
@@ -437,6 +453,8 @@ export interface ObjectiveDenyToolCallResponse {
 
 export namespace ObjectiveDenyToolCallResponse {
   export interface Event {
+    error?: Event.Error;
+
     message?: Event.Message;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
@@ -455,6 +473,12 @@ export namespace ObjectiveDenyToolCallResponse {
   }
 
   export namespace Event {
+    export interface Error {
+      message?: string;
+
+      type?: string;
+    }
+
     export interface Message {
       content?: string;
 
@@ -551,6 +575,8 @@ export interface ObjectiveListEventsResponse {
 
 export namespace ObjectiveListEventsResponse {
   export interface Event {
+    error?: Event.Error;
+
     message?: Event.Message;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
@@ -569,6 +595,12 @@ export namespace ObjectiveListEventsResponse {
   }
 
   export namespace Event {
+    export interface Error {
+      message?: string;
+
+      type?: string;
+    }
+
     export interface Message {
       content?: string;
 
