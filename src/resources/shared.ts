@@ -21,6 +21,10 @@ export namespace Actor {
      */
     apiKey?: APIKeysAPI.APIKey;
 
+    displayName?: string;
+
+    email?: string;
+
     profile?: Shared.Profile;
   }
 }
