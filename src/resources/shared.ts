@@ -1,27 +1,81 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as Shared from './shared';
-import * as APIKeysAPI from './api-keys';
 import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
+/**
+ * Actor is the "through model" that associates account-level resources (Profiles,
+ * API Keys) to specific workspaces. This allows a single Profile or API Key to
+ * have access to multiple workspaces while maintaining proper isolation and audit
+ * trails.
+ *
+ * Key relationships:
+ *
+ * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+ * - Actor references either a Profile (human) or API Key (machine) via IDs
+ * - Every resource creation and operation is tagged with the actor_id
+ *
+ * Authentication flow:
+ *
+ * 1.  JWT token is validated and issuer is checked
+ * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+ * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+ * 4.  All subsequent operations use the actor_id for audit and authorization
+ */
 export interface Actor {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: ResourceMetadata;
 
+  /**
+   * ActorSpec defines the properties of an actor
+   */
   spec?: Actor.Spec;
 }
 
 export namespace Actor {
+  /**
+   * ActorSpec defines the properties of an actor
+   */
   export interface Spec {
     /**
-     * API Keys
+     * ID of the API Key (for service accounts authenticated via Cadenya JWT)
      */
-    apiKey?: APIKeysAPI.APIKey;
+    apiKeyId?: string;
 
-    profile?: Shared.Profile;
+    /**
+     * Display name of the actor (copied from Profile.spec.display_name or
+     * APIKey.spec.description)
+     */
+    displayName?: string;
+
+    /**
+     * Email address of the actor (copied from Profile.spec.email or
+     * APIKey.spec.description)
+     */
+    email?: string;
+
+    /**
+     * ID of the Integration (reserved for future use)
+     */
+    integrationId?: string;
+
+    /**
+     * ID of the Profile (for human users authenticated via SSO/OAuth)
+     */
+    profileId?: string;
+
+    /**
+     * Status of this actor in the workspace (can be disabled without affecting the
+     * underlying Profile/APIKey)
+     */
+    status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+
+    /**
+     * The type of actor (PROFILE, API_KEY, or future INTEGRATION)
+     */
+    type?: 'ACTOR_TYPE_UNSPECIFIED' | 'ACTOR_TYPE_PROFILE' | 'ACTOR_TYPE_API_KEY' | 'ACTOR_TYPE_INTEGRATION';
   }
 }
 
@@ -94,21 +148,6 @@ export interface OperationMetadata {
   labels?: { [key: string]: string };
 
   /**
-   * If a resource is marked as managed, it indicates that it should only be modified
-   * the actor that created it in the first place
-   */
-  managed?: boolean;
-
-  /**
-   * Some resources only allow certain fields to be modified after they are created
-   * (like a tool set backed by an MCP server) You'll still be able to send other
-   * fields in an update request, but don't expect them to be updated if they are not
-   * included in this list. An empty/null list indicates that any field (except
-   * read-only fields) can be updated on the resource.
-   */
-  modifiableFields?: string;
-
-  /**
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
   workspaceId?: string;
@@ -129,12 +168,6 @@ export namespace OperationMetadata {
   }
 }
 
-export interface Profile {
-  email?: string;
-
-  name?: string;
-}
-
 /**
  * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
  */
@@ -150,16 +183,9 @@ export interface ResourceMetadata {
   accountId?: string;
 
   /**
-   * ID of the actor (user or service account) that created or last modified this
-   * resource (UUID v7)
+   * ID of the actor (user or service account) that created this resource
    */
   actorId?: string;
-
-  /**
-   * Optional short identifier for quick reference (e.g., "CSA-1", "email-v2") Useful
-   * for agents where a memorable callsign is preferred over long UUIDs
-   */
-  callsign?: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)

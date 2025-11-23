@@ -933,7 +933,6 @@ export declare namespace Cadenya {
   export type Actor = API.Actor;
   export type CallableTool = API.CallableTool;
   export type OperationMetadata = API.OperationMetadata;
-  export type Profile = API.Profile;
   export type ResourceMetadata = API.ResourceMetadata;
   export type Workspace = API.Workspace;
 }

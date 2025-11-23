@@ -5,7 +5,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">Actor</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">Profile</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">Workspace</a></code>
 
