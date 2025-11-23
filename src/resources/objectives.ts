@@ -194,6 +194,25 @@ export namespace ObjectiveSpec {
 }
 
 export interface ObjectiveApproveToolCallResponse {
+  /**
+   * Actor is the "through model" that associates account-level resources (Profiles,
+   * API Keys) to specific workspaces. This allows a single Profile or API Key to
+   * have access to multiple workspaces while maintaining proper isolation and audit
+   * trails.
+   *
+   * Key relationships:
+   *
+   * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+   * - Actor references either a Profile (human) or API Key (machine) via IDs
+   * - Every resource creation and operation is tagged with the actor_id
+   *
+   * Authentication flow:
+   *
+   * 1.  JWT token is validated and issuer is checked
+   * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+   * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+   * 4.  All subsequent operations use the actor_id for audit and authorization
+   */
   actor?: Shared.Actor;
 
   event?: ObjectiveApproveToolCallResponse.Event;
@@ -293,6 +312,25 @@ export namespace ObjectiveApproveToolCallResponse {
 
       message?: string;
 
+      /**
+       * Actor is the "through model" that associates account-level resources (Profiles,
+       * API Keys) to specific workspaces. This allows a single Profile or API Key to
+       * have access to multiple workspaces while maintaining proper isolation and audit
+       * trails.
+       *
+       * Key relationships:
+       *
+       * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+       * - Actor references either a Profile (human) or API Key (machine) via IDs
+       * - Every resource creation and operation is tagged with the actor_id
+       *
+       * Authentication flow:
+       *
+       * 1.  JWT token is validated and issuer is checked
+       * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+       * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+       * 4.  All subsequent operations use the actor_id for audit and authorization
+       */
       modifiedBy?: Shared.Actor;
     }
 
@@ -316,6 +354,25 @@ export namespace ObjectiveApproveToolCallResponse {
 }
 
 export interface ObjectiveContinueResponse {
+  /**
+   * Actor is the "through model" that associates account-level resources (Profiles,
+   * API Keys) to specific workspaces. This allows a single Profile or API Key to
+   * have access to multiple workspaces while maintaining proper isolation and audit
+   * trails.
+   *
+   * Key relationships:
+   *
+   * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+   * - Actor references either a Profile (human) or API Key (machine) via IDs
+   * - Every resource creation and operation is tagged with the actor_id
+   *
+   * Authentication flow:
+   *
+   * 1.  JWT token is validated and issuer is checked
+   * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+   * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+   * 4.  All subsequent operations use the actor_id for audit and authorization
+   */
   actor?: Shared.Actor;
 
   event?: ObjectiveContinueResponse.Event;
@@ -415,6 +472,25 @@ export namespace ObjectiveContinueResponse {
 
       message?: string;
 
+      /**
+       * Actor is the "through model" that associates account-level resources (Profiles,
+       * API Keys) to specific workspaces. This allows a single Profile or API Key to
+       * have access to multiple workspaces while maintaining proper isolation and audit
+       * trails.
+       *
+       * Key relationships:
+       *
+       * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+       * - Actor references either a Profile (human) or API Key (machine) via IDs
+       * - Every resource creation and operation is tagged with the actor_id
+       *
+       * Authentication flow:
+       *
+       * 1.  JWT token is validated and issuer is checked
+       * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+       * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+       * 4.  All subsequent operations use the actor_id for audit and authorization
+       */
       modifiedBy?: Shared.Actor;
     }
 
@@ -438,6 +514,25 @@ export namespace ObjectiveContinueResponse {
 }
 
 export interface ObjectiveDenyToolCallResponse {
+  /**
+   * Actor is the "through model" that associates account-level resources (Profiles,
+   * API Keys) to specific workspaces. This allows a single Profile or API Key to
+   * have access to multiple workspaces while maintaining proper isolation and audit
+   * trails.
+   *
+   * Key relationships:
+   *
+   * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+   * - Actor references either a Profile (human) or API Key (machine) via IDs
+   * - Every resource creation and operation is tagged with the actor_id
+   *
+   * Authentication flow:
+   *
+   * 1.  JWT token is validated and issuer is checked
+   * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+   * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+   * 4.  All subsequent operations use the actor_id for audit and authorization
+   */
   actor?: Shared.Actor;
 
   event?: ObjectiveDenyToolCallResponse.Event;
@@ -537,6 +632,25 @@ export namespace ObjectiveDenyToolCallResponse {
 
       message?: string;
 
+      /**
+       * Actor is the "through model" that associates account-level resources (Profiles,
+       * API Keys) to specific workspaces. This allows a single Profile or API Key to
+       * have access to multiple workspaces while maintaining proper isolation and audit
+       * trails.
+       *
+       * Key relationships:
+       *
+       * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+       * - Actor references either a Profile (human) or API Key (machine) via IDs
+       * - Every resource creation and operation is tagged with the actor_id
+       *
+       * Authentication flow:
+       *
+       * 1.  JWT token is validated and issuer is checked
+       * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+       * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+       * 4.  All subsequent operations use the actor_id for audit and authorization
+       */
       modifiedBy?: Shared.Actor;
     }
 
@@ -560,6 +674,25 @@ export namespace ObjectiveDenyToolCallResponse {
 }
 
 export interface ObjectiveListEventsResponse {
+  /**
+   * Actor is the "through model" that associates account-level resources (Profiles,
+   * API Keys) to specific workspaces. This allows a single Profile or API Key to
+   * have access to multiple workspaces while maintaining proper isolation and audit
+   * trails.
+   *
+   * Key relationships:
+   *
+   * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+   * - Actor references either a Profile (human) or API Key (machine) via IDs
+   * - Every resource creation and operation is tagged with the actor_id
+   *
+   * Authentication flow:
+   *
+   * 1.  JWT token is validated and issuer is checked
+   * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+   * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+   * 4.  All subsequent operations use the actor_id for audit and authorization
+   */
   actor?: Shared.Actor;
 
   event?: ObjectiveListEventsResponse.Event;
@@ -659,6 +792,25 @@ export namespace ObjectiveListEventsResponse {
 
       message?: string;
 
+      /**
+       * Actor is the "through model" that associates account-level resources (Profiles,
+       * API Keys) to specific workspaces. This allows a single Profile or API Key to
+       * have access to multiple workspaces while maintaining proper isolation and audit
+       * trails.
+       *
+       * Key relationships:
+       *
+       * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+       * - Actor references either a Profile (human) or API Key (machine) via IDs
+       * - Every resource creation and operation is tagged with the actor_id
+       *
+       * Authentication flow:
+       *
+       * 1.  JWT token is validated and issuer is checked
+       * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+       * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+       * 4.  All subsequent operations use the actor_id for audit and authorization
+       */
       modifiedBy?: Shared.Actor;
     }
 
