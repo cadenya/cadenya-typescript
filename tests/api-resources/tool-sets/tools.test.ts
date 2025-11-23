@@ -53,7 +53,7 @@ describe('resource tools', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.toolSets.tools.update('id', {
       toolSetId: 'toolSetId',
-      metadata: { callsign: 'callsign', externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
+      metadata: { externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
       spec: {
         config: {
           http: {

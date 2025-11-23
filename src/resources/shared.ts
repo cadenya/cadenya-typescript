@@ -98,21 +98,6 @@ export interface OperationMetadata {
   labels?: { [key: string]: string };
 
   /**
-   * If a resource is marked as managed, it indicates that it should only be modified
-   * the actor that created it in the first place
-   */
-  managed?: boolean;
-
-  /**
-   * Some resources only allow certain fields to be modified after they are created
-   * (like a tool set backed by an MCP server) You'll still be able to send other
-   * fields in an update request, but don't expect them to be updated if they are not
-   * included in this list. An empty/null list indicates that any field (except
-   * read-only fields) can be updated on the resource.
-   */
-  modifiableFields?: string;
-
-  /**
    * Workspace this operation belongs to for organizational grouping (UUID v7)
    */
   workspaceId?: string;
@@ -154,16 +139,9 @@ export interface ResourceMetadata {
   accountId?: string;
 
   /**
-   * ID of the actor (user or service account) that created or last modified this
-   * resource (UUID v7)
+   * ID of the actor (user or service account) that created this resource
    */
   actorId?: string;
-
-  /**
-   * Optional short identifier for quick reference (e.g., "CSA-1", "email-v2") Useful
-   * for agents where a memorable callsign is preferred over long UUIDs
-   */
-  callsign?: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
