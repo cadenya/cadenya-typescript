@@ -1,31 +1,81 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as Shared from './shared';
-import * as APIKeysAPI from './api-keys';
 import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
+/**
+ * Actor is the "through model" that associates account-level resources (Profiles,
+ * API Keys) to specific workspaces. This allows a single Profile or API Key to
+ * have access to multiple workspaces while maintaining proper isolation and audit
+ * trails.
+ *
+ * Key relationships:
+ *
+ * - Actor belongs to both an Account and a Workspace (via ResourceMetadata)
+ * - Actor references either a Profile (human) or API Key (machine) via IDs
+ * - Every resource creation and operation is tagged with the actor_id
+ *
+ * Authentication flow:
+ *
+ * 1.  JWT token is validated and issuer is checked
+ * 2.  If issuer is WorkOS -> Profile lookup -> Find/create Actor in workspace
+ * 3.  If issuer is Cadenya -> API Key lookup -> Find/create Actor in workspace
+ * 4.  All subsequent operations use the actor_id for audit and authorization
+ */
 export interface Actor {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: ResourceMetadata;
 
+  /**
+   * ActorSpec defines the properties of an actor
+   */
   spec?: Actor.Spec;
 }
 
 export namespace Actor {
+  /**
+   * ActorSpec defines the properties of an actor
+   */
   export interface Spec {
     /**
-     * API Keys
+     * ID of the API Key (for service accounts authenticated via Cadenya JWT)
      */
-    apiKey?: APIKeysAPI.APIKey;
+    apiKeyId?: string;
 
+    /**
+     * Display name of the actor (copied from Profile.spec.display_name or
+     * APIKey.spec.description)
+     */
     displayName?: string;
 
+    /**
+     * Email address of the actor (copied from Profile.spec.email or
+     * APIKey.spec.description)
+     */
     email?: string;
 
-    profile?: Shared.Profile;
+    /**
+     * ID of the Integration (reserved for future use)
+     */
+    integrationId?: string;
+
+    /**
+     * ID of the Profile (for human users authenticated via SSO/OAuth)
+     */
+    profileId?: string;
+
+    /**
+     * Status of this actor in the workspace (can be disabled without affecting the
+     * underlying Profile/APIKey)
+     */
+    status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+
+    /**
+     * The type of actor (PROFILE, API_KEY, or future INTEGRATION)
+     */
+    type?: 'ACTOR_TYPE_UNSPECIFIED' | 'ACTOR_TYPE_PROFILE' | 'ACTOR_TYPE_API_KEY' | 'ACTOR_TYPE_INTEGRATION';
   }
 }
 
@@ -116,12 +166,6 @@ export namespace OperationMetadata {
 
     type?: string;
   }
-}
-
-export interface Profile {
-  email?: string;
-
-  name?: string;
 }
 
 /**
