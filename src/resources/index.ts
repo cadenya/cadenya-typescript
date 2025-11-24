@@ -72,15 +72,22 @@ export {
 export {
   ToolSets,
   type McpToolFilter,
+  type SyncCompleted,
+  type SyncFailed,
+  type SyncStarted,
   type ToolSet,
   type ToolSetAdapter,
   type ToolSetAdapterHTTP,
   type ToolSetAdapterMcp,
+  type ToolSetEvent,
+  type ToolSetEventData,
   type ToolSetSpec,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
+  type ToolSetListEventsParams,
   type ToolSetsCursorPagination,
+  type ToolSetEventsCursorPagination,
 } from './tool-sets/tool-sets';
 export {
   WorkspaceSecrets,

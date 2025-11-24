@@ -102,10 +102,15 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">McpToolFilter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncCompleted</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncFailed</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncStarted</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSet</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMcp</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEvent</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventData</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
 
 Methods:
@@ -115,6 +120,7 @@ Methods:
 - <code title="put /v1/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
 - <code title="get /v1/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">list</a>({ ...params }) -> ToolSetsCursorPagination</code>
 - <code title="delete /v1/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">delete</a>(id) -> void</code>
+- <code title="get /v1/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
 
 ## Tools
 
