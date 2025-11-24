@@ -58,7 +58,7 @@ describe('resource prompts', () => {
         content: 'content',
         default: true,
         objectiveLabelsSelector: { foo: 'string' },
-        status: 'STATUS_ENABLED',
+        status: 'PROMPT_STATUS_UNSPECIFIED',
       },
       updateMask: 'updateMask',
     });

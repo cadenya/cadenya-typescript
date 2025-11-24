@@ -77,6 +77,15 @@ export interface MemoryFolder {
  */
 export interface MemoryFolderSpec {
   /**
+   * Status of the memory folder
+   */
+  status?:
+    | 'MEMORY_STATUS_UNSPECIFIED'
+    | 'MEMORY_STATUS_ENABLED'
+    | 'MEMORY_STATUS_DISABLED'
+    | 'MEMORY_STATUS_ARCHIVED';
+
+  /**
    * Human-readable summary describing the purpose of this folder
    */
   summary?: string;
