@@ -103,11 +103,18 @@ import {
 } from './resources/memories/memories';
 import {
   McpToolFilter,
+  SyncCompleted,
+  SyncFailed,
+  SyncStarted,
   ToolSet,
   ToolSetAdapter,
   ToolSetAdapterHTTP,
   ToolSetAdapterMcp,
   ToolSetCreateParams,
+  ToolSetEvent,
+  ToolSetEventData,
+  ToolSetEventsCursorPagination,
+  ToolSetListEventsParams,
   ToolSetListParams,
   ToolSetSpec,
   ToolSetUpdateParams,
@@ -916,15 +923,22 @@ export declare namespace Cadenya {
   export {
     ToolSets as ToolSets,
     type McpToolFilter as McpToolFilter,
+    type SyncCompleted as SyncCompleted,
+    type SyncFailed as SyncFailed,
+    type SyncStarted as SyncStarted,
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
+    type ToolSetEvent as ToolSetEvent,
+    type ToolSetEventData as ToolSetEventData,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
+    type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+    type ToolSetListEventsParams as ToolSetListEventsParams,
   };
 
   export {

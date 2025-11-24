@@ -68,9 +68,25 @@ export class ToolSets extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Lists all events (including sync status) for a tool set
+   */
+  listEvents(
+    toolSetID: string,
+    query: ToolSetListEventsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<ToolSetEventsCursorPagination, ToolSetEvent> {
+    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/events`, CursorPagination<ToolSetEvent>, {
+      query,
+      ...options,
+    });
+  }
 }
 
 export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
+
+export type ToolSetEventsCursorPagination = CursorPagination<ToolSetEvent>;
 
 /**
  * Top-level filter with simple boolean logic (no nesting)
@@ -112,6 +128,51 @@ export namespace McpToolFilter {
       startsWith?: string;
     }
   }
+}
+
+/**
+ * SyncCompleted is emitted when a tool set sync operation completes successfully
+ */
+export interface SyncCompleted {
+  /**
+   * Optional message with additional details
+   */
+  message?: string;
+
+  /**
+   * Number of tools synced
+   */
+  toolsSynced?: number;
+}
+
+/**
+ * SyncFailed is emitted when a tool set sync operation fails
+ */
+export interface SyncFailed {
+  /**
+   * Indicates this is an error event
+   */
+  error?: boolean;
+
+  /**
+   * Optional error type/code for programmatic handling
+   */
+  errorType?: string;
+
+  /**
+   * Error message describing what went wrong
+   */
+  message?: string;
+}
+
+/**
+ * SyncStarted is emitted when a tool set sync operation begins
+ */
+export interface SyncStarted {
+  /**
+   * Timestamp when the sync was initiated
+   */
+  message?: string;
 }
 
 export interface ToolSet {
@@ -172,6 +233,52 @@ export namespace ToolSetAdapterMcp {
   }
 }
 
+/**
+ * ToolSetEvent represents a single event in the tool set's operation timeline
+ */
+export interface ToolSetEvent {
+  /**
+   * ToolSetEventData represents the actual event payload for tool set operations
+   */
+  event?: ToolSetEventData;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: Shared.OperationMetadata;
+
+  /**
+   * The tool set this event is associated with
+   */
+  toolSetId?: string;
+}
+
+/**
+ * ToolSetEventData represents the actual event payload for tool set operations
+ */
+export interface ToolSetEventData {
+  /**
+   * SyncCompleted is emitted when a tool set sync operation completes successfully
+   */
+  syncCompleted?: SyncCompleted;
+
+  /**
+   * SyncFailed is emitted when a tool set sync operation fails
+   */
+  syncFailed?: SyncFailed;
+
+  /**
+   * SyncStarted is emitted when a tool set sync operation begins
+   */
+  syncStarted?: SyncStarted;
+
+  /**
+   * Type of the event (e.g., "sync_started", "sync_completed", "sync_failed")
+   */
+  type?: string;
+}
+
 export interface ToolSetSpec {
   adapter?: ToolSetAdapter;
 
@@ -216,20 +323,34 @@ export interface ToolSetListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface ToolSetListEventsParams extends CursorPaginationParams {
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
+}
+
 ToolSets.Tools = Tools;
 
 export declare namespace ToolSets {
   export {
     type McpToolFilter as McpToolFilter,
+    type SyncCompleted as SyncCompleted,
+    type SyncFailed as SyncFailed,
+    type SyncStarted as SyncStarted,
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
+    type ToolSetEvent as ToolSetEvent,
+    type ToolSetEventData as ToolSetEventData,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
+    type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+    type ToolSetListEventsParams as ToolSetListEventsParams,
   };
 
   export {
