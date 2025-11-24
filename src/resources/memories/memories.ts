@@ -88,6 +88,15 @@ export interface MemorySpec {
   remoteSource?: MemorySpecRemoteSource;
 
   /**
+   * Status of the memory
+   */
+  status?:
+    | 'MEMORY_STATUS_UNSPECIFIED'
+    | 'MEMORY_STATUS_ENABLED'
+    | 'MEMORY_STATUS_DISABLED'
+    | 'MEMORY_STATUS_ARCHIVED';
+
+  /**
    * Human-readable summary of what this memory contains
    */
   summary?: string;

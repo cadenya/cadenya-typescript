@@ -119,7 +119,7 @@ export interface AgentSpec {
   /**
    * Status of the agent
    */
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status?: 'AGENT_STATUS_UNSPECIFIED' | 'AGENT_STATUS_ENABLED' | 'AGENT_STATUS_ARCHIVED';
 
   toolSelection?: AgentSpecToolSelection;
 

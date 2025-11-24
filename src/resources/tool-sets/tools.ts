@@ -114,7 +114,11 @@ export interface ToolSpec {
 
   requiresApproval?: boolean;
 
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status?:
+    | 'TOOL_STATUS_UNSPECIFIED'
+    | 'TOOL_STATUS_ENABLED'
+    | 'TOOL_STATUS_DISABLED'
+    | 'TOOL_STATUS_ARCHIVED';
 
   toolSetId?: string;
 }

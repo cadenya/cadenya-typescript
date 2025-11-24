@@ -186,7 +186,7 @@ export interface ToolSetSpec {
    */
   managed?: boolean;
 
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status?: 'TOOL_SET_STATUS_UNSPECIFIED' | 'TOOL_SET_STATUS_ENABLED' | 'TOOL_SET_STATUS_ARCHIVED';
 }
 
 export interface ToolSetCreateParams {
