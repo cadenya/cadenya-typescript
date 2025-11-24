@@ -78,4 +78,28 @@ describe('resource toolSets', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
+
+  // Prism tests are disabled
+  test.skip('listEvents', async () => {
+    const responsePromise = client.toolSets.listEvents('toolSetId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('listEvents: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.toolSets.listEvents(
+        'toolSetId',
+        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Cadenya.NotFoundError);
+  });
 });
