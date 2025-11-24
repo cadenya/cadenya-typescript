@@ -29,6 +29,15 @@ import {
   APIKeysCursorPagination,
 } from './resources/api-keys';
 import {
+  MemoryFolder,
+  MemoryFolderCreateParams,
+  MemoryFolderListParams,
+  MemoryFolderSpec,
+  MemoryFolderUpdateParams,
+  MemoryFolders,
+  MemoryFoldersCursorPagination,
+} from './resources/memory-folders';
+import {
   Objective,
   ObjectiveApproveToolCallParams,
   ObjectiveApproveToolCallResponse,
@@ -81,6 +90,17 @@ import {
   ToolSelectionAssignedTools,
   ToolSelectionAutoDiscovery,
 } from './resources/agents/agents';
+import {
+  Memories,
+  MemoriesCursorPagination,
+  Memory,
+  MemoryCreateParams,
+  MemoryListParams,
+  MemorySpec,
+  MemorySpecDocument,
+  MemorySpecRemoteSource,
+  MemoryUpdateParams,
+} from './resources/memories/memories';
 import {
   McpToolFilter,
   ToolSet,
@@ -819,6 +839,8 @@ export class Cadenya {
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
+  memoryFolders: API.MemoryFolders = new API.MemoryFolders(this);
+  memories: API.Memories = new API.Memories(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -830,6 +852,8 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
+Cadenya.MemoryFolders = MemoryFolders;
+Cadenya.Memories = Memories;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -928,6 +952,28 @@ export declare namespace Cadenya {
     type WorkspaceSpec as WorkspaceSpec,
     type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
+  };
+
+  export {
+    MemoryFolders as MemoryFolders,
+    type MemoryFolder as MemoryFolder,
+    type MemoryFolderSpec as MemoryFolderSpec,
+    type MemoryFoldersCursorPagination as MemoryFoldersCursorPagination,
+    type MemoryFolderCreateParams as MemoryFolderCreateParams,
+    type MemoryFolderUpdateParams as MemoryFolderUpdateParams,
+    type MemoryFolderListParams as MemoryFolderListParams,
+  };
+
+  export {
+    Memories as Memories,
+    type Memory as Memory,
+    type MemorySpec as MemorySpec,
+    type MemorySpecDocument as MemorySpecDocument,
+    type MemorySpecRemoteSource as MemorySpecRemoteSource,
+    type MemoriesCursorPagination as MemoriesCursorPagination,
+    type MemoryCreateParams as MemoryCreateParams,
+    type MemoryUpdateParams as MemoryUpdateParams,
+    type MemoryListParams as MemoryListParams,
   };
 
   export type Actor = API.Actor;

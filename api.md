@@ -175,3 +175,45 @@ Methods:
 
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
+
+# MemoryFolders
+
+Types:
+
+- <code><a href="./src/resources/memory-folders.ts">MemoryFolder</a></code>
+- <code><a href="./src/resources/memory-folders.ts">MemoryFolderSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/memory_folders">client.memoryFolders.<a href="./src/resources/memory-folders.ts">create</a>({ ...params }) -> MemoryFolder</code>
+- <code title="get /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">retrieve</a>(id) -> MemoryFolder</code>
+- <code title="patch /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">update</a>(pathID, { ...params }) -> MemoryFolder</code>
+- <code title="get /v1/memory_folders">client.memoryFolders.<a href="./src/resources/memory-folders.ts">list</a>({ ...params }) -> MemoryFoldersCursorPagination</code>
+- <code title="delete /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">delete</a>(id) -> void</code>
+
+# Memories
+
+Types:
+
+- <code><a href="./src/resources/memories/memories.ts">Memory</a></code>
+- <code><a href="./src/resources/memories/memories.ts">MemorySpec</a></code>
+- <code><a href="./src/resources/memories/memories.ts">MemorySpecDocument</a></code>
+- <code><a href="./src/resources/memories/memories.ts">MemorySpecRemoteSource</a></code>
+
+Methods:
+
+- <code title="post /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">create</a>({ ...params }) -> Memory</code>
+- <code title="get /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">retrieve</a>(id) -> Memory</code>
+- <code title="patch /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">update</a>(pathID, { ...params }) -> Memory</code>
+- <code title="get /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">list</a>({ ...params }) -> MemoriesCursorPagination</code>
+- <code title="delete /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">delete</a>(id) -> void</code>
+
+## Folders
+
+Types:
+
+- <code><a href="./src/resources/memories/folders.ts">FolderListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/memories/{memoryId}/folders">client.memories.folders.<a href="./src/resources/memories/folders.ts">list</a>(memoryID) -> FolderListResponse</code>
