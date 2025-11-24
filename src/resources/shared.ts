@@ -70,7 +70,7 @@ export namespace Actor {
      * Status of this actor in the workspace (can be disabled without affecting the
      * underlying Profile/APIKey)
      */
-    status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+    status?: 'ACTOR_STATUS_UNSPECIFIED' | 'ACTOR_STATUS_ENABLED' | 'ACTOR_STATUS_SUSPENDED';
 
     /**
      * The type of actor (PROFILE, API_KEY, or future INTEGRATION)

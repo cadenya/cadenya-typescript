@@ -86,6 +86,12 @@ export interface Agent {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
+  /**
+   * Memories assigned to this agent Can include individual memories or entire memory
+   * folders (which include all memories in the folder)
+   */
+  agentMemories?: Array<AgentSpec.AgentMemory>;
+
   agentTools?: Array<AgentSpecAgentTool>;
 
   constraints?: AgentSpecConstraints;
@@ -96,9 +102,24 @@ export interface AgentSpec {
   description?: string;
 
   /**
+   * Enable episodic memory for this agent When true, the system automatically
+   * creates a memory folder for each objective using the objective's episodic_key as
+   * the external_id, allowing the agent to store and retrieve memories specific to
+   * that episode
+   */
+  enableEpisodicMemory?: boolean;
+
+  /**
+   * How long episodic memories should be retained After this duration, episodic
+   * memory folders can be automatically cleaned up If not set, episodic memories are
+   * retained indefinitely
+   */
+  episodicMemoryTtl?: number;
+
+  /**
    * Status of the agent
    */
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status?: 'AGENT_STATUS_UNSPECIFIED' | 'AGENT_STATUS_ENABLED' | 'AGENT_STATUS_ARCHIVED';
 
   toolSelection?: AgentSpecToolSelection;
 
@@ -108,6 +129,24 @@ export interface AgentSpec {
   webhookEventsUrl?: string;
 
   webhookEventsUrlSecret?: string;
+}
+
+export namespace AgentSpec {
+  export interface AgentMemory {
+    memoryFolderId?: string;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    memoryFolderMetadata?: Shared.ResourceMetadata;
+
+    memoryId?: string;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    memoryMetadata?: Shared.ResourceMetadata;
+  }
 }
 
 export interface AgentSpecAgentTool {

@@ -123,7 +123,7 @@ export interface APIKeySpec {
   /**
    * Status of the API Key (can be disabled without deleting)
    */
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status?: 'API_KEY_STATUS_UNSPECIFIED' | 'API_KEY_STATUS_ACTIVE' | 'API_KEY_STATUS_REVOKED';
 }
 
 export interface APIKeyCreateParams {
