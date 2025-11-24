@@ -27,6 +27,26 @@ export {
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
+  Memories,
+  type Memory,
+  type MemorySpec,
+  type MemorySpecDocument,
+  type MemorySpecRemoteSource,
+  type MemoryCreateParams,
+  type MemoryUpdateParams,
+  type MemoryListParams,
+  type MemoriesCursorPagination,
+} from './memories/memories';
+export {
+  MemoryFolders,
+  type MemoryFolder,
+  type MemoryFolderSpec,
+  type MemoryFolderCreateParams,
+  type MemoryFolderUpdateParams,
+  type MemoryFolderListParams,
+  type MemoryFoldersCursorPagination,
+} from './memory-folders';
+export {
   Objectives,
   type Objective,
   type ObjectiveSpec,
