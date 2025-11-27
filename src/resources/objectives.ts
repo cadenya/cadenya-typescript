@@ -137,12 +137,12 @@ export namespace Objective {
     /**
      * Total input tokens consumed across all LLM completions
      */
-    totalInputTokens?: string;
+    totalInputTokens?: number;
 
     /**
      * Total output tokens generated across all LLM completions
      */
-    totalOutputTokens?: string;
+    totalOutputTokens?: number;
 
     /**
      * Total number of tool calls made during execution
