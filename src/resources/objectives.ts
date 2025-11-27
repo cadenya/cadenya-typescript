@@ -101,6 +101,12 @@ export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<Obje
 
 export interface Objective {
   /**
+   * ObjectiveDetails provides read-only aggregated statistics about an objective's
+   * execution
+   */
+  details?: Objective.Details;
+
+  /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
@@ -112,6 +118,38 @@ export interface Objective {
 }
 
 export namespace Objective {
+  /**
+   * ObjectiveDetails provides read-only aggregated statistics about an objective's
+   * execution
+   */
+  export interface Details {
+    /**
+     * List of callable tools assigned to the agent for this objective Includes tools,
+     * agents, and cadenya-provided tools from the agent's configuration
+     */
+    callableTools?: Array<Shared.CallableTool>;
+
+    /**
+     * Total number of events generated during this objective's execution
+     */
+    totalEvents?: number;
+
+    /**
+     * Total input tokens consumed across all LLM completions
+     */
+    totalInputTokens?: string;
+
+    /**
+     * Total output tokens generated across all LLM completions
+     */
+    totalOutputTokens?: string;
+
+    /**
+     * Total number of tool calls made during execution
+     */
+    totalToolCalls?: number;
+  }
+
   export interface Status {
     message?: string;
 
