@@ -14,6 +14,13 @@ import {
   Prompts,
   PromptsCursorPagination,
 } from './prompts';
+import * as WebhookDeliveriesAPI from './webhook-deliveries';
+import {
+  WebhookDeliveries,
+  WebhookDeliveriesCursorPagination,
+  WebhookDelivery,
+  WebhookDeliveryListParams,
+} from './webhook-deliveries';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -22,6 +29,9 @@ import { path } from '../../internal/utils/path';
 
 export class Agents extends APIResource {
   prompts: PromptsAPI.Prompts = new PromptsAPI.Prompts(this._client);
+  webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(
+    this._client,
+  );
 
   /**
    * Creates a new agent in the workspace
@@ -272,6 +282,7 @@ export interface AgentListParams extends CursorPaginationParams {
 }
 
 Agents.Prompts = Prompts;
+Agents.WebhookDeliveries = WebhookDeliveries;
 
 export declare namespace Agents {
   export {
@@ -299,5 +310,12 @@ export declare namespace Agents {
     type PromptUpdateParams as PromptUpdateParams,
     type PromptListParams as PromptListParams,
     type PromptDeleteParams as PromptDeleteParams,
+  };
+
+  export {
+    WebhookDeliveries as WebhookDeliveries,
+    type WebhookDelivery as WebhookDelivery,
+    type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
+    type WebhookDeliveryListParams as WebhookDeliveryListParams,
   };
 }
