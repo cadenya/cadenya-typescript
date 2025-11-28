@@ -26,3 +26,9 @@ export {
   type PromptDeleteParams,
   type PromptsCursorPagination,
 } from './prompts';
+export {
+  WebhookDeliveries,
+  type WebhookDelivery,
+  type WebhookDeliveryListParams,
+  type WebhookDeliveriesCursorPagination,
+} from './webhook-deliveries';

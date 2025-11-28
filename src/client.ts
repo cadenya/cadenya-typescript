@@ -29,6 +29,17 @@ import {
   APIKeysCursorPagination,
 } from './resources/api-keys';
 import {
+  Memories,
+  MemoriesCursorPagination,
+  Memory,
+  MemoryCreateParams,
+  MemoryListParams,
+  MemorySpec,
+  MemorySpecDocument,
+  MemorySpecRemoteSource,
+  MemoryUpdateParams,
+} from './resources/memories';
+import {
   MemoryFolder,
   MemoryFolderCreateParams,
   MemoryFolderListParams,
@@ -90,17 +101,6 @@ import {
   ToolSelectionAssignedTools,
   ToolSelectionAutoDiscovery,
 } from './resources/agents/agents';
-import {
-  Memories,
-  MemoriesCursorPagination,
-  Memory,
-  MemoryCreateParams,
-  MemoryListParams,
-  MemorySpec,
-  MemorySpecDocument,
-  MemorySpecRemoteSource,
-  MemoryUpdateParams,
-} from './resources/memories/memories';
 import {
   McpToolFilter,
   SyncCompleted,

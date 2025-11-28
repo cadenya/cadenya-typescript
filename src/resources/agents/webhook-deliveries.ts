@@ -1,0 +1,92 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
+
+export class WebhookDeliveries extends APIResource {
+  /**
+   * Lists all webhook deliveries for an agent
+   */
+  list(
+    agentID: string,
+    query: WebhookDeliveryListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<WebhookDeliveriesCursorPagination, WebhookDelivery> {
+    return this._client.getAPIList(
+      path`/v1/agents/${agentID}/webhook_deliveries`,
+      CursorPagination<WebhookDelivery>,
+      { query, ...options },
+    );
+  }
+}
+
+export type WebhookDeliveriesCursorPagination = CursorPagination<WebhookDelivery>;
+
+export interface WebhookDelivery {
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: Shared.OperationMetadata;
+
+  /**
+   * Webhook delivery spec
+   */
+  spec?: WebhookDelivery.Spec;
+}
+
+export namespace WebhookDelivery {
+  /**
+   * Webhook delivery spec
+   */
+  export interface Spec {
+    /**
+     * Related resources
+     */
+    agentId?: string;
+
+    attemptCount?: number;
+
+    errorMessage?: string;
+
+    /**
+     * Response details (no response_body to avoid storing large payloads)
+     */
+    httpStatusCode?: number;
+
+    lastAttemptAt?: string;
+
+    latencyMs?: number;
+
+    objectiveEventId?: string;
+
+    objectiveId?: string;
+
+    status?:
+      | 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED'
+      | 'WEBHOOK_DELIVERY_STATUS_PENDING'
+      | 'WEBHOOK_DELIVERY_STATUS_COMPLETED'
+      | 'WEBHOOK_DELIVERY_STATUS_FAILED'
+      | 'WEBHOOK_DELIVERY_STATUS_DISABLED';
+
+    webhookId?: string;
+
+    /**
+     * Webhook delivery details
+     */
+    webhookUrl?: string;
+  }
+}
+
+export interface WebhookDeliveryListParams extends CursorPaginationParams {}
+
+export declare namespace WebhookDeliveries {
+  export {
+    type WebhookDelivery as WebhookDelivery,
+    type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
+    type WebhookDeliveryListParams as WebhookDeliveryListParams,
+  };
+}

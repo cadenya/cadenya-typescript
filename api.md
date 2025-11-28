@@ -56,6 +56,16 @@ Methods:
 - <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptsCursorPagination</code>
 - <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
 
+## WebhookDeliveries
+
+Types:
+
+- <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDelivery</a></code>
+
+Methods:
+
+- <code title="get /v1/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
+
 # Objectives
 
 Types:
@@ -201,25 +211,15 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/memories/memories.ts">Memory</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpec</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpecDocument</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpecRemoteSource</a></code>
+- <code><a href="./src/resources/memories.ts">Memory</a></code>
+- <code><a href="./src/resources/memories.ts">MemorySpec</a></code>
+- <code><a href="./src/resources/memories.ts">MemorySpecDocument</a></code>
+- <code><a href="./src/resources/memories.ts">MemorySpecRemoteSource</a></code>
 
 Methods:
 
-- <code title="post /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">create</a>({ ...params }) -> Memory</code>
-- <code title="get /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">retrieve</a>(id) -> Memory</code>
-- <code title="patch /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">update</a>(pathID, { ...params }) -> Memory</code>
-- <code title="get /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">list</a>({ ...params }) -> MemoriesCursorPagination</code>
-- <code title="delete /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">delete</a>(id) -> void</code>
-
-## Folders
-
-Types:
-
-- <code><a href="./src/resources/memories/folders.ts">FolderListResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/memories/{memoryId}/folders">client.memories.folders.<a href="./src/resources/memories/folders.ts">list</a>(memoryID) -> FolderListResponse</code>
+- <code title="post /v1/memories">client.memories.<a href="./src/resources/memories.ts">create</a>({ ...params }) -> Memory</code>
+- <code title="get /v1/memories/{id}">client.memories.<a href="./src/resources/memories.ts">retrieve</a>(id) -> Memory</code>
+- <code title="patch /v1/memories/{id}">client.memories.<a href="./src/resources/memories.ts">update</a>(pathID, { ...params }) -> Memory</code>
+- <code title="get /v1/memories">client.memories.<a href="./src/resources/memories.ts">list</a>({ ...params }) -> MemoriesCursorPagination</code>
+- <code title="delete /v1/memories/{id}">client.memories.<a href="./src/resources/memories.ts">delete</a>(id) -> void</code>

@@ -36,7 +36,7 @@ export {
   type MemoryUpdateParams,
   type MemoryListParams,
   type MemoriesCursorPagination,
-} from './memories/memories';
+} from './memories';
 export {
   MemoryFolders,
   type MemoryFolder,
