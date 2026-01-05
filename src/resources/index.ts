@@ -10,7 +10,7 @@ export {
   type APIKeyListParams,
   type APIKeysCursorPagination,
 } from './api-keys';
-export { AccountResource, type Account, type AccountSetupResponse, type AccountSetupParams } from './account';
+export { AccountResource, type Account } from './account';
 export {
   Agents,
   type Agent,

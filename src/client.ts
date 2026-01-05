@@ -18,7 +18,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
+import { Account, AccountResource } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -871,12 +871,7 @@ export declare namespace Cadenya {
     type CursorPaginationResponse as CursorPaginationResponse,
   };
 
-  export {
-    AccountResource as AccountResource,
-    type Account as Account,
-    type AccountSetupResponse as AccountSetupResponse,
-    type AccountSetupParams as AccountSetupParams,
-  };
+  export { AccountResource as AccountResource, type Account as Account };
 
   export {
     Agents as Agents,

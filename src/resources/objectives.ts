@@ -329,21 +329,9 @@ export interface ObjectiveApproveToolCallResponse {
 
 export namespace ObjectiveApproveToolCallResponse {
   export interface Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    chatHistoryCompaction?: Event.ChatHistoryCompaction;
-
     error?: Event.Error;
 
     message?: Event.Message;
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    newContextWindow?: Event.NewContextWindow;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
 
@@ -353,11 +341,7 @@ export namespace ObjectiveApproveToolCallResponse {
 
     toolCalled?: Event.ToolCalled;
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    toolCallStatusUpdated?: Event.ToolCallStatusUpdated;
+    toolCallStatus?: Event.ToolCallStatus;
 
     toolDenied?: Event.ToolDenied;
 
@@ -365,32 +349,6 @@ export namespace ObjectiveApproveToolCallResponse {
   }
 
   export namespace Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    export interface ChatHistoryCompaction {
-      /**
-       * Number of messages that were compacted/summarized
-       */
-      messagesCompacted?: number;
-
-      /**
-       * Optional summary text describing what was compacted
-       */
-      summary?: string;
-
-      /**
-       * Number of prompt tokens after compaction
-       */
-      tokensAfter?: number;
-
-      /**
-       * Number of prompt tokens before compaction
-       */
-      tokensBefore?: number;
-    }
-
     export interface Error {
       message?: string;
 
@@ -401,18 +359,6 @@ export namespace ObjectiveApproveToolCallResponse {
       content?: string;
 
       role?: string;
-    }
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    export interface NewContextWindow {
-      /**
-       * ID of the newly created ObjectiveContextWindow resource References
-       * ObjectiveContextWindow.metadata.id
-       */
-      contextWindowId?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -462,20 +408,9 @@ export namespace ObjectiveApproveToolCallResponse {
       content?: string;
     }
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    export interface ToolCallStatusUpdated {
-      /**
-       * Whether the tool call was approved (true) or denied (false)
-       */
+    export interface ToolCallStatus {
       approved?: boolean;
 
-      /**
-       * Optional message from the approver/denier For denials, this is passed to the
-       * agent for additional context
-       */
       message?: string;
 
       /**
@@ -554,21 +489,9 @@ export interface ObjectiveContinueResponse {
 
 export namespace ObjectiveContinueResponse {
   export interface Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    chatHistoryCompaction?: Event.ChatHistoryCompaction;
-
     error?: Event.Error;
 
     message?: Event.Message;
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    newContextWindow?: Event.NewContextWindow;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
 
@@ -578,11 +501,7 @@ export namespace ObjectiveContinueResponse {
 
     toolCalled?: Event.ToolCalled;
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    toolCallStatusUpdated?: Event.ToolCallStatusUpdated;
+    toolCallStatus?: Event.ToolCallStatus;
 
     toolDenied?: Event.ToolDenied;
 
@@ -590,32 +509,6 @@ export namespace ObjectiveContinueResponse {
   }
 
   export namespace Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    export interface ChatHistoryCompaction {
-      /**
-       * Number of messages that were compacted/summarized
-       */
-      messagesCompacted?: number;
-
-      /**
-       * Optional summary text describing what was compacted
-       */
-      summary?: string;
-
-      /**
-       * Number of prompt tokens after compaction
-       */
-      tokensAfter?: number;
-
-      /**
-       * Number of prompt tokens before compaction
-       */
-      tokensBefore?: number;
-    }
-
     export interface Error {
       message?: string;
 
@@ -626,18 +519,6 @@ export namespace ObjectiveContinueResponse {
       content?: string;
 
       role?: string;
-    }
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    export interface NewContextWindow {
-      /**
-       * ID of the newly created ObjectiveContextWindow resource References
-       * ObjectiveContextWindow.metadata.id
-       */
-      contextWindowId?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -687,20 +568,9 @@ export namespace ObjectiveContinueResponse {
       content?: string;
     }
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    export interface ToolCallStatusUpdated {
-      /**
-       * Whether the tool call was approved (true) or denied (false)
-       */
+    export interface ToolCallStatus {
       approved?: boolean;
 
-      /**
-       * Optional message from the approver/denier For denials, this is passed to the
-       * agent for additional context
-       */
       message?: string;
 
       /**
@@ -779,21 +649,9 @@ export interface ObjectiveDenyToolCallResponse {
 
 export namespace ObjectiveDenyToolCallResponse {
   export interface Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    chatHistoryCompaction?: Event.ChatHistoryCompaction;
-
     error?: Event.Error;
 
     message?: Event.Message;
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    newContextWindow?: Event.NewContextWindow;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
 
@@ -803,11 +661,7 @@ export namespace ObjectiveDenyToolCallResponse {
 
     toolCalled?: Event.ToolCalled;
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    toolCallStatusUpdated?: Event.ToolCallStatusUpdated;
+    toolCallStatus?: Event.ToolCallStatus;
 
     toolDenied?: Event.ToolDenied;
 
@@ -815,32 +669,6 @@ export namespace ObjectiveDenyToolCallResponse {
   }
 
   export namespace Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    export interface ChatHistoryCompaction {
-      /**
-       * Number of messages that were compacted/summarized
-       */
-      messagesCompacted?: number;
-
-      /**
-       * Optional summary text describing what was compacted
-       */
-      summary?: string;
-
-      /**
-       * Number of prompt tokens after compaction
-       */
-      tokensAfter?: number;
-
-      /**
-       * Number of prompt tokens before compaction
-       */
-      tokensBefore?: number;
-    }
-
     export interface Error {
       message?: string;
 
@@ -851,18 +679,6 @@ export namespace ObjectiveDenyToolCallResponse {
       content?: string;
 
       role?: string;
-    }
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    export interface NewContextWindow {
-      /**
-       * ID of the newly created ObjectiveContextWindow resource References
-       * ObjectiveContextWindow.metadata.id
-       */
-      contextWindowId?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -912,20 +728,9 @@ export namespace ObjectiveDenyToolCallResponse {
       content?: string;
     }
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    export interface ToolCallStatusUpdated {
-      /**
-       * Whether the tool call was approved (true) or denied (false)
-       */
+    export interface ToolCallStatus {
       approved?: boolean;
 
-      /**
-       * Optional message from the approver/denier For denials, this is passed to the
-       * agent for additional context
-       */
       message?: string;
 
       /**
@@ -1004,21 +809,9 @@ export interface ObjectiveListEventsResponse {
 
 export namespace ObjectiveListEventsResponse {
   export interface Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    chatHistoryCompaction?: Event.ChatHistoryCompaction;
-
     error?: Event.Error;
 
     message?: Event.Message;
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    newContextWindow?: Event.NewContextWindow;
 
     subObjectiveCreated?: Event.SubObjectiveCreated;
 
@@ -1028,11 +821,7 @@ export namespace ObjectiveListEventsResponse {
 
     toolCalled?: Event.ToolCalled;
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    toolCallStatusUpdated?: Event.ToolCallStatusUpdated;
+    toolCallStatus?: Event.ToolCallStatus;
 
     toolDenied?: Event.ToolDenied;
 
@@ -1040,32 +829,6 @@ export namespace ObjectiveListEventsResponse {
   }
 
   export namespace Event {
-    /**
-     * ChatHistoryCompaction represents a compaction event where chat history was
-     * summarized to reduce token usage and prevent context window overflow
-     */
-    export interface ChatHistoryCompaction {
-      /**
-       * Number of messages that were compacted/summarized
-       */
-      messagesCompacted?: number;
-
-      /**
-       * Optional summary text describing what was compacted
-       */
-      summary?: string;
-
-      /**
-       * Number of prompt tokens after compaction
-       */
-      tokensAfter?: number;
-
-      /**
-       * Number of prompt tokens before compaction
-       */
-      tokensBefore?: number;
-    }
-
     export interface Error {
       message?: string;
 
@@ -1076,18 +839,6 @@ export namespace ObjectiveListEventsResponse {
       content?: string;
 
       role?: string;
-    }
-
-    /**
-     * NewContextWindow represents the creation of a new context window Context windows
-     * are created when approaching token limits
-     */
-    export interface NewContextWindow {
-      /**
-       * ID of the newly created ObjectiveContextWindow resource References
-       * ObjectiveContextWindow.metadata.id
-       */
-      contextWindowId?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -1137,20 +888,9 @@ export namespace ObjectiveListEventsResponse {
       content?: string;
     }
 
-    /**
-     * ToolCallStatusUpdated represents a change in tool call approval status Generated
-     * when ApproveToolCall or DenyToolCall RPCs are called
-     */
-    export interface ToolCallStatusUpdated {
-      /**
-       * Whether the tool call was approved (true) or denied (false)
-       */
+    export interface ToolCallStatus {
       approved?: boolean;
 
-      /**
-       * Optional message from the approver/denier For denials, this is passed to the
-       * agent for additional context
-       */
       message?: string;
 
       /**
