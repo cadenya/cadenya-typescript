@@ -1,4 +1,4 @@
-configured_endpoints: 55
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/cadenya%2Fcadenya-0cc47d56a54bc64798485e4acc61dface32ac9ba9c0eb8e0a14163eccd3f850a.yml
-openapi_spec_hash: 69380e814d3d584410410d495aac7042
+configured_endpoints: 54
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/cadenya%2Fcadenya-e213271d4c08a45d0bb02356fe22e0d44a74052c130a1a96b551d1c360fecde2.yml
+openapi_spec_hash: 206d768f4f7a72f10b3e5d0a2fd561ad
 config_hash: b711f1fe9a1dfe5ae3000adac06ffd41
