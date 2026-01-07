@@ -141,7 +141,11 @@ describe('resource objectives', () => {
     await expect(
       client.objectives.listEvents(
         'objectiveId',
-        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
+        {
+          cursor: 'cursor',
+          limit: 0,
+          sortOrder: 'sortOrder',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

@@ -61,7 +61,11 @@ describe('resource memories', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.memories.list(
-        { cursor: 'cursor', folderId: 'folderId', limit: 0 },
+        {
+          cursor: 'cursor',
+          folderId: 'folderId',
+          limit: 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
