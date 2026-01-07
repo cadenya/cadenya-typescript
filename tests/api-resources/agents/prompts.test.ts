@@ -53,7 +53,11 @@ describe('resource prompts', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.agents.prompts.update('id', {
       agentId: 'agentId',
-      metadata: { externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
+      metadata: {
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+        name: 'name',
+      },
       spec: {
         content: 'content',
         default: true,
@@ -82,7 +86,11 @@ describe('resource prompts', () => {
     await expect(
       client.agents.prompts.list(
         'agentId',
-        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
+        {
+          cursor: 'cursor',
+          limit: 0,
+          sortOrder: 'sortOrder',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

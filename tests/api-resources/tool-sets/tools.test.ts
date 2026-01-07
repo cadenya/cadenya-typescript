@@ -53,7 +53,11 @@ describe('resource tools', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.toolSets.tools.update('id', {
       toolSetId: 'toolSetId',
-      metadata: { externalId: 'externalId', labels: { foo: 'string' }, name: 'name' },
+      metadata: {
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+        name: 'name',
+      },
       spec: {
         config: {
           http: {
@@ -64,7 +68,11 @@ describe('resource tools', () => {
             requestBodyTemplate: 'requestBodyTemplate',
             requestMethod: 'GET',
           },
-          mcp: { toolDescription: 'toolDescription', toolName: 'toolName', toolTitle: 'toolTitle' },
+          mcp: {
+            toolDescription: 'toolDescription',
+            toolName: 'toolName',
+            toolTitle: 'toolTitle',
+          },
         },
         contentFilter: { jq: 'jq', regex: 'regex' },
         description: 'description',
@@ -97,7 +105,11 @@ describe('resource tools', () => {
     await expect(
       client.toolSets.tools.list(
         'toolSetId',
-        { cursor: 'cursor', limit: 0, sortOrder: 'sortOrder' },
+        {
+          cursor: 'cursor',
+          limit: 0,
+          sortOrder: 'sortOrder',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

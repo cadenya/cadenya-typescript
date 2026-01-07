@@ -61,7 +61,12 @@ describe('resource apiKeys', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.apiKeys.list(
-        { cursor: 'cursor', limit: 0, prefix: 'prefix', sortOrder: 'sortOrder' },
+        {
+          cursor: 'cursor',
+          limit: 0,
+          prefix: 'prefix',
+          sortOrder: 'sortOrder',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
