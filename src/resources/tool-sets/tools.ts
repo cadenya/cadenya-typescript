@@ -155,7 +155,7 @@ export interface ToolRetrieveParams {
 
 export interface ToolUpdateParams {
   /**
-   * Path param:
+   * Path param
    */
   toolSetId: string;
 
@@ -166,12 +166,12 @@ export interface ToolUpdateParams {
   metadata?: Shared.ResourceMetadata;
 
   /**
-   * Body param:
+   * Body param
    */
   spec?: ToolSpec;
 
   /**
-   * Body param:
+   * Body param
    */
   updateMask?: string;
 }
