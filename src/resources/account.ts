@@ -16,12 +16,20 @@ export class AccountResource extends APIResource {
 }
 
 export interface Account {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
   metadata?: Account.Metadata;
 
   spec?: Account.Spec;
 }
 
 export namespace Account {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
   export interface Metadata {
     /**
      * Unique identifier for the resource (UUID v7)
@@ -49,6 +57,8 @@ export namespace Account {
      * Tool") Required for resources that users interact with directly
      */
     name?: string;
+
+    profileId?: string;
   }
 
   export interface Spec {
