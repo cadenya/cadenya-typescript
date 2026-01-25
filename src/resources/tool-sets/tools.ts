@@ -106,19 +106,9 @@ export interface ToolSpec {
 
   description?: string;
 
-  indexContent?: string;
-
-  name?: string;
-
   parameters?: { [key: string]: unknown };
 
   requiresApproval?: boolean;
-
-  status?:
-    | 'TOOL_STATUS_UNSPECIFIED'
-    | 'TOOL_STATUS_ENABLED'
-    | 'TOOL_STATUS_DISABLED'
-    | 'TOOL_STATUS_ARCHIVED';
 
   toolSetId?: string;
 }
