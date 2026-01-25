@@ -292,8 +292,6 @@ export interface ToolSetSpec {
    * tool set must be created/modified by an API Key type.
    */
   managed?: boolean;
-
-  status?: 'TOOL_SET_STATUS_UNSPECIFIED' | 'TOOL_SET_STATUS_ENABLED' | 'TOOL_SET_STATUS_ARCHIVED';
 }
 
 export interface ToolSetCreateParams {
