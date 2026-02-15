@@ -100,6 +100,11 @@ export interface AgentVariationSpec {
   constraints?: AgentVariationSpecConstraints;
 
   /**
+   * Human-readable description of what this variation does or when it should be used
+   */
+  description?: string;
+
+  /**
    * Enable episodic memory for objectives using this variation When true, the system
    * automatically creates a memory folder for each objective using the objective's
    * episodic_key as the external_id, allowing the agent to store and retrieve
@@ -113,6 +118,11 @@ export interface AgentVariationSpec {
    * retained indefinitely
    */
   episodicMemoryTtl?: number;
+
+  /**
+   * ModelConfig defines the model configuration for a variation
+   */
+  modelConfig?: AgentVariationSpec.ModelConfig;
 
   /**
    * The system prompt for this variation
@@ -130,6 +140,25 @@ export interface AgentVariationSpec {
    * variation_id.
    */
   weight?: number;
+}
+
+export namespace AgentVariationSpec {
+  /**
+   * ModelConfig defines the model configuration for a variation
+   */
+  export interface ModelConfig {
+    /**
+     * The model identifier in family/model format (e.g., "claude/opus-4.6",
+     * "claude/sonnet-4.5")
+     */
+    modelId?: string;
+
+    /**
+     * Sampling temperature for model inference (0.0 to 1.0) Lower values produce more
+     * deterministic outputs, higher values increase randomness
+     */
+    temperature?: number;
+  }
 }
 
 export interface AgentVariationSpecAgentMemory {

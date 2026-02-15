@@ -98,8 +98,10 @@ describe('resource variations', () => {
           },
         ],
         constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
+        description: 'description',
         enableEpisodicMemory: true,
         episodicMemoryTtl: 0,
+        modelConfig: { modelId: 'modelId', temperature: 0 },
         prompt: 'prompt',
         toolSelection: {
           assignedTools: { allowDiscovery: true },
