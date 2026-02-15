@@ -24,12 +24,7 @@ Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecAgentTool</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecConstraints</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecToolSelection</a></code>
 - <code><a href="./src/resources/agents/agents.ts">Page</a></code>
-- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAssignedTools</a></code>
-- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAutoDiscovery</a></code>
 
 Methods:
 
@@ -39,20 +34,26 @@ Methods:
 - <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsCursorPagination</code>
 - <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
 
-## Prompts
+## Variations
 
 Types:
 
-- <code><a href="./src/resources/agents/prompts.ts">Prompt</a></code>
-- <code><a href="./src/resources/agents/prompts.ts">PromptSpec</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentMemory</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
 
 Methods:
 
-- <code title="post /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">create</a>(agentID, { ...params }) -> Prompt</code>
-- <code title="get /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">retrieve</a>(id, { ...params }) -> Prompt</code>
-- <code title="patch /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">update</a>(id, { ...params }) -> Prompt</code>
-- <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptsCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
 
 ## WebhookDeliveries
 

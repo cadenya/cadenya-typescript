@@ -91,15 +91,10 @@ import {
   AgentCreateParams,
   AgentListParams,
   AgentSpec,
-  AgentSpecAgentTool,
-  AgentSpecConstraints,
-  AgentSpecToolSelection,
   AgentUpdateParams,
   Agents,
   AgentsCursorPagination,
   Page,
-  ToolSelectionAssignedTools,
-  ToolSelectionAutoDiscovery,
 } from './resources/agents/agents';
 import {
   McpToolFilter,
@@ -552,7 +547,7 @@ export class Cadenya {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -589,9 +584,14 @@ export class Cadenya {
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     path: string,
     Page: new (...args: any[]) => PageClass,
-    opts?: RequestOptions,
+    opts?: PromiseOrValue<RequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
   }
 
   requestAPIList<
@@ -599,7 +599,7 @@ export class Cadenya {
     PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
   >(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: FinalRequestOptions,
+    options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
     return new Pagination.PagePromise<PageClass, Item>(this as any as Cadenya, request, Page);
@@ -612,9 +612,10 @@ export class Cadenya {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -781,6 +782,12 @@ export class Cadenya {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -877,12 +884,7 @@ export declare namespace Cadenya {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type AgentSpecAgentTool as AgentSpecAgentTool,
-    type AgentSpecConstraints as AgentSpecConstraints,
-    type AgentSpecToolSelection as AgentSpecToolSelection,
     type Page as Page,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
