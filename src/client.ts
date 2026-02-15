@@ -29,25 +29,25 @@ import {
   APIKeysCursorPagination,
 } from './resources/api-keys';
 import {
-  Memories,
-  MemoriesCursorPagination,
-  Memory,
-  MemoryCreateParams,
-  MemoryListParams,
-  MemorySpec,
-  MemorySpecDocument,
-  MemorySpecRemoteSource,
-  MemoryUpdateParams,
-} from './resources/memories';
+  DocumentNamespace,
+  DocumentNamespaceCreateParams,
+  DocumentNamespaceListParams,
+  DocumentNamespaceSpec,
+  DocumentNamespaceUpdateParams,
+  DocumentNamespaces,
+  DocumentNamespacesCursorPagination,
+} from './resources/document-namespaces';
 import {
-  MemoryFolder,
-  MemoryFolderCreateParams,
-  MemoryFolderListParams,
-  MemoryFolderSpec,
-  MemoryFolderUpdateParams,
-  MemoryFolders,
-  MemoryFoldersCursorPagination,
-} from './resources/memory-folders';
+  Document,
+  DocumentCreateParams,
+  DocumentListParams,
+  DocumentSpec,
+  DocumentSpecInlineContent,
+  DocumentSpecRemoteSource,
+  DocumentUpdateParams,
+  Documents,
+  DocumentsCursorPagination,
+} from './resources/documents';
 import {
   Objective,
   ObjectiveApproveToolCallParams,
@@ -853,8 +853,8 @@ export class Cadenya {
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
-  memoryFolders: API.MemoryFolders = new API.MemoryFolders(this);
-  memories: API.Memories = new API.Memories(this);
+  documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
+  documents: API.Documents = new API.Documents(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -866,8 +866,8 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.MemoryFolders = MemoryFolders;
-Cadenya.Memories = Memories;
+Cadenya.DocumentNamespaces = DocumentNamespaces;
+Cadenya.Documents = Documents;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -966,25 +966,25 @@ export declare namespace Cadenya {
   };
 
   export {
-    MemoryFolders as MemoryFolders,
-    type MemoryFolder as MemoryFolder,
-    type MemoryFolderSpec as MemoryFolderSpec,
-    type MemoryFoldersCursorPagination as MemoryFoldersCursorPagination,
-    type MemoryFolderCreateParams as MemoryFolderCreateParams,
-    type MemoryFolderUpdateParams as MemoryFolderUpdateParams,
-    type MemoryFolderListParams as MemoryFolderListParams,
+    DocumentNamespaces as DocumentNamespaces,
+    type DocumentNamespace as DocumentNamespace,
+    type DocumentNamespaceSpec as DocumentNamespaceSpec,
+    type DocumentNamespacesCursorPagination as DocumentNamespacesCursorPagination,
+    type DocumentNamespaceCreateParams as DocumentNamespaceCreateParams,
+    type DocumentNamespaceUpdateParams as DocumentNamespaceUpdateParams,
+    type DocumentNamespaceListParams as DocumentNamespaceListParams,
   };
 
   export {
-    Memories as Memories,
-    type Memory as Memory,
-    type MemorySpec as MemorySpec,
-    type MemorySpecDocument as MemorySpecDocument,
-    type MemorySpecRemoteSource as MemorySpecRemoteSource,
-    type MemoriesCursorPagination as MemoriesCursorPagination,
-    type MemoryCreateParams as MemoryCreateParams,
-    type MemoryUpdateParams as MemoryUpdateParams,
-    type MemoryListParams as MemoryListParams,
+    Documents as Documents,
+    type Document as Document,
+    type DocumentSpec as DocumentSpec,
+    type DocumentSpecInlineContent as DocumentSpecInlineContent,
+    type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type DocumentsCursorPagination as DocumentsCursorPagination,
+    type DocumentCreateParams as DocumentCreateParams,
+    type DocumentUpdateParams as DocumentUpdateParams,
+    type DocumentListParams as DocumentListParams,
   };
 
   export type Actor = API.Actor;

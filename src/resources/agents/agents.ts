@@ -6,7 +6,7 @@ import * as VariationsAPI from './variations';
 import {
   AgentVariation,
   AgentVariationSpec,
-  AgentVariationSpecAgentMemory,
+  AgentVariationSpecAgentDocument,
   AgentVariationSpecAgentTool,
   AgentVariationSpecConstraints,
   AgentVariationSpecToolSelection,
@@ -110,7 +110,11 @@ export interface AgentSpec {
   /**
    * Status of the agent
    */
-  status?: 'AGENT_STATUS_UNSPECIFIED' | 'AGENT_STATUS_ENABLED' | 'AGENT_STATUS_ARCHIVED';
+  status?:
+    | 'AGENT_STATUS_UNSPECIFIED'
+    | 'AGENT_STATUS_DRAFT'
+    | 'AGENT_STATUS_PUBLISHED'
+    | 'AGENT_STATUS_ARCHIVED';
 
   /**
    * Controls how variations are selected when creating objectives Defaults to
@@ -194,7 +198,7 @@ export declare namespace Agents {
     Variations as Variations,
     type AgentVariation as AgentVariation,
     type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecAgentMemory as AgentVariationSpecAgentMemory,
+    type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,

@@ -22,25 +22,25 @@ export {
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
-  Memories,
-  type Memory,
-  type MemorySpec,
-  type MemorySpecDocument,
-  type MemorySpecRemoteSource,
-  type MemoryCreateParams,
-  type MemoryUpdateParams,
-  type MemoryListParams,
-  type MemoriesCursorPagination,
-} from './memories';
+  DocumentNamespaces,
+  type DocumentNamespace,
+  type DocumentNamespaceSpec,
+  type DocumentNamespaceCreateParams,
+  type DocumentNamespaceUpdateParams,
+  type DocumentNamespaceListParams,
+  type DocumentNamespacesCursorPagination,
+} from './document-namespaces';
 export {
-  MemoryFolders,
-  type MemoryFolder,
-  type MemoryFolderSpec,
-  type MemoryFolderCreateParams,
-  type MemoryFolderUpdateParams,
-  type MemoryFolderListParams,
-  type MemoryFoldersCursorPagination,
-} from './memory-folders';
+  Documents,
+  type Document,
+  type DocumentSpec,
+  type DocumentSpecInlineContent,
+  type DocumentSpecRemoteSource,
+  type DocumentCreateParams,
+  type DocumentUpdateParams,
+  type DocumentListParams,
+  type DocumentsCursorPagination,
+} from './documents';
 export {
   Objectives,
   type Objective,
