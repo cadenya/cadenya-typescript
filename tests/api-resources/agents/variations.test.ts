@@ -59,16 +59,16 @@ describe('resource variations', () => {
         name: 'name',
       },
       spec: {
-        agentMemories: [
+        agentDocuments: [
           {
-            memoryFolderId: 'memoryFolderId',
-            memoryFolderMetadata: {
+            documentId: 'documentId',
+            documentMetadata: {
               externalId: 'externalId',
               labels: { foo: 'string' },
               name: 'name',
             },
-            memoryId: 'memoryId',
-            memoryMetadata: {
+            documentNamespaceId: 'documentNamespaceId',
+            documentNamespaceMetadata: {
               externalId: 'externalId',
               labels: { foo: 'string' },
               name: 'name',

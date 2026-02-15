@@ -84,10 +84,10 @@ export interface AgentVariation {
  */
 export interface AgentVariationSpec {
   /**
-   * Memories assigned to this variation Can include individual memories or entire
-   * memory folders (which include all memories in the folder)
+   * Documents assigned to this variation. Can include individual documents or entire
+   * document namespaces (which include all documents in the namespace).
    */
-  agentMemories?: Array<AgentVariationSpecAgentMemory>;
+  agentDocuments?: Array<AgentVariationSpecAgentDocument>;
 
   /**
    * Tools assigned to this variation
@@ -105,17 +105,17 @@ export interface AgentVariationSpec {
   description?: string;
 
   /**
-   * Enable episodic memory for objectives using this variation When true, the system
-   * automatically creates a memory folder for each objective using the objective's
-   * episodic_key as the external_id, allowing the agent to store and retrieve
-   * memories specific to that episode
+   * Enable episodic memory for objectives using this variation. When true, the
+   * system automatically creates a document namespace for each objective using the
+   * objective's episodic_key as the external_id, allowing the agent to store and
+   * retrieve documents specific to that episode.
    */
   enableEpisodicMemory?: boolean;
 
   /**
-   * How long episodic memories should be retained After this duration, episodic
-   * memory folders can be automatically cleaned up If not set, episodic memories are
-   * retained indefinitely
+   * How long episodic memories should be retained. After this duration, episodic
+   * document namespaces can be automatically cleaned up. If not set, episodic
+   * memories are retained indefinitely.
    */
   episodicMemoryTtl?: number;
 
@@ -161,20 +161,20 @@ export namespace AgentVariationSpec {
   }
 }
 
-export interface AgentVariationSpecAgentMemory {
-  memoryFolderId?: string;
+export interface AgentVariationSpecAgentDocument {
+  documentId?: string;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  memoryFolderMetadata?: Shared.ResourceMetadata;
+  documentMetadata?: Shared.ResourceMetadata;
 
-  memoryId?: string;
+  documentNamespaceId?: string;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  memoryMetadata?: Shared.ResourceMetadata;
+  documentNamespaceMetadata?: Shared.ResourceMetadata;
 }
 
 export interface AgentVariationSpecAgentTool {
@@ -313,7 +313,7 @@ export declare namespace Variations {
   export {
     type AgentVariation as AgentVariation,
     type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecAgentMemory as AgentVariationSpecAgentMemory,
+    type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,

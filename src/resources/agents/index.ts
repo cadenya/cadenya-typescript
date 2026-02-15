@@ -14,7 +14,7 @@ export {
   Variations,
   type AgentVariation,
   type AgentVariationSpec,
-  type AgentVariationSpecAgentMemory,
+  type AgentVariationSpecAgentDocument,
   type AgentVariationSpecAgentTool,
   type AgentVariationSpecConstraints,
   type AgentVariationSpecToolSelection,
