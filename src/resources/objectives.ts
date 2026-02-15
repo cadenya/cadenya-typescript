@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
 import * as AgentsAPI from './agents/agents';
+import * as VariationsAPI from './agents/variations';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -263,21 +264,20 @@ export interface ObjectiveSpec {
   parentObjectiveId?: string;
 
   /**
-   * prompt_ids can be an empty array on create, and the agent's prompts will be used
-   * to create assign the system prompt
-   */
-  promptIds?: Array<string>;
-
-  /**
    * Secrets that can be used in the headers for tool calls using the secret
    * interpolation format.
    */
   secrets?: Array<ObjectiveSpec.Secret>;
 
   /**
-   * system_prompt is read-only, and is set by the agent's prompts
+   * system_prompt is read-only, derived from the selected variation's prompt
    */
   systemPrompt?: string;
+
+  /**
+   * AgentVariation resource
+   */
+  variation?: VariationsAPI.AgentVariation;
 }
 
 export namespace ObjectiveSpec {
@@ -832,6 +832,11 @@ export interface ObjectiveCreateParams {
   metadata?: Shared.OperationMetadata;
 
   spec?: ObjectiveSpec;
+
+  /**
+   * Explicit variation selection (required when agent uses EXPLICIT mode)
+   */
+  variationId?: string;
 }
 
 export interface ObjectiveListParams extends CursorPaginationParams {
