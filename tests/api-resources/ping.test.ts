@@ -8,7 +8,7 @@ const client = new Cadenya({
 });
 
 describe('resource ping', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('check', async () => {
     const responsePromise = client.ping.check();
     const rawResponse = await responsePromise.asResponse();

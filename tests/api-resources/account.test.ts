@@ -8,7 +8,7 @@ const client = new Cadenya({
 });
 
 describe('resource account', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.account.retrieve();
     const rawResponse = await responsePromise.asResponse();

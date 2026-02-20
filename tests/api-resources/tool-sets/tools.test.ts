@@ -8,7 +8,7 @@ const client = new Cadenya({
 });
 
 describe('resource tools', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.toolSets.tools.create('toolSetId', {});
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource tools', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.toolSets.tools.retrieve('id', { toolSetId: 'toolSetId' });
     const rawResponse = await responsePromise.asResponse();
@@ -32,12 +32,12 @@ describe('resource tools', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.toolSets.tools.retrieve('id', { toolSetId: 'toolSetId' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.toolSets.tools.update('id', { toolSetId: 'toolSetId' });
     const rawResponse = await responsePromise.asResponse();
@@ -49,7 +49,7 @@ describe('resource tools', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.toolSets.tools.update('id', {
       toolSetId: 'toolSetId',
@@ -84,7 +84,7 @@ describe('resource tools', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.toolSets.tools.list('toolSetId');
     const rawResponse = await responsePromise.asResponse();
@@ -96,7 +96,7 @@ describe('resource tools', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -112,7 +112,7 @@ describe('resource tools', () => {
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.toolSets.tools.delete('id', { toolSetId: 'toolSetId' });
     const rawResponse = await responsePromise.asResponse();
@@ -124,7 +124,7 @@ describe('resource tools', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.toolSets.tools.delete('id', { toolSetId: 'toolSetId' });
   });

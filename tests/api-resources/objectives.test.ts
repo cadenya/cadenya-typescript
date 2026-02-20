@@ -8,7 +8,7 @@ const client = new Cadenya({
 });
 
 describe('resource objectives', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.objectives.create({});
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.objectives.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
@@ -32,7 +32,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.objectives.list();
     const rawResponse = await responsePromise.asResponse();
@@ -44,7 +44,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -63,7 +63,7 @@ describe('resource objectives', () => {
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('approveToolCall: only required params', async () => {
     const responsePromise = client.objectives.approveToolCall('objectiveEventId', {
       path_objectiveId: 'objectiveId',
@@ -77,7 +77,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('approveToolCall: required and optional params', async () => {
     const response = await client.objectives.approveToolCall('objectiveEventId', {
       path_objectiveId: 'objectiveId',
@@ -87,7 +87,7 @@ describe('resource objectives', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('continue', async () => {
     const responsePromise = client.objectives.continue('objectiveId', {});
     const rawResponse = await responsePromise.asResponse();
@@ -99,7 +99,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('denyToolCall: only required params', async () => {
     const responsePromise = client.objectives.denyToolCall('objectiveEventId', {
       path_objectiveId: 'objectiveId',
@@ -113,7 +113,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('denyToolCall: required and optional params', async () => {
     const response = await client.objectives.denyToolCall('objectiveEventId', {
       path_objectiveId: 'objectiveId',
@@ -123,7 +123,7 @@ describe('resource objectives', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listEvents', async () => {
     const responsePromise = client.objectives.listEvents('objectiveId');
     const rawResponse = await responsePromise.asResponse();
@@ -135,7 +135,7 @@ describe('resource objectives', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listEvents: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
