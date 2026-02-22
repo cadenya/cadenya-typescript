@@ -110,6 +110,12 @@ export interface ToolSpec {
 
   requiresApproval?: boolean;
 
+  status?:
+    | 'TOOL_STATUS_UNSPECIFIED'
+    | 'TOOL_STATUS_AVAILABLE'
+    | 'TOOL_STATUS_FILTERED'
+    | 'TOOL_STATUS_ARCHIVED';
+
   toolSetId?: string;
 }
 
