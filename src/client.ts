@@ -18,7 +18,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource, AccountSetupParams, AccountSetupResponse } from './resources/account';
+import { Account, AccountResource } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -29,14 +29,25 @@ import {
   APIKeysCursorPagination,
 } from './resources/api-keys';
 import {
-  MemoryFolder,
-  MemoryFolderCreateParams,
-  MemoryFolderListParams,
-  MemoryFolderSpec,
-  MemoryFolderUpdateParams,
-  MemoryFolders,
-  MemoryFoldersCursorPagination,
-} from './resources/memory-folders';
+  DocumentNamespace,
+  DocumentNamespaceCreateParams,
+  DocumentNamespaceListParams,
+  DocumentNamespaceSpec,
+  DocumentNamespaceUpdateParams,
+  DocumentNamespaces,
+  DocumentNamespacesCursorPagination,
+} from './resources/document-namespaces';
+import {
+  Document,
+  DocumentCreateParams,
+  DocumentListParams,
+  DocumentSpec,
+  DocumentSpecInlineContent,
+  DocumentSpecRemoteSource,
+  DocumentUpdateParams,
+  Documents,
+  DocumentsCursorPagination,
+} from './resources/documents';
 import {
   Objective,
   ObjectiveApproveToolCallParams,
@@ -80,27 +91,11 @@ import {
   AgentCreateParams,
   AgentListParams,
   AgentSpec,
-  AgentSpecAgentTool,
-  AgentSpecConstraints,
-  AgentSpecToolSelection,
   AgentUpdateParams,
   Agents,
   AgentsCursorPagination,
   Page,
-  ToolSelectionAssignedTools,
-  ToolSelectionAutoDiscovery,
 } from './resources/agents/agents';
-import {
-  Memories,
-  MemoriesCursorPagination,
-  Memory,
-  MemoryCreateParams,
-  MemoryListParams,
-  MemorySpec,
-  MemorySpecDocument,
-  MemorySpecRemoteSource,
-  MemoryUpdateParams,
-} from './resources/memories/memories';
 import {
   McpToolFilter,
   SyncCompleted,
@@ -218,7 +213,7 @@ export class Cadenya {
   baseURL: string;
   maxRetries: number;
   timeout: number;
-  logger: Logger | undefined;
+  logger: Logger;
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
 
@@ -552,7 +547,7 @@ export class Cadenya {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -589,9 +584,14 @@ export class Cadenya {
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     path: string,
     Page: new (...args: any[]) => PageClass,
-    opts?: RequestOptions,
+    opts?: PromiseOrValue<RequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
   }
 
   requestAPIList<
@@ -599,7 +599,7 @@ export class Cadenya {
     PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
   >(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: FinalRequestOptions,
+    options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
     return new Pagination.PagePromise<PageClass, Item>(this as any as Cadenya, request, Page);
@@ -612,9 +612,10 @@ export class Cadenya {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -781,6 +782,12 @@ export class Cadenya {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -813,6 +820,14 @@ export class Cadenya {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body as Record<string, unknown>),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -846,8 +861,8 @@ export class Cadenya {
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
   workspaces: API.Workspaces = new API.Workspaces(this);
-  memoryFolders: API.MemoryFolders = new API.MemoryFolders(this);
-  memories: API.Memories = new API.Memories(this);
+  documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
+  documents: API.Documents = new API.Documents(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -859,8 +874,8 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.MemoryFolders = MemoryFolders;
-Cadenya.Memories = Memories;
+Cadenya.DocumentNamespaces = DocumentNamespaces;
+Cadenya.Documents = Documents;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -871,23 +886,13 @@ export declare namespace Cadenya {
     type CursorPaginationResponse as CursorPaginationResponse,
   };
 
-  export {
-    AccountResource as AccountResource,
-    type Account as Account,
-    type AccountSetupResponse as AccountSetupResponse,
-    type AccountSetupParams as AccountSetupParams,
-  };
+  export { AccountResource as AccountResource, type Account as Account };
 
   export {
     Agents as Agents,
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type AgentSpecAgentTool as AgentSpecAgentTool,
-    type AgentSpecConstraints as AgentSpecConstraints,
-    type AgentSpecToolSelection as AgentSpecToolSelection,
     type Page as Page,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
@@ -969,25 +974,25 @@ export declare namespace Cadenya {
   };
 
   export {
-    MemoryFolders as MemoryFolders,
-    type MemoryFolder as MemoryFolder,
-    type MemoryFolderSpec as MemoryFolderSpec,
-    type MemoryFoldersCursorPagination as MemoryFoldersCursorPagination,
-    type MemoryFolderCreateParams as MemoryFolderCreateParams,
-    type MemoryFolderUpdateParams as MemoryFolderUpdateParams,
-    type MemoryFolderListParams as MemoryFolderListParams,
+    DocumentNamespaces as DocumentNamespaces,
+    type DocumentNamespace as DocumentNamespace,
+    type DocumentNamespaceSpec as DocumentNamespaceSpec,
+    type DocumentNamespacesCursorPagination as DocumentNamespacesCursorPagination,
+    type DocumentNamespaceCreateParams as DocumentNamespaceCreateParams,
+    type DocumentNamespaceUpdateParams as DocumentNamespaceUpdateParams,
+    type DocumentNamespaceListParams as DocumentNamespaceListParams,
   };
 
   export {
-    Memories as Memories,
-    type Memory as Memory,
-    type MemorySpec as MemorySpec,
-    type MemorySpecDocument as MemorySpecDocument,
-    type MemorySpecRemoteSource as MemorySpecRemoteSource,
-    type MemoriesCursorPagination as MemoriesCursorPagination,
-    type MemoryCreateParams as MemoryCreateParams,
-    type MemoryUpdateParams as MemoryUpdateParams,
-    type MemoryListParams as MemoryListParams,
+    Documents as Documents,
+    type Document as Document,
+    type DocumentSpec as DocumentSpec,
+    type DocumentSpecInlineContent as DocumentSpecInlineContent,
+    type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type DocumentsCursorPagination as DocumentsCursorPagination,
+    type DocumentCreateParams as DocumentCreateParams,
+    type DocumentUpdateParams as DocumentUpdateParams,
+    type DocumentListParams as DocumentListParams,
   };
 
   export type Actor = API.Actor;

@@ -62,7 +62,8 @@ export type APIKeysCursorPagination = CursorPagination<APIKey>;
  */
 export interface APIKey {
   /**
-   * Account-level metadata (no workspace_id since API Keys belong to accounts)
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   metadata?: APIKey.Metadata;
 
@@ -74,7 +75,8 @@ export interface APIKey {
 
 export namespace APIKey {
   /**
-   * Account-level metadata (no workspace_id since API Keys belong to accounts)
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   export interface Metadata {
     /**
@@ -103,6 +105,8 @@ export namespace APIKey {
      * Tool") Required for resources that users interact with directly
      */
     name?: string;
+
+    profileId?: string;
   }
 }
 
@@ -121,14 +125,15 @@ export interface APIKeySpec {
   description?: string;
 
   /**
-   * Status of the API Key (can be disabled without deleting)
+   * workspace_ids is a list of workspaces this API key has access to
    */
-  status?: 'API_KEY_STATUS_UNSPECIFIED' | 'API_KEY_STATUS_ACTIVE' | 'API_KEY_STATUS_REVOKED';
+  workspaceIds?: Array<string>;
 }
 
 export interface APIKeyCreateParams {
   /**
-   * Account-level metadata for the new API Key
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   metadata?: APIKeyCreateParams.Metadata;
 
@@ -140,7 +145,8 @@ export interface APIKeyCreateParams {
 
 export namespace APIKeyCreateParams {
   /**
-   * Account-level metadata for the new API Key
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   export interface Metadata {
     /**
@@ -164,7 +170,8 @@ export namespace APIKeyCreateParams {
 
 export interface APIKeyUpdateParams {
   /**
-   * Account-level metadata for the API Key
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   metadata?: APIKeyUpdateParams.Metadata;
 
@@ -181,7 +188,8 @@ export interface APIKeyUpdateParams {
 
 export namespace APIKeyUpdateParams {
   /**
-   * Account-level metadata for the API Key
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
   export interface Metadata {
     /**

@@ -13,12 +13,10 @@ Types:
 Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
-- <code><a href="./src/resources/account.ts">AccountSetupResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
-- <code title="post /v1/account/setup">client.account.<a href="./src/resources/account.ts">setup</a>({ ...params }) -> AccountSetupResponse</code>
 
 # Agents
 
@@ -26,12 +24,7 @@ Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecAgentTool</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecConstraints</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpecToolSelection</a></code>
 - <code><a href="./src/resources/agents/agents.ts">Page</a></code>
-- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAssignedTools</a></code>
-- <code><a href="./src/resources/agents/agents.ts">ToolSelectionAutoDiscovery</a></code>
 
 Methods:
 
@@ -41,20 +34,36 @@ Methods:
 - <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsCursorPagination</code>
 - <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
 
-## Prompts
+## Variations
 
 Types:
 
-- <code><a href="./src/resources/agents/prompts.ts">Prompt</a></code>
-- <code><a href="./src/resources/agents/prompts.ts">PromptSpec</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentDocument</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
 
 Methods:
 
-- <code title="post /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">create</a>(agentID, { ...params }) -> Prompt</code>
-- <code title="get /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">retrieve</a>(id, { ...params }) -> Prompt</code>
-- <code title="patch /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">update</a>(id, { ...params }) -> Prompt</code>
-- <code title="get /v1/agents/{agentId}/prompts">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">list</a>(agentID, { ...params }) -> PromptsCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/prompts/{id}">client.agents.prompts.<a href="./src/resources/agents/prompts.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
+
+## WebhookDeliveries
+
+Types:
+
+- <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDelivery</a></code>
+
+Methods:
+
+- <code title="get /v1/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
 
 # Objectives
 
@@ -182,44 +191,34 @@ Methods:
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
 
-# MemoryFolders
+# DocumentNamespaces
 
 Types:
 
-- <code><a href="./src/resources/memory-folders.ts">MemoryFolder</a></code>
-- <code><a href="./src/resources/memory-folders.ts">MemoryFolderSpec</a></code>
+- <code><a href="./src/resources/document-namespaces.ts">DocumentNamespace</a></code>
+- <code><a href="./src/resources/document-namespaces.ts">DocumentNamespaceSpec</a></code>
 
 Methods:
 
-- <code title="post /v1/memory_folders">client.memoryFolders.<a href="./src/resources/memory-folders.ts">create</a>({ ...params }) -> MemoryFolder</code>
-- <code title="get /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">retrieve</a>(id) -> MemoryFolder</code>
-- <code title="patch /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">update</a>(pathID, { ...params }) -> MemoryFolder</code>
-- <code title="get /v1/memory_folders">client.memoryFolders.<a href="./src/resources/memory-folders.ts">list</a>({ ...params }) -> MemoryFoldersCursorPagination</code>
-- <code title="delete /v1/memory_folders/{id}">client.memoryFolders.<a href="./src/resources/memory-folders.ts">delete</a>(id) -> void</code>
+- <code title="post /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">create</a>({ ...params }) -> DocumentNamespace</code>
+- <code title="get /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">retrieve</a>(id) -> DocumentNamespace</code>
+- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(pathID, { ...params }) -> DocumentNamespace</code>
+- <code title="get /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">list</a>({ ...params }) -> DocumentNamespacesCursorPagination</code>
+- <code title="delete /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">delete</a>(id) -> void</code>
 
-# Memories
+# Documents
 
 Types:
 
-- <code><a href="./src/resources/memories/memories.ts">Memory</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpec</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpecDocument</a></code>
-- <code><a href="./src/resources/memories/memories.ts">MemorySpecRemoteSource</a></code>
+- <code><a href="./src/resources/documents.ts">Document</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentSpec</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentSpecInlineContent</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentSpecRemoteSource</a></code>
 
 Methods:
 
-- <code title="post /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">create</a>({ ...params }) -> Memory</code>
-- <code title="get /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">retrieve</a>(id) -> Memory</code>
-- <code title="patch /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">update</a>(pathID, { ...params }) -> Memory</code>
-- <code title="get /v1/memories">client.memories.<a href="./src/resources/memories/memories.ts">list</a>({ ...params }) -> MemoriesCursorPagination</code>
-- <code title="delete /v1/memories/{id}">client.memories.<a href="./src/resources/memories/memories.ts">delete</a>(id) -> void</code>
-
-## Folders
-
-Types:
-
-- <code><a href="./src/resources/memories/folders.ts">FolderListResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/memories/{memoryId}/folders">client.memories.folders.<a href="./src/resources/memories/folders.ts">list</a>(memoryID) -> FolderListResponse</code>
+- <code title="post /v1/documents">client.documents.<a href="./src/resources/documents.ts">create</a>({ ...params }) -> Document</code>
+- <code title="get /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(id) -> Document</code>
+- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(pathID, { ...params }) -> Document</code>
+- <code title="get /v1/documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsCursorPagination</code>
+- <code title="delete /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">delete</a>(id) -> void</code>

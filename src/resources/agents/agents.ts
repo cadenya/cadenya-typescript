@@ -2,18 +2,31 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
-import * as PromptsAPI from './prompts';
+import * as VariationsAPI from './variations';
 import {
-  Prompt,
-  PromptCreateParams,
-  PromptDeleteParams,
-  PromptListParams,
-  PromptRetrieveParams,
-  PromptSpec,
-  PromptUpdateParams,
-  Prompts,
-  PromptsCursorPagination,
-} from './prompts';
+  AgentVariation,
+  AgentVariationSpec,
+  AgentVariationSpecAgentDocument,
+  AgentVariationSpecAgentTool,
+  AgentVariationSpecConstraints,
+  AgentVariationSpecToolSelection,
+  AgentVariationsCursorPagination,
+  ToolSelectionAssignedTools,
+  ToolSelectionAutoDiscovery,
+  VariationCreateParams,
+  VariationDeleteParams,
+  VariationListParams,
+  VariationRetrieveParams,
+  VariationUpdateParams,
+  Variations,
+} from './variations';
+import * as WebhookDeliveriesAPI from './webhook-deliveries';
+import {
+  WebhookDeliveries,
+  WebhookDeliveriesCursorPagination,
+  WebhookDelivery,
+  WebhookDeliveryListParams,
+} from './webhook-deliveries';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -21,7 +34,10 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Agents extends APIResource {
-  prompts: PromptsAPI.Prompts = new PromptsAPI.Prompts(this._client);
+  variations: VariationsAPI.Variations = new VariationsAPI.Variations(this._client);
+  webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(
+    this._client,
+  );
 
   /**
    * Creates a new agent in the workspace
@@ -87,41 +103,27 @@ export interface Agent {
  */
 export interface AgentSpec {
   /**
-   * Memories assigned to this agent Can include individual memories or entire memory
-   * folders (which include all memories in the folder)
-   */
-  agentMemories?: Array<AgentSpec.AgentMemory>;
-
-  agentTools?: Array<AgentSpecAgentTool>;
-
-  constraints?: AgentSpecConstraints;
-
-  /**
    * Description of the agent's purpose
    */
   description?: string;
 
   /**
-   * Enable episodic memory for this agent When true, the system automatically
-   * creates a memory folder for each objective using the objective's episodic_key as
-   * the external_id, allowing the agent to store and retrieve memories specific to
-   * that episode
-   */
-  enableEpisodicMemory?: boolean;
-
-  /**
-   * How long episodic memories should be retained After this duration, episodic
-   * memory folders can be automatically cleaned up If not set, episodic memories are
-   * retained indefinitely
-   */
-  episodicMemoryTtl?: number;
-
-  /**
    * Status of the agent
    */
-  status?: 'AGENT_STATUS_UNSPECIFIED' | 'AGENT_STATUS_ENABLED' | 'AGENT_STATUS_ARCHIVED';
+  status?:
+    | 'AGENT_STATUS_UNSPECIFIED'
+    | 'AGENT_STATUS_DRAFT'
+    | 'AGENT_STATUS_PUBLISHED'
+    | 'AGENT_STATUS_ARCHIVED';
 
-  toolSelection?: AgentSpecToolSelection;
+  /**
+   * Controls how variations are selected when creating objectives Defaults to
+   * WEIGHTED when unspecified
+   */
+  variationSelectionMode?:
+    | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
+    | 'VARIATION_SELECTION_MODE_WEIGHTED'
+    | 'VARIATION_SELECTION_MODE_EXPLICIT';
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
@@ -131,103 +133,10 @@ export interface AgentSpec {
   webhookEventsUrlSecret?: string;
 }
 
-export namespace AgentSpec {
-  export interface AgentMemory {
-    memoryFolderId?: string;
-
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    memoryFolderMetadata?: Shared.ResourceMetadata;
-
-    memoryId?: string;
-
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    memoryMetadata?: Shared.ResourceMetadata;
-  }
-}
-
-export interface AgentSpecAgentTool {
-  agentId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  agentMetadata?: Shared.ResourceMetadata;
-
-  toolId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  toolMetadata?: Shared.ResourceMetadata;
-
-  toolSetId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  toolSetMetadata?: Shared.ResourceMetadata;
-}
-
-export interface AgentSpecConstraints {
-  /**
-   * The maximum number of sub-objectives that can be created. 0 means no limit.
-   */
-  maxSubObjectives?: number;
-
-  /**
-   * The maximum number of tool calls that can be made. 0 means no limit.
-   */
-  maxToolCalls?: number;
-}
-
-export interface AgentSpecToolSelection {
-  /**
-   * AssignedTools is used to indicate that the agent should only use the tools/tool
-   * sets that are explicitly assigned to it. Allow discovery is used when the agent
-   * thinks it needs to discover more tools.
-   */
-  assignedTools?: ToolSelectionAssignedTools;
-
-  /**
-   * AutoDiscovery is used to indicate that the agent should automatically discover
-   * tools that are not explicitly assigned to it. Max tools is the maximum number of
-   * tools that can be discovered. Hints are optional hints for tool search. These
-   * are used in conjunction with the context-aware tool search and can help select
-   * the best tools for the task.
-   */
-  autoDiscovery?: ToolSelectionAutoDiscovery;
-}
-
 export interface Page {
   nextCursor?: string;
 
   total?: number;
-}
-
-/**
- * AssignedTools is used to indicate that the agent should only use the tools/tool
- * sets that are explicitly assigned to it. Allow discovery is used when the agent
- * thinks it needs to discover more tools.
- */
-export interface ToolSelectionAssignedTools {
-  allowDiscovery?: boolean;
-}
-
-/**
- * AutoDiscovery is used to indicate that the agent should automatically discover
- * tools that are not explicitly assigned to it. Max tools is the maximum number of
- * tools that can be discovered. Hints are optional hints for tool search. These
- * are used in conjunction with the context-aware tool search and can help select
- * the best tools for the task.
- */
-export interface ToolSelectionAutoDiscovery {
-  hints?: Array<string>;
-
-  maxTools?: number;
 }
 
 export interface AgentCreateParams {
@@ -271,18 +180,14 @@ export interface AgentListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
-Agents.Prompts = Prompts;
+Agents.Variations = Variations;
+Agents.WebhookDeliveries = WebhookDeliveries;
 
 export declare namespace Agents {
   export {
     type Agent as Agent,
     type AgentSpec as AgentSpec,
-    type AgentSpecAgentTool as AgentSpecAgentTool,
-    type AgentSpecConstraints as AgentSpecConstraints,
-    type AgentSpecToolSelection as AgentSpecToolSelection,
     type Page as Page,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
@@ -290,14 +195,27 @@ export declare namespace Agents {
   };
 
   export {
-    Prompts as Prompts,
-    type Prompt as Prompt,
-    type PromptSpec as PromptSpec,
-    type PromptsCursorPagination as PromptsCursorPagination,
-    type PromptCreateParams as PromptCreateParams,
-    type PromptRetrieveParams as PromptRetrieveParams,
-    type PromptUpdateParams as PromptUpdateParams,
-    type PromptListParams as PromptListParams,
-    type PromptDeleteParams as PromptDeleteParams,
+    Variations as Variations,
+    type AgentVariation as AgentVariation,
+    type AgentVariationSpec as AgentVariationSpec,
+    type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
+    type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
+    type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
+    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
+    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
+    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
+    type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
+    type VariationCreateParams as VariationCreateParams,
+    type VariationRetrieveParams as VariationRetrieveParams,
+    type VariationUpdateParams as VariationUpdateParams,
+    type VariationListParams as VariationListParams,
+    type VariationDeleteParams as VariationDeleteParams,
+  };
+
+  export {
+    WebhookDeliveries as WebhookDeliveries,
+    type WebhookDelivery as WebhookDelivery,
+    type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
+    type WebhookDeliveryListParams as WebhookDeliveryListParams,
   };
 }

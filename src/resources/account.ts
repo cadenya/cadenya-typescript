@@ -13,25 +13,54 @@ export class AccountResource extends APIResource {
   retrieve(options?: RequestOptions): APIPromise<Account> {
     return this._client.get('/v1/account', options);
   }
-
-  /**
-   * Setup the account
-   */
-  setup(body: AccountSetupParams, options?: RequestOptions): APIPromise<AccountSetupResponse> {
-    return this._client.post('/v1/account/setup', { body, ...options });
-  }
 }
 
 export interface Account {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata?: Account.Metadata;
 
   spec?: Account.Spec;
 }
 
 export namespace Account {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
+  export interface Metadata {
+    /**
+     * Unique identifier for the resource (UUID v7)
+     */
+    id?: string;
+
+    /**
+     * Account this resource belongs to for multi-tenant isolation (UUID v7)
+     */
+    accountId?: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool") Required for resources that users interact with directly
+     */
+    name?: string;
+
+    profileId?: string;
+  }
+
   export interface Spec {
     billingEmail?: string;
 
@@ -43,24 +72,6 @@ export namespace Account {
   }
 }
 
-export interface AccountSetupResponse {
-  account?: Account;
-
-  workspace?: Shared.Workspace;
-}
-
-export interface AccountSetupParams {
-  email?: string;
-
-  externalUserId?: string;
-
-  name?: string;
-}
-
 export declare namespace AccountResource {
-  export {
-    type Account as Account,
-    type AccountSetupResponse as AccountSetupResponse,
-    type AccountSetupParams as AccountSetupParams,
-  };
+  export { type Account as Account };
 }

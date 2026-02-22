@@ -70,8 +70,6 @@ export interface WorkspaceSecret {
 }
 
 export interface WorkspaceSecretSpec {
-  name?: string;
-
   value?: string;
 }
 

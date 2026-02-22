@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.16.0 (2026-02-20)
+
+Full Changelog: [v0.15.0...v0.16.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.15.0...v0.16.0)
+
+### Features
+
+* **api:** api update ([227567b](https://github.com/cadenya-agents/typescript-sdk/commit/227567b12eb7fef7331a89fe1dcd12a218242ca3))
+* **api:** api update ([1d158e8](https://github.com/cadenya-agents/typescript-sdk/commit/1d158e8a1eca0502e2aed4012483016877b2cd8a))
+* **api:** api update ([c5b516c](https://github.com/cadenya-agents/typescript-sdk/commit/c5b516cb4248a6e03e44f01baa04525cdcd4c571))
+* **api:** api update ([eeac5e5](https://github.com/cadenya-agents/typescript-sdk/commit/eeac5e5364078b253d0dfa6ae2a7c80ffcc9934b))
+* **api:** api update ([9217483](https://github.com/cadenya-agents/typescript-sdk/commit/92174838d9247fb787bce82fd8519dd6eafca0ef))
+* **api:** api update ([b92dd37](https://github.com/cadenya-agents/typescript-sdk/commit/b92dd3755aba28b8ca469a99badf616d1cc04279))
+* **api:** api update ([163ee8a](https://github.com/cadenya-agents/typescript-sdk/commit/163ee8a7d0c70f79e96e27e507a6ec7afaf5be1f))
+* **api:** api update ([0f1056c](https://github.com/cadenya-agents/typescript-sdk/commit/0f1056ca9fc3785b709e0edb8561cad52200bbf1))
+* **api:** api update ([45bdb6c](https://github.com/cadenya-agents/typescript-sdk/commit/45bdb6c9082804dd9535189415eb95411c75c344))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([db36bd0](https://github.com/cadenya-agents/typescript-sdk/commit/db36bd05d793729262cac0979c022adddd417d82))
+* **mcp:** return correct lines on typescript errors ([4a0a0a6](https://github.com/cadenya-agents/typescript-sdk/commit/4a0a0a6796f438980a2191c287d3dc52c369dc8b))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([0e7ea79](https://github.com/cadenya-agents/typescript-sdk/commit/0e7ea797dd496c49f6e18e36441391b8c1391a0d))
+* **ci:** upgrade `actions/github-script` ([0c7f4cd](https://github.com/cadenya-agents/typescript-sdk/commit/0c7f4cd6184b7192c237fb38527f1c43bdb6f3c5))
+* **client:** fix logger property type ([1cb6020](https://github.com/cadenya-agents/typescript-sdk/commit/1cb602084f719dbfa860bd63c2c6fe26c92ffee0))
+* fix typo in descriptions ([38b0e0f](https://github.com/cadenya-agents/typescript-sdk/commit/38b0e0fe7715b3ac35724fb963a14017b59a0e28))
+* **internal:** codegen related update ([3ada15c](https://github.com/cadenya-agents/typescript-sdk/commit/3ada15c25e881fd62ceddbe84a27d7f1811993a4))
+* **internal:** codegen related update ([e431ee9](https://github.com/cadenya-agents/typescript-sdk/commit/e431ee96911873bca78c1e5e30e2d02f05f2cb85))
+* **internal:** codegen related update ([03f6090](https://github.com/cadenya-agents/typescript-sdk/commit/03f6090518f1261e69c661dbcee7ac5b09593d14))
+* **internal:** codegen related update ([4f50c8b](https://github.com/cadenya-agents/typescript-sdk/commit/4f50c8babf593de7c66c7b9d1bed9454b129ae19))
+* **internal:** remove mock server code ([fe78c21](https://github.com/cadenya-agents/typescript-sdk/commit/fe78c21c91935f39761583d8fa33ffca0cc03066))
+* **internal:** update `actions/checkout` version ([ed27094](https://github.com/cadenya-agents/typescript-sdk/commit/ed2709434fe14e9c54bca0565043644d302b1ba5))
+* **internal:** upgrade babel, qs, js-yaml ([13c9cc6](https://github.com/cadenya-agents/typescript-sdk/commit/13c9cc6e08cd95d8068d23d5cb72ffb8c3fcf533))
+* **internal:** upgrade eslint ([ffd0895](https://github.com/cadenya-agents/typescript-sdk/commit/ffd08956d55d60c33b7b4e700945bc83ad5d0d0c))
+* update mock server docs ([158a684](https://github.com/cadenya-agents/typescript-sdk/commit/158a684e65d3bf5aaa539ed808a668fc69d44daf))
+
+
+### Documentation
+
+* add more examples ([40ce9c4](https://github.com/cadenya-agents/typescript-sdk/commit/40ce9c4ded1a6fd4d1dbdca7b087395e8465a5de))
+
 ## 0.15.0 (2025-11-27)
 
 Full Changelog: [v0.14.0...v0.15.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.14.0...v0.15.0)
