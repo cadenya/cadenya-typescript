@@ -50,11 +50,11 @@ describe('resource objectives', () => {
     await expect(
       client.objectives.list(
         {
+          actorId: 'actorId',
           agentId: 'agentId',
           cursor: 'cursor',
           limit: 0,
           parentObjectiveId: 'parentObjectiveId',
-          profileId: 'profileId',
           sortOrder: 'sortOrder',
           state: 'STATE_UNSPECIFIED',
         },
@@ -64,8 +64,10 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('cancel', async () => {
-    const responsePromise = client.objectives.cancel('objectiveId', {});
+  test.skip('approveToolCall: only required params', async () => {
+    const responsePromise = client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -73,6 +75,16 @@ describe('resource objectives', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('approveToolCall: required and optional params', async () => {
+    const response = await client.objectives.approveToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
   });
 
   // Mock server tests are disabled
@@ -88,8 +100,10 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listContextWindows', async () => {
-    const responsePromise = client.objectives.listContextWindows('objectiveId');
+  test.skip('denyToolCall: only required params', async () => {
+    const responsePromise = client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -100,15 +114,13 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listContextWindows: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.listContextWindows(
-        'objectiveId',
-        { cursor: 'cursor', limit: 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('denyToolCall: required and optional params', async () => {
+    const response = await client.objectives.denyToolCall('objectiveEventId', {
+      path_objectiveId: 'objectiveId',
+      message: 'message',
+      body_objectiveEventId: 'objectiveEventId',
+      body_objectiveId: 'objectiveId',
+    });
   });
 
   // Mock server tests are disabled

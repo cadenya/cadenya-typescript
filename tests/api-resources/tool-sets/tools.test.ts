@@ -78,7 +78,6 @@ describe('resource tools', () => {
         description: 'description',
         parameters: { foo: 'bar' },
         requiresApproval: true,
-        status: 'TOOL_STATUS_UNSPECIFIED',
         toolSetId: 'toolSetId',
       },
       updateMask: 'updateMask',
