@@ -72,12 +72,6 @@ export interface OperationMetadata {
   accountId?: string;
 
   /**
-   * ID of the actor (user or service account) that initiated this operation (UUID
-   * v7)
-   */
-  actorId?: string;
-
-  /**
    * Timestamp when this operation was created UUID v7 includes timestamp
    * information, but this explicit field enables easier querying
    */
@@ -95,7 +89,7 @@ export interface OperationMetadata {
   labels?: { [key: string]: string };
 
   /**
-   * The actor that created the resource
+   * ID of the actor (user or service account) that created this operation
    */
   profileId?: string;
 
