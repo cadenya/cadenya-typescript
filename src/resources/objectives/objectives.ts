@@ -285,6 +285,8 @@ export namespace Objective {
 }
 
 export interface ObjectiveContinueResponse {
+  contextWindowId?: string;
+
   data?: ObjectiveContinueResponse.Data;
 
   /**
@@ -292,8 +294,6 @@ export interface ObjectiveContinueResponse {
    * runs)
    */
   metadata?: Shared.OperationMetadata;
-
-  objective?: Objective;
 
   /**
    * Profile represents a human user at the account level. Profiles are
@@ -305,14 +305,9 @@ export interface ObjectiveContinueResponse {
 
 export namespace ObjectiveContinueResponse {
   export interface Data {
-    /**
-     * The context window ID that this event belongs to
-     */
-    contextWindowId?: string;
+    assistantMessage?: Data.AssistantMessage;
 
     error?: Data.Error;
-
-    message?: Data.Message;
 
     subObjectiveCreated?: Data.SubObjectiveCreated;
 
@@ -324,20 +319,40 @@ export namespace ObjectiveContinueResponse {
 
     toolDenied?: Data.ToolDenied;
 
+    toolResult?: Data.ToolResult;
+
     type?: string;
+
+    userMessage?: Data.UserMessage;
   }
 
   export namespace Data {
+    export interface AssistantMessage {
+      content?: string;
+
+      toolCalls?: Array<AssistantMessage.ToolCall>;
+    }
+
+    export namespace AssistantMessage {
+      export interface ToolCall {
+        arguments?: string;
+
+        /**
+         * CallableTool is a union that represents a tool that can be called by an agent.
+         * In Cadenya, a tool that is used within an agent objective might be a
+         * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+         * and a Cadenya Tool (one Cadenya provides). These tools
+         */
+        tool?: Shared.CallableTool;
+
+        toolCallId?: string;
+      }
+    }
+
     export interface Error {
       message?: string;
 
       type?: string;
-    }
-
-    export interface Message {
-      content?: string;
-
-      role?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -374,6 +389,16 @@ export namespace ObjectiveContinueResponse {
        * The ID of the tool call record
        */
       toolCallId?: string;
+    }
+
+    export interface ToolResult {
+      content?: string;
+
+      toolCallId?: string;
+    }
+
+    export interface UserMessage {
+      content?: string;
     }
   }
 
@@ -504,6 +529,8 @@ export namespace ObjectiveListContextWindowsResponse {
 }
 
 export interface ObjectiveListEventsResponse {
+  contextWindowId?: string;
+
   data?: ObjectiveListEventsResponse.Data;
 
   /**
@@ -511,8 +538,6 @@ export interface ObjectiveListEventsResponse {
    * runs)
    */
   metadata?: Shared.OperationMetadata;
-
-  objective?: Objective;
 
   /**
    * Profile represents a human user at the account level. Profiles are
@@ -524,14 +549,9 @@ export interface ObjectiveListEventsResponse {
 
 export namespace ObjectiveListEventsResponse {
   export interface Data {
-    /**
-     * The context window ID that this event belongs to
-     */
-    contextWindowId?: string;
+    assistantMessage?: Data.AssistantMessage;
 
     error?: Data.Error;
-
-    message?: Data.Message;
 
     subObjectiveCreated?: Data.SubObjectiveCreated;
 
@@ -543,20 +563,40 @@ export namespace ObjectiveListEventsResponse {
 
     toolDenied?: Data.ToolDenied;
 
+    toolResult?: Data.ToolResult;
+
     type?: string;
+
+    userMessage?: Data.UserMessage;
   }
 
   export namespace Data {
+    export interface AssistantMessage {
+      content?: string;
+
+      toolCalls?: Array<AssistantMessage.ToolCall>;
+    }
+
+    export namespace AssistantMessage {
+      export interface ToolCall {
+        arguments?: string;
+
+        /**
+         * CallableTool is a union that represents a tool that can be called by an agent.
+         * In Cadenya, a tool that is used within an agent objective might be a
+         * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+         * and a Cadenya Tool (one Cadenya provides). These tools
+         */
+        tool?: Shared.CallableTool;
+
+        toolCallId?: string;
+      }
+    }
+
     export interface Error {
       message?: string;
 
       type?: string;
-    }
-
-    export interface Message {
-      content?: string;
-
-      role?: string;
     }
 
     export interface SubObjectiveCreated {
@@ -593,6 +633,16 @@ export namespace ObjectiveListEventsResponse {
        * The ID of the tool call record
        */
       toolCallId?: string;
+    }
+
+    export interface ToolResult {
+      content?: string;
+
+      toolCallId?: string;
+    }
+
+    export interface UserMessage {
+      content?: string;
     }
   }
 
