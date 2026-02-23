@@ -92,7 +92,6 @@ import {
   ObjectiveListEventsResponse,
   ObjectiveListEventsResponsesCursorPagination,
   ObjectiveListParams,
-  ObjectiveSpec,
   Objectives,
   ObjectivesCursorPagination,
 } from './resources/objectives/objectives';
@@ -902,7 +901,6 @@ export declare namespace Cadenya {
   export {
     Objectives as Objectives,
     type Objective as Objective,
-    type ObjectiveSpec as ObjectiveSpec,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListContextWindowsResponse as ObjectiveListContextWindowsResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,

@@ -3,7 +3,6 @@
 export {
   Objectives,
   type Objective,
-  type ObjectiveSpec,
   type ObjectiveContinueResponse,
   type ObjectiveListContextWindowsResponse,
   type ObjectiveListEventsResponse,
