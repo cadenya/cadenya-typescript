@@ -27,22 +27,22 @@ export type WebhookDeliveriesCursorPagination = CursorPagination<WebhookDelivery
 
 export interface WebhookDelivery {
   /**
+   * Webhook delivery data
+   */
+  data?: WebhookDelivery.Data;
+
+  /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
   metadata?: Shared.OperationMetadata;
-
-  /**
-   * Webhook delivery spec
-   */
-  spec?: WebhookDelivery.Spec;
 }
 
 export namespace WebhookDelivery {
   /**
-   * Webhook delivery spec
+   * Webhook delivery data
    */
-  export interface Spec {
+  export interface Data {
     /**
      * Related resources
      */

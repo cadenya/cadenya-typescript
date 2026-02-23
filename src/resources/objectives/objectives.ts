@@ -104,11 +104,13 @@ export type ObjectiveListContextWindowsResponsesCursorPagination =
 export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<ObjectiveListEventsResponse>;
 
 export interface Objective {
+  data?: Objective.Data;
+
   /**
-   * ObjectiveDetails provides read-only aggregated statistics about an objective's
+   * ObjectiveInfo provides read-only aggregated statistics about an objective's
    * execution
    */
-  details?: Objective.Details;
+  info?: Objective.Info;
 
   /**
    * Read-only list of the last five windows of execution for this objective, ordered
@@ -123,17 +125,69 @@ export interface Objective {
    */
   metadata?: Shared.OperationMetadata;
 
-  spec?: ObjectiveSpec;
-
   status?: Objective.Status;
 }
 
 export namespace Objective {
+  export interface Data {
+    /**
+     * Agent resource
+     */
+    agent?: AgentsAPI.Agent;
+
+    /**
+     * The objective's events will be sent as an HTTP POST request to this endpoint
+     */
+    callbackUrl?: string;
+
+    /**
+     * Represents a dynamically typed value which can be either null, a number, a
+     * string, a boolean, a recursive struct value, or a list of values.
+     */
+    data?: unknown;
+
+    /**
+     * The initial message sent to the agent. This becomes the first user message in
+     * the LLM chat history.
+     */
+    initialMessage?: string;
+
+    /**
+     * A parent objective means the objective was spawned off using a separate agent to
+     * complete an objective
+     */
+    parentObjectiveId?: string;
+
+    /**
+     * Secrets that can be used in the headers for tool calls using the secret
+     * interpolation format.
+     */
+    secrets?: Array<Data.Secret>;
+
+    /**
+     * system_prompt is read-only, derived from the selected variation's prompt
+     */
+    systemPrompt?: string;
+
+    /**
+     * AgentVariation resource
+     */
+    variation?: VariationsAPI.AgentVariation;
+  }
+
+  export namespace Data {
+    export interface Secret {
+      name?: string;
+
+      value?: string;
+    }
+  }
+
   /**
-   * ObjectiveDetails provides read-only aggregated statistics about an objective's
+   * ObjectiveInfo provides read-only aggregated statistics about an objective's
    * execution
    */
-  export interface Details {
+  export interface Info {
     /**
      * List of callable tools assigned to the agent for this objective Includes tools,
      * agents, and cadenya-provided tools from the agent's configuration
@@ -174,17 +228,17 @@ export namespace Objective {
    * compact their windows and carry on into a new one.
    */
   export interface LastFiveWindow {
+    data?: LastFiveWindow.Data;
+
     /**
      * Metadata for ephemeral operations and activities (e.g., objectives, executions,
      * runs)
      */
     metadata?: Shared.OperationMetadata;
-
-    spec?: LastFiveWindow.Spec;
   }
 
   export namespace LastFiveWindow {
-    export interface Spec {
+    export interface Data {
       /**
        * A calculated value for how many completion tokens (output tokens) have been used
        * in this context window
@@ -224,87 +278,13 @@ export namespace Objective {
       | 'STATE_UNSPECIFIED'
       | 'STATE_PENDING'
       | 'STATE_RUNNING'
-      | 'STATE_PAUSED'
       | 'STATE_COMPLETED'
       | 'STATE_FAILED'
       | 'STATE_CANCELLED';
   }
 }
 
-export interface ObjectiveSpec {
-  /**
-   * Agent resource
-   */
-  agent?: AgentsAPI.Agent;
-
-  /**
-   * The objective's events will be sent as an HTTP POST request to this endpoint
-   */
-  callbackUrl?: string;
-
-  /**
-   * Represents a dynamically typed value which can be either null, a number, a
-   * string, a boolean, a recursive struct value, or a list of values.
-   */
-  data?: unknown;
-
-  /**
-   * Documents that can be accessed during the objective's iterations. These are not
-   * included in the agent's objective unless requested.
-   */
-  documents?: Array<ObjectiveSpec.Document>;
-
-  /**
-   * The initial message sent to the agent. This becomes the first user message in
-   * the LLM chat history.
-   */
-  initialMessage?: string;
-
-  /**
-   * A parent objective means the objective was spawned off using a separate agent to
-   * complete an objective
-   */
-  parentObjectiveId?: string;
-
-  /**
-   * Secrets that can be used in the headers for tool calls using the secret
-   * interpolation format.
-   */
-  secrets?: Array<ObjectiveSpec.Secret>;
-
-  /**
-   * system_prompt is read-only, derived from the selected variation's prompt
-   */
-  systemPrompt?: string;
-
-  /**
-   * AgentVariation resource
-   */
-  variation?: VariationsAPI.AgentVariation;
-}
-
-export namespace ObjectiveSpec {
-  export interface Document {
-    content?: string;
-
-    contentType?: string;
-  }
-
-  export interface Secret {
-    name?: string;
-
-    value?: string;
-  }
-}
-
 export interface ObjectiveContinueResponse {
-  /**
-   * Actor is the "through model" that associates account-level resources (Profiles,
-   * API Keys) to specific workspaces. This allows a single Profile to have access to
-   * multiple workspaces while maintaining proper isolation and audit trails.
-   */
-  actor?: Shared.Actor;
-
   data?: ObjectiveContinueResponse.Data;
 
   /**
@@ -314,6 +294,13 @@ export interface ObjectiveContinueResponse {
   metadata?: Shared.OperationMetadata;
 
   objective?: Objective;
+
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  profile?: ObjectiveContinueResponse.Profile;
 }
 
 export namespace ObjectiveContinueResponse {
@@ -389,6 +376,82 @@ export namespace ObjectiveContinueResponse {
       toolCallId?: string;
     }
   }
+
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  export interface Profile {
+    /**
+     * AccountResourceMetadata is used to represent a resource that is associated to an
+     * account but not to a workspace.
+     */
+    metadata?: Profile.Metadata;
+
+    /**
+     * ProfileSpec contains the profile-specific fields
+     */
+    spec?: Profile.Spec;
+  }
+
+  export namespace Profile {
+    /**
+     * AccountResourceMetadata is used to represent a resource that is associated to an
+     * account but not to a workspace.
+     */
+    export interface Metadata {
+      /**
+       * Unique identifier for the resource (UUID v7)
+       */
+      id?: string;
+
+      /**
+       * Account this resource belongs to for multi-tenant isolation (UUID v7)
+       */
+      accountId?: string;
+
+      /**
+       * External ID for the resource (e.g., a workflow ID from an external system)
+       */
+      externalId?: string;
+
+      /**
+       * Arbitrary key-value pairs for categorization and filtering Examples:
+       * {"environment": "production", "team": "platform", "version": "v2"}
+       */
+      labels?: { [key: string]: string };
+
+      /**
+       * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+       * Tool") Required for resources that users interact with directly
+       */
+      name?: string;
+
+      profileId?: string;
+    }
+
+    /**
+     * ProfileSpec contains the profile-specific fields
+     */
+    export interface Spec {
+      /**
+       * Email address of the user (required, unique per account)
+       */
+      email?: string;
+
+      /**
+       * Display name for the user (e.g., "Bobby Tables")
+       */
+      name?: string;
+
+      /**
+       * Type is the type of profile. User's are humans, API keys are computers. You know
+       * the deal.
+       */
+      type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+    }
+  }
 }
 
 /**
@@ -397,17 +460,17 @@ export namespace ObjectiveContinueResponse {
  * compact their windows and carry on into a new one.
  */
 export interface ObjectiveListContextWindowsResponse {
+  data?: ObjectiveListContextWindowsResponse.Data;
+
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
   metadata?: Shared.OperationMetadata;
-
-  spec?: ObjectiveListContextWindowsResponse.Spec;
 }
 
 export namespace ObjectiveListContextWindowsResponse {
-  export interface Spec {
+  export interface Data {
     /**
      * A calculated value for how many completion tokens (output tokens) have been used
      * in this context window
@@ -441,13 +504,6 @@ export namespace ObjectiveListContextWindowsResponse {
 }
 
 export interface ObjectiveListEventsResponse {
-  /**
-   * Actor is the "through model" that associates account-level resources (Profiles,
-   * API Keys) to specific workspaces. This allows a single Profile to have access to
-   * multiple workspaces while maintaining proper isolation and audit trails.
-   */
-  actor?: Shared.Actor;
-
   data?: ObjectiveListEventsResponse.Data;
 
   /**
@@ -457,6 +513,13 @@ export interface ObjectiveListEventsResponse {
   metadata?: Shared.OperationMetadata;
 
   objective?: Objective;
+
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  profile?: ObjectiveListEventsResponse.Profile;
 }
 
 export namespace ObjectiveListEventsResponse {
@@ -532,10 +595,88 @@ export namespace ObjectiveListEventsResponse {
       toolCallId?: string;
     }
   }
+
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  export interface Profile {
+    /**
+     * AccountResourceMetadata is used to represent a resource that is associated to an
+     * account but not to a workspace.
+     */
+    metadata?: Profile.Metadata;
+
+    /**
+     * ProfileSpec contains the profile-specific fields
+     */
+    spec?: Profile.Spec;
+  }
+
+  export namespace Profile {
+    /**
+     * AccountResourceMetadata is used to represent a resource that is associated to an
+     * account but not to a workspace.
+     */
+    export interface Metadata {
+      /**
+       * Unique identifier for the resource (UUID v7)
+       */
+      id?: string;
+
+      /**
+       * Account this resource belongs to for multi-tenant isolation (UUID v7)
+       */
+      accountId?: string;
+
+      /**
+       * External ID for the resource (e.g., a workflow ID from an external system)
+       */
+      externalId?: string;
+
+      /**
+       * Arbitrary key-value pairs for categorization and filtering Examples:
+       * {"environment": "production", "team": "platform", "version": "v2"}
+       */
+      labels?: { [key: string]: string };
+
+      /**
+       * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+       * Tool") Required for resources that users interact with directly
+       */
+      name?: string;
+
+      profileId?: string;
+    }
+
+    /**
+     * ProfileSpec contains the profile-specific fields
+     */
+    export interface Spec {
+      /**
+       * Email address of the user (required, unique per account)
+       */
+      email?: string;
+
+      /**
+       * Display name for the user (e.g., "Bobby Tables")
+       */
+      name?: string;
+
+      /**
+       * Type is the type of profile. User's are humans, API keys are computers. You know
+       * the deal.
+       */
+      type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+    }
+  }
 }
 
 export interface ObjectiveCreateParams {
   agentId?: string;
+
+  data?: ObjectiveCreateParams.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -543,12 +684,45 @@ export interface ObjectiveCreateParams {
    */
   metadata?: Shared.OperationMetadata;
 
-  spec?: ObjectiveSpec;
-
   /**
    * Explicit variation selection (required when agent uses EXPLICIT mode)
    */
   variationId?: string;
+}
+
+export namespace ObjectiveCreateParams {
+  export interface Data {
+    /**
+     * The objective's events will be sent as an HTTP POST request to this endpoint
+     */
+    callbackUrl?: string;
+
+    /**
+     * Represents a dynamically typed value which can be either null, a number, a
+     * string, a boolean, a recursive struct value, or a list of values.
+     */
+    data?: unknown;
+
+    /**
+     * The initial message sent to the agent. This becomes the first user message in
+     * the LLM chat history.
+     */
+    initialMessage?: string;
+
+    /**
+     * Secrets that can be used in the headers for tool calls using the secret
+     * interpolation format.
+     */
+    secrets?: Array<Data.Secret>;
+  }
+
+  export namespace Data {
+    export interface Secret {
+      name?: string;
+
+      value?: string;
+    }
+  }
 }
 
 export interface ObjectiveListParams extends CursorPaginationParams {
@@ -576,7 +750,6 @@ export interface ObjectiveListParams extends CursorPaginationParams {
     | 'STATE_UNSPECIFIED'
     | 'STATE_PENDING'
     | 'STATE_RUNNING'
-    | 'STATE_PAUSED'
     | 'STATE_COMPLETED'
     | 'STATE_FAILED'
     | 'STATE_CANCELLED';
@@ -622,7 +795,6 @@ Objectives.ToolCalls = ToolCalls;
 export declare namespace Objectives {
   export {
     type Objective as Objective,
-    type ObjectiveSpec as ObjectiveSpec,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
     type ObjectiveListContextWindowsResponse as ObjectiveListContextWindowsResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,

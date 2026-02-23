@@ -70,7 +70,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSpec</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContinueResponse</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListContextWindowsResponse</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListEventsResponse</a></code>
