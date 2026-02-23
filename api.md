@@ -69,33 +69,22 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSpec</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContinueResponse</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListContextWindowsResponse</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListEventsResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">Objective</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveSpec</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveApproveToolCallResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveContinueResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveDenyToolCallResponse</a></code>
+- <code><a href="./src/resources/objectives.ts">ObjectiveListEventsResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">create</a>({ ...params }) -> Objective</code>
-- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieve</a>(id) -> Objective</code>
-- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
-- <code title="post /v1/objectives/{objectiveId}/cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
-- <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
-- <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveListContextWindowsResponsesCursorPagination</code>
-- <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
-
-## ToolCalls
-
-Types:
-
-- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCall</a></code>
-
-Methods:
-
-- <code title="get /v1/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
-- <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
-- <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">create</a>({ ...params }) -> Objective</code>
+- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives.ts">retrieve</a>(id) -> Objective</code>
+- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
+- <code title="put /v1/objectives/{objectiveId}/approve_tool_call/{objectiveEventId}">client.objectives.<a href="./src/resources/objectives.ts">approveToolCall</a>(objectiveEventID, { ...params }) -> ObjectiveApproveToolCallResponse</code>
+- <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
+- <code title="put /v1/objectives/{objectiveId}/deny_tool_call/{objectiveEventId}">client.objectives.<a href="./src/resources/objectives.ts">denyToolCall</a>(objectiveEventID, { ...params }) -> ObjectiveDenyToolCallResponse</code>
+- <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
 # Ping
 

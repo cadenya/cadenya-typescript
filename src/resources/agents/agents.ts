@@ -88,6 +88,12 @@ export type AgentsCursorPagination = CursorPagination<Agent>;
  */
 export interface Agent {
   /**
+   * AgentInfo contains simple information about an agent for display or quick
+   * reference
+   */
+  info?: Agent.Info;
+
+  /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: Shared.ResourceMetadata;
@@ -96,6 +102,16 @@ export interface Agent {
    * Agent specification (user-provided configuration)
    */
   spec?: AgentSpec;
+}
+
+export namespace Agent {
+  /**
+   * AgentInfo contains simple information about an agent for display or quick
+   * reference
+   */
+  export interface Info {
+    variationCount?: number;
+  }
 }
 
 /**
@@ -140,6 +156,11 @@ export interface Page {
 }
 
 export interface AgentCreateParams {
+  /**
+   * AgentVariation resource
+   */
+  defaultVariation?: VariationsAPI.AgentVariation;
+
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
