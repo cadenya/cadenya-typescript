@@ -133,13 +133,13 @@ export interface AgentSpec {
     | 'AGENT_STATUS_ARCHIVED';
 
   /**
-   * Controls how variations are selected when creating objectives Defaults to
-   * WEIGHTED when unspecified
+   * Controls how variations are automatically selected when creating objectives
+   * Defaults to RANDOM when unspecified
    */
   variationSelectionMode?:
     | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
-    | 'VARIATION_SELECTION_MODE_WEIGHTED'
-    | 'VARIATION_SELECTION_MODE_EXPLICIT';
+    | 'VARIATION_SELECTION_MODE_RANDOM'
+    | 'VARIATION_SELECTION_MODE_WEIGHTED';
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
