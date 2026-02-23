@@ -136,8 +136,9 @@ export interface AgentVariationSpec {
 
   /**
    * Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).
-   * Weight of 0 means never auto-selected, but can be explicitly chosen via
-   * variation_id.
+   * Only used when the agent's variation_selection_mode is WEIGHTED. A weight of 0
+   * means never auto-selected, but can still be chosen explicitly via variation_id
+   * on CreateObjectiveRequest.
    */
   weight?: number;
 }

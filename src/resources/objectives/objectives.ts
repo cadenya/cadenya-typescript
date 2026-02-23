@@ -685,7 +685,8 @@ export interface ObjectiveCreateParams {
   metadata?: Shared.OperationMetadata;
 
   /**
-   * Explicit variation selection (required when agent uses EXPLICIT mode)
+   * Optional explicit variation selection. Overrides the agent's
+   * variation_selection_mode.
    */
   variationId?: string;
 }
