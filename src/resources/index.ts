@@ -45,19 +45,19 @@ export {
   Objectives,
   type Objective,
   type ObjectiveSpec,
-  type ObjectiveApproveToolCallResponse,
   type ObjectiveContinueResponse,
-  type ObjectiveDenyToolCallResponse,
+  type ObjectiveListContextWindowsResponse,
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveListParams,
-  type ObjectiveApproveToolCallParams,
+  type ObjectiveCancelParams,
   type ObjectiveContinueParams,
-  type ObjectiveDenyToolCallParams,
+  type ObjectiveListContextWindowsParams,
   type ObjectiveListEventsParams,
   type ObjectivesCursorPagination,
+  type ObjectiveListContextWindowsResponsesCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
-} from './objectives';
+} from './objectives/objectives';
 export { Ping, type PingCheckResponse } from './ping';
 export {
   Search,
