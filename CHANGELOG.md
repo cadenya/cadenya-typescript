@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.17.0 (2026-02-24)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* **api:** api update ([16f0827](https://github.com/cadenya-agents/typescript-sdk/commit/16f08274e2d461aaebd854ecfc0982447ae37a3f))
+* **api:** api update ([e6e5200](https://github.com/cadenya-agents/typescript-sdk/commit/e6e5200a0b767e22d19a587d886dbb4ebc74730b))
+* **api:** api update ([cd071f8](https://github.com/cadenya-agents/typescript-sdk/commit/cd071f827b8fba7769c2ecd9ddb7bf7957b9fedf))
+* **api:** api update ([af72915](https://github.com/cadenya-agents/typescript-sdk/commit/af7291582813a1e3eb2bc389dfc57de77b41d758))
+* **api:** api update ([46dca44](https://github.com/cadenya-agents/typescript-sdk/commit/46dca44f32077f07c352d1629fa6529d1ec40e59))
+* **api:** api update ([7e42cf9](https://github.com/cadenya-agents/typescript-sdk/commit/7e42cf9601bb6eca40a323b86a7acf5e6cad1f42))
+* **api:** api update ([2387218](https://github.com/cadenya-agents/typescript-sdk/commit/238721817127e44e3040059118aa04696e57a187))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([c0f81b0](https://github.com/cadenya-agents/typescript-sdk/commit/c0f81b0950e2a694a7434fb968cacc9e2034516d))
+
 ## 0.16.0 (2026-02-20)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.15.0...v0.16.0)
