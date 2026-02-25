@@ -84,6 +84,11 @@ export interface ResourceMetadata {
   accountId?: string;
 
   /**
+   * Timestamp when this resource was created
+   */
+  createdAt?: string;
+
+  /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
   externalId?: string;
