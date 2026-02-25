@@ -42,14 +42,14 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:cadenya-agents/typescript-sdk.git
+$ npm install git+ssh://git@github.com:cadenya/typescript-sdk.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/cadenya-agents/typescript-sdk
+$ git clone https://www.github.com/cadenya/typescript-sdk
 $ cd typescript-sdk
 
 # With yarn
