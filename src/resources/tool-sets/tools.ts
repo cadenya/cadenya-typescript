@@ -75,6 +75,13 @@ export interface ConfigHTTP {
   requestBodyTemplate?: string;
 
   requestMethod?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+  /**
+   * The tool name (commonly an "operation id" in OpenAPI specs) to call on the HTTP
+   * adapter. This is used to match the tool spec to the correct endpoint on the HTTP
+   * adapter. it will be derived from the name of the tool if not provided.
+   */
+  toolName?: string;
 }
 
 export interface ConfigMcp {

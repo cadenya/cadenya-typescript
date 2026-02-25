@@ -67,6 +67,7 @@ describe('resource tools', () => {
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
             requestMethod: 'GET',
+            toolName: 'toolName',
           },
           mcp: {
             toolDescription: 'toolDescription',

@@ -38,6 +38,7 @@ import {
   DocumentNamespacesCursorPagination,
 } from './resources/document-namespaces';
 import {
+  CallbacksOrReferences,
   Document,
   DocumentCreateParams,
   DocumentListParams,
@@ -47,8 +48,12 @@ import {
   DocumentUpdateParams,
   Documents,
   DocumentsCursorPagination,
+  HeadersOrReferences,
+  MediaTypes,
+  NamedPathItem,
+  NamedSchemaOrReference,
+  SchemaOrReference,
 } from './resources/documents';
-import { Ping, PingCheckResponse } from './resources/ping';
 import {
   Search,
   SearchSearchToolsOrToolSetsParams,
@@ -854,7 +859,6 @@ export class Cadenya {
   account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
-  ping: API.Ping = new API.Ping(this);
   search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   apiKeys: API.APIKeys = new API.APIKeys(this);
@@ -867,7 +871,6 @@ export class Cadenya {
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
-Cadenya.Ping = Ping;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
@@ -914,8 +917,6 @@ export declare namespace Cadenya {
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
-
-  export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
 
   export {
     Search as Search,
@@ -983,17 +984,22 @@ export declare namespace Cadenya {
 
   export {
     Documents as Documents,
+    type CallbacksOrReferences as CallbacksOrReferences,
     type Document as Document,
     type DocumentSpec as DocumentSpec,
     type DocumentSpecInlineContent as DocumentSpecInlineContent,
     type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type HeadersOrReferences as HeadersOrReferences,
+    type MediaTypes as MediaTypes,
+    type NamedPathItem as NamedPathItem,
+    type NamedSchemaOrReference as NamedSchemaOrReference,
+    type SchemaOrReference as SchemaOrReference,
     type DocumentsCursorPagination as DocumentsCursorPagination,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
   };
 
-  export type Actor = API.Actor;
   export type CallableTool = API.CallableTool;
   export type OperationMetadata = API.OperationMetadata;
   export type ResourceMetadata = API.ResourceMetadata;

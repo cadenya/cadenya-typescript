@@ -32,10 +32,16 @@ export {
 } from './document-namespaces';
 export {
   Documents,
+  type CallbacksOrReferences,
   type Document,
   type DocumentSpec,
   type DocumentSpecInlineContent,
   type DocumentSpecRemoteSource,
+  type HeadersOrReferences,
+  type MediaTypes,
+  type NamedPathItem,
+  type NamedSchemaOrReference,
+  type SchemaOrReference,
   type DocumentCreateParams,
   type DocumentUpdateParams,
   type DocumentListParams,
@@ -57,7 +63,6 @@ export {
   type ObjectiveListContextWindowsResponsesCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
-export { Ping, type PingCheckResponse } from './ping';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,
