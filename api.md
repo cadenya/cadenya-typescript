@@ -2,8 +2,11 @@
 
 Types:
 
+- <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">Profile</a></code>
+- <code><a href="./src/resources/shared.ts">ProfileSpec</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">Workspace</a></code>
 
@@ -42,6 +45,7 @@ Types:
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentDocument</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
 - <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
 - <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
@@ -210,16 +214,29 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/documents.ts">Any</a></code>
+- <code><a href="./src/resources/documents.ts">AnyOrExpression</a></code>
 - <code><a href="./src/resources/documents.ts">CallbacksOrReferences</a></code>
 - <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpec</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpecInlineContent</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpecRemoteSource</a></code>
+- <code><a href="./src/resources/documents.ts">Expression</a></code>
+- <code><a href="./src/resources/documents.ts">GoogleProtobufAny</a></code>
 - <code><a href="./src/resources/documents.ts">HeadersOrReferences</a></code>
 - <code><a href="./src/resources/documents.ts">MediaTypes</a></code>
+- <code><a href="./src/resources/documents.ts">NamedAny</a></code>
 - <code><a href="./src/resources/documents.ts">NamedPathItem</a></code>
 - <code><a href="./src/resources/documents.ts">NamedSchemaOrReference</a></code>
+- <code><a href="./src/resources/documents.ts">NamedServerVariable</a></code>
+- <code><a href="./src/resources/documents.ts">NamedString</a></code>
+- <code><a href="./src/resources/documents.ts">OAuthFlow</a></code>
+- <code><a href="./src/resources/documents.ts">Reference</a></code>
 - <code><a href="./src/resources/documents.ts">SchemaOrReference</a></code>
+- <code><a href="./src/resources/documents.ts">Server</a></code>
+- <code><a href="./src/resources/documents.ts">ServerVariable</a></code>
+- <code><a href="./src/resources/documents.ts">ServerVariables</a></code>
+- <code><a href="./src/resources/documents.ts">Strings</a></code>
 
 Methods:
 

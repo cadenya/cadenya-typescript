@@ -54,6 +54,22 @@ export class Documents extends APIResource {
 
 export type DocumentsCursorPagination = CursorPagination<Document>;
 
+export interface Any {
+  /**
+   * Contains an arbitrary serialized message along with a @type that describes the
+   * type of the serialized message.
+   */
+  value?: GoogleProtobufAny;
+
+  yaml?: string;
+}
+
+export interface AnyOrExpression {
+  any?: Any;
+
+  expression?: Expression;
+}
+
 export interface CallbacksOrReferences {
   additionalProperties?: Array<unknown>;
 }
@@ -89,9 +105,9 @@ export interface Document {
 
   security?: Array<Document.Security>;
 
-  servers?: Array<Document.Server>;
+  servers?: Array<Server>;
 
-  specificationExtension?: Array<Document.SpecificationExtension>;
+  specificationExtension?: Array<NamedAny>;
 
   tags?: Array<Document.Tag>;
 }
@@ -121,7 +137,7 @@ export namespace Document {
 
     securitySchemes?: Components.SecuritySchemes;
 
-    specificationExtension?: Array<Components.SpecificationExtension>;
+    specificationExtension?: Array<DocumentsAPI.NamedAny>;
   }
 
   export namespace Components {
@@ -160,7 +176,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
         }
 
         export namespace Value {
@@ -169,99 +185,11 @@ export namespace Document {
 
             externalValue?: string;
 
-            specificationExtension?: Array<Example.SpecificationExtension>;
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
             summary?: string;
 
-            value?: Example.Value;
-          }
-
-          export namespace Example {
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-            }
-
-            export interface Value {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              value?: Value.Value;
-
-              yaml?: string;
-            }
-
-            export namespace Value {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              export interface Value {
-                /**
-                 * The type of the serialized message.
-                 */
-                '@type'?: string;
-
-                [k: string]: unknown;
-              }
-            }
-          }
-
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
+            value?: DocumentsAPI.Any;
           }
         }
       }
@@ -313,7 +241,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
         }
 
         export namespace Value {
@@ -335,395 +263,16 @@ export namespace Document {
 
             operationRef?: string;
 
-            parameters?: Link.Parameters;
+            parameters?: DocumentsAPI.AnyOrExpression;
 
-            requestBody?: Link.RequestBody;
-
-            /**
-             * An object representing a Server.
-             */
-            server?: Link.Server;
-
-            specificationExtension?: Array<Link.SpecificationExtension>;
-          }
-
-          export namespace Link {
-            export interface Parameters {
-              any?: Parameters.Any;
-
-              expression?: Parameters.Expression;
-            }
-
-            export namespace Parameters {
-              export interface Any {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Any.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Any {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-
-              export interface Expression {
-                additionalProperties?: Array<Expression.AdditionalProperty>;
-              }
-
-              export namespace Expression {
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface AdditionalProperty {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: AdditionalProperty.Value;
-                }
-
-                export namespace AdditionalProperty {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-            }
-
-            export interface RequestBody {
-              any?: RequestBody.Any;
-
-              expression?: RequestBody.Expression;
-            }
-
-            export namespace RequestBody {
-              export interface Any {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Any.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Any {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-
-              export interface Expression {
-                additionalProperties?: Array<Expression.AdditionalProperty>;
-              }
-
-              export namespace Expression {
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface AdditionalProperty {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: AdditionalProperty.Value;
-                }
-
-                export namespace AdditionalProperty {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-            }
+            requestBody?: DocumentsAPI.AnyOrExpression;
 
             /**
              * An object representing a Server.
              */
-            export interface Server {
-              description?: string;
+            server?: DocumentsAPI.Server;
 
-              specificationExtension?: Array<Server.SpecificationExtension>;
-
-              url?: string;
-
-              variables?: Server.Variables;
-            }
-
-            export namespace Server {
-              /**
-               * Automatically-generated message used to represent maps of Any as ordered
-               * (name,value) pairs.
-               */
-              export interface SpecificationExtension {
-                /**
-                 * Map key
-                 */
-                name?: string;
-
-                /**
-                 * Mapped value
-                 */
-                value?: SpecificationExtension.Value;
-              }
-
-              export namespace SpecificationExtension {
-                /**
-                 * Mapped value
-                 */
-                export interface Value {
-                  /**
-                   * Contains an arbitrary serialized message along with a @type that describes the
-                   * type of the serialized message.
-                   */
-                  value?: Value.Value;
-
-                  yaml?: string;
-                }
-
-                export namespace Value {
-                  /**
-                   * Contains an arbitrary serialized message along with a @type that describes the
-                   * type of the serialized message.
-                   */
-                  export interface Value {
-                    /**
-                     * The type of the serialized message.
-                     */
-                    '@type'?: string;
-
-                    [k: string]: unknown;
-                  }
-                }
-              }
-
-              export interface Variables {
-                additionalProperties?: Array<Variables.AdditionalProperty>;
-              }
-
-              export namespace Variables {
-                /**
-                 * Automatically-generated message used to represent maps of ServerVariable as
-                 * ordered (name,value) pairs.
-                 */
-                export interface AdditionalProperty {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * An object representing a Server Variable for server URL template substitution.
-                   */
-                  value?: AdditionalProperty.Value;
-                }
-
-                export namespace AdditionalProperty {
-                  /**
-                   * An object representing a Server Variable for server URL template substitution.
-                   */
-                  export interface Value {
-                    default?: string;
-
-                    description?: string;
-
-                    enum?: Array<string>;
-
-                    specificationExtension?: Array<Value.SpecificationExtension>;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Automatically-generated message used to represent maps of Any as ordered
-                     * (name,value) pairs.
-                     */
-                    export interface SpecificationExtension {
-                      /**
-                       * Map key
-                       */
-                      name?: string;
-
-                      /**
-                       * Mapped value
-                       */
-                      value?: SpecificationExtension.Value;
-                    }
-
-                    export namespace SpecificationExtension {
-                      /**
-                       * Mapped value
-                       */
-                      export interface Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        value?: Value.Value;
-
-                        yaml?: string;
-                      }
-
-                      export namespace Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        export interface Value {
-                          /**
-                           * The type of the serialized message.
-                           */
-                          '@type'?: string;
-
-                          [k: string]: unknown;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-            }
-          }
-
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
           }
         }
       }
@@ -768,7 +317,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
         }
 
         export namespace Value {
@@ -787,7 +336,7 @@ export namespace Document {
 
             description?: string;
 
-            example?: Parameter.Example;
+            example?: DocumentsAPI.Any;
 
             examples?: Parameter.Examples;
 
@@ -801,37 +350,12 @@ export namespace Document {
 
             schema?: DocumentsAPI.SchemaOrReference;
 
-            specificationExtension?: Array<Parameter.SpecificationExtension>;
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
             style?: string;
           }
 
           export namespace Parameter {
-            export interface Example {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              value?: Example.Value;
-
-              yaml?: string;
-            }
-
-            export namespace Example {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              export interface Value {
-                /**
-                 * The type of the serialized message.
-                 */
-                '@type'?: string;
-
-                [k: string]: unknown;
-              }
-            }
-
             export interface Examples {
               additionalProperties?: Array<Examples.AdditionalProperty>;
             }
@@ -867,7 +391,7 @@ export namespace Document {
                    * reference resolution is accomplished as defined by the JSON Reference
                    * specification and not by the JSON Schema specification.
                    */
-                  reference?: Value.Reference;
+                  reference?: DocumentsAPI.Reference;
                 }
 
                 export namespace Value {
@@ -876,164 +400,15 @@ export namespace Document {
 
                     externalValue?: string;
 
-                    specificationExtension?: Array<Example.SpecificationExtension>;
+                    specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
                     summary?: string;
 
-                    value?: Example.Value;
-                  }
-
-                  export namespace Example {
-                    /**
-                     * Automatically-generated message used to represent maps of Any as ordered
-                     * (name,value) pairs.
-                     */
-                    export interface SpecificationExtension {
-                      /**
-                       * Map key
-                       */
-                      name?: string;
-
-                      /**
-                       * Mapped value
-                       */
-                      value?: SpecificationExtension.Value;
-                    }
-
-                    export namespace SpecificationExtension {
-                      /**
-                       * Mapped value
-                       */
-                      export interface Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        value?: Value.Value;
-
-                        yaml?: string;
-                      }
-
-                      export namespace Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        export interface Value {
-                          /**
-                           * The type of the serialized message.
-                           */
-                          '@type'?: string;
-
-                          [k: string]: unknown;
-                        }
-                      }
-                    }
-
-                    export interface Value {
-                      /**
-                       * Contains an arbitrary serialized message along with a @type that describes the
-                       * type of the serialized message.
-                       */
-                      value?: Value.Value;
-
-                      yaml?: string;
-                    }
-
-                    export namespace Value {
-                      /**
-                       * Contains an arbitrary serialized message along with a @type that describes the
-                       * type of the serialized message.
-                       */
-                      export interface Value {
-                        /**
-                         * The type of the serialized message.
-                         */
-                        '@type'?: string;
-
-                        [k: string]: unknown;
-                      }
-                    }
-                  }
-
-                  /**
-                   * A simple object to allow referencing other components in the specification,
-                   * internally and externally. The Reference Object is defined by JSON Reference and
-                   * follows the same structure, behavior and rules. For this specification,
-                   * reference resolution is accomplished as defined by the JSON Reference
-                   * specification and not by the JSON Schema specification.
-                   */
-                  export interface Reference {
-                    description?: string;
-
-                    Ref?: string;
-
-                    summary?: string;
+                    value?: DocumentsAPI.Any;
                   }
                 }
               }
             }
-
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-            }
-          }
-
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
           }
         }
       }
@@ -1072,7 +447,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
 
           /**
            * Describes a single request body.
@@ -1081,21 +456,6 @@ export namespace Document {
         }
 
         export namespace Value {
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
-          }
-
           /**
            * Describes a single request body.
            */
@@ -1106,55 +466,7 @@ export namespace Document {
 
             required?: boolean;
 
-            specificationExtension?: Array<RequestBody.SpecificationExtension>;
-          }
-
-          export namespace RequestBody {
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
-            }
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
           }
         }
       }
@@ -1193,7 +505,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
 
           /**
            * Describes a single response from an API Operation, including design-time, static
@@ -1203,21 +515,6 @@ export namespace Document {
         }
 
         export namespace Value {
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
-          }
-
           /**
            * Describes a single response from an API Operation, including design-time, static
            * `links` to operations based on the response.
@@ -1231,7 +528,7 @@ export namespace Document {
 
             links?: Response.Links;
 
-            specificationExtension?: Array<Response.SpecificationExtension>;
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
           }
 
           export namespace Response {
@@ -1281,7 +578,7 @@ export namespace Document {
                    * reference resolution is accomplished as defined by the JSON Reference
                    * specification and not by the JSON Schema specification.
                    */
-                  reference?: Value.Reference;
+                  reference?: DocumentsAPI.Reference;
                 }
 
                 export namespace Value {
@@ -1303,442 +600,17 @@ export namespace Document {
 
                     operationRef?: string;
 
-                    parameters?: Link.Parameters;
+                    parameters?: DocumentsAPI.AnyOrExpression;
 
-                    requestBody?: Link.RequestBody;
-
-                    /**
-                     * An object representing a Server.
-                     */
-                    server?: Link.Server;
-
-                    specificationExtension?: Array<Link.SpecificationExtension>;
-                  }
-
-                  export namespace Link {
-                    export interface Parameters {
-                      any?: Parameters.Any;
-
-                      expression?: Parameters.Expression;
-                    }
-
-                    export namespace Parameters {
-                      export interface Any {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        value?: Any.Value;
-
-                        yaml?: string;
-                      }
-
-                      export namespace Any {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        export interface Value {
-                          /**
-                           * The type of the serialized message.
-                           */
-                          '@type'?: string;
-
-                          [k: string]: unknown;
-                        }
-                      }
-
-                      export interface Expression {
-                        additionalProperties?: Array<Expression.AdditionalProperty>;
-                      }
-
-                      export namespace Expression {
-                        /**
-                         * Automatically-generated message used to represent maps of Any as ordered
-                         * (name,value) pairs.
-                         */
-                        export interface AdditionalProperty {
-                          /**
-                           * Map key
-                           */
-                          name?: string;
-
-                          /**
-                           * Mapped value
-                           */
-                          value?: AdditionalProperty.Value;
-                        }
-
-                        export namespace AdditionalProperty {
-                          /**
-                           * Mapped value
-                           */
-                          export interface Value {
-                            /**
-                             * Contains an arbitrary serialized message along with a @type that describes the
-                             * type of the serialized message.
-                             */
-                            value?: Value.Value;
-
-                            yaml?: string;
-                          }
-
-                          export namespace Value {
-                            /**
-                             * Contains an arbitrary serialized message along with a @type that describes the
-                             * type of the serialized message.
-                             */
-                            export interface Value {
-                              /**
-                               * The type of the serialized message.
-                               */
-                              '@type'?: string;
-
-                              [k: string]: unknown;
-                            }
-                          }
-                        }
-                      }
-                    }
-
-                    export interface RequestBody {
-                      any?: RequestBody.Any;
-
-                      expression?: RequestBody.Expression;
-                    }
-
-                    export namespace RequestBody {
-                      export interface Any {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        value?: Any.Value;
-
-                        yaml?: string;
-                      }
-
-                      export namespace Any {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        export interface Value {
-                          /**
-                           * The type of the serialized message.
-                           */
-                          '@type'?: string;
-
-                          [k: string]: unknown;
-                        }
-                      }
-
-                      export interface Expression {
-                        additionalProperties?: Array<Expression.AdditionalProperty>;
-                      }
-
-                      export namespace Expression {
-                        /**
-                         * Automatically-generated message used to represent maps of Any as ordered
-                         * (name,value) pairs.
-                         */
-                        export interface AdditionalProperty {
-                          /**
-                           * Map key
-                           */
-                          name?: string;
-
-                          /**
-                           * Mapped value
-                           */
-                          value?: AdditionalProperty.Value;
-                        }
-
-                        export namespace AdditionalProperty {
-                          /**
-                           * Mapped value
-                           */
-                          export interface Value {
-                            /**
-                             * Contains an arbitrary serialized message along with a @type that describes the
-                             * type of the serialized message.
-                             */
-                            value?: Value.Value;
-
-                            yaml?: string;
-                          }
-
-                          export namespace Value {
-                            /**
-                             * Contains an arbitrary serialized message along with a @type that describes the
-                             * type of the serialized message.
-                             */
-                            export interface Value {
-                              /**
-                               * The type of the serialized message.
-                               */
-                              '@type'?: string;
-
-                              [k: string]: unknown;
-                            }
-                          }
-                        }
-                      }
-                    }
+                    requestBody?: DocumentsAPI.AnyOrExpression;
 
                     /**
                      * An object representing a Server.
                      */
-                    export interface Server {
-                      description?: string;
+                    server?: DocumentsAPI.Server;
 
-                      specificationExtension?: Array<Server.SpecificationExtension>;
-
-                      url?: string;
-
-                      variables?: Server.Variables;
-                    }
-
-                    export namespace Server {
-                      /**
-                       * Automatically-generated message used to represent maps of Any as ordered
-                       * (name,value) pairs.
-                       */
-                      export interface SpecificationExtension {
-                        /**
-                         * Map key
-                         */
-                        name?: string;
-
-                        /**
-                         * Mapped value
-                         */
-                        value?: SpecificationExtension.Value;
-                      }
-
-                      export namespace SpecificationExtension {
-                        /**
-                         * Mapped value
-                         */
-                        export interface Value {
-                          /**
-                           * Contains an arbitrary serialized message along with a @type that describes the
-                           * type of the serialized message.
-                           */
-                          value?: Value.Value;
-
-                          yaml?: string;
-                        }
-
-                        export namespace Value {
-                          /**
-                           * Contains an arbitrary serialized message along with a @type that describes the
-                           * type of the serialized message.
-                           */
-                          export interface Value {
-                            /**
-                             * The type of the serialized message.
-                             */
-                            '@type'?: string;
-
-                            [k: string]: unknown;
-                          }
-                        }
-                      }
-
-                      export interface Variables {
-                        additionalProperties?: Array<Variables.AdditionalProperty>;
-                      }
-
-                      export namespace Variables {
-                        /**
-                         * Automatically-generated message used to represent maps of ServerVariable as
-                         * ordered (name,value) pairs.
-                         */
-                        export interface AdditionalProperty {
-                          /**
-                           * Map key
-                           */
-                          name?: string;
-
-                          /**
-                           * An object representing a Server Variable for server URL template substitution.
-                           */
-                          value?: AdditionalProperty.Value;
-                        }
-
-                        export namespace AdditionalProperty {
-                          /**
-                           * An object representing a Server Variable for server URL template substitution.
-                           */
-                          export interface Value {
-                            default?: string;
-
-                            description?: string;
-
-                            enum?: Array<string>;
-
-                            specificationExtension?: Array<Value.SpecificationExtension>;
-                          }
-
-                          export namespace Value {
-                            /**
-                             * Automatically-generated message used to represent maps of Any as ordered
-                             * (name,value) pairs.
-                             */
-                            export interface SpecificationExtension {
-                              /**
-                               * Map key
-                               */
-                              name?: string;
-
-                              /**
-                               * Mapped value
-                               */
-                              value?: SpecificationExtension.Value;
-                            }
-
-                            export namespace SpecificationExtension {
-                              /**
-                               * Mapped value
-                               */
-                              export interface Value {
-                                /**
-                                 * Contains an arbitrary serialized message along with a @type that describes the
-                                 * type of the serialized message.
-                                 */
-                                value?: Value.Value;
-
-                                yaml?: string;
-                              }
-
-                              export namespace Value {
-                                /**
-                                 * Contains an arbitrary serialized message along with a @type that describes the
-                                 * type of the serialized message.
-                                 */
-                                export interface Value {
-                                  /**
-                                   * The type of the serialized message.
-                                   */
-                                  '@type'?: string;
-
-                                  [k: string]: unknown;
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-
-                    /**
-                     * Automatically-generated message used to represent maps of Any as ordered
-                     * (name,value) pairs.
-                     */
-                    export interface SpecificationExtension {
-                      /**
-                       * Map key
-                       */
-                      name?: string;
-
-                      /**
-                       * Mapped value
-                       */
-                      value?: SpecificationExtension.Value;
-                    }
-
-                    export namespace SpecificationExtension {
-                      /**
-                       * Mapped value
-                       */
-                      export interface Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        value?: Value.Value;
-
-                        yaml?: string;
-                      }
-
-                      export namespace Value {
-                        /**
-                         * Contains an arbitrary serialized message along with a @type that describes the
-                         * type of the serialized message.
-                         */
-                        export interface Value {
-                          /**
-                           * The type of the serialized message.
-                           */
-                          '@type'?: string;
-
-                          [k: string]: unknown;
-                        }
-                      }
-                    }
+                    specificationExtension?: Array<DocumentsAPI.NamedAny>;
                   }
-
-                  /**
-                   * A simple object to allow referencing other components in the specification,
-                   * internally and externally. The Reference Object is defined by JSON Reference and
-                   * follows the same structure, behavior and rules. For this specification,
-                   * reference resolution is accomplished as defined by the JSON Reference
-                   * specification and not by the JSON Schema specification.
-                   */
-                  export interface Reference {
-                    description?: string;
-
-                    Ref?: string;
-
-                    summary?: string;
-                  }
-                }
-              }
-            }
-
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
                 }
               }
             }
@@ -1784,7 +656,7 @@ export namespace Document {
            * reference resolution is accomplished as defined by the JSON Reference
            * specification and not by the JSON Schema specification.
            */
-          reference?: Value.Reference;
+          reference?: DocumentsAPI.Reference;
 
           /**
            * Defines a security scheme that can be used by the operations. Supported schemes
@@ -1799,21 +671,6 @@ export namespace Document {
         }
 
         export namespace Value {
-          /**
-           * A simple object to allow referencing other components in the specification,
-           * internally and externally. The Reference Object is defined by JSON Reference and
-           * follows the same structure, behavior and rules. For this specification,
-           * reference resolution is accomplished as defined by the JSON Reference
-           * specification and not by the JSON Schema specification.
-           */
-          export interface Reference {
-            description?: string;
-
-            Ref?: string;
-
-            summary?: string;
-          }
-
           /**
            * Defines a security scheme that can be used by the operations. Supported schemes
            * are HTTP authentication, an API key (either as a header, a cookie parameter or
@@ -1841,7 +698,7 @@ export namespace Document {
 
             scheme?: string;
 
-            specificationExtension?: Array<SecurityScheme.SpecificationExtension>;
+            specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
             type?: string;
           }
@@ -1854,506 +711,26 @@ export namespace Document {
               /**
                * Configuration details for a supported OAuth Flow
                */
-              authorizationCode?: Flows.AuthorizationCode;
+              authorizationCode?: DocumentsAPI.OAuthFlow;
 
               /**
                * Configuration details for a supported OAuth Flow
                */
-              clientCredentials?: Flows.ClientCredentials;
+              clientCredentials?: DocumentsAPI.OAuthFlow;
 
               /**
                * Configuration details for a supported OAuth Flow
                */
-              implicit?: Flows.Implicit;
+              implicit?: DocumentsAPI.OAuthFlow;
 
               /**
                * Configuration details for a supported OAuth Flow
                */
-              password?: Flows.Password;
+              password?: DocumentsAPI.OAuthFlow;
 
-              specificationExtension?: Array<Flows.SpecificationExtension>;
-            }
-
-            export namespace Flows {
-              /**
-               * Configuration details for a supported OAuth Flow
-               */
-              export interface AuthorizationCode {
-                authorizationUrl?: string;
-
-                refreshUrl?: string;
-
-                scopes?: AuthorizationCode.Scopes;
-
-                specificationExtension?: Array<AuthorizationCode.SpecificationExtension>;
-
-                tokenUrl?: string;
-              }
-
-              export namespace AuthorizationCode {
-                export interface Scopes {
-                  additionalProperties?: Array<Scopes.AdditionalProperty>;
-                }
-
-                export namespace Scopes {
-                  /**
-                   * Automatically-generated message used to represent maps of string as ordered
-                   * (name,value) pairs.
-                   */
-                  export interface AdditionalProperty {
-                    /**
-                     * Map key
-                     */
-                    name?: string;
-
-                    /**
-                     * Mapped value
-                     */
-                    value?: string;
-                  }
-                }
-
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface SpecificationExtension {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: SpecificationExtension.Value;
-                }
-
-                export namespace SpecificationExtension {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-
-              /**
-               * Configuration details for a supported OAuth Flow
-               */
-              export interface ClientCredentials {
-                authorizationUrl?: string;
-
-                refreshUrl?: string;
-
-                scopes?: ClientCredentials.Scopes;
-
-                specificationExtension?: Array<ClientCredentials.SpecificationExtension>;
-
-                tokenUrl?: string;
-              }
-
-              export namespace ClientCredentials {
-                export interface Scopes {
-                  additionalProperties?: Array<Scopes.AdditionalProperty>;
-                }
-
-                export namespace Scopes {
-                  /**
-                   * Automatically-generated message used to represent maps of string as ordered
-                   * (name,value) pairs.
-                   */
-                  export interface AdditionalProperty {
-                    /**
-                     * Map key
-                     */
-                    name?: string;
-
-                    /**
-                     * Mapped value
-                     */
-                    value?: string;
-                  }
-                }
-
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface SpecificationExtension {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: SpecificationExtension.Value;
-                }
-
-                export namespace SpecificationExtension {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-
-              /**
-               * Configuration details for a supported OAuth Flow
-               */
-              export interface Implicit {
-                authorizationUrl?: string;
-
-                refreshUrl?: string;
-
-                scopes?: Implicit.Scopes;
-
-                specificationExtension?: Array<Implicit.SpecificationExtension>;
-
-                tokenUrl?: string;
-              }
-
-              export namespace Implicit {
-                export interface Scopes {
-                  additionalProperties?: Array<Scopes.AdditionalProperty>;
-                }
-
-                export namespace Scopes {
-                  /**
-                   * Automatically-generated message used to represent maps of string as ordered
-                   * (name,value) pairs.
-                   */
-                  export interface AdditionalProperty {
-                    /**
-                     * Map key
-                     */
-                    name?: string;
-
-                    /**
-                     * Mapped value
-                     */
-                    value?: string;
-                  }
-                }
-
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface SpecificationExtension {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: SpecificationExtension.Value;
-                }
-
-                export namespace SpecificationExtension {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-
-              /**
-               * Configuration details for a supported OAuth Flow
-               */
-              export interface Password {
-                authorizationUrl?: string;
-
-                refreshUrl?: string;
-
-                scopes?: Password.Scopes;
-
-                specificationExtension?: Array<Password.SpecificationExtension>;
-
-                tokenUrl?: string;
-              }
-
-              export namespace Password {
-                export interface Scopes {
-                  additionalProperties?: Array<Scopes.AdditionalProperty>;
-                }
-
-                export namespace Scopes {
-                  /**
-                   * Automatically-generated message used to represent maps of string as ordered
-                   * (name,value) pairs.
-                   */
-                  export interface AdditionalProperty {
-                    /**
-                     * Map key
-                     */
-                    name?: string;
-
-                    /**
-                     * Mapped value
-                     */
-                    value?: string;
-                  }
-                }
-
-                /**
-                 * Automatically-generated message used to represent maps of Any as ordered
-                 * (name,value) pairs.
-                 */
-                export interface SpecificationExtension {
-                  /**
-                   * Map key
-                   */
-                  name?: string;
-
-                  /**
-                   * Mapped value
-                   */
-                  value?: SpecificationExtension.Value;
-                }
-
-                export namespace SpecificationExtension {
-                  /**
-                   * Mapped value
-                   */
-                  export interface Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    value?: Value.Value;
-
-                    yaml?: string;
-                  }
-
-                  export namespace Value {
-                    /**
-                     * Contains an arbitrary serialized message along with a @type that describes the
-                     * type of the serialized message.
-                     */
-                    export interface Value {
-                      /**
-                       * The type of the serialized message.
-                       */
-                      '@type'?: string;
-
-                      [k: string]: unknown;
-                    }
-                  }
-                }
-              }
-
-              /**
-               * Automatically-generated message used to represent maps of Any as ordered
-               * (name,value) pairs.
-               */
-              export interface SpecificationExtension {
-                /**
-                 * Map key
-                 */
-                name?: string;
-
-                /**
-                 * Mapped value
-                 */
-                value?: SpecificationExtension.Value;
-              }
-
-              export namespace SpecificationExtension {
-                /**
-                 * Mapped value
-                 */
-                export interface Value {
-                  /**
-                   * Contains an arbitrary serialized message along with a @type that describes the
-                   * type of the serialized message.
-                   */
-                  value?: Value.Value;
-
-                  yaml?: string;
-                }
-
-                export namespace Value {
-                  /**
-                   * Contains an arbitrary serialized message along with a @type that describes the
-                   * type of the serialized message.
-                   */
-                  export interface Value {
-                    /**
-                     * The type of the serialized message.
-                     */
-                    '@type'?: string;
-
-                    [k: string]: unknown;
-                  }
-                }
-              }
-            }
-
-            /**
-             * Automatically-generated message used to represent maps of Any as ordered
-             * (name,value) pairs.
-             */
-            export interface SpecificationExtension {
-              /**
-               * Map key
-               */
-              name?: string;
-
-              /**
-               * Mapped value
-               */
-              value?: SpecificationExtension.Value;
-            }
-
-            export namespace SpecificationExtension {
-              /**
-               * Mapped value
-               */
-              export interface Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                value?: Value.Value;
-
-                yaml?: string;
-              }
-
-              export namespace Value {
-                /**
-                 * Contains an arbitrary serialized message along with a @type that describes the
-                 * type of the serialized message.
-                 */
-                export interface Value {
-                  /**
-                   * The type of the serialized message.
-                   */
-                  '@type'?: string;
-
-                  [k: string]: unknown;
-                }
-              }
+              specificationExtension?: Array<DocumentsAPI.NamedAny>;
             }
           }
-        }
-      }
-    }
-
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
         }
       }
     }
@@ -2365,57 +742,9 @@ export namespace Document {
   export interface ExternalDocs {
     description?: string;
 
-    specificationExtension?: Array<ExternalDocs.SpecificationExtension>;
+    specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
     url?: string;
-  }
-
-  export namespace ExternalDocs {
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
-        }
-      }
-    }
   }
 
   /**
@@ -2436,7 +765,7 @@ export namespace Document {
      */
     license?: Info.License;
 
-    specificationExtension?: Array<Info.SpecificationExtension>;
+    specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
     summary?: string;
 
@@ -2456,57 +785,9 @@ export namespace Document {
 
       name?: string;
 
-      specificationExtension?: Array<Contact.SpecificationExtension>;
+      specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
       url?: string;
-    }
-
-    export namespace Contact {
-      /**
-       * Automatically-generated message used to represent maps of Any as ordered
-       * (name,value) pairs.
-       */
-      export interface SpecificationExtension {
-        /**
-         * Map key
-         */
-        name?: string;
-
-        /**
-         * Mapped value
-         */
-        value?: SpecificationExtension.Value;
-      }
-
-      export namespace SpecificationExtension {
-        /**
-         * Mapped value
-         */
-        export interface Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          value?: Value.Value;
-
-          yaml?: string;
-        }
-
-        export namespace Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          export interface Value {
-            /**
-             * The type of the serialized message.
-             */
-            '@type'?: string;
-
-            [k: string]: unknown;
-          }
-        }
-      }
     }
 
     /**
@@ -2515,103 +796,9 @@ export namespace Document {
     export interface License {
       name?: string;
 
-      specificationExtension?: Array<License.SpecificationExtension>;
+      specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
       url?: string;
-    }
-
-    export namespace License {
-      /**
-       * Automatically-generated message used to represent maps of Any as ordered
-       * (name,value) pairs.
-       */
-      export interface SpecificationExtension {
-        /**
-         * Map key
-         */
-        name?: string;
-
-        /**
-         * Mapped value
-         */
-        value?: SpecificationExtension.Value;
-      }
-
-      export namespace SpecificationExtension {
-        /**
-         * Mapped value
-         */
-        export interface Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          value?: Value.Value;
-
-          yaml?: string;
-        }
-
-        export namespace Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          export interface Value {
-            /**
-             * The type of the serialized message.
-             */
-            '@type'?: string;
-
-            [k: string]: unknown;
-          }
-        }
-      }
-    }
-
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
-        }
-      }
     }
   }
 
@@ -2623,55 +810,7 @@ export namespace Document {
   export interface Paths {
     path?: Array<DocumentsAPI.NamedPathItem>;
 
-    specificationExtension?: Array<Paths.SpecificationExtension>;
-  }
-
-  export namespace Paths {
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
-        }
-      }
-    }
+    specificationExtension?: Array<DocumentsAPI.NamedAny>;
   }
 
   /**
@@ -2717,198 +856,6 @@ export namespace Document {
   }
 
   /**
-   * An object representing a Server.
-   */
-  export interface Server {
-    description?: string;
-
-    specificationExtension?: Array<Server.SpecificationExtension>;
-
-    url?: string;
-
-    variables?: Server.Variables;
-  }
-
-  export namespace Server {
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
-        }
-      }
-    }
-
-    export interface Variables {
-      additionalProperties?: Array<Variables.AdditionalProperty>;
-    }
-
-    export namespace Variables {
-      /**
-       * Automatically-generated message used to represent maps of ServerVariable as
-       * ordered (name,value) pairs.
-       */
-      export interface AdditionalProperty {
-        /**
-         * Map key
-         */
-        name?: string;
-
-        /**
-         * An object representing a Server Variable for server URL template substitution.
-         */
-        value?: AdditionalProperty.Value;
-      }
-
-      export namespace AdditionalProperty {
-        /**
-         * An object representing a Server Variable for server URL template substitution.
-         */
-        export interface Value {
-          default?: string;
-
-          description?: string;
-
-          enum?: Array<string>;
-
-          specificationExtension?: Array<Value.SpecificationExtension>;
-        }
-
-        export namespace Value {
-          /**
-           * Automatically-generated message used to represent maps of Any as ordered
-           * (name,value) pairs.
-           */
-          export interface SpecificationExtension {
-            /**
-             * Map key
-             */
-            name?: string;
-
-            /**
-             * Mapped value
-             */
-            value?: SpecificationExtension.Value;
-          }
-
-          export namespace SpecificationExtension {
-            /**
-             * Mapped value
-             */
-            export interface Value {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              value?: Value.Value;
-
-              yaml?: string;
-            }
-
-            export namespace Value {
-              /**
-               * Contains an arbitrary serialized message along with a @type that describes the
-               * type of the serialized message.
-               */
-              export interface Value {
-                /**
-                 * The type of the serialized message.
-                 */
-                '@type'?: string;
-
-                [k: string]: unknown;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Automatically-generated message used to represent maps of Any as ordered
-   * (name,value) pairs.
-   */
-  export interface SpecificationExtension {
-    /**
-     * Map key
-     */
-    name?: string;
-
-    /**
-     * Mapped value
-     */
-    value?: SpecificationExtension.Value;
-  }
-
-  export namespace SpecificationExtension {
-    /**
-     * Mapped value
-     */
-    export interface Value {
-      /**
-       * Contains an arbitrary serialized message along with a @type that describes the
-       * type of the serialized message.
-       */
-      value?: Value.Value;
-
-      yaml?: string;
-    }
-
-    export namespace Value {
-      /**
-       * Contains an arbitrary serialized message along with a @type that describes the
-       * type of the serialized message.
-       */
-      export interface Value {
-        /**
-         * The type of the serialized message.
-         */
-        '@type'?: string;
-
-        [k: string]: unknown;
-      }
-    }
-  }
-
-  /**
    * Adds metadata to a single tag that is used by the Operation Object. It is not
    * mandatory to have a Tag Object per tag defined in the Operation Object
    * instances.
@@ -2923,7 +870,7 @@ export namespace Document {
 
     name?: string;
 
-    specificationExtension?: Array<Tag.SpecificationExtension>;
+    specificationExtension?: Array<DocumentsAPI.NamedAny>;
   }
 
   export namespace Tag {
@@ -2933,103 +880,9 @@ export namespace Document {
     export interface ExternalDocs {
       description?: string;
 
-      specificationExtension?: Array<ExternalDocs.SpecificationExtension>;
+      specificationExtension?: Array<DocumentsAPI.NamedAny>;
 
       url?: string;
-    }
-
-    export namespace ExternalDocs {
-      /**
-       * Automatically-generated message used to represent maps of Any as ordered
-       * (name,value) pairs.
-       */
-      export interface SpecificationExtension {
-        /**
-         * Map key
-         */
-        name?: string;
-
-        /**
-         * Mapped value
-         */
-        value?: SpecificationExtension.Value;
-      }
-
-      export namespace SpecificationExtension {
-        /**
-         * Mapped value
-         */
-        export interface Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          value?: Value.Value;
-
-          yaml?: string;
-        }
-
-        export namespace Value {
-          /**
-           * Contains an arbitrary serialized message along with a @type that describes the
-           * type of the serialized message.
-           */
-          export interface Value {
-            /**
-             * The type of the serialized message.
-             */
-            '@type'?: string;
-
-            [k: string]: unknown;
-          }
-        }
-      }
-    }
-
-    /**
-     * Automatically-generated message used to represent maps of Any as ordered
-     * (name,value) pairs.
-     */
-    export interface SpecificationExtension {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: SpecificationExtension.Value;
-    }
-
-    export namespace SpecificationExtension {
-      /**
-       * Mapped value
-       */
-      export interface Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        value?: Value.Value;
-
-        yaml?: string;
-      }
-
-      export namespace Value {
-        /**
-         * Contains an arbitrary serialized message along with a @type that describes the
-         * type of the serialized message.
-         */
-        export interface Value {
-          /**
-           * The type of the serialized message.
-           */
-          '@type'?: string;
-
-          [k: string]: unknown;
-        }
-      }
     }
   }
 }
@@ -3114,12 +967,45 @@ export interface DocumentSpecRemoteSource {
   url?: string;
 }
 
+export interface Expression {
+  additionalProperties?: Array<NamedAny>;
+}
+
+/**
+ * Contains an arbitrary serialized message along with a @type that describes the
+ * type of the serialized message.
+ */
+export interface GoogleProtobufAny {
+  /**
+   * The type of the serialized message.
+   */
+  '@type'?: string;
+
+  [k: string]: unknown;
+}
+
 export interface HeadersOrReferences {
   additionalProperties?: Array<unknown>;
 }
 
 export interface MediaTypes {
   additionalProperties?: Array<unknown>;
+}
+
+/**
+ * Automatically-generated message used to represent maps of Any as ordered
+ * (name,value) pairs.
+ */
+export interface NamedAny {
+  /**
+   * Map key
+   */
+  name?: string;
+
+  /**
+   * Mapped value
+   */
+  value?: Any;
 }
 
 /**
@@ -3156,6 +1042,68 @@ export interface NamedSchemaOrReference {
   value?: SchemaOrReference;
 }
 
+/**
+ * Automatically-generated message used to represent maps of ServerVariable as
+ * ordered (name,value) pairs.
+ */
+export interface NamedServerVariable {
+  /**
+   * Map key
+   */
+  name?: string;
+
+  /**
+   * An object representing a Server Variable for server URL template substitution.
+   */
+  value?: ServerVariable;
+}
+
+/**
+ * Automatically-generated message used to represent maps of string as ordered
+ * (name,value) pairs.
+ */
+export interface NamedString {
+  /**
+   * Map key
+   */
+  name?: string;
+
+  /**
+   * Mapped value
+   */
+  value?: string;
+}
+
+/**
+ * Configuration details for a supported OAuth Flow
+ */
+export interface OAuthFlow {
+  authorizationUrl?: string;
+
+  refreshUrl?: string;
+
+  scopes?: Strings;
+
+  specificationExtension?: Array<NamedAny>;
+
+  tokenUrl?: string;
+}
+
+/**
+ * A simple object to allow referencing other components in the specification,
+ * internally and externally. The Reference Object is defined by JSON Reference and
+ * follows the same structure, behavior and rules. For this specification,
+ * reference resolution is accomplished as defined by the JSON Reference
+ * specification and not by the JSON Schema specification.
+ */
+export interface Reference {
+  description?: string;
+
+  Ref?: string;
+
+  summary?: string;
+}
+
 export interface SchemaOrReference {
   /**
    * A simple object to allow referencing other components in the specification,
@@ -3164,7 +1112,7 @@ export interface SchemaOrReference {
    * reference resolution is accomplished as defined by the JSON Reference
    * specification and not by the JSON Schema specification.
    */
-  reference?: SchemaOrReference.Reference;
+  reference?: Reference;
 
   /**
    * The Schema Object allows the definition of input and output data types. These
@@ -3176,21 +1124,38 @@ export interface SchemaOrReference {
   schema?: unknown;
 }
 
-export namespace SchemaOrReference {
-  /**
-   * A simple object to allow referencing other components in the specification,
-   * internally and externally. The Reference Object is defined by JSON Reference and
-   * follows the same structure, behavior and rules. For this specification,
-   * reference resolution is accomplished as defined by the JSON Reference
-   * specification and not by the JSON Schema specification.
-   */
-  export interface Reference {
-    description?: string;
+/**
+ * An object representing a Server.
+ */
+export interface Server {
+  description?: string;
 
-    Ref?: string;
+  specificationExtension?: Array<NamedAny>;
 
-    summary?: string;
-  }
+  url?: string;
+
+  variables?: ServerVariables;
+}
+
+/**
+ * An object representing a Server Variable for server URL template substitution.
+ */
+export interface ServerVariable {
+  default?: string;
+
+  description?: string;
+
+  enum?: Array<string>;
+
+  specificationExtension?: Array<NamedAny>;
+}
+
+export interface ServerVariables {
+  additionalProperties?: Array<NamedServerVariable>;
+}
+
+export interface Strings {
+  additionalProperties?: Array<NamedString>;
 }
 
 export interface DocumentCreateParams {
@@ -3243,16 +1208,29 @@ export interface DocumentListParams extends CursorPaginationParams {
 
 export declare namespace Documents {
   export {
+    type Any as Any,
+    type AnyOrExpression as AnyOrExpression,
     type CallbacksOrReferences as CallbacksOrReferences,
     type Document as Document,
     type DocumentSpec as DocumentSpec,
     type DocumentSpecInlineContent as DocumentSpecInlineContent,
     type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type Expression as Expression,
+    type GoogleProtobufAny as GoogleProtobufAny,
     type HeadersOrReferences as HeadersOrReferences,
     type MediaTypes as MediaTypes,
+    type NamedAny as NamedAny,
     type NamedPathItem as NamedPathItem,
     type NamedSchemaOrReference as NamedSchemaOrReference,
+    type NamedServerVariable as NamedServerVariable,
+    type NamedString as NamedString,
+    type OAuthFlow as OAuthFlow,
+    type Reference as Reference,
     type SchemaOrReference as SchemaOrReference,
+    type Server as Server,
+    type ServerVariable as ServerVariable,
+    type ServerVariables as ServerVariables,
+    type Strings as Strings,
     type DocumentsCursorPagination as DocumentsCursorPagination,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentUpdateParams as DocumentUpdateParams,

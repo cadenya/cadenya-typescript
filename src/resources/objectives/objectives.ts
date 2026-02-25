@@ -300,7 +300,7 @@ export interface ObjectiveContinueResponse {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  profile?: ObjectiveContinueResponse.Profile;
+  profile?: Shared.Profile;
 }
 
 export namespace ObjectiveContinueResponse {
@@ -411,82 +411,6 @@ export namespace ObjectiveContinueResponse {
       content?: string;
     }
   }
-
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  export interface Profile {
-    /**
-     * AccountResourceMetadata is used to represent a resource that is associated to an
-     * account but not to a workspace.
-     */
-    metadata?: Profile.Metadata;
-
-    /**
-     * ProfileSpec contains the profile-specific fields
-     */
-    spec?: Profile.Spec;
-  }
-
-  export namespace Profile {
-    /**
-     * AccountResourceMetadata is used to represent a resource that is associated to an
-     * account but not to a workspace.
-     */
-    export interface Metadata {
-      /**
-       * Unique identifier for the resource (UUID v7)
-       */
-      id?: string;
-
-      /**
-       * Account this resource belongs to for multi-tenant isolation (UUID v7)
-       */
-      accountId?: string;
-
-      /**
-       * External ID for the resource (e.g., a workflow ID from an external system)
-       */
-      externalId?: string;
-
-      /**
-       * Arbitrary key-value pairs for categorization and filtering Examples:
-       * {"environment": "production", "team": "platform", "version": "v2"}
-       */
-      labels?: { [key: string]: string };
-
-      /**
-       * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-       * Tool") Required for resources that users interact with directly
-       */
-      name?: string;
-
-      profileId?: string;
-    }
-
-    /**
-     * ProfileSpec contains the profile-specific fields
-     */
-    export interface Spec {
-      /**
-       * Email address of the user (required, unique per account)
-       */
-      email?: string;
-
-      /**
-       * Display name for the user (e.g., "Bobby Tables")
-       */
-      name?: string;
-
-      /**
-       * Type is the type of profile. User's are humans, API keys are computers. You know
-       * the deal.
-       */
-      type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
-    }
-  }
 }
 
 /**
@@ -554,7 +478,7 @@ export interface ObjectiveListEventsResponse {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  profile?: ObjectiveListEventsResponse.Profile;
+  profile?: Shared.Profile;
 }
 
 export namespace ObjectiveListEventsResponse {
@@ -663,82 +587,6 @@ export namespace ObjectiveListEventsResponse {
 
     export interface UserMessage {
       content?: string;
-    }
-  }
-
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  export interface Profile {
-    /**
-     * AccountResourceMetadata is used to represent a resource that is associated to an
-     * account but not to a workspace.
-     */
-    metadata?: Profile.Metadata;
-
-    /**
-     * ProfileSpec contains the profile-specific fields
-     */
-    spec?: Profile.Spec;
-  }
-
-  export namespace Profile {
-    /**
-     * AccountResourceMetadata is used to represent a resource that is associated to an
-     * account but not to a workspace.
-     */
-    export interface Metadata {
-      /**
-       * Unique identifier for the resource (UUID v7)
-       */
-      id?: string;
-
-      /**
-       * Account this resource belongs to for multi-tenant isolation (UUID v7)
-       */
-      accountId?: string;
-
-      /**
-       * External ID for the resource (e.g., a workflow ID from an external system)
-       */
-      externalId?: string;
-
-      /**
-       * Arbitrary key-value pairs for categorization and filtering Examples:
-       * {"environment": "production", "team": "platform", "version": "v2"}
-       */
-      labels?: { [key: string]: string };
-
-      /**
-       * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-       * Tool") Required for resources that users interact with directly
-       */
-      name?: string;
-
-      profileId?: string;
-    }
-
-    /**
-     * ProfileSpec contains the profile-specific fields
-     */
-    export interface Spec {
-      /**
-       * Email address of the user (required, unique per account)
-       */
-      email?: string;
-
-      /**
-       * Display name for the user (e.g., "Bobby Tables")
-       */
-      name?: string;
-
-      /**
-       * Type is the type of profile. User's are humans, API keys are computers. You know
-       * the deal.
-       */
-      type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
     }
   }
 }

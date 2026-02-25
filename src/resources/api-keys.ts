@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -73,49 +74,12 @@ export interface APIKey {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: APIKey.Metadata;
+  metadata?: Shared.AccountResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
    */
   spec?: APIKeySpec;
-}
-
-export namespace APIKey {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  export interface Metadata {
-    /**
-     * Unique identifier for the resource (UUID v7)
-     */
-    id?: string;
-
-    /**
-     * Account this resource belongs to for multi-tenant isolation (UUID v7)
-     */
-    accountId?: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool") Required for resources that users interact with directly
-     */
-    name?: string;
-
-    profileId?: string;
-  }
 }
 
 /**
@@ -143,7 +107,7 @@ export interface APIKeyCreateParams {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: APIKeyCreateParams.Metadata;
+  metadata?: Shared.AccountResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -151,37 +115,12 @@ export interface APIKeyCreateParams {
   spec?: APIKeySpec;
 }
 
-export namespace APIKeyCreateParams {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  export interface Metadata {
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool") Required for resources that users interact with directly
-     */
-    name?: string;
-  }
-}
-
 export interface APIKeyUpdateParams {
   /**
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: APIKeyUpdateParams.Metadata;
+  metadata?: Shared.AccountResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -192,31 +131,6 @@ export interface APIKeyUpdateParams {
    * Fields to update
    */
   updateMask?: string;
-}
-
-export namespace APIKeyUpdateParams {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  export interface Metadata {
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool") Required for resources that users interact with directly
-     */
-    name?: string;
-  }
 }
 
 export interface APIKeyListParams extends CursorPaginationParams {
