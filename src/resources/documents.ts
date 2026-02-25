@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as DocumentsAPI from './documents';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
@@ -53,6 +54,10 @@ export class Documents extends APIResource {
 
 export type DocumentsCursorPagination = CursorPagination<Document>;
 
+export interface CallbacksOrReferences {
+  additionalProperties?: Array<unknown>;
+}
+
 export interface Document {
   /**
    * Holds a set of reusable objects for different aspects of the OAS. All objects
@@ -98,11 +103,11 @@ export namespace Document {
    * are explicitly referenced from properties outside the components object.
    */
   export interface Components {
-    callbacks?: Components.Callbacks;
+    callbacks?: DocumentsAPI.CallbacksOrReferences;
 
     examples?: Components.Examples;
 
-    headers?: Components.Headers;
+    headers?: DocumentsAPI.HeadersOrReferences;
 
     links?: Components.Links;
 
@@ -120,10 +125,6 @@ export namespace Document {
   }
 
   export namespace Components {
-    export interface Callbacks {
-      additionalProperties?: Array<unknown>;
-    }
-
     export interface Examples {
       additionalProperties?: Array<Examples.AdditionalProperty>;
     }
@@ -264,10 +265,6 @@ export namespace Document {
           }
         }
       }
-    }
-
-    export interface Headers {
-      additionalProperties?: Array<unknown>;
     }
 
     export interface Links {
@@ -784,7 +781,7 @@ export namespace Document {
 
             allowReserved?: boolean;
 
-            content?: Parameter.Content;
+            content?: DocumentsAPI.MediaTypes;
 
             deprecated?: boolean;
 
@@ -802,7 +799,7 @@ export namespace Document {
 
             required?: boolean;
 
-            schema?: Parameter.Schema;
+            schema?: DocumentsAPI.SchemaOrReference;
 
             specificationExtension?: Array<Parameter.SpecificationExtension>;
 
@@ -810,10 +807,6 @@ export namespace Document {
           }
 
           export namespace Parameter {
-            export interface Content {
-              additionalProperties?: Array<unknown>;
-            }
-
             export interface Example {
               /**
                * Contains an arbitrary serialized message along with a @type that describes the
@@ -981,36 +974,6 @@ export namespace Document {
               }
             }
 
-            export interface Schema {
-              /**
-               * A simple object to allow referencing other components in the specification,
-               * internally and externally. The Reference Object is defined by JSON Reference and
-               * follows the same structure, behavior and rules. For this specification,
-               * reference resolution is accomplished as defined by the JSON Reference
-               * specification and not by the JSON Schema specification.
-               */
-              reference?: Schema.Reference;
-
-              schema?: unknown;
-            }
-
-            export namespace Schema {
-              /**
-               * A simple object to allow referencing other components in the specification,
-               * internally and externally. The Reference Object is defined by JSON Reference and
-               * follows the same structure, behavior and rules. For this specification,
-               * reference resolution is accomplished as defined by the JSON Reference
-               * specification and not by the JSON Schema specification.
-               */
-              export interface Reference {
-                description?: string;
-
-                Ref?: string;
-
-                summary?: string;
-              }
-            }
-
             /**
              * Automatically-generated message used to represent maps of Any as ordered
              * (name,value) pairs.
@@ -1137,7 +1100,7 @@ export namespace Document {
            * Describes a single request body.
            */
           export interface RequestBody {
-            content?: RequestBody.Content;
+            content?: DocumentsAPI.MediaTypes;
 
             description?: string;
 
@@ -1147,10 +1110,6 @@ export namespace Document {
           }
 
           export namespace RequestBody {
-            export interface Content {
-              additionalProperties?: Array<unknown>;
-            }
-
             /**
              * Automatically-generated message used to represent maps of Any as ordered
              * (name,value) pairs.
@@ -1264,11 +1223,11 @@ export namespace Document {
            * `links` to operations based on the response.
            */
           export interface Response {
-            content?: Response.Content;
+            content?: DocumentsAPI.MediaTypes;
 
             description?: string;
 
-            headers?: Response.Headers;
+            headers?: DocumentsAPI.HeadersOrReferences;
 
             links?: Response.Links;
 
@@ -1276,14 +1235,6 @@ export namespace Document {
           }
 
           export namespace Response {
-            export interface Content {
-              additionalProperties?: Array<unknown>;
-            }
-
-            export interface Headers {
-              additionalProperties?: Array<unknown>;
-            }
-
             export interface Links {
               additionalProperties?: Array<Links.AdditionalProperty>;
             }
@@ -1797,25 +1748,7 @@ export namespace Document {
     }
 
     export interface Schemas {
-      additionalProperties?: Array<Schemas.AdditionalProperty>;
-    }
-
-    export namespace Schemas {
-      /**
-       * Automatically-generated message used to represent maps of SchemaOrReference as
-       * ordered (name,value) pairs.
-       */
-      export interface AdditionalProperty {
-        /**
-         * Map key
-         */
-        name?: string;
-
-        /**
-         * Mapped value
-         */
-        value?: unknown;
-      }
+      additionalProperties?: Array<DocumentsAPI.NamedSchemaOrReference>;
     }
 
     export interface SecuritySchemes {
@@ -2688,28 +2621,12 @@ export namespace Document {
    * full URL. The Paths MAY be empty, due to ACL constraints.
    */
   export interface Paths {
-    path?: Array<Paths.Path>;
+    path?: Array<DocumentsAPI.NamedPathItem>;
 
     specificationExtension?: Array<Paths.SpecificationExtension>;
   }
 
   export namespace Paths {
-    /**
-     * Automatically-generated message used to represent maps of PathItem as ordered
-     * (name,value) pairs.
-     */
-    export interface Path {
-      /**
-       * Map key
-       */
-      name?: string;
-
-      /**
-       * Mapped value
-       */
-      value?: unknown;
-    }
-
     /**
      * Automatically-generated message used to represent maps of Any as ordered
      * (name,value) pairs.
@@ -3197,6 +3114,85 @@ export interface DocumentSpecRemoteSource {
   url?: string;
 }
 
+export interface HeadersOrReferences {
+  additionalProperties?: Array<unknown>;
+}
+
+export interface MediaTypes {
+  additionalProperties?: Array<unknown>;
+}
+
+/**
+ * Automatically-generated message used to represent maps of PathItem as ordered
+ * (name,value) pairs.
+ */
+export interface NamedPathItem {
+  /**
+   * Map key
+   */
+  name?: string;
+
+  /**
+   * Describes the operations available on a single path. A Path Item MAY be empty,
+   * due to ACL constraints. The path itself is still exposed to the documentation
+   * viewer but they will not know which operations and parameters are available.
+   */
+  value?: unknown;
+}
+
+/**
+ * Automatically-generated message used to represent maps of SchemaOrReference as
+ * ordered (name,value) pairs.
+ */
+export interface NamedSchemaOrReference {
+  /**
+   * Map key
+   */
+  name?: string;
+
+  /**
+   * Mapped value
+   */
+  value?: SchemaOrReference;
+}
+
+export interface SchemaOrReference {
+  /**
+   * A simple object to allow referencing other components in the specification,
+   * internally and externally. The Reference Object is defined by JSON Reference and
+   * follows the same structure, behavior and rules. For this specification,
+   * reference resolution is accomplished as defined by the JSON Reference
+   * specification and not by the JSON Schema specification.
+   */
+  reference?: SchemaOrReference.Reference;
+
+  /**
+   * The Schema Object allows the definition of input and output data types. These
+   * types can be objects, but also primitives and arrays. This object is an extended
+   * subset of the JSON Schema Specification Wright Draft 00. For more information
+   * about the properties, see JSON Schema Core and JSON Schema Validation. Unless
+   * stated otherwise, the property definitions follow the JSON Schema.
+   */
+  schema?: unknown;
+}
+
+export namespace SchemaOrReference {
+  /**
+   * A simple object to allow referencing other components in the specification,
+   * internally and externally. The Reference Object is defined by JSON Reference and
+   * follows the same structure, behavior and rules. For this specification,
+   * reference resolution is accomplished as defined by the JSON Reference
+   * specification and not by the JSON Schema specification.
+   */
+  export interface Reference {
+    description?: string;
+
+    Ref?: string;
+
+    summary?: string;
+  }
+}
+
 export interface DocumentCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -3247,10 +3243,16 @@ export interface DocumentListParams extends CursorPaginationParams {
 
 export declare namespace Documents {
   export {
+    type CallbacksOrReferences as CallbacksOrReferences,
     type Document as Document,
     type DocumentSpec as DocumentSpec,
     type DocumentSpecInlineContent as DocumentSpecInlineContent,
     type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type HeadersOrReferences as HeadersOrReferences,
+    type MediaTypes as MediaTypes,
+    type NamedPathItem as NamedPathItem,
+    type NamedSchemaOrReference as NamedSchemaOrReference,
+    type SchemaOrReference as SchemaOrReference,
     type DocumentsCursorPagination as DocumentsCursorPagination,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentUpdateParams as DocumentUpdateParams,

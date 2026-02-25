@@ -95,8 +95,6 @@ Methods:
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 
-# Ping
-
 # Search
 
 Types:
@@ -165,6 +163,7 @@ Methods:
 - <code title="patch /v1/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
 - <code title="get /v1/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">list</a>({ ...params }) -> APIKeysCursorPagination</code>
 - <code title="delete /v1/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">delete</a>(id) -> void</code>
+- <code title="put /v1/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys.ts">rotate</a>(id) -> APIKey</code>
 
 # WorkspaceSecrets
 
@@ -211,10 +210,16 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/documents.ts">CallbacksOrReferences</a></code>
 - <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpec</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpecInlineContent</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentSpecRemoteSource</a></code>
+- <code><a href="./src/resources/documents.ts">HeadersOrReferences</a></code>
+- <code><a href="./src/resources/documents.ts">MediaTypes</a></code>
+- <code><a href="./src/resources/documents.ts">NamedPathItem</a></code>
+- <code><a href="./src/resources/documents.ts">NamedSchemaOrReference</a></code>
+- <code><a href="./src/resources/documents.ts">SchemaOrReference</a></code>
 
 Methods:
 

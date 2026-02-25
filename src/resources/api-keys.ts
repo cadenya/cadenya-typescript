@@ -49,6 +49,14 @@ export class APIKeys extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Rotates an API Key and returns a new token. All previous API Key tokens in use
+   * will be invalidated.
+   */
+  rotate(id: string, options?: RequestOptions): APIPromise<APIKey> {
+    return this._client.put(path`/v1/api_keys/${id}/rotate`, options);
+  }
 }
 
 export type APIKeysCursorPagination = CursorPagination<APIKey>;
