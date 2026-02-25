@@ -283,15 +283,6 @@ export interface ToolSetSpec {
   adapter?: ToolSetAdapter;
 
   description?: string;
-
-  /**
-   * If a tool set is an MCP server, for example, this will be a read only field. If
-   * the adapter type is an HTTP endpoint, then you may modify this to true yourself.
-   * When a tool set is managed, all of the tools associated with it cannot be
-   * created or modified by a profile actor (ie: a human). Instead, tools within a
-   * tool set must be created/modified by an API Key type.
-   */
-  managed?: boolean;
 }
 
 export interface ToolSetCreateParams {
