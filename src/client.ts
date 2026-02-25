@@ -48,23 +48,6 @@ import {
   Documents,
   DocumentsCursorPagination,
 } from './resources/documents';
-import {
-  Objective,
-  ObjectiveApproveToolCallParams,
-  ObjectiveApproveToolCallResponse,
-  ObjectiveContinueParams,
-  ObjectiveContinueResponse,
-  ObjectiveCreateParams,
-  ObjectiveDenyToolCallParams,
-  ObjectiveDenyToolCallResponse,
-  ObjectiveListEventsParams,
-  ObjectiveListEventsResponse,
-  ObjectiveListEventsResponsesCursorPagination,
-  ObjectiveListParams,
-  ObjectiveSpec,
-  Objectives,
-  ObjectivesCursorPagination,
-} from './resources/objectives';
 import { Ping, PingCheckResponse } from './resources/ping';
 import {
   Search,
@@ -96,6 +79,22 @@ import {
   AgentsCursorPagination,
   Page,
 } from './resources/agents/agents';
+import {
+  Objective,
+  ObjectiveCancelParams,
+  ObjectiveContinueParams,
+  ObjectiveContinueResponse,
+  ObjectiveCreateParams,
+  ObjectiveListContextWindowsParams,
+  ObjectiveListContextWindowsResponse,
+  ObjectiveListContextWindowsResponsesCursorPagination,
+  ObjectiveListEventsParams,
+  ObjectiveListEventsResponse,
+  ObjectiveListEventsResponsesCursorPagination,
+  ObjectiveListParams,
+  Objectives,
+  ObjectivesCursorPagination,
+} from './resources/objectives/objectives';
 import {
   McpToolFilter,
   SyncCompleted,
@@ -902,18 +901,17 @@ export declare namespace Cadenya {
   export {
     Objectives as Objectives,
     type Objective as Objective,
-    type ObjectiveSpec as ObjectiveSpec,
-    type ObjectiveApproveToolCallResponse as ObjectiveApproveToolCallResponse,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
-    type ObjectiveDenyToolCallResponse as ObjectiveDenyToolCallResponse,
+    type ObjectiveListContextWindowsResponse as ObjectiveListContextWindowsResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
+    type ObjectiveListContextWindowsResponsesCursorPagination as ObjectiveListContextWindowsResponsesCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,
-    type ObjectiveApproveToolCallParams as ObjectiveApproveToolCallParams,
+    type ObjectiveCancelParams as ObjectiveCancelParams,
     type ObjectiveContinueParams as ObjectiveContinueParams,
-    type ObjectiveDenyToolCallParams as ObjectiveDenyToolCallParams,
+    type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 

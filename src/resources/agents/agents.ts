@@ -88,6 +88,12 @@ export type AgentsCursorPagination = CursorPagination<Agent>;
  */
 export interface Agent {
   /**
+   * AgentInfo contains simple information about an agent for display or quick
+   * reference
+   */
+  info?: Agent.Info;
+
+  /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   metadata?: Shared.ResourceMetadata;
@@ -96,6 +102,16 @@ export interface Agent {
    * Agent specification (user-provided configuration)
    */
   spec?: AgentSpec;
+}
+
+export namespace Agent {
+  /**
+   * AgentInfo contains simple information about an agent for display or quick
+   * reference
+   */
+  export interface Info {
+    variationCount?: number;
+  }
 }
 
 /**
@@ -117,13 +133,13 @@ export interface AgentSpec {
     | 'AGENT_STATUS_ARCHIVED';
 
   /**
-   * Controls how variations are selected when creating objectives Defaults to
-   * WEIGHTED when unspecified
+   * Controls how variations are automatically selected when creating objectives
+   * Defaults to RANDOM when unspecified
    */
   variationSelectionMode?:
     | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
-    | 'VARIATION_SELECTION_MODE_WEIGHTED'
-    | 'VARIATION_SELECTION_MODE_EXPLICIT';
+    | 'VARIATION_SELECTION_MODE_RANDOM'
+    | 'VARIATION_SELECTION_MODE_WEIGHTED';
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
@@ -140,6 +156,11 @@ export interface Page {
 }
 
 export interface AgentCreateParams {
+  /**
+   * AgentVariation resource
+   */
+  defaultVariation?: VariationsAPI.AgentVariation;
+
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */

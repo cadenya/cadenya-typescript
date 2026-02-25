@@ -60,7 +60,7 @@ $ yarn link cadenya
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global cadenya
+$ pnpm link --global cadenya
 ```
 
 ## Running tests
