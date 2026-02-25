@@ -319,6 +319,8 @@ export namespace ObjectiveContinueResponse {
 
     toolDenied?: Data.ToolDenied;
 
+    toolError?: Data.ToolError;
+
     toolResult?: Data.ToolResult;
 
     type?: string;
@@ -336,6 +338,8 @@ export namespace ObjectiveContinueResponse {
     export namespace AssistantMessage {
       export interface ToolCall {
         arguments?: string;
+
+        functionName?: string;
 
         /**
          * CallableTool is a union that represents a tool that can be called by an agent.
@@ -388,6 +392,12 @@ export namespace ObjectiveContinueResponse {
       /**
        * The ID of the tool call record
        */
+      toolCallId?: string;
+    }
+
+    export interface ToolError {
+      message?: string;
+
       toolCallId?: string;
     }
 
@@ -563,6 +573,8 @@ export namespace ObjectiveListEventsResponse {
 
     toolDenied?: Data.ToolDenied;
 
+    toolError?: Data.ToolError;
+
     toolResult?: Data.ToolResult;
 
     type?: string;
@@ -580,6 +592,8 @@ export namespace ObjectiveListEventsResponse {
     export namespace AssistantMessage {
       export interface ToolCall {
         arguments?: string;
+
+        functionName?: string;
 
         /**
          * CallableTool is a union that represents a tool that can be called by an agent.
@@ -632,6 +646,12 @@ export namespace ObjectiveListEventsResponse {
       /**
        * The ID of the tool call record
        */
+      toolCallId?: string;
+    }
+
+    export interface ToolError {
+      message?: string;
+
       toolCallId?: string;
     }
 
