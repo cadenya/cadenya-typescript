@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Actor</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
@@ -97,14 +96,6 @@ Methods:
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 
 # Ping
-
-Types:
-
-- <code><a href="./src/resources/ping.ts">PingCheckResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/ping">client.ping.<a href="./src/resources/ping.ts">check</a>() -> PingCheckResponse</code>
 
 # Search
 

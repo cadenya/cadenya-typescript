@@ -57,7 +57,7 @@ export {
   type ObjectiveListContextWindowsResponsesCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
-export { Ping, type PingCheckResponse } from './ping';
+export { Ping } from './ping';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,

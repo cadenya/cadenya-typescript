@@ -48,7 +48,7 @@ import {
   Documents,
   DocumentsCursorPagination,
 } from './resources/documents';
-import { Ping, PingCheckResponse } from './resources/ping';
+import { Ping } from './resources/ping';
 import {
   Search,
   SearchSearchToolsOrToolSetsParams,
@@ -915,7 +915,7 @@ export declare namespace Cadenya {
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
 
-  export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
+  export { Ping as Ping };
 
   export {
     Search as Search,
@@ -993,7 +993,6 @@ export declare namespace Cadenya {
     type DocumentListParams as DocumentListParams,
   };
 
-  export type Actor = API.Actor;
   export type CallableTool = API.CallableTool;
   export type OperationMetadata = API.OperationMetadata;
   export type ResourceMetadata = API.ResourceMetadata;

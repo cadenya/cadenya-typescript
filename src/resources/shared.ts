@@ -4,36 +4,6 @@ import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
 /**
- * Actor is the "through model" that associates account-level resources (Profiles,
- * API Keys) to specific workspaces. This allows a single Profile to have access to
- * multiple workspaces while maintaining proper isolation and audit trails.
- */
-export interface Actor {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  metadata?: ResourceMetadata;
-
-  /**
-   * ActorSpec defines the properties of an actor
-   */
-  spec?: Actor.Spec;
-}
-
-export namespace Actor {
-  /**
-   * ActorSpec defines the properties of an actor
-   */
-  export interface Spec {
-    email?: string;
-
-    name?: string;
-
-    profileId?: string;
-  }
-}
-
-/**
  * CallableTool is a union that represents a tool that can be called by an agent.
  * In Cadenya, a tool that is used within an agent objective might be a
  * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
