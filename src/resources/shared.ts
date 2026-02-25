@@ -4,33 +4,38 @@ import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
 /**
- * Actor is the "through model" that associates account-level resources (Profiles,
- * API Keys) to specific workspaces. This allows a single Profile to have access to
- * multiple workspaces while maintaining proper isolation and audit trails.
+ * AccountResourceMetadata is used to represent a resource that is associated to an
+ * account but not to a workspace.
  */
-export interface Actor {
+export interface AccountResourceMetadata {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * Unique identifier for the resource (UUID v7)
    */
-  metadata?: ResourceMetadata;
+  id?: string;
 
   /**
-   * ActorSpec defines the properties of an actor
+   * Account this resource belongs to for multi-tenant isolation (UUID v7)
    */
-  spec?: Actor.Spec;
-}
+  accountId?: string;
 
-export namespace Actor {
   /**
-   * ActorSpec defines the properties of an actor
+   * External ID for the resource (e.g., a workflow ID from an external system)
    */
-  export interface Spec {
-    email?: string;
+  externalId?: string;
 
-    name?: string;
+  /**
+   * Arbitrary key-value pairs for categorization and filtering Examples:
+   * {"environment": "production", "team": "platform", "version": "v2"}
+   */
+  labels?: { [key: string]: string };
 
-    profileId?: string;
-  }
+  /**
+   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+   * Tool") Required for resources that users interact with directly
+   */
+  name?: string;
+
+  profileId?: string;
 }
 
 /**
@@ -100,6 +105,45 @@ export interface OperationMetadata {
 }
 
 /**
+ * Profile represents a human user at the account level. Profiles are
+ * account-scoped resources that can be associated with multiple workspaces through
+ * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+ */
+export interface Profile {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
+  metadata?: AccountResourceMetadata;
+
+  /**
+   * ProfileSpec contains the profile-specific fields
+   */
+  spec?: ProfileSpec;
+}
+
+/**
+ * ProfileSpec contains the profile-specific fields
+ */
+export interface ProfileSpec {
+  /**
+   * Email address of the user (required, unique per account)
+   */
+  email?: string;
+
+  /**
+   * Display name for the user (e.g., "Bobby Tables")
+   */
+  name?: string;
+
+  /**
+   * Type is the type of profile. User's are humans, API keys are computers. You know
+   * the deal.
+   */
+  type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+}
+
+/**
  * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
  */
 export interface ResourceMetadata {
@@ -112,6 +156,11 @@ export interface ResourceMetadata {
    * Account this resource belongs to for multi-tenant isolation (UUID v7)
    */
   accountId?: string;
+
+  /**
+   * Timestamp when this resource was created
+   */
+  createdAt?: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
@@ -146,46 +195,9 @@ export interface Workspace {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: Workspace.Metadata;
+  metadata?: AccountResourceMetadata;
 
   spec?: WorkspacesAPI.WorkspaceSpec;
-}
-
-export namespace Workspace {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  export interface Metadata {
-    /**
-     * Unique identifier for the resource (UUID v7)
-     */
-    id?: string;
-
-    /**
-     * Account this resource belongs to for multi-tenant isolation (UUID v7)
-     */
-    accountId?: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool") Required for resources that users interact with directly
-     */
-    name?: string;
-
-    profileId?: string;
-  }
 }
 
 export type WorkspacesCursorPagination = CursorPagination<Workspace>;

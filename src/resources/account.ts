@@ -20,47 +20,12 @@ export interface Account {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: Account.Metadata;
+  metadata?: Shared.AccountResourceMetadata;
 
   spec?: Account.Spec;
 }
 
 export namespace Account {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  export interface Metadata {
-    /**
-     * Unique identifier for the resource (UUID v7)
-     */
-    id?: string;
-
-    /**
-     * Account this resource belongs to for multi-tenant isolation (UUID v7)
-     */
-    accountId?: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool") Required for resources that users interact with directly
-     */
-    name?: string;
-
-    profileId?: string;
-  }
-
   export interface Spec {
     billingEmail?: string;
 

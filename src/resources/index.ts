@@ -32,10 +32,29 @@ export {
 } from './document-namespaces';
 export {
   Documents,
+  type Any,
+  type AnyOrExpression,
+  type CallbacksOrReferences,
   type Document,
   type DocumentSpec,
   type DocumentSpecInlineContent,
   type DocumentSpecRemoteSource,
+  type Expression,
+  type GoogleProtobufAny,
+  type HeadersOrReferences,
+  type MediaTypes,
+  type NamedAny,
+  type NamedPathItem,
+  type NamedSchemaOrReference,
+  type NamedServerVariable,
+  type NamedString,
+  type OAuthFlow,
+  type Reference,
+  type SchemaOrReference,
+  type Server,
+  type ServerVariable,
+  type ServerVariables,
+  type Strings,
   type DocumentCreateParams,
   type DocumentUpdateParams,
   type DocumentListParams,
@@ -57,7 +76,6 @@ export {
   type ObjectiveListContextWindowsResponsesCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
-export { Ping, type PingCheckResponse } from './ping';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,

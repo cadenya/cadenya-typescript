@@ -38,6 +38,9 @@ import {
   DocumentNamespacesCursorPagination,
 } from './resources/document-namespaces';
 import {
+  Any,
+  AnyOrExpression,
+  CallbacksOrReferences,
   Document,
   DocumentCreateParams,
   DocumentListParams,
@@ -47,8 +50,23 @@ import {
   DocumentUpdateParams,
   Documents,
   DocumentsCursorPagination,
+  Expression,
+  GoogleProtobufAny,
+  HeadersOrReferences,
+  MediaTypes,
+  NamedAny,
+  NamedPathItem,
+  NamedSchemaOrReference,
+  NamedServerVariable,
+  NamedString,
+  OAuthFlow,
+  Reference,
+  SchemaOrReference,
+  Server,
+  ServerVariable,
+  ServerVariables,
+  Strings,
 } from './resources/documents';
-import { Ping, PingCheckResponse } from './resources/ping';
 import {
   Search,
   SearchSearchToolsOrToolSetsParams,
@@ -854,7 +872,6 @@ export class Cadenya {
   account: API.AccountResource = new API.AccountResource(this);
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
-  ping: API.Ping = new API.Ping(this);
   search: API.Search = new API.Search(this);
   toolSets: API.ToolSets = new API.ToolSets(this);
   apiKeys: API.APIKeys = new API.APIKeys(this);
@@ -867,7 +884,6 @@ export class Cadenya {
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
-Cadenya.Ping = Ping;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
@@ -914,8 +930,6 @@ export declare namespace Cadenya {
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
   };
-
-  export { Ping as Ping, type PingCheckResponse as PingCheckResponse };
 
   export {
     Search as Search,
@@ -983,19 +997,40 @@ export declare namespace Cadenya {
 
   export {
     Documents as Documents,
+    type Any as Any,
+    type AnyOrExpression as AnyOrExpression,
+    type CallbacksOrReferences as CallbacksOrReferences,
     type Document as Document,
     type DocumentSpec as DocumentSpec,
     type DocumentSpecInlineContent as DocumentSpecInlineContent,
     type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
+    type Expression as Expression,
+    type GoogleProtobufAny as GoogleProtobufAny,
+    type HeadersOrReferences as HeadersOrReferences,
+    type MediaTypes as MediaTypes,
+    type NamedAny as NamedAny,
+    type NamedPathItem as NamedPathItem,
+    type NamedSchemaOrReference as NamedSchemaOrReference,
+    type NamedServerVariable as NamedServerVariable,
+    type NamedString as NamedString,
+    type OAuthFlow as OAuthFlow,
+    type Reference as Reference,
+    type SchemaOrReference as SchemaOrReference,
+    type Server as Server,
+    type ServerVariable as ServerVariable,
+    type ServerVariables as ServerVariables,
+    type Strings as Strings,
     type DocumentsCursorPagination as DocumentsCursorPagination,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
   };
 
-  export type Actor = API.Actor;
+  export type AccountResourceMetadata = API.AccountResourceMetadata;
   export type CallableTool = API.CallableTool;
   export type OperationMetadata = API.OperationMetadata;
+  export type Profile = API.Profile;
+  export type ProfileSpec = API.ProfileSpec;
   export type ResourceMetadata = API.ResourceMetadata;
   export type Workspace = API.Workspace;
 }
