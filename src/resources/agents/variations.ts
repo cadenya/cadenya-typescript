@@ -122,7 +122,7 @@ export interface AgentVariationSpec {
   /**
    * ModelConfig defines the model configuration for a variation
    */
-  modelConfig?: AgentVariationSpec.ModelConfig;
+  modelConfig?: AgentVariationSpecModelConfig;
 
   /**
    * The system prompt for this variation
@@ -141,25 +141,6 @@ export interface AgentVariationSpec {
    * on CreateObjectiveRequest.
    */
   weight?: number;
-}
-
-export namespace AgentVariationSpec {
-  /**
-   * ModelConfig defines the model configuration for a variation
-   */
-  export interface ModelConfig {
-    /**
-     * The model identifier in family/model format (e.g., "claude/opus-4.6",
-     * "claude/sonnet-4.5")
-     */
-    modelId?: string;
-
-    /**
-     * Sampling temperature for model inference (0.0 to 1.0) Lower values produce more
-     * deterministic outputs, higher values increase randomness
-     */
-    temperature?: number;
-  }
 }
 
 export interface AgentVariationSpecAgentDocument {
@@ -211,6 +192,23 @@ export interface AgentVariationSpecConstraints {
    * The maximum number of tool calls that can be made. 0 means no limit.
    */
   maxToolCalls?: number;
+}
+
+/**
+ * ModelConfig defines the model configuration for a variation
+ */
+export interface AgentVariationSpecModelConfig {
+  /**
+   * The model identifier in family/model format (e.g., "claude/opus-4.6",
+   * "claude/sonnet-4.5")
+   */
+  modelId?: string;
+
+  /**
+   * Sampling temperature for model inference (0.0 to 1.0) Lower values produce more
+   * deterministic outputs, higher values increase randomness
+   */
+  temperature?: number;
 }
 
 export interface AgentVariationSpecToolSelection {
@@ -317,6 +315,7 @@ export declare namespace Variations {
     type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
+    type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
     type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
     type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
     type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,

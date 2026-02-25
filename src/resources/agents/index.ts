@@ -17,6 +17,7 @@ export {
   type AgentVariationSpecAgentDocument,
   type AgentVariationSpecAgentTool,
   type AgentVariationSpecConstraints,
+  type AgentVariationSpecModelConfig,
   type AgentVariationSpecToolSelection,
   type ToolSelectionAssignedTools,
   type ToolSelectionAutoDiscovery,
