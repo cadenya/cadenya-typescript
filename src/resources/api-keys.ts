@@ -97,9 +97,9 @@ export interface APIKeySpec {
   description?: string;
 
   /**
-   * workspace_ids is a list of workspaces this API key has access to
+   * workspace_id is used when an API key is scoped to a workspace
    */
-  workspaceIds?: Array<string>;
+  workspaceId?: Array<string>;
 }
 
 export interface APIKeyCreateParams {
