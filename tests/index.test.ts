@@ -322,13 +322,30 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['CADENYA_BASE_URL'] = ''; // empty
       const client = new Cadenya({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.cadenya.com');
+      expect(client.baseURL).toEqual('https://api.cadenya.dev');
     });
 
     test('blank env variable', () => {
       process.env['CADENYA_BASE_URL'] = '  '; // blank
       const client = new Cadenya({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.cadenya.com');
+      expect(client.baseURL).toEqual('https://api.cadenya.dev');
+    });
+
+    test('env variable with environment', () => {
+      process.env['CADENYA_BASE_URL'] = 'https://example.com/from_env';
+
+      expect(
+        () => new Cadenya({ apiKey: 'My API Key', environment: 'staging' }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Ambiguous URL; The \`baseURL\` option (or CADENYA_BASE_URL env var) and the \`environment\` option are given. If you want to use the environment you must pass baseURL: null"`,
+      );
+
+      const client = new Cadenya({
+        apiKey: 'My API Key',
+        baseURL: null,
+        environment: 'staging',
+      });
+      expect(client.baseURL).toEqual('https://api.cadenya.dev');
     });
 
     test('in request options', () => {
