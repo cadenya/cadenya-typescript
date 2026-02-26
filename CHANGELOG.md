@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.17.0 (2026-02-26)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/cadenya/typescript-sdk/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* **api:** api update ([86ccd63](https://github.com/cadenya/typescript-sdk/commit/86ccd634810bee0db3f3d8e06fb1b16fe4f8291c))
+* **api:** api update ([2b10a14](https://github.com/cadenya/typescript-sdk/commit/2b10a1482e8c348bfcbf2d5d46e87ca61f78ff1e))
+* **api:** api update ([0a517ac](https://github.com/cadenya/typescript-sdk/commit/0a517ac5d353c11f5f4fa4c5e51e462667957ae4))
+* **api:** api update ([5352844](https://github.com/cadenya/typescript-sdk/commit/5352844c267f9306cfc5d2429b3cfbce28a0cf03))
+* **api:** api update ([924b643](https://github.com/cadenya/typescript-sdk/commit/924b6433d6f2b1e9857ffd5fe98677d67eed6b11))
+
+
+### Chores
+
+* sync repo ([42576f0](https://github.com/cadenya/typescript-sdk/commit/42576f05bb5f8b9ef5b3351474d6cd28c5885a9c))
+* update SDK settings ([ce5ea6b](https://github.com/cadenya/typescript-sdk/commit/ce5ea6b7d0fdcde021568b3bec3943b135347315))
+* update SDK settings ([d7a3f3c](https://github.com/cadenya/typescript-sdk/commit/d7a3f3cb68268922dae8feeb281a418c543701cb))
+
 ## 0.16.0 (2026-02-20)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/cadenya-agents/typescript-sdk/compare/v0.15.0...v0.16.0)
