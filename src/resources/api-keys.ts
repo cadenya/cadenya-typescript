@@ -99,7 +99,7 @@ export interface APIKeySpec {
   /**
    * workspace_id is used when an API key is scoped to a workspace
    */
-  workspaceId?: Array<string>;
+  workspaceId?: string;
 }
 
 export interface APIKeyCreateParams {
