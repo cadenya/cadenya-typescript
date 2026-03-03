@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.1 (2026-03-03)
+
+Full Changelog: [v0.18.0...v0.18.1](https://github.com/cadenya/typescript-sdk/compare/v0.18.0...v0.18.1)
+
+### Chores
+
+* **internal:** codegen related update ([d53b6f9](https://github.com/cadenya/typescript-sdk/commit/d53b6f9a678d86b684acf64f1ba11be8318a42a9))
+
 ## 0.18.0 (2026-02-28)
 
 Full Changelog: [v0.17.0...v0.18.0](https://github.com/cadenya/typescript-sdk/compare/v0.17.0...v0.18.0)
