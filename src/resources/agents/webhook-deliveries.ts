@@ -6,6 +6,14 @@ import { CursorPagination, type CursorPaginationParams, PagePromise } from '../.
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * AgentService manages AI agents at the WORKSPACE level.
+ *  Agents are workspace-scoped resources that define AI behavior and tool access.
+ *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Workspace-level operations
+ */
 export class WebhookDeliveries extends APIResource {
   /**
    * Lists all webhook deliveries for an agent
