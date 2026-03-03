@@ -7,6 +7,14 @@ import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * WorkspaceService manages workspaces at the ACCOUNT level.
+ *  This service is responsible for creating and listing workspaces within an account.
+ *  Workspaces provide organizational grouping for resources within an account.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
+ */
 export class Workspaces extends APIResource {
   /**
    * Creates a new workspace for the account
