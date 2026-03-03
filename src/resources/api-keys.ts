@@ -8,6 +8,15 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * APIKeyService manages API Keys at the ACCOUNT level.
+ *  API Keys belong directly to accounts and can be associated with multiple
+ *  workspaces through the Actor model. This allows a single API Key to have
+ *  cross-workspace access.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Account-level operations
+ */
 export class APIKeys extends APIResource {
   /**
    * Creates a new API key at the account level. The API key can then be associated

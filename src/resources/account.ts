@@ -5,6 +5,14 @@ import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * AccountService manages account-level operations.
+ *  Accounts are the top-level organizational unit in the system.
+ *  All operations are scoped to the authenticated account determined by the JWT token.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Account-level operations
+ */
 export class AccountResource extends APIResource {
   /**
    * Retrieves the current account for the token accessing the API. Useful to check

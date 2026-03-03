@@ -9,6 +9,17 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * DocumentService manages document namespaces and documents at the WORKSPACE level.
+ *  Document namespaces categorize documents for use cases such as customer-specific
+ *  documents, regionalized documentation, and agent-created episodic memories.
+ *  Documents are key primitives of the platform containing knowledge as inline content
+ *  or remote sources. Each document belongs to exactly one namespace.
+ *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Workspace-level operations
+ */
 export class Documents extends APIResource {
   /**
    * Creates a new document in the workspace within a namespace

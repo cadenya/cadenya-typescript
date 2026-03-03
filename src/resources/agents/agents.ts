@@ -34,6 +34,14 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * AgentService manages AI agents at the WORKSPACE level.
+ *  Agents are workspace-scoped resources that define AI behavior and tool access.
+ *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Workspace-level operations
+ */
 export class Agents extends APIResource {
   variations: VariationsAPI.Variations = new VariationsAPI.Variations(this._client);
   webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(

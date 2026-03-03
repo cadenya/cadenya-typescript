@@ -881,15 +881,81 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * AccountService manages account-level operations.
+   *  Accounts are the top-level organizational unit in the system.
+   *  All operations are scoped to the authenticated account determined by the JWT token.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Account-level operations
+   */
   account: API.AccountResource = new API.AccountResource(this);
+  /**
+   * AgentService manages AI agents at the WORKSPACE level.
+   *  Agents are workspace-scoped resources that define AI behavior and tool access.
+   *  All operations are implicitly scoped to the workspace determined by the JWT token.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
   search: API.Search = new API.Search(this);
+  /**
+   * ToolService manages tool sets and tools at the WORKSPACE level.
+   *  Tool sets group related tools, and tools define specific capabilities for agents.
+   *  All operations are implicitly scoped to the workspace determined by the JWT token.
+   *
+   *  Note: When a ToolSet has managed=true, only API Key actors can modify its tools.
+   *  Profile actors (humans) are restricted from modifying managed tool sets.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
   toolSets: API.ToolSets = new API.ToolSets(this);
+  /**
+   * APIKeyService manages API Keys at the ACCOUNT level.
+   *  API Keys belong directly to accounts and can be associated with multiple
+   *  workspaces through the Actor model. This allows a single API Key to have
+   *  cross-workspace access.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Account-level operations
+   */
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
+  /**
+   * WorkspaceService manages workspaces at the ACCOUNT level.
+   *  This service is responsible for creating and listing workspaces within an account.
+   *  Workspaces provide organizational grouping for resources within an account.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
+   */
   workspaces: API.Workspaces = new API.Workspaces(this);
+  /**
+   * DocumentService manages document namespaces and documents at the WORKSPACE level.
+   *  Document namespaces categorize documents for use cases such as customer-specific
+   *  documents, regionalized documentation, and agent-created episodic memories.
+   *  Documents are key primitives of the platform containing knowledge as inline content
+   *  or remote sources. Each document belongs to exactly one namespace.
+   *  All operations are implicitly scoped to the workspace determined by the JWT token.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
   documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
+  /**
+   * DocumentService manages document namespaces and documents at the WORKSPACE level.
+   *  Document namespaces categorize documents for use cases such as customer-specific
+   *  documents, regionalized documentation, and agent-created episodic memories.
+   *  Documents are key primitives of the platform containing knowledge as inline content
+   *  or remote sources. Each document belongs to exactly one namespace.
+   *  All operations are implicitly scoped to the workspace determined by the JWT token.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
   documents: API.Documents = new API.Documents(this);
 }
 

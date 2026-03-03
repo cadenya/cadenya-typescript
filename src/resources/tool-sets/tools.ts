@@ -8,6 +8,17 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * ToolService manages tool sets and tools at the WORKSPACE level.
+ *  Tool sets group related tools, and tools define specific capabilities for agents.
+ *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ *
+ *  Note: When a ToolSet has managed=true, only API Key actors can modify its tools.
+ *  Profile actors (humans) are restricted from modifying managed tool sets.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Workspace-level operations
+ */
 export class Tools extends APIResource {
   /**
    * Creates a new tool in the tool set
