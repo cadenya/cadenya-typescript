@@ -54,24 +54,24 @@ describe('resource variations', () => {
     const response = await client.agents.variations.update('id', {
       agentId: 'agentId',
       metadata: {
+        name: 'name',
         externalId: 'externalId',
         labels: { foo: 'string' },
-        name: 'name',
       },
       spec: {
         agentDocuments: [
           {
             documentId: 'documentId',
             documentMetadata: {
+              name: 'name',
               externalId: 'externalId',
               labels: { foo: 'string' },
-              name: 'name',
             },
             documentNamespaceId: 'documentNamespaceId',
             documentNamespaceMetadata: {
+              name: 'name',
               externalId: 'externalId',
               labels: { foo: 'string' },
-              name: 'name',
             },
           },
         ],
@@ -79,21 +79,21 @@ describe('resource variations', () => {
           {
             agentId: 'agentId',
             agentMetadata: {
+              name: 'name',
               externalId: 'externalId',
               labels: { foo: 'string' },
-              name: 'name',
             },
             toolId: 'toolId',
             toolMetadata: {
+              name: 'name',
               externalId: 'externalId',
               labels: { foo: 'string' },
-              name: 'name',
             },
             toolSetId: 'toolSetId',
             toolSetMetadata: {
+              name: 'name',
               externalId: 'externalId',
               labels: { foo: 'string' },
-              name: 'name',
             },
           },
         ],

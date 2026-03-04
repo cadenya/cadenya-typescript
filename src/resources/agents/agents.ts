@@ -97,20 +97,20 @@ export type AgentsCursorPagination = CursorPagination<Agent>;
  */
 export interface Agent {
   /**
-   * AgentInfo contains simple information about an agent for display or quick
-   * reference
-   */
-  info?: Agent.Info;
-
-  /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * Agent specification (user-provided configuration)
    */
-  spec?: AgentSpec;
+  spec: AgentSpec;
+
+  /**
+   * AgentInfo contains simple information about an agent for display or quick
+   * reference
+   */
+  info?: Agent.Info;
 }
 
 export namespace Agent {

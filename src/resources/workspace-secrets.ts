@@ -64,9 +64,9 @@ export interface WorkspaceSecret {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: WorkspaceSecretSpec;
+  spec: WorkspaceSecretSpec;
 }
 
 export interface WorkspaceSecretSpec {
