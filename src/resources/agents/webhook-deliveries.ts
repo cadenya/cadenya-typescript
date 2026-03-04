@@ -37,13 +37,13 @@ export interface WebhookDelivery {
   /**
    * Webhook delivery data
    */
-  data?: WebhookDelivery.Data;
+  data: WebhookDelivery.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
 }
 
 export namespace WebhookDelivery {

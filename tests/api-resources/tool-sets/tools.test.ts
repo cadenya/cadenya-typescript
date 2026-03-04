@@ -54,9 +54,9 @@ describe('resource tools', () => {
     const response = await client.toolSets.tools.update('id', {
       toolSetId: 'toolSetId',
       metadata: {
+        name: 'name',
         externalId: 'externalId',
         labels: { foo: 'string' },
-        name: 'name',
       },
       spec: {
         config: {

@@ -11,7 +11,13 @@ export interface AccountResourceMetadata {
   /**
    * Unique identifier for the resource (UUID v7)
    */
-  id?: string;
+  id: string;
+
+  /**
+   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+   * Tool") Required for resources that users interact with directly
+   */
+  name: string;
 
   /**
    * Account this resource belongs to for multi-tenant isolation (UUID v7)
@@ -28,12 +34,6 @@ export interface AccountResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
-
-  /**
-   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-   * Tool") Required for resources that users interact with directly
-   */
-  name?: string;
 
   profileId?: string;
 }
@@ -69,18 +69,18 @@ export interface OperationMetadata {
   /**
    * Unique identifier for the operation (UUID v7)
    */
-  id?: string;
-
-  /**
-   * Account this operation belongs to for multi-tenant isolation (UUID v7)
-   */
-  accountId?: string;
+  id: string;
 
   /**
    * Timestamp when this operation was created UUID v7 includes timestamp
    * information, but this explicit field enables easier querying
    */
-  createdAt?: string;
+  createdAt: string;
+
+  /**
+   * Account this operation belongs to for multi-tenant isolation (UUID v7)
+   */
+  accountId?: string;
 
   /**
    * External ID for the operation (e.g., a workflow ID from an external system)
@@ -114,12 +114,12 @@ export interface Profile {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: AccountResourceMetadata;
+  metadata: AccountResourceMetadata;
 
   /**
    * ProfileSpec contains the profile-specific fields
    */
-  spec?: ProfileSpec;
+  spec: ProfileSpec;
 }
 
 /**
@@ -150,17 +150,23 @@ export interface ResourceMetadata {
   /**
    * Unique identifier for the resource (UUID v7)
    */
-  id?: string;
+  id: string;
+
+  /**
+   * Timestamp when this resource was created
+   */
+  createdAt: string;
+
+  /**
+   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+   * Tool") Required for resources that users interact with directly
+   */
+  name: string;
 
   /**
    * Account this resource belongs to for multi-tenant isolation (UUID v7)
    */
   accountId?: string;
-
-  /**
-   * Timestamp when this resource was created
-   */
-  createdAt?: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
@@ -172,12 +178,6 @@ export interface ResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
-
-  /**
-   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-   * Tool") Required for resources that users interact with directly
-   */
-  name?: string;
 
   /**
    * ID of the actor (user or service account) that created this resource
@@ -195,9 +195,9 @@ export interface Workspace {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: AccountResourceMetadata;
+  metadata: AccountResourceMetadata;
 
-  spec?: WorkspacesAPI.WorkspaceSpec;
+  spec: WorkspacesAPI.WorkspaceSpec;
 }
 
 export type WorkspacesCursorPagination = CursorPagination<Workspace>;

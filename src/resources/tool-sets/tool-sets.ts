@@ -190,9 +190,9 @@ export interface ToolSet {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: ToolSetSpec;
+  spec: ToolSetSpec;
 }
 
 export interface ToolSetAdapter {
@@ -249,15 +249,15 @@ export namespace ToolSetAdapterMcp {
  */
 export interface ToolSetEvent {
   /**
-   * ToolSetEventData represents the actual event payload for tool set operations
-   */
-  event?: ToolSetEventData;
-
-  /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
+
+  /**
+   * ToolSetEventData represents the actual event payload for tool set operations
+   */
+  event?: ToolSetEventData;
 
   /**
    * The tool set this event is associated with

@@ -81,12 +81,12 @@ export interface DocumentNamespace {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * DocumentNamespaceSpec defines the properties of a document namespace.
    */
-  spec?: DocumentNamespaceSpec;
+  spec: DocumentNamespaceSpec;
 }
 
 /**
