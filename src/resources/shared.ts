@@ -9,12 +9,12 @@ import { CursorPagination } from '../core/pagination';
  */
 export interface AccountResourceMetadata {
   /**
-   * Unique identifier for the resource (UUID v7)
+   * Unique identifier for the resource (prefixed ULID, e.g., "apikey_01HXK...")
    */
   id: string;
 
   /**
-   * Account this resource belongs to for multi-tenant isolation (UUID v7)
+   * Account this resource belongs to for multi-tenant isolation (prefixed ULID)
    */
   accountId: string;
 
@@ -67,18 +67,18 @@ export interface CallableTool {
  */
 export interface OperationMetadata {
   /**
-   * Unique identifier for the operation (UUID v7)
+   * Unique identifier for the operation (prefixed ULID, e.g., "obj_01HXK...")
    */
   id: string;
 
   /**
-   * Account this operation belongs to for multi-tenant isolation (UUID v7)
+   * Account this operation belongs to for multi-tenant isolation (prefixed ULID)
    */
   accountId: string;
 
   /**
-   * Timestamp when this operation was created UUID v7 includes timestamp
-   * information, but this explicit field enables easier querying
+   * Timestamp when this operation was created ULID includes timestamp information,
+   * but this explicit field enables easier querying
    */
   createdAt: string;
 
@@ -88,7 +88,7 @@ export interface OperationMetadata {
   profileId: string;
 
   /**
-   * Workspace this operation belongs to for organizational grouping (UUID v7)
+   * Workspace this operation belongs to for organizational grouping (prefixed ULID)
    */
   workspaceId: string;
 
@@ -148,12 +148,12 @@ export interface ProfileSpec {
  */
 export interface ResourceMetadata {
   /**
-   * Unique identifier for the resource (UUID v7)
+   * Unique identifier for the resource (prefixed ULID, e.g., "agent_01HXK...")
    */
   id: string;
 
   /**
-   * Account this resource belongs to for multi-tenant isolation (UUID v7)
+   * Account this resource belongs to for multi-tenant isolation (prefixed ULID)
    */
   accountId: string;
 
@@ -174,7 +174,7 @@ export interface ResourceMetadata {
   profileId: string;
 
   /**
-   * Workspace this resource belongs to for organizational grouping (UUID v7)
+   * Workspace this resource belongs to for organizational grouping (prefixed ULID)
    */
   workspaceId: string;
 

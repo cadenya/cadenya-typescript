@@ -113,10 +113,11 @@ export interface APIKeySpec {
 
 export interface APIKeyCreateParams {
   /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
+   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
+   * creating or updating an account-scoped resource. Read-only fields (id,
+   * account_id, profile_id) are excluded since they are set by the server.
    */
-  metadata: Shared.AccountResourceMetadata;
+  metadata: APIKeyCreateParams.Metadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -124,12 +125,39 @@ export interface APIKeyCreateParams {
   spec: APIKeySpec;
 }
 
+export namespace APIKeyCreateParams {
+  /**
+   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
+   * creating or updating an account-scoped resource. Read-only fields (id,
+   * account_id, profile_id) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Production API Key", "Staging
+     * Workspace")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
+}
+
 export interface APIKeyUpdateParams {
   /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
+   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
+   * creating or updating an account-scoped resource. Read-only fields (id,
+   * account_id, profile_id) are excluded since they are set by the server.
    */
-  metadata?: Shared.AccountResourceMetadata;
+  metadata?: APIKeyUpdateParams.Metadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -140,6 +168,32 @@ export interface APIKeyUpdateParams {
    * Fields to update
    */
   updateMask?: string;
+}
+
+export namespace APIKeyUpdateParams {
+  /**
+   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
+   * creating or updating an account-scoped resource. Read-only fields (id,
+   * account_id, profile_id) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Production API Key", "Staging
+     * Workspace")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface APIKeyListParams extends CursorPaginationParams {

@@ -597,10 +597,11 @@ export interface ObjectiveCreateParams {
   data: ObjectiveCreateParams.Data;
 
   /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
+   * CreateOrUpdateOperationMetadata contains the user-provided fields for creating
+   * an operation. Read-only fields (id, account_id, workspace_id, created_at,
+   * profile_id) are excluded since they are set by the server.
    */
-  metadata: Shared.OperationMetadata;
+  metadata: ObjectiveCreateParams.Metadata;
 
   /**
    * Optional explicit variation selection. Overrides the agent's
@@ -641,6 +642,24 @@ export namespace ObjectiveCreateParams {
 
       value?: string;
     }
+  }
+
+  /**
+   * CreateOrUpdateOperationMetadata contains the user-provided fields for creating
+   * an operation. Read-only fields (id, account_id, workspace_id, created_at,
+   * profile_id) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * External ID for the operation (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"priority": "high", "source": "api", "workflow": "onboarding"}
+     */
+    labels?: { [key: string]: string };
   }
 }
 
