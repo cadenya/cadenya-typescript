@@ -9,8 +9,11 @@ const client = new Cadenya({
 
 describe('resource toolSets', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.toolSets.create({});
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.toolSets.create({
+      metadata: { name: 'name' },
+      spec: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +21,81 @@ describe('resource toolSets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.toolSets.create({
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: {
+        adapter: {
+          http: {
+            baseUrl: 'baseUrl',
+            headers: { foo: 'string' },
+          },
+          mcp: {
+            excludeTools: {
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+              operator: 'OPERATOR_UNSPECIFIED',
+            },
+            headers: { foo: 'string' },
+            includeTools: {
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+              operator: 'OPERATOR_UNSPECIFIED',
+            },
+            toolApprovals: {
+              always: true,
+              only: {
+                filters: [
+                  {
+                    attribute: 'ATTRIBUTE_UNSPECIFIED',
+                    matcher: {
+                      caseSensitive: true,
+                      contains: 'contains',
+                      endsWith: 'endsWith',
+                      exact: 'exact',
+                      regex: 'regex',
+                      startsWith: 'startsWith',
+                    },
+                  },
+                ],
+                operator: 'OPERATOR_UNSPECIFIED',
+              },
+            },
+            url: 'url',
+          },
+        },
+        description: 'description',
+      },
+    });
   });
 
   // Mock server tests are disabled

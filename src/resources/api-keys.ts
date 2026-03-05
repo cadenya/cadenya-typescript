@@ -116,12 +116,12 @@ export interface APIKeyCreateParams {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: Shared.AccountResourceMetadata;
+  metadata: Shared.AccountResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
    */
-  spec?: APIKeySpec;
+  spec: APIKeySpec;
 }
 
 export interface APIKeyUpdateParams {

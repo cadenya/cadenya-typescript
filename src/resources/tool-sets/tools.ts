@@ -158,9 +158,9 @@ export interface ToolCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: ToolSpec;
+  spec: ToolSpec;
 }
 
 export interface ToolRetrieveParams {

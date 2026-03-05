@@ -45,9 +45,9 @@ export interface WorkspaceCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: WorkspaceSpec;
+  spec: WorkspaceSpec;
 }
 
 export interface WorkspaceListParams extends CursorPaginationParams {

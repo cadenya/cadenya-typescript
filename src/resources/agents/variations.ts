@@ -255,12 +255,12 @@ export interface VariationCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * AgentVariationSpec defines the operational configuration for a variation
    */
-  spec?: AgentVariationSpec;
+  spec: AgentVariationSpec;
 }
 
 export interface VariationRetrieveParams {

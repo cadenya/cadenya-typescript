@@ -1173,18 +1173,18 @@ export interface DocumentCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * The namespace this document belongs to. Each document belongs to exactly one
    * namespace.
    */
-  namespaceId?: string;
+  namespaceId: string;
 
   /**
    * DocumentSpec defines the content and properties of a document.
    */
-  spec?: DocumentSpec;
+  spec: DocumentSpec;
 }
 
 export interface DocumentUpdateParams {

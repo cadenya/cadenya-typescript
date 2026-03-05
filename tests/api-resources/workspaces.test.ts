@@ -9,8 +9,11 @@ const client = new Cadenya({
 
 describe('resource workspaces', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.workspaces.create({});
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.workspaces.create({
+      metadata: { name: 'name' },
+      spec: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +21,18 @@ describe('resource workspaces', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.workspaces.create({
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { description: 'description' },
+    });
   });
 
   // Mock server tests are disabled
