@@ -253,10 +253,9 @@ export interface ToolSelectionAutoDiscovery {
 
 export interface VariationCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata: VariationCreateParams.Metadata;
 
@@ -268,10 +267,9 @@ export interface VariationCreateParams {
 
 export namespace VariationCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**
@@ -307,10 +305,10 @@ export interface VariationUpdateParams {
   agentId: string;
 
   /**
-   * Body param: CreateOrUpdateResourceMetadata contains the user-provided fields for
-   * creating or updating a workspace-scoped resource. Read-only fields (id,
-   * account_id, workspace_id, profile_id, created_at) are excluded since they are
-   * set by the server.
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: VariationUpdateParams.Metadata;
 
@@ -328,10 +326,9 @@ export interface VariationUpdateParams {
 
 export namespace VariationUpdateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**

@@ -1170,10 +1170,9 @@ export interface Strings {
 
 export interface DocumentCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata: DocumentCreateParams.Metadata;
 
@@ -1191,10 +1190,9 @@ export interface DocumentCreateParams {
 
 export namespace DocumentCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**
@@ -1223,10 +1221,9 @@ export interface DocumentUpdateParams {
   body_id?: string;
 
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata?: DocumentUpdateParams.Metadata;
 
@@ -1243,10 +1240,9 @@ export interface DocumentUpdateParams {
 
 export namespace DocumentUpdateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**

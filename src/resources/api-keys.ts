@@ -113,9 +113,9 @@ export interface APIKeySpec {
 
 export interface APIKeyCreateParams {
   /**
-   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
-   * creating or updating an account-scoped resource. Read-only fields (id,
-   * account_id, profile_id) are excluded since they are set by the server.
+   * CreateAccountResourceMetadata contains the user-provided fields for creating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
    */
   metadata: APIKeyCreateParams.Metadata;
 
@@ -127,9 +127,9 @@ export interface APIKeyCreateParams {
 
 export namespace APIKeyCreateParams {
   /**
-   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
-   * creating or updating an account-scoped resource. Read-only fields (id,
-   * account_id, profile_id) are excluded since they are set by the server.
+   * CreateAccountResourceMetadata contains the user-provided fields for creating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
    */
   export interface Metadata {
     /**
@@ -153,9 +153,9 @@ export namespace APIKeyCreateParams {
 
 export interface APIKeyUpdateParams {
   /**
-   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
-   * creating or updating an account-scoped resource. Read-only fields (id,
-   * account_id, profile_id) are excluded since they are set by the server.
+   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
    */
   metadata?: APIKeyUpdateParams.Metadata;
 
@@ -172,9 +172,9 @@ export interface APIKeyUpdateParams {
 
 export namespace APIKeyUpdateParams {
   /**
-   * CreateOrUpdateAccountResourceMetadata contains the user-provided fields for
-   * creating or updating an account-scoped resource. Read-only fields (id,
-   * account_id, profile_id) are excluded since they are set by the server.
+   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
    */
   export interface Metadata {
     /**
