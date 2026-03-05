@@ -75,10 +75,9 @@ export interface WorkspaceSecretSpec {
 
 export interface WorkspaceSecretCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata: WorkspaceSecretCreateParams.Metadata;
 
@@ -87,10 +86,9 @@ export interface WorkspaceSecretCreateParams {
 
 export namespace WorkspaceSecretCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**
@@ -114,10 +112,9 @@ export namespace WorkspaceSecretCreateParams {
 
 export interface WorkspaceSecretUpdateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata?: WorkspaceSecretUpdateParams.Metadata;
 
@@ -131,10 +128,9 @@ export interface WorkspaceSecretUpdateParams {
 
 export namespace WorkspaceSecretUpdateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**

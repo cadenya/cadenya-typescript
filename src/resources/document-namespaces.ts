@@ -110,10 +110,9 @@ export interface DocumentNamespaceSpec {
 
 export interface DocumentNamespaceCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata: DocumentNamespaceCreateParams.Metadata;
 
@@ -125,10 +124,9 @@ export interface DocumentNamespaceCreateParams {
 
 export namespace DocumentNamespaceCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**
@@ -157,10 +155,9 @@ export interface DocumentNamespaceUpdateParams {
   body_id?: string;
 
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata?: DocumentNamespaceUpdateParams.Metadata;
 
@@ -177,10 +174,9 @@ export interface DocumentNamespaceUpdateParams {
 
 export namespace DocumentNamespaceUpdateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**

@@ -43,10 +43,9 @@ export interface WorkspaceSpec {
 
 export interface WorkspaceCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   metadata: WorkspaceCreateParams.Metadata;
 
@@ -55,10 +54,9 @@ export interface WorkspaceCreateParams {
 
 export namespace WorkspaceCreateParams {
   /**
-   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
-   * updating a workspace-scoped resource. Read-only fields (id, account_id,
-   * workspace_id, profile_id, created_at) are excluded since they are set by the
-   * server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
   export interface Metadata {
     /**
