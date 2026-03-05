@@ -592,15 +592,15 @@ export namespace ObjectiveListEventsResponse {
 }
 
 export interface ObjectiveCreateParams {
-  agentId?: string;
+  agentId: string;
 
-  data?: ObjectiveCreateParams.Data;
+  data: ObjectiveCreateParams.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
 
   /**
    * Optional explicit variation selection. Overrides the agent's

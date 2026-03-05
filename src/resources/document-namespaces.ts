@@ -112,12 +112,12 @@ export interface DocumentNamespaceCreateParams {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * DocumentNamespaceSpec defines the properties of a document namespace.
    */
-  spec?: DocumentNamespaceSpec;
+  spec: DocumentNamespaceSpec;
 }
 
 export interface DocumentNamespaceUpdateParams {

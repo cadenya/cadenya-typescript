@@ -14,15 +14,17 @@ export interface AccountResourceMetadata {
   id: string;
 
   /**
+   * Account this resource belongs to for multi-tenant isolation (UUID v7)
+   */
+  accountId: string;
+
+  /**
    * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
    * Tool") Required for resources that users interact with directly
    */
   name: string;
 
-  /**
-   * Account this resource belongs to for multi-tenant isolation (UUID v7)
-   */
-  accountId?: string;
+  profileId: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
@@ -34,8 +36,6 @@ export interface AccountResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
-
-  profileId?: string;
 }
 
 /**
@@ -72,15 +72,25 @@ export interface OperationMetadata {
   id: string;
 
   /**
+   * Account this operation belongs to for multi-tenant isolation (UUID v7)
+   */
+  accountId: string;
+
+  /**
    * Timestamp when this operation was created UUID v7 includes timestamp
    * information, but this explicit field enables easier querying
    */
   createdAt: string;
 
   /**
-   * Account this operation belongs to for multi-tenant isolation (UUID v7)
+   * ID of the actor (user or service account) that created this operation
    */
-  accountId?: string;
+  profileId: string;
+
+  /**
+   * Workspace this operation belongs to for organizational grouping (UUID v7)
+   */
+  workspaceId: string;
 
   /**
    * External ID for the operation (e.g., a workflow ID from an external system)
@@ -92,16 +102,6 @@ export interface OperationMetadata {
    * {"priority": "high", "source": "api", "workflow": "onboarding"}
    */
   labels?: { [key: string]: string };
-
-  /**
-   * ID of the actor (user or service account) that created this operation
-   */
-  profileId?: string;
-
-  /**
-   * Workspace this operation belongs to for organizational grouping (UUID v7)
-   */
-  workspaceId?: string;
 }
 
 /**
@@ -153,6 +153,11 @@ export interface ResourceMetadata {
   id: string;
 
   /**
+   * Account this resource belongs to for multi-tenant isolation (UUID v7)
+   */
+  accountId: string;
+
+  /**
    * Timestamp when this resource was created
    */
   createdAt: string;
@@ -164,9 +169,14 @@ export interface ResourceMetadata {
   name: string;
 
   /**
-   * Account this resource belongs to for multi-tenant isolation (UUID v7)
+   * ID of the actor (user or service account) that created this resource
    */
-  accountId?: string;
+  profileId: string;
+
+  /**
+   * Workspace this resource belongs to for organizational grouping (UUID v7)
+   */
+  workspaceId: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
@@ -178,16 +188,6 @@ export interface ResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
-
-  /**
-   * ID of the actor (user or service account) that created this resource
-   */
-  profileId?: string;
-
-  /**
-   * Workspace this resource belongs to for organizational grouping (UUID v7)
-   */
-  workspaceId?: string;
 }
 
 export interface Workspace {

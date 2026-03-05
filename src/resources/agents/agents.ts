@@ -166,19 +166,19 @@ export interface Page {
 
 export interface AgentCreateParams {
   /**
-   * AgentVariation resource
-   */
-  defaultVariation?: VariationsAPI.AgentVariation;
-
-  /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * Agent specification (user-provided configuration)
    */
-  spec?: AgentSpec;
+  spec: AgentSpec;
+
+  /**
+   * AgentVariation resource
+   */
+  defaultVariation?: VariationsAPI.AgentVariation;
 }
 
 export interface AgentUpdateParams {
