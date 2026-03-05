@@ -75,18 +75,51 @@ export interface WorkspaceSecretSpec {
 
 export interface WorkspaceSecretCreateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
-  metadata: Shared.ResourceMetadata;
+  metadata: WorkspaceSecretCreateParams.Metadata;
 
   spec: WorkspaceSecretSpec;
 }
 
+export namespace WorkspaceSecretCreateParams {
+  /**
+   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
+}
+
 export interface WorkspaceSecretUpdateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata?: WorkspaceSecretUpdateParams.Metadata;
 
   spec?: WorkspaceSecretSpec;
 
@@ -94,6 +127,33 @@ export interface WorkspaceSecretUpdateParams {
    * Fields to update
    */
   updateMask?: string;
+}
+
+export namespace WorkspaceSecretUpdateParams {
+  /**
+   * CreateOrUpdateResourceMetadata contains the user-provided fields for creating or
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface WorkspaceSecretListParams extends CursorPaginationParams {
