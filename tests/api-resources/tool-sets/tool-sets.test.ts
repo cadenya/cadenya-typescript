@@ -39,6 +39,7 @@ describe('resource toolSets', () => {
           },
           mcp: {
             excludeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
               filters: [
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
@@ -52,10 +53,10 @@ describe('resource toolSets', () => {
                   },
                 },
               ],
-              operator: 'OPERATOR_UNSPECIFIED',
             },
             headers: { foo: 'string' },
             includeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
               filters: [
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
@@ -69,11 +70,11 @@ describe('resource toolSets', () => {
                   },
                 },
               ],
-              operator: 'OPERATOR_UNSPECIFIED',
             },
             toolApprovals: {
               always: true,
               only: {
+                operator: 'OPERATOR_UNSPECIFIED',
                 filters: [
                   {
                     attribute: 'ATTRIBUTE_UNSPECIFIED',
@@ -87,7 +88,6 @@ describe('resource toolSets', () => {
                     },
                   },
                 ],
-                operator: 'OPERATOR_UNSPECIFIED',
               },
             },
             url: 'url',

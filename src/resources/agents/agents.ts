@@ -126,14 +126,9 @@ export interface AgentInfo {
  */
 export interface AgentSpec {
   /**
-   * Description of the agent's purpose
-   */
-  description?: string;
-
-  /**
    * Status of the agent
    */
-  status?:
+  status:
     | 'AGENT_STATUS_UNSPECIFIED'
     | 'AGENT_STATUS_DRAFT'
     | 'AGENT_STATUS_PUBLISHED'
@@ -143,17 +138,27 @@ export interface AgentSpec {
    * Controls how variations are automatically selected when creating objectives
    * Defaults to RANDOM when unspecified
    */
-  variationSelectionMode?:
+  variationSelectionMode:
     | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
     | 'VARIATION_SELECTION_MODE_RANDOM'
     | 'VARIATION_SELECTION_MODE_WEIGHTED';
 
   /**
+   * Description of the agent's purpose
+   */
+  description?: string;
+
+  /**
+   * The generated secret that will sign all webhooks that are sent to your
+   * configured Webhook URL. Formatted as "wh_asdf1234" per the
+   * https://www.standardwebhooks.com/ format.
+   */
+  webhookEventsHmacSecret?: string;
+
+  /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
   webhookEventsUrl?: string;
-
-  webhookEventsUrlSecret?: string;
 }
 
 export interface Page {
@@ -176,9 +181,28 @@ export interface AgentCreateParams {
   spec: AgentSpec;
 
   /**
-   * AgentVariation resource
+   * Create agent variation request
    */
-  defaultVariation?: VariationsAPI.AgentVariation;
+  defaultVariation?: AgentCreateParams.DefaultVariation;
+}
+
+export namespace AgentCreateParams {
+  /**
+   * Create agent variation request
+   */
+  export interface DefaultVariation {
+    /**
+     * CreateResourceMetadata contains the user-provided fields for creating a
+     * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+     * profile_id, created_at) are excluded since they are set by the server.
+     */
+    metadata: Shared.CreateResourceMetadata;
+
+    /**
+     * AgentVariationSpec defines the operational configuration for a variation
+     */
+    spec: VariationsAPI.AgentVariationSpec;
+  }
 }
 
 export interface AgentUpdateParams {
@@ -201,12 +225,6 @@ export interface AgentUpdateParams {
 }
 
 export interface AgentListParams extends CursorPaginationParams {
-  /**
-   * Label filter. Repeatable. Each value is `key`, `key=value`, or `key!=value`.
-   * Multiple selectors are ANDed. Example: `env=prod`, `tier!=frontend`
-   */
-  label?: Array<string>;
-
   /**
    * Filter expression (query param: prefix)
    */

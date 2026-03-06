@@ -12,7 +12,10 @@ describe('resource agents', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.agents.create({
       metadata: { name: 'name' },
-      spec: {},
+      spec: {
+        status: 'AGENT_STATUS_UNSPECIFIED',
+        variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,9 +35,9 @@ describe('resource agents', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        description: 'description',
         status: 'AGENT_STATUS_UNSPECIFIED',
         variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
+        description: 'description',
         webhookEventsUrl: 'webhookEventsUrl',
       },
       defaultVariation: {
@@ -141,7 +144,6 @@ describe('resource agents', () => {
       client.agents.list(
         {
           cursor: 'cursor',
-          label: ['string'],
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',

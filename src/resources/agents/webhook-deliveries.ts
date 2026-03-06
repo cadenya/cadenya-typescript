@@ -51,6 +51,13 @@ export namespace WebhookDelivery {
    * Webhook delivery data
    */
   export interface Data {
+    status:
+      | 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED'
+      | 'WEBHOOK_DELIVERY_STATUS_PENDING'
+      | 'WEBHOOK_DELIVERY_STATUS_COMPLETED'
+      | 'WEBHOOK_DELIVERY_STATUS_FAILED'
+      | 'WEBHOOK_DELIVERY_STATUS_DISABLED';
+
     /**
      * Related resources
      */
@@ -72,13 +79,6 @@ export namespace WebhookDelivery {
     objectiveEventId?: string;
 
     objectiveId?: string;
-
-    status?:
-      | 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED'
-      | 'WEBHOOK_DELIVERY_STATUS_PENDING'
-      | 'WEBHOOK_DELIVERY_STATUS_COMPLETED'
-      | 'WEBHOOK_DELIVERY_STATUS_FAILED'
-      | 'WEBHOOK_DELIVERY_STATUS_DISABLED';
 
     webhookId?: string;
 

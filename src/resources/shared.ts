@@ -169,6 +169,12 @@ export interface Profile {
  */
 export interface ProfileSpec {
   /**
+   * Type is the type of profile. User's are humans, API keys are computers. You know
+   * the deal.
+   */
+  type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+
+  /**
    * Email address of the user (required, unique per account)
    */
   email?: string;
@@ -177,12 +183,6 @@ export interface ProfileSpec {
    * Display name for the user (e.g., "Bobby Tables")
    */
   name?: string;
-
-  /**
-   * Type is the type of profile. User's are humans, API keys are computers. You know
-   * the deal.
-   */
-  type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
 }
 
 /**
