@@ -126,14 +126,9 @@ export interface AgentInfo {
  */
 export interface AgentSpec {
   /**
-   * Description of the agent's purpose
-   */
-  description?: string;
-
-  /**
    * Status of the agent
    */
-  status?:
+  status:
     | 'AGENT_STATUS_UNSPECIFIED'
     | 'AGENT_STATUS_DRAFT'
     | 'AGENT_STATUS_PUBLISHED'
@@ -143,10 +138,15 @@ export interface AgentSpec {
    * Controls how variations are automatically selected when creating objectives
    * Defaults to RANDOM when unspecified
    */
-  variationSelectionMode?:
+  variationSelectionMode:
     | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
     | 'VARIATION_SELECTION_MODE_RANDOM'
     | 'VARIATION_SELECTION_MODE_WEIGHTED';
+
+  /**
+   * Description of the agent's purpose
+   */
+  description?: string;
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.

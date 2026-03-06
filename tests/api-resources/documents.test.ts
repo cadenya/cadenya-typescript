@@ -13,7 +13,7 @@ describe('resource documents', () => {
     const responsePromise = client.documents.create({
       metadata: { name: 'name' },
       namespaceId: 'namespaceId',
-      spec: {},
+      spec: { status: 'DOCUMENT_STATUS_UNSPECIFIED', type: 'DOCUMENT_TYPE_UNSPECIFIED' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -34,15 +34,15 @@ describe('resource documents', () => {
       },
       namespaceId: 'namespaceId',
       spec: {
+        status: 'DOCUMENT_STATUS_UNSPECIFIED',
+        type: 'DOCUMENT_TYPE_UNSPECIFIED',
         inlineContent: { content: 'content', mimeType: 'mimeType' },
         remoteSource: {
           headers: { foo: 'string' },
           method: 'method',
           url: 'url',
         },
-        status: 'DOCUMENT_STATUS_UNSPECIFIED',
         summary: 'summary',
-        type: 'DOCUMENT_TYPE_UNSPECIFIED',
       },
     });
   });

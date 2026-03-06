@@ -318,15 +318,15 @@ export interface ObjectiveInfo {
 }
 
 export interface ObjectiveStatus {
-  message?: string;
-
-  state?:
+  state:
     | 'STATE_UNSPECIFIED'
     | 'STATE_PENDING'
     | 'STATE_RUNNING'
     | 'STATE_COMPLETED'
     | 'STATE_FAILED'
     | 'STATE_CANCELLED';
+
+  message?: string;
 }
 
 export interface SubObjectiveCreated {

@@ -72,6 +72,8 @@ export class Tools extends APIResource {
 export type ToolsCursorPagination = CursorPagination<Tool>;
 
 export interface ConfigHTTP {
+  requestMethod: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
   headers?: { [key: string]: string };
 
   path?: string;
@@ -84,8 +86,6 @@ export interface ConfigHTTP {
    * These are only used when the request method is a POST, PUT, or PATCH
    */
   requestBodyTemplate?: string;
-
-  requestMethod?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
   /**
    * The tool name (commonly an "operation id" in OpenAPI specs) to call on the HTTP
@@ -113,6 +113,12 @@ export interface Tool {
 }
 
 export interface ToolSpec {
+  status:
+    | 'TOOL_STATUS_UNSPECIFIED'
+    | 'TOOL_STATUS_AVAILABLE'
+    | 'TOOL_STATUS_FILTERED'
+    | 'TOOL_STATUS_ARCHIVED';
+
   /**
    * Config defines the adapter to use for the tool. This is used to determine how
    * the tool is called. For example, if the tool is an HTTP tool, the adapter will
@@ -127,12 +133,6 @@ export interface ToolSpec {
   parameters?: { [key: string]: unknown };
 
   requiresApproval?: boolean;
-
-  status?:
-    | 'TOOL_STATUS_UNSPECIFIED'
-    | 'TOOL_STATUS_AVAILABLE'
-    | 'TOOL_STATUS_FILTERED'
-    | 'TOOL_STATUS_ARCHIVED';
 
   toolSetId?: string;
 }

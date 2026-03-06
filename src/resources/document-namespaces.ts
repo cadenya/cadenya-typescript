@@ -96,7 +96,7 @@ export interface DocumentNamespaceSpec {
   /**
    * Status of the document namespace
    */
-  status?:
+  status:
     | 'DOCUMENT_STATUS_UNSPECIFIED'
     | 'DOCUMENT_STATUS_ENABLED'
     | 'DOCUMENT_STATUS_DISABLED'

@@ -74,6 +74,15 @@ export interface ObjectiveToolCall {
   metadata: Shared.OperationMetadata;
 
   /**
+   * Current status of the tool call
+   */
+  status:
+    | 'TOOL_CALL_STATUS_PENDING'
+    | 'TOOL_CALL_STATUS_APPROVED'
+    | 'TOOL_CALL_STATUS_DENIED'
+    | 'TOOL_CALL_STATUS_EXECUTED';
+
+  /**
    * Profile represents a human user at the account level. Profiles are
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
@@ -114,15 +123,6 @@ export interface ObjectiveToolCall {
    * The result content returned by the tool after execution
    */
   result?: string;
-
-  /**
-   * Current status of the tool call
-   */
-  status?:
-    | 'TOOL_CALL_STATUS_PENDING'
-    | 'TOOL_CALL_STATUS_APPROVED'
-    | 'TOOL_CALL_STATUS_DENIED'
-    | 'TOOL_CALL_STATUS_EXECUTED';
 }
 
 export interface ToolCallListParams extends CursorPaginationParams {}

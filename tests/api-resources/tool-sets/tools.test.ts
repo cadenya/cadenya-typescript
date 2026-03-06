@@ -12,7 +12,7 @@ describe('resource tools', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.toolSets.tools.create('toolSetId', {
       metadata: { name: 'name' },
-      spec: {},
+      spec: { status: 'TOOL_STATUS_UNSPECIFIED' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,14 +32,15 @@ describe('resource tools', () => {
         labels: { foo: 'string' },
       },
       spec: {
+        status: 'TOOL_STATUS_UNSPECIFIED',
         config: {
           http: {
+            requestMethod: 'GET',
             headers: { foo: 'string' },
             path: 'path',
             query: 'query',
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
-            requestMethod: 'GET',
             toolName: 'toolName',
           },
           mcp: {
@@ -52,7 +53,6 @@ describe('resource tools', () => {
         description: 'description',
         parameters: { foo: 'bar' },
         requiresApproval: true,
-        status: 'TOOL_STATUS_UNSPECIFIED',
         toolSetId: 'toolSetId',
       },
     });
@@ -97,14 +97,15 @@ describe('resource tools', () => {
         labels: { foo: 'string' },
       },
       spec: {
+        status: 'TOOL_STATUS_UNSPECIFIED',
         config: {
           http: {
+            requestMethod: 'GET',
             headers: { foo: 'string' },
             path: 'path',
             query: 'query',
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
-            requestMethod: 'GET',
             toolName: 'toolName',
           },
           mcp: {
@@ -117,7 +118,6 @@ describe('resource tools', () => {
         description: 'description',
         parameters: { foo: 'bar' },
         requiresApproval: true,
-        status: 'TOOL_STATUS_UNSPECIFIED',
         toolSetId: 'toolSetId',
       },
       updateMask: 'updateMask',
