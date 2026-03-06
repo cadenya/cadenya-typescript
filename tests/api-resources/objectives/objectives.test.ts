@@ -9,8 +9,12 @@ const client = new Cadenya({
 
 describe('resource objectives', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.objectives.create({});
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.objectives.create({
+      agentId: 'agentId',
+      data: {},
+      metadata: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +22,24 @@ describe('resource objectives', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.objectives.create({
+      agentId: 'agentId',
+      data: {
+        callbackUrl: 'callbackUrl',
+        data: {},
+        initialMessage: 'initialMessage',
+        secrets: [{ name: 'name', value: 'value' }],
+      },
+      metadata: {
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      variationId: 'variationId',
+    });
   });
 
   // Mock server tests are disabled

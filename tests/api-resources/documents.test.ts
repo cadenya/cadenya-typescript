@@ -9,8 +9,12 @@ const client = new Cadenya({
 
 describe('resource documents', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.documents.create({});
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.documents.create({
+      metadata: { name: 'name' },
+      namespaceId: 'namespaceId',
+      spec: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +22,29 @@ describe('resource documents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.documents.create({
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      namespaceId: 'namespaceId',
+      spec: {
+        inlineContent: { content: 'content', mimeType: 'mimeType' },
+        remoteSource: {
+          headers: { foo: 'string' },
+          method: 'method',
+          url: 'url',
+        },
+        status: 'DOCUMENT_STATUS_UNSPECIFIED',
+        summary: 'summary',
+        type: 'DOCUMENT_TYPE_UNSPECIFIED',
+      },
+    });
   });
 
   // Mock server tests are disabled

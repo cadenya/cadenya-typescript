@@ -28,9 +28,9 @@ export interface Account {
    * AccountResourceMetadata is used to represent a resource that is associated to an
    * account but not to a workspace.
    */
-  metadata?: Shared.AccountResourceMetadata;
+  metadata: Shared.AccountResourceMetadata;
 
-  spec?: Account.Spec;
+  spec: Account.Spec;
 }
 
 export namespace Account {

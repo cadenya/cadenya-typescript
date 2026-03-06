@@ -9,8 +9,11 @@ const client = new Cadenya({
 
 describe('resource tools', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.toolSets.tools.create('toolSetId', {});
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.toolSets.tools.create('toolSetId', {
+      metadata: { name: 'name' },
+      spec: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +21,41 @@ describe('resource tools', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.toolSets.tools.create('toolSetId', {
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: {
+        config: {
+          http: {
+            headers: { foo: 'string' },
+            path: 'path',
+            query: 'query',
+            requestBodyContentType: 'requestBodyContentType',
+            requestBodyTemplate: 'requestBodyTemplate',
+            requestMethod: 'GET',
+            toolName: 'toolName',
+          },
+          mcp: {
+            toolDescription: 'toolDescription',
+            toolName: 'toolName',
+            toolTitle: 'toolTitle',
+          },
+        },
+        contentFilter: { jq: 'jq', regex: 'regex' },
+        description: 'description',
+        parameters: { foo: 'bar' },
+        requiresApproval: true,
+        status: 'TOOL_STATUS_UNSPECIFIED',
+        toolSetId: 'toolSetId',
+      },
+    });
   });
 
   // Mock server tests are disabled
@@ -54,9 +92,9 @@ describe('resource tools', () => {
     const response = await client.toolSets.tools.update('id', {
       toolSetId: 'toolSetId',
       metadata: {
+        name: 'name',
         externalId: 'externalId',
         labels: { foo: 'string' },
-        name: 'name',
       },
       spec: {
         config: {

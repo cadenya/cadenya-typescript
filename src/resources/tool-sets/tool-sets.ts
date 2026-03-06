@@ -190,9 +190,9 @@ export interface ToolSet {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: ToolSetSpec;
+  spec: ToolSetSpec;
 }
 
 export interface ToolSetAdapter {
@@ -249,15 +249,15 @@ export namespace ToolSetAdapterMcp {
  */
 export interface ToolSetEvent {
   /**
-   * ToolSetEventData represents the actual event payload for tool set operations
-   */
-  event?: ToolSetEventData;
-
-  /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
+
+  /**
+   * ToolSetEventData represents the actual event payload for tool set operations
+   */
+  event?: ToolSetEventData;
 
   /**
    * The tool set this event is associated with
@@ -298,22 +298,78 @@ export interface ToolSetSpec {
 
 export interface ToolSetCreateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: ToolSetCreateParams.Metadata;
 
-  spec?: ToolSetSpec;
+  spec: ToolSetSpec;
+}
+
+export namespace ToolSetCreateParams {
+  /**
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface ToolSetUpdateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata?: ToolSetUpdateParams.Metadata;
 
   spec?: ToolSetSpec;
 
   updateMask?: string;
+}
+
+export namespace ToolSetUpdateParams {
+  /**
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface ToolSetListParams extends CursorPaginationParams {

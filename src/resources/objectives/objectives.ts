@@ -104,7 +104,15 @@ export type ObjectiveListContextWindowsResponsesCursorPagination =
 export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<ObjectiveListEventsResponse>;
 
 export interface Objective {
-  data?: Objective.Data;
+  data: Objective.Data;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata: Shared.OperationMetadata;
+
+  status: Objective.Status;
 
   /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
@@ -118,14 +126,6 @@ export interface Objective {
    * example).
    */
   lastFiveWindows?: Array<Objective.LastFiveWindow>;
-
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata?: Shared.OperationMetadata;
-
-  status?: Objective.Status;
 }
 
 export namespace Objective {
@@ -183,6 +183,18 @@ export namespace Objective {
     }
   }
 
+  export interface Status {
+    message?: string;
+
+    state?:
+      | 'STATE_UNSPECIFIED'
+      | 'STATE_PENDING'
+      | 'STATE_RUNNING'
+      | 'STATE_COMPLETED'
+      | 'STATE_FAILED'
+      | 'STATE_CANCELLED';
+  }
+
   /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
    * execution
@@ -228,13 +240,13 @@ export namespace Objective {
    * compact their windows and carry on into a new one.
    */
   export interface LastFiveWindow {
-    data?: LastFiveWindow.Data;
+    data: LastFiveWindow.Data;
 
     /**
      * Metadata for ephemeral operations and activities (e.g., objectives, executions,
      * runs)
      */
-    metadata?: Shared.OperationMetadata;
+    metadata: Shared.OperationMetadata;
   }
 
   export namespace LastFiveWindow {
@@ -270,30 +282,18 @@ export namespace Objective {
       sequence?: number;
     }
   }
-
-  export interface Status {
-    message?: string;
-
-    state?:
-      | 'STATE_UNSPECIFIED'
-      | 'STATE_PENDING'
-      | 'STATE_RUNNING'
-      | 'STATE_COMPLETED'
-      | 'STATE_FAILED'
-      | 'STATE_CANCELLED';
-  }
 }
 
 export interface ObjectiveContinueResponse {
-  contextWindowId?: string;
-
-  data?: ObjectiveContinueResponse.Data;
+  data: ObjectiveContinueResponse.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
+
+  contextWindowId?: string;
 
   /**
    * Profile represents a human user at the account level. Profiles are
@@ -419,13 +419,13 @@ export namespace ObjectiveContinueResponse {
  * compact their windows and carry on into a new one.
  */
 export interface ObjectiveListContextWindowsResponse {
-  data?: ObjectiveListContextWindowsResponse.Data;
+  data: ObjectiveListContextWindowsResponse.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
 }
 
 export namespace ObjectiveListContextWindowsResponse {
@@ -463,15 +463,15 @@ export namespace ObjectiveListContextWindowsResponse {
 }
 
 export interface ObjectiveListEventsResponse {
-  contextWindowId?: string;
-
-  data?: ObjectiveListEventsResponse.Data;
+  data: ObjectiveListEventsResponse.Data;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: Shared.OperationMetadata;
+
+  contextWindowId?: string;
 
   /**
    * Profile represents a human user at the account level. Profiles are
@@ -592,15 +592,16 @@ export namespace ObjectiveListEventsResponse {
 }
 
 export interface ObjectiveCreateParams {
-  agentId?: string;
+  agentId: string;
 
-  data?: ObjectiveCreateParams.Data;
+  data: ObjectiveCreateParams.Data;
 
   /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
+   * CreateOperationMetadata contains the user-provided fields for creating an
+   * operation. Read-only fields (id, account_id, workspace_id, created_at,
+   * profile_id) are excluded since they are set by the server.
    */
-  metadata?: Shared.OperationMetadata;
+  metadata: ObjectiveCreateParams.Metadata;
 
   /**
    * Optional explicit variation selection. Overrides the agent's
@@ -641,6 +642,24 @@ export namespace ObjectiveCreateParams {
 
       value?: string;
     }
+  }
+
+  /**
+   * CreateOperationMetadata contains the user-provided fields for creating an
+   * operation. Read-only fields (id, account_id, workspace_id, created_at,
+   * profile_id) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * External ID for the operation (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"priority": "high", "source": "api", "workflow": "onboarding"}
+     */
+    labels?: { [key: string]: string };
   }
 }
 

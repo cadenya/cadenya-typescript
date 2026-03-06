@@ -81,12 +81,12 @@ export interface DocumentNamespace {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * DocumentNamespaceSpec defines the properties of a document namespace.
    */
-  spec?: DocumentNamespaceSpec;
+  spec: DocumentNamespaceSpec;
 }
 
 /**
@@ -110,14 +110,42 @@ export interface DocumentNamespaceSpec {
 
 export interface DocumentNamespaceCreateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: DocumentNamespaceCreateParams.Metadata;
 
   /**
    * DocumentNamespaceSpec defines the properties of a document namespace.
    */
-  spec?: DocumentNamespaceSpec;
+  spec: DocumentNamespaceSpec;
+}
+
+export namespace DocumentNamespaceCreateParams {
+  /**
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface DocumentNamespaceUpdateParams {
@@ -127,9 +155,11 @@ export interface DocumentNamespaceUpdateParams {
   body_id?: string;
 
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata?: DocumentNamespaceUpdateParams.Metadata;
 
   /**
    * DocumentNamespaceSpec defines the properties of a document namespace.
@@ -140,6 +170,32 @@ export interface DocumentNamespaceUpdateParams {
    * Fields to update (if empty, all fields are updated)
    */
   updateMask?: string;
+}
+
+export namespace DocumentNamespaceUpdateParams {
+  /**
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface DocumentNamespaceListParams extends CursorPaginationParams {}

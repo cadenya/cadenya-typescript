@@ -43,11 +43,39 @@ export interface WorkspaceSpec {
 
 export interface WorkspaceCreateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: WorkspaceCreateParams.Metadata;
 
-  spec?: WorkspaceSpec;
+  spec: WorkspaceSpec;
+}
+
+export namespace WorkspaceCreateParams {
+  /**
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface WorkspaceListParams extends CursorPaginationParams {

@@ -107,9 +107,9 @@ export interface Tool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
-  spec?: ToolSpec;
+  spec: ToolSpec;
 }
 
 export interface ToolSpec {
@@ -156,11 +156,39 @@ export interface ToolSpecContentFilter {
 
 export interface ToolCreateParams {
   /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata: ToolCreateParams.Metadata;
 
-  spec?: ToolSpec;
+  spec: ToolSpec;
+}
+
+export namespace ToolCreateParams {
+  /**
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface ToolRetrieveParams {
@@ -174,10 +202,12 @@ export interface ToolUpdateParams {
   toolSetId: string;
 
   /**
-   * Body param: Standard metadata for persistent, named resources (e.g., agents,
-   * tools, prompts)
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
-  metadata?: Shared.ResourceMetadata;
+  metadata?: ToolUpdateParams.Metadata;
 
   /**
    * Body param
@@ -188,6 +218,32 @@ export interface ToolUpdateParams {
    * Body param
    */
   updateMask?: string;
+}
+
+export namespace ToolUpdateParams {
+  /**
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+     * Tool")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
 }
 
 export interface ToolListParams extends CursorPaginationParams {

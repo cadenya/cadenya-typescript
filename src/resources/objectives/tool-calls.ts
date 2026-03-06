@@ -68,6 +68,12 @@ export type ObjectiveToolCallsCursorPagination = CursorPagination<ObjectiveToolC
  */
 export interface ObjectiveToolCall {
   /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata: Shared.OperationMetadata;
+
+  /**
    * Profile represents a human user at the account level. Profiles are
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
@@ -98,12 +104,6 @@ export interface ObjectiveToolCall {
    * A memo supplied by the approver or denier
    */
   memo?: string;
-
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata?: Shared.OperationMetadata;
 
   /**
    * The objective this tool call belongs to
