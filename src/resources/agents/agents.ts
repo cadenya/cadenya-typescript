@@ -110,17 +110,15 @@ export interface Agent {
    * AgentInfo contains simple information about an agent for display or quick
    * reference
    */
-  info?: Agent.Info;
+  info?: AgentInfo;
 }
 
-export namespace Agent {
-  /**
-   * AgentInfo contains simple information about an agent for display or quick
-   * reference
-   */
-  export interface Info {
-    variationCount?: number;
-  }
+/**
+ * AgentInfo contains simple information about an agent for display or quick
+ * reference
+ */
+export interface AgentInfo {
+  variationCount?: number;
 }
 
 /**
@@ -220,6 +218,7 @@ Agents.WebhookDeliveries = WebhookDeliveries;
 export declare namespace Agents {
   export {
     type Agent as Agent,
+    type AgentInfo as AgentInfo,
     type AgentSpec as AgentSpec,
     type Page as Page,
     type AgentsCursorPagination as AgentsCursorPagination,
