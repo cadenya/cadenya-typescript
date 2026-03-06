@@ -38,11 +38,11 @@ export class DocumentNamespaces extends APIResource {
    * Updates a document namespace in the workspace
    */
   update(
-    pathID: string,
+    id: string,
     body: DocumentNamespaceUpdateParams,
     options?: RequestOptions,
   ): APIPromise<DocumentNamespace> {
-    return this._client.patch(path`/v1/document_namespaces/${pathID}`, { body, ...options });
+    return this._client.patch(path`/v1/document_namespaces/${id}`, { body, ...options });
   }
 
   /**
@@ -123,11 +123,6 @@ export interface DocumentNamespaceCreateParams {
 }
 
 export interface DocumentNamespaceUpdateParams {
-  /**
-   * Unique identifier of the document namespace to update
-   */
-  body_id?: string;
-
   /**
    * UpdateResourceMetadata contains the user-provided fields for updating a
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,

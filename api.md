@@ -210,7 +210,7 @@ Methods:
 
 - <code title="post /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">create</a>({ ...params }) -> DocumentNamespace</code>
 - <code title="get /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">retrieve</a>(id) -> DocumentNamespace</code>
-- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(pathID, { ...params }) -> DocumentNamespace</code>
+- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(id, { ...params }) -> DocumentNamespace</code>
 - <code title="get /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">list</a>({ ...params }) -> DocumentNamespacesCursorPagination</code>
 - <code title="delete /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">delete</a>(id) -> void</code>
 
@@ -246,6 +246,6 @@ Methods:
 
 - <code title="post /v1/documents">client.documents.<a href="./src/resources/documents.ts">create</a>({ ...params }) -> Document</code>
 - <code title="get /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(id) -> Document</code>
-- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(pathID, { ...params }) -> Document</code>
+- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(id, { ...params }) -> Document</code>
 - <code title="get /v1/documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsCursorPagination</code>
 - <code title="delete /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">delete</a>(id) -> void</code>
