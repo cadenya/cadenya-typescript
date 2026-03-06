@@ -257,38 +257,12 @@ export interface VariationCreateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata: VariationCreateParams.Metadata;
+  metadata: Shared.CreateResourceMetadata;
 
   /**
    * AgentVariationSpec defines the operational configuration for a variation
    */
   spec: AgentVariationSpec;
-}
-
-export namespace VariationCreateParams {
-  /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface VariationRetrieveParams {
@@ -310,7 +284,7 @@ export interface VariationUpdateParams {
    * workspace_id, profile_id, created_at) are excluded since they are set by the
    * server.
    */
-  metadata?: VariationUpdateParams.Metadata;
+  metadata?: Shared.UpdateResourceMetadata;
 
   /**
    * Body param: AgentVariationSpec defines the operational configuration for a
@@ -322,32 +296,6 @@ export interface VariationUpdateParams {
    * Body param: Fields to update
    */
   updateMask?: string;
-}
-
-export namespace VariationUpdateParams {
-  /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface VariationListParams extends CursorPaginationParams {

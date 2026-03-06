@@ -79,35 +79,9 @@ export interface WorkspaceSecretCreateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata: WorkspaceSecretCreateParams.Metadata;
+  metadata: Shared.CreateResourceMetadata;
 
   spec: WorkspaceSecretSpec;
-}
-
-export namespace WorkspaceSecretCreateParams {
-  /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface WorkspaceSecretUpdateParams {
@@ -116,7 +90,7 @@ export interface WorkspaceSecretUpdateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: WorkspaceSecretUpdateParams.Metadata;
+  metadata?: Shared.UpdateResourceMetadata;
 
   spec?: WorkspaceSecretSpec;
 
@@ -124,32 +98,6 @@ export interface WorkspaceSecretUpdateParams {
    * Fields to update
    */
   updateMask?: string;
-}
-
-export namespace WorkspaceSecretUpdateParams {
-  /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface WorkspaceSecretListParams extends CursorPaginationParams {

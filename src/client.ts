@@ -1106,9 +1106,12 @@ export declare namespace Cadenya {
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
   export type CallableTool = API.CallableTool;
+  export type CreateOperationMetadata = API.CreateOperationMetadata;
+  export type CreateResourceMetadata = API.CreateResourceMetadata;
   export type OperationMetadata = API.OperationMetadata;
   export type Profile = API.Profile;
   export type ProfileSpec = API.ProfileSpec;
   export type ResourceMetadata = API.ResourceMetadata;
+  export type UpdateResourceMetadata = API.UpdateResourceMetadata;
   export type Workspace = API.Workspace;
 }

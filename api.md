@@ -4,10 +4,13 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
+- <code><a href="./src/resources/shared.ts">CreateOperationMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">CreateResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">Profile</a></code>
 - <code><a href="./src/resources/shared.ts">ProfileSpec</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">Workspace</a></code>
 
 # Account
@@ -194,6 +197,7 @@ Methods:
 
 - <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
+- <code title="get /v1/workspaces/current">client.workspaces.<a href="./src/resources/workspaces.ts">get</a>() -> Workspace</code>
 
 # DocumentNamespaces
 
