@@ -202,12 +202,6 @@ export interface AgentUpdateParams {
 
 export interface AgentListParams extends CursorPaginationParams {
   /**
-   * Label filter. Repeatable. Each value is `key`, `key=value`, or `key!=value`.
-   * Multiple selectors are ANDed. Example: `env=prod`, `tier!=frontend`
-   */
-  label?: Array<string>;
-
-  /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;
