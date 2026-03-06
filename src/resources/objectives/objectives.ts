@@ -677,11 +677,6 @@ export interface ObjectiveListParams extends CursorPaginationParams {
 
 export interface ObjectiveCancelParams {
   /**
-   * The ID of the objective. Supports "eid:" prefix for external IDs.
-   */
-  body_objectiveId?: string;
-
-  /**
    * Optional reason for cancellation
    */
   reason?: string;
@@ -692,13 +687,6 @@ export interface ObjectiveContinueParams {
    * The message to continue an objective that has completed.
    */
   message?: string;
-
-  /**
-   * The ID of the objective. If you have assigned an external ID to the objective,
-   * you can prefix the ID with "eid:". For example, "eid:1234567890". Otherwise, the
-   * ID assigned by Cadenya should be used.
-   */
-  body_objectiveId?: string;
 }
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {}

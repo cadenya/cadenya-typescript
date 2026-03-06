@@ -34,9 +34,7 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('approve: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.approve('toolCallId', {
-      path_objectiveId: 'objectiveId',
-    });
+    const responsePromise = client.objectives.toolCalls.approve('toolCallId', { objectiveId: 'objectiveId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,18 +47,14 @@ describe('resource toolCalls', () => {
   // Mock server tests are disabled
   test.skip('approve: required and optional params', async () => {
     const response = await client.objectives.toolCalls.approve('toolCallId', {
-      path_objectiveId: 'objectiveId',
+      objectiveId: 'objectiveId',
       memo: 'memo',
-      body_objectiveId: 'objectiveId',
-      body_toolCallId: 'toolCallId',
     });
   });
 
   // Mock server tests are disabled
   test.skip('deny: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.deny('toolCallId', {
-      path_objectiveId: 'objectiveId',
-    });
+    const responsePromise = client.objectives.toolCalls.deny('toolCallId', { objectiveId: 'objectiveId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -73,10 +67,8 @@ describe('resource toolCalls', () => {
   // Mock server tests are disabled
   test.skip('deny: required and optional params', async () => {
     const response = await client.objectives.toolCalls.deny('toolCallId', {
-      path_objectiveId: 'objectiveId',
+      objectiveId: 'objectiveId',
       memo: 'memo',
-      body_objectiveId: 'objectiveId',
-      body_toolCallId: 'toolCallId',
     });
   });
 });
