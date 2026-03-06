@@ -35,6 +35,14 @@ export class Workspaces extends APIResource {
       ...options,
     });
   }
+
+  /**
+   * Retrieves the workspace associated with the current API token. Useful for
+   * workspace-scoped tokens to identify which workspace they belong to.
+   */
+  get(options?: RequestOptions): APIPromise<Shared.Workspace> {
+    return this._client.get('/v1/workspaces/current', options);
+  }
 }
 
 export interface WorkspaceSpec {
