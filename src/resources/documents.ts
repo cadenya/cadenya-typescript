@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as DocumentsAPI from './documents';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -1174,7 +1175,7 @@ export interface DocumentCreateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata: DocumentCreateParams.Metadata;
+  metadata: Shared.CreateResourceMetadata;
 
   /**
    * The namespace this document belongs to. Each document belongs to exactly one
@@ -1188,32 +1189,6 @@ export interface DocumentCreateParams {
   spec: DocumentSpec;
 }
 
-export namespace DocumentCreateParams {
-  /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
-}
-
 export interface DocumentUpdateParams {
   /**
    * Unique identifier of the document to update
@@ -1225,7 +1200,7 @@ export interface DocumentUpdateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: DocumentUpdateParams.Metadata;
+  metadata?: Shared.UpdateResourceMetadata;
 
   /**
    * DocumentSpec defines the content and properties of a document.
@@ -1236,32 +1211,6 @@ export interface DocumentUpdateParams {
    * Fields to update (if empty, all fields are updated)
    */
   updateMask?: string;
-}
-
-export namespace DocumentUpdateParams {
-  /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface DocumentListParams extends CursorPaginationParams {

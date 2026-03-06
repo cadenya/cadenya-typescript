@@ -160,35 +160,9 @@ export interface ToolCreateParams {
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
    * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata: ToolCreateParams.Metadata;
+  metadata: Shared.CreateResourceMetadata;
 
   spec: ToolSpec;
-}
-
-export namespace ToolCreateParams {
-  /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface ToolRetrieveParams {
@@ -207,7 +181,7 @@ export interface ToolUpdateParams {
    * workspace_id, profile_id, created_at) are excluded since they are set by the
    * server.
    */
-  metadata?: ToolUpdateParams.Metadata;
+  metadata?: Shared.UpdateResourceMetadata;
 
   /**
    * Body param
@@ -218,32 +192,6 @@ export interface ToolUpdateParams {
    * Body param
    */
   updateMask?: string;
-}
-
-export namespace ToolUpdateParams {
-  /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
-     * Tool")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface ToolListParams extends CursorPaginationParams {
