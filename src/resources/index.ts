@@ -111,6 +111,7 @@ export {
   type ToolSetAdapterMcp,
   type ToolSetEvent,
   type ToolSetEventData,
+  type ToolSetInfo,
   type ToolSetSpec,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
@@ -122,6 +123,7 @@ export {
 export {
   WorkspaceSecrets,
   type WorkspaceSecret,
+  type WorkspaceSecretInfo,
   type WorkspaceSecretSpec,
   type WorkspaceSecretCreateParams,
   type WorkspaceSecretUpdateParams,

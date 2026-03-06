@@ -12,6 +12,7 @@ export {
   type ToolSetAdapterMcp,
   type ToolSetEvent,
   type ToolSetEventData,
+  type ToolSetInfo,
   type ToolSetSpec,
   type ToolSetCreateParams,
   type ToolSetUpdateParams,
