@@ -33,8 +33,8 @@ export class ToolCalls extends APIResource {
     params: ToolCallApproveParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { path_objectiveId, ...body } = params;
-    return this._client.put(path`/v1/objectives/${path_objectiveId}/tool_calls/${toolCallID}/approve`, {
+    const { objectiveId, ...body } = params;
+    return this._client.put(path`/v1/objectives/${objectiveId}/tool_calls/${toolCallID}/approve`, {
       body,
       ...options,
     });
@@ -51,8 +51,8 @@ export class ToolCalls extends APIResource {
     params: ToolCallDenyParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { path_objectiveId, ...body } = params;
-    return this._client.put(path`/v1/objectives/${path_objectiveId}/tool_calls/${toolCallID}/deny`, {
+    const { objectiveId, ...body } = params;
+    return this._client.put(path`/v1/objectives/${objectiveId}/tool_calls/${toolCallID}/deny`, {
       body,
       ...options,
     });
@@ -131,44 +131,24 @@ export interface ToolCallApproveParams {
   /**
    * Path param: The ID of the objective. Supports "eid:" prefix for external IDs.
    */
-  path_objectiveId: string;
+  objectiveId: string;
 
   /**
    * Body param: A memo to associate to the tool call approval
    */
   memo?: string;
-
-  /**
-   * Body param: The ID of the objective. Supports "eid:" prefix for external IDs.
-   */
-  body_objectiveId?: string;
-
-  /**
-   * Body param: The ID of the tool call to approve
-   */
-  body_toolCallId?: string;
 }
 
 export interface ToolCallDenyParams {
   /**
    * Path param: The ID of the objective. Supports "eid:" prefix for external IDs.
    */
-  path_objectiveId: string;
+  objectiveId: string;
 
   /**
    * Body param: A memo to associate to the tool call denial
    */
   memo?: string;
-
-  /**
-   * Body param: The ID of the objective. Supports "eid:" prefix for external IDs.
-   */
-  body_objectiveId?: string;
-
-  /**
-   * Body param: The ID of the tool call to deny
-   */
-  body_toolCallId?: string;
 }
 
 export declare namespace ToolCalls {

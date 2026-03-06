@@ -28,6 +28,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentInfo</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentSpec</a></code>
 - <code><a href="./src/resources/agents/agents.ts">Page</a></code>
 
@@ -75,9 +76,26 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveDataSecret</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveError</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveStatus</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">SubObjectiveCreated</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolApprovalRequested</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolApproved</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolCalled</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolDenied</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolError</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ToolResult</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">UserMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContinueResponse</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListContextWindowsResponse</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListEventsResponse</a></code>
 
 Methods:
@@ -87,7 +105,7 @@ Methods:
 - <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
 - <code title="post /v1/objectives/{objectiveId}/cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
 - <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
-- <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveListContextWindowsResponsesCursorPagination</code>
+- <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
 - <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
 ## ToolCalls
@@ -210,7 +228,7 @@ Methods:
 
 - <code title="post /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">create</a>({ ...params }) -> DocumentNamespace</code>
 - <code title="get /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">retrieve</a>(id) -> DocumentNamespace</code>
-- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(pathID, { ...params }) -> DocumentNamespace</code>
+- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(id, { ...params }) -> DocumentNamespace</code>
 - <code title="get /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">list</a>({ ...params }) -> DocumentNamespacesCursorPagination</code>
 - <code title="delete /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">delete</a>(id) -> void</code>
 
@@ -246,6 +264,6 @@ Methods:
 
 - <code title="post /v1/documents">client.documents.<a href="./src/resources/documents.ts">create</a>({ ...params }) -> Document</code>
 - <code title="get /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(id) -> Document</code>
-- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(pathID, { ...params }) -> Document</code>
+- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(id, { ...params }) -> Document</code>
 - <code title="get /v1/documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsCursorPagination</code>
 - <code title="delete /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">delete</a>(id) -> void</code>

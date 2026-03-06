@@ -38,8 +38,8 @@ export class Documents extends APIResource {
   /**
    * Updates a document in the workspace
    */
-  update(pathID: string, body: DocumentUpdateParams, options?: RequestOptions): APIPromise<Document> {
-    return this._client.patch(path`/v1/documents/${pathID}`, { body, ...options });
+  update(id: string, body: DocumentUpdateParams, options?: RequestOptions): APIPromise<Document> {
+    return this._client.patch(path`/v1/documents/${id}`, { body, ...options });
   }
 
   /**
@@ -1190,11 +1190,6 @@ export interface DocumentCreateParams {
 }
 
 export interface DocumentUpdateParams {
-  /**
-   * Unique identifier of the document to update
-   */
-  body_id?: string;
-
   /**
    * UpdateResourceMetadata contains the user-provided fields for updating a
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
