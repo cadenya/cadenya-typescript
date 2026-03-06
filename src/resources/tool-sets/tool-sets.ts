@@ -193,6 +193,11 @@ export interface ToolSet {
   metadata: Shared.ResourceMetadata;
 
   spec: ToolSetSpec;
+
+  /**
+   * Tool set information
+   */
+  info?: ToolSetInfo;
 }
 
 export interface ToolSetAdapter {
@@ -290,6 +295,14 @@ export interface ToolSetEventData {
   type?: string;
 }
 
+export interface ToolSetInfo {
+  agentCount?: number;
+
+  lastSync?: string;
+
+  toolCount?: number;
+}
+
 export interface ToolSetSpec {
   adapter?: ToolSetAdapter;
 
@@ -348,6 +361,7 @@ export declare namespace ToolSets {
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
+    type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,

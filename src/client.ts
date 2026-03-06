@@ -76,6 +76,7 @@ import {
 import {
   WorkspaceSecret,
   WorkspaceSecretCreateParams,
+  WorkspaceSecretInfo,
   WorkspaceSecretListParams,
   WorkspaceSecretSpec,
   WorkspaceSecretUpdateParams,
@@ -145,6 +146,7 @@ import {
   ToolSetEvent,
   ToolSetEventData,
   ToolSetEventsCursorPagination,
+  ToolSetInfo,
   ToolSetListEventsParams,
   ToolSetListParams,
   ToolSetSpec,
@@ -369,9 +371,6 @@ export class Cadenya {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: object | Record<string, unknown>): string {
     return stringifyQuery(query);
   }
@@ -1063,6 +1062,7 @@ export declare namespace Cadenya {
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
+    type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
@@ -1085,6 +1085,7 @@ export declare namespace Cadenya {
   export {
     WorkspaceSecrets as WorkspaceSecrets,
     type WorkspaceSecret as WorkspaceSecret,
+    type WorkspaceSecretInfo as WorkspaceSecretInfo,
     type WorkspaceSecretSpec as WorkspaceSecretSpec,
     type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
     type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,

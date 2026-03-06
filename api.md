@@ -144,6 +144,7 @@ Types:
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEvent</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventData</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
 
 Methods:
@@ -195,6 +196,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/workspace-secrets.ts">WorkspaceSecret</a></code>
+- <code><a href="./src/resources/workspace-secrets.ts">WorkspaceSecretInfo</a></code>
 - <code><a href="./src/resources/workspace-secrets.ts">WorkspaceSecretSpec</a></code>
 
 Methods:
