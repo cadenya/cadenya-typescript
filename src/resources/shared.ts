@@ -62,6 +62,48 @@ export interface CallableTool {
 }
 
 /**
+ * CreateOperationMetadata contains the user-provided fields for creating an
+ * operation. Read-only fields (id, account_id, workspace_id, created_at,
+ * profile_id) are excluded since they are set by the server.
+ */
+export interface CreateOperationMetadata {
+  /**
+   * External ID for the operation (e.g., a workflow ID from an external system)
+   */
+  externalId?: string;
+
+  /**
+   * Arbitrary key-value pairs for categorization and filtering Examples:
+   * {"priority": "high", "source": "api", "workflow": "onboarding"}
+   */
+  labels?: { [key: string]: string };
+}
+
+/**
+ * CreateResourceMetadata contains the user-provided fields for creating a
+ * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+ * profile_id, created_at) are excluded since they are set by the server.
+ */
+export interface CreateResourceMetadata {
+  /**
+   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+   * Tool")
+   */
+  name: string;
+
+  /**
+   * External ID for the resource (e.g., a workflow ID from an external system)
+   */
+  externalId?: string;
+
+  /**
+   * Arbitrary key-value pairs for categorization and filtering Examples:
+   * {"environment": "production", "team": "platform", "version": "v2"}
+   */
+  labels?: { [key: string]: string };
+}
+
+/**
  * Metadata for ephemeral operations and activities (e.g., objectives, executions,
  * runs)
  */
@@ -177,6 +219,30 @@ export interface ResourceMetadata {
    * Workspace this resource belongs to for organizational grouping (prefixed ULID)
    */
   workspaceId: string;
+
+  /**
+   * External ID for the resource (e.g., a workflow ID from an external system)
+   */
+  externalId?: string;
+
+  /**
+   * Arbitrary key-value pairs for categorization and filtering Examples:
+   * {"environment": "production", "team": "platform", "version": "v2"}
+   */
+  labels?: { [key: string]: string };
+}
+
+/**
+ * UpdateResourceMetadata contains the user-provided fields for updating a
+ * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+ * profile_id, created_at) are excluded since they are set by the server.
+ */
+export interface UpdateResourceMetadata {
+  /**
+   * Human-readable name for the resource (e.g., "Customer Support Agent", "Email
+   * Tool")
+   */
+  name: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
