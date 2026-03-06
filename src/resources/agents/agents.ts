@@ -149,11 +149,16 @@ export interface AgentSpec {
   description?: string;
 
   /**
+   * The generated secret that will sign all webhooks that are sent to your
+   * configured Webhook URL. Formatted as "wh_asdf1234" per the
+   * https://www.standardwebhooks.com/ format.
+   */
+  webhookEventsHmacSecret?: string;
+
+  /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
   webhookEventsUrl?: string;
-
-  webhookEventsUrlSecret?: string;
 }
 
 export interface Page {
@@ -176,9 +181,28 @@ export interface AgentCreateParams {
   spec: AgentSpec;
 
   /**
-   * AgentVariation resource
+   * Create agent variation request
    */
-  defaultVariation?: VariationsAPI.AgentVariation;
+  defaultVariation?: AgentCreateParams.DefaultVariation;
+}
+
+export namespace AgentCreateParams {
+  /**
+   * Create agent variation request
+   */
+  export interface DefaultVariation {
+    /**
+     * CreateResourceMetadata contains the user-provided fields for creating a
+     * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+     * profile_id, created_at) are excluded since they are set by the server.
+     */
+    metadata: Shared.CreateResourceMetadata;
+
+    /**
+     * AgentVariationSpec defines the operational configuration for a variation
+     */
+    spec: VariationsAPI.AgentVariationSpec;
+  }
 }
 
 export interface AgentUpdateParams {
