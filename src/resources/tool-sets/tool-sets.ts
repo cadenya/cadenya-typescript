@@ -103,9 +103,9 @@ export type ToolSetEventsCursorPagination = CursorPagination<ToolSetEvent>;
  * Top-level filter with simple boolean logic (no nesting)
  */
 export interface McpToolFilter {
-  filters?: Array<McpToolFilter.Filter>;
+  operator: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
 
-  operator?: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
+  filters?: Array<McpToolFilter.Filter>;
 }
 
 export namespace McpToolFilter {
@@ -113,7 +113,7 @@ export namespace McpToolFilter {
    * Single attribute filter
    */
   export interface Filter {
-    attribute?: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+    attribute: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
 
     /**
      * String matching operations

@@ -903,6 +903,24 @@ export namespace Document {
  */
 export interface DocumentSpec {
   /**
+   * Status of the document
+   */
+  status:
+    | 'DOCUMENT_STATUS_UNSPECIFIED'
+    | 'DOCUMENT_STATUS_ENABLED'
+    | 'DOCUMENT_STATUS_DISABLED'
+    | 'DOCUMENT_STATUS_ARCHIVED';
+
+  /**
+   * The type of document being stored
+   */
+  type:
+    | 'DOCUMENT_TYPE_UNSPECIFIED'
+    | 'DOCUMENT_TYPE_EPISODIC'
+    | 'DOCUMENT_TYPE_SEMANTIC'
+    | 'DOCUMENT_TYPE_PROCEDURAL';
+
+  /**
    * InlineContent represents content stored directly in the document.
    */
   inlineContent?: DocumentSpecInlineContent;
@@ -913,27 +931,9 @@ export interface DocumentSpec {
   remoteSource?: DocumentSpecRemoteSource;
 
   /**
-   * Status of the document
-   */
-  status?:
-    | 'DOCUMENT_STATUS_UNSPECIFIED'
-    | 'DOCUMENT_STATUS_ENABLED'
-    | 'DOCUMENT_STATUS_DISABLED'
-    | 'DOCUMENT_STATUS_ARCHIVED';
-
-  /**
    * Human-readable summary of what this document contains
    */
   summary?: string;
-
-  /**
-   * The type of document being stored
-   */
-  type?:
-    | 'DOCUMENT_TYPE_UNSPECIFIED'
-    | 'DOCUMENT_TYPE_EPISODIC'
-    | 'DOCUMENT_TYPE_SEMANTIC'
-    | 'DOCUMENT_TYPE_PROCEDURAL';
 }
 
 /**

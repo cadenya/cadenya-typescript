@@ -12,7 +12,7 @@ describe('resource documentNamespaces', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.documentNamespaces.create({
       metadata: { name: 'name' },
-      spec: {},
+      spec: { status: 'DOCUMENT_STATUS_UNSPECIFIED' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
