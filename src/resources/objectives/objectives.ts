@@ -72,10 +72,10 @@ export class Objectives extends APIResource {
     objectiveID: string,
     query: ObjectiveListContextWindowsParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ObjectiveListContextWindowsResponsesCursorPagination, ObjectiveListContextWindowsResponse> {
+  ): PagePromise<ObjectiveContextWindowsCursorPagination, ObjectiveContextWindow> {
     return this._client.getAPIList(
       path`/v1/objectives/${objectiveID}/context_windows`,
-      CursorPagination<ObjectiveListContextWindowsResponse>,
+      CursorPagination<ObjectiveContextWindow>,
       { query, ...options },
     );
   }
@@ -98,13 +98,34 @@ export class Objectives extends APIResource {
 
 export type ObjectivesCursorPagination = CursorPagination<Objective>;
 
-export type ObjectiveListContextWindowsResponsesCursorPagination =
-  CursorPagination<ObjectiveListContextWindowsResponse>;
+export type ObjectiveContextWindowsCursorPagination = CursorPagination<ObjectiveContextWindow>;
 
 export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<ObjectiveListEventsResponse>;
 
+export interface AssistantMessage {
+  content?: string;
+
+  toolCalls?: Array<AssistantToolCall>;
+}
+
+export interface AssistantToolCall {
+  arguments?: string;
+
+  functionName?: string;
+
+  /**
+   * CallableTool is a union that represents a tool that can be called by an agent.
+   * In Cadenya, a tool that is used within an agent objective might be a
+   * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+   * and a Cadenya Tool (one Cadenya provides). These tools
+   */
+  tool?: Shared.CallableTool;
+
+  toolCallId?: string;
+}
+
 export interface Objective {
-  data: Objective.Data;
+  data: ObjectiveData;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -112,305 +133,20 @@ export interface Objective {
    */
   metadata: Shared.OperationMetadata;
 
-  status: Objective.Status;
+  status: ObjectiveStatus;
 
   /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
    * execution
    */
-  info?: Objective.Info;
+  info?: ObjectiveInfo;
 
   /**
    * Read-only list of the last five windows of execution for this objective, ordered
    * by most recent first. Is only included in singular RPC calls (GetObjective, for
    * example).
    */
-  lastFiveWindows?: Array<Objective.LastFiveWindow>;
-}
-
-export namespace Objective {
-  export interface Data {
-    /**
-     * Agent resource
-     */
-    agent?: AgentsAPI.Agent;
-
-    /**
-     * The objective's events will be sent as an HTTP POST request to this endpoint
-     */
-    callbackUrl?: string;
-
-    /**
-     * Represents a dynamically typed value which can be either null, a number, a
-     * string, a boolean, a recursive struct value, or a list of values.
-     */
-    data?: unknown;
-
-    /**
-     * The initial message sent to the agent. This becomes the first user message in
-     * the LLM chat history.
-     */
-    initialMessage?: string;
-
-    /**
-     * A parent objective means the objective was spawned off using a separate agent to
-     * complete an objective
-     */
-    parentObjectiveId?: string;
-
-    /**
-     * Secrets that can be used in the headers for tool calls using the secret
-     * interpolation format.
-     */
-    secrets?: Array<Data.Secret>;
-
-    /**
-     * system_prompt is read-only, derived from the selected variation's prompt
-     */
-    systemPrompt?: string;
-
-    /**
-     * AgentVariation resource
-     */
-    variation?: VariationsAPI.AgentVariation;
-  }
-
-  export namespace Data {
-    export interface Secret {
-      name?: string;
-
-      value?: string;
-    }
-  }
-
-  export interface Status {
-    message?: string;
-
-    state?:
-      | 'STATE_UNSPECIFIED'
-      | 'STATE_PENDING'
-      | 'STATE_RUNNING'
-      | 'STATE_COMPLETED'
-      | 'STATE_FAILED'
-      | 'STATE_CANCELLED';
-  }
-
-  /**
-   * ObjectiveInfo provides read-only aggregated statistics about an objective's
-   * execution
-   */
-  export interface Info {
-    /**
-     * List of callable tools assigned to the agent for this objective Includes tools,
-     * agents, and cadenya-provided tools from the agent's configuration
-     */
-    callableTools?: Array<Shared.CallableTool>;
-
-    /**
-     * Total number of context windows that this objective has generated
-     */
-    totalContextWindows?: number;
-
-    /**
-     * Total number of events generated during this objective's execution
-     */
-    totalEvents?: number;
-
-    /**
-     * Total input tokens consumed across all LLM completions across all context
-     * windows
-     */
-    totalInputTokens?: number;
-
-    /**
-     * Total output tokens generated across all LLM completions across all context
-     * windows
-     */
-    totalOutputTokens?: number;
-
-    /**
-     * Total number of tool calls made during execution
-     */
-    totalToolCalls?: number;
-  }
-
-  /**
-   * ObjectiveContextWindow is a window of chat completions that is grouped together
-   * to prevent context-window overflows. Context windows also allow agents to
-   * compact their windows and carry on into a new one.
-   */
-  export interface LastFiveWindow {
-    data: LastFiveWindow.Data;
-
-    /**
-     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-     * runs)
-     */
-    metadata: Shared.OperationMetadata;
-  }
-
-  export namespace LastFiveWindow {
-    export interface Data {
-      /**
-       * A calculated value for how many completion tokens (output tokens) have been used
-       * in this context window
-       */
-      completionTokens?: number;
-
-      /**
-       * The objective's ID that this window belongs to
-       */
-      objectiveId?: string;
-
-      /**
-       * The instructions for this window to continue from a previous window's chat
-       * history.
-       */
-      previousWindowContinueInstructions?: string;
-
-      /**
-       * A calculated value for how many prompt tokens (input tokens) have been used in
-       * this context window
-       */
-      promptTokens?: number;
-
-      /**
-       * sequence is a numeric representation of which context window this is. Sequences
-       * are useful to perform a max(sequence) on in order to calculate how many context
-       * windows an objective has.
-       */
-      sequence?: number;
-    }
-  }
-}
-
-export interface ObjectiveContinueResponse {
-  data: ObjectiveContinueResponse.Data;
-
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata: Shared.OperationMetadata;
-
-  contextWindowId?: string;
-
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  profile?: Shared.Profile;
-}
-
-export namespace ObjectiveContinueResponse {
-  export interface Data {
-    assistantMessage?: Data.AssistantMessage;
-
-    error?: Data.Error;
-
-    subObjectiveCreated?: Data.SubObjectiveCreated;
-
-    toolApprovalRequested?: Data.ToolApprovalRequested;
-
-    toolApproved?: Data.ToolApproved;
-
-    toolCalled?: Data.ToolCalled;
-
-    toolDenied?: Data.ToolDenied;
-
-    toolError?: Data.ToolError;
-
-    toolResult?: Data.ToolResult;
-
-    type?: string;
-
-    userMessage?: Data.UserMessage;
-  }
-
-  export namespace Data {
-    export interface AssistantMessage {
-      content?: string;
-
-      toolCalls?: Array<AssistantMessage.ToolCall>;
-    }
-
-    export namespace AssistantMessage {
-      export interface ToolCall {
-        arguments?: string;
-
-        functionName?: string;
-
-        /**
-         * CallableTool is a union that represents a tool that can be called by an agent.
-         * In Cadenya, a tool that is used within an agent objective might be a
-         * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-         * and a Cadenya Tool (one Cadenya provides). These tools
-         */
-        tool?: Shared.CallableTool;
-
-        toolCallId?: string;
-      }
-    }
-
-    export interface Error {
-      message?: string;
-
-      type?: string;
-    }
-
-    export interface SubObjectiveCreated {
-      /**
-       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-       * runs)
-       */
-      metadata?: Shared.OperationMetadata;
-    }
-
-    export interface ToolApprovalRequested {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolApproved {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolCalled {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolDenied {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolError {
-      message?: string;
-
-      toolCallId?: string;
-    }
-
-    export interface ToolResult {
-      content?: string;
-
-      toolCallId?: string;
-    }
-
-    export interface UserMessage {
-      content?: string;
-    }
-  }
+  lastFiveWindows?: Array<ObjectiveContextWindow>;
 }
 
 /**
@@ -418,8 +154,8 @@ export namespace ObjectiveContinueResponse {
  * to prevent context-window overflows. Context windows also allow agents to
  * compact their windows and carry on into a new one.
  */
-export interface ObjectiveListContextWindowsResponse {
-  data: ObjectiveListContextWindowsResponse.Data;
+export interface ObjectiveContextWindow {
+  data: ObjectiveContextWindowData;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -428,42 +164,225 @@ export interface ObjectiveListContextWindowsResponse {
   metadata: Shared.OperationMetadata;
 }
 
-export namespace ObjectiveListContextWindowsResponse {
-  export interface Data {
-    /**
-     * A calculated value for how many completion tokens (output tokens) have been used
-     * in this context window
-     */
-    completionTokens?: number;
+export interface ObjectiveContextWindowData {
+  /**
+   * A calculated value for how many completion tokens (output tokens) have been used
+   * in this context window
+   */
+  completionTokens?: number;
 
-    /**
-     * The objective's ID that this window belongs to
-     */
-    objectiveId?: string;
+  /**
+   * The objective's ID that this window belongs to
+   */
+  objectiveId?: string;
 
-    /**
-     * The instructions for this window to continue from a previous window's chat
-     * history.
-     */
-    previousWindowContinueInstructions?: string;
+  /**
+   * The instructions for this window to continue from a previous window's chat
+   * history.
+   */
+  previousWindowContinueInstructions?: string;
 
-    /**
-     * A calculated value for how many prompt tokens (input tokens) have been used in
-     * this context window
-     */
-    promptTokens?: number;
+  /**
+   * A calculated value for how many prompt tokens (input tokens) have been used in
+   * this context window
+   */
+  promptTokens?: number;
 
-    /**
-     * sequence is a numeric representation of which context window this is. Sequences
-     * are useful to perform a max(sequence) on in order to calculate how many context
-     * windows an objective has.
-     */
-    sequence?: number;
-  }
+  /**
+   * sequence is a numeric representation of which context window this is. Sequences
+   * are useful to perform a max(sequence) on in order to calculate how many context
+   * windows an objective has.
+   */
+  sequence?: number;
 }
 
-export interface ObjectiveListEventsResponse {
-  data: ObjectiveListEventsResponse.Data;
+export interface ObjectiveData {
+  /**
+   * Agent resource
+   */
+  agent?: AgentsAPI.Agent;
+
+  /**
+   * The objective's events will be sent as an HTTP POST request to this endpoint
+   */
+  callbackUrl?: string;
+
+  /**
+   * Represents a dynamically typed value which can be either null, a number, a
+   * string, a boolean, a recursive struct value, or a list of values.
+   */
+  data?: unknown;
+
+  /**
+   * The initial message sent to the agent. This becomes the first user message in
+   * the LLM chat history.
+   */
+  initialMessage?: string;
+
+  /**
+   * A parent objective means the objective was spawned off using a separate agent to
+   * complete an objective
+   */
+  parentObjectiveId?: string;
+
+  /**
+   * Secrets that can be used in the headers for tool calls using the secret
+   * interpolation format.
+   */
+  secrets?: Array<ObjectiveDataSecret>;
+
+  /**
+   * system_prompt is read-only, derived from the selected variation's prompt
+   */
+  systemPrompt?: string;
+
+  /**
+   * AgentVariation resource
+   */
+  variation?: VariationsAPI.AgentVariation;
+}
+
+export interface ObjectiveDataSecret {
+  name?: string;
+
+  value?: string;
+}
+
+export interface ObjectiveError {
+  message?: string;
+
+  type?: string;
+}
+
+export interface ObjectiveEventData {
+  assistantMessage?: AssistantMessage;
+
+  error?: ObjectiveError;
+
+  subObjectiveCreated?: SubObjectiveCreated;
+
+  toolApprovalRequested?: ToolApprovalRequested;
+
+  toolApproved?: ToolApproved;
+
+  toolCalled?: ToolCalled;
+
+  toolDenied?: ToolDenied;
+
+  toolError?: ToolError;
+
+  toolResult?: ToolResult;
+
+  type?: string;
+
+  userMessage?: UserMessage;
+}
+
+/**
+ * ObjectiveInfo provides read-only aggregated statistics about an objective's
+ * execution
+ */
+export interface ObjectiveInfo {
+  /**
+   * List of callable tools assigned to the agent for this objective Includes tools,
+   * agents, and cadenya-provided tools from the agent's configuration
+   */
+  callableTools?: Array<Shared.CallableTool>;
+
+  /**
+   * Total number of context windows that this objective has generated
+   */
+  totalContextWindows?: number;
+
+  /**
+   * Total number of events generated during this objective's execution
+   */
+  totalEvents?: number;
+
+  /**
+   * Total input tokens consumed across all LLM completions across all context
+   * windows
+   */
+  totalInputTokens?: number;
+
+  /**
+   * Total output tokens generated across all LLM completions across all context
+   * windows
+   */
+  totalOutputTokens?: number;
+
+  /**
+   * Total number of tool calls made during execution
+   */
+  totalToolCalls?: number;
+}
+
+export interface ObjectiveStatus {
+  message?: string;
+
+  state?:
+    | 'STATE_UNSPECIFIED'
+    | 'STATE_PENDING'
+    | 'STATE_RUNNING'
+    | 'STATE_COMPLETED'
+    | 'STATE_FAILED'
+    | 'STATE_CANCELLED';
+}
+
+export interface SubObjectiveCreated {
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata?: Shared.OperationMetadata;
+}
+
+export interface ToolApprovalRequested {
+  /**
+   * The ID of the tool call record
+   */
+  toolCallId?: string;
+}
+
+export interface ToolApproved {
+  /**
+   * The ID of the tool call record
+   */
+  toolCallId?: string;
+}
+
+export interface ToolCalled {
+  /**
+   * The ID of the tool call record
+   */
+  toolCallId?: string;
+}
+
+export interface ToolDenied {
+  /**
+   * The ID of the tool call record
+   */
+  toolCallId?: string;
+}
+
+export interface ToolError {
+  message?: string;
+
+  toolCallId?: string;
+}
+
+export interface ToolResult {
+  content?: string;
+
+  toolCallId?: string;
+}
+
+export interface UserMessage {
+  content?: string;
+}
+
+export interface ObjectiveContinueResponse {
+  data: ObjectiveEventData;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -481,120 +400,29 @@ export interface ObjectiveListEventsResponse {
   profile?: Shared.Profile;
 }
 
-export namespace ObjectiveListEventsResponse {
-  export interface Data {
-    assistantMessage?: Data.AssistantMessage;
+export interface ObjectiveListEventsResponse {
+  data: ObjectiveEventData;
 
-    error?: Data.Error;
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata: Shared.OperationMetadata;
 
-    subObjectiveCreated?: Data.SubObjectiveCreated;
+  contextWindowId?: string;
 
-    toolApprovalRequested?: Data.ToolApprovalRequested;
-
-    toolApproved?: Data.ToolApproved;
-
-    toolCalled?: Data.ToolCalled;
-
-    toolDenied?: Data.ToolDenied;
-
-    toolError?: Data.ToolError;
-
-    toolResult?: Data.ToolResult;
-
-    type?: string;
-
-    userMessage?: Data.UserMessage;
-  }
-
-  export namespace Data {
-    export interface AssistantMessage {
-      content?: string;
-
-      toolCalls?: Array<AssistantMessage.ToolCall>;
-    }
-
-    export namespace AssistantMessage {
-      export interface ToolCall {
-        arguments?: string;
-
-        functionName?: string;
-
-        /**
-         * CallableTool is a union that represents a tool that can be called by an agent.
-         * In Cadenya, a tool that is used within an agent objective might be a
-         * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-         * and a Cadenya Tool (one Cadenya provides). These tools
-         */
-        tool?: Shared.CallableTool;
-
-        toolCallId?: string;
-      }
-    }
-
-    export interface Error {
-      message?: string;
-
-      type?: string;
-    }
-
-    export interface SubObjectiveCreated {
-      /**
-       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-       * runs)
-       */
-      metadata?: Shared.OperationMetadata;
-    }
-
-    export interface ToolApprovalRequested {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolApproved {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolCalled {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolDenied {
-      /**
-       * The ID of the tool call record
-       */
-      toolCallId?: string;
-    }
-
-    export interface ToolError {
-      message?: string;
-
-      toolCallId?: string;
-    }
-
-    export interface ToolResult {
-      content?: string;
-
-      toolCallId?: string;
-    }
-
-    export interface UserMessage {
-      content?: string;
-    }
-  }
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  profile?: Shared.Profile;
 }
 
 export interface ObjectiveCreateParams {
   agentId: string;
 
-  data: ObjectiveCreateParams.Data;
+  data: ObjectiveData;
 
   /**
    * CreateOperationMetadata contains the user-provided fields for creating an
@@ -608,41 +436,6 @@ export interface ObjectiveCreateParams {
    * variation_selection_mode.
    */
   variationId?: string;
-}
-
-export namespace ObjectiveCreateParams {
-  export interface Data {
-    /**
-     * The objective's events will be sent as an HTTP POST request to this endpoint
-     */
-    callbackUrl?: string;
-
-    /**
-     * Represents a dynamically typed value which can be either null, a number, a
-     * string, a boolean, a recursive struct value, or a list of values.
-     */
-    data?: unknown;
-
-    /**
-     * The initial message sent to the agent. This becomes the first user message in
-     * the LLM chat history.
-     */
-    initialMessage?: string;
-
-    /**
-     * Secrets that can be used in the headers for tool calls using the secret
-     * interpolation format.
-     */
-    secrets?: Array<Data.Secret>;
-  }
-
-  export namespace Data {
-    export interface Secret {
-      name?: string;
-
-      value?: string;
-    }
-  }
 }
 
 export interface ObjectiveListParams extends CursorPaginationParams {
@@ -702,12 +495,29 @@ Objectives.ToolCalls = ToolCalls;
 
 export declare namespace Objectives {
   export {
+    type AssistantMessage as AssistantMessage,
+    type AssistantToolCall as AssistantToolCall,
     type Objective as Objective,
+    type ObjectiveContextWindow as ObjectiveContextWindow,
+    type ObjectiveContextWindowData as ObjectiveContextWindowData,
+    type ObjectiveData as ObjectiveData,
+    type ObjectiveDataSecret as ObjectiveDataSecret,
+    type ObjectiveError as ObjectiveError,
+    type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveInfo as ObjectiveInfo,
+    type ObjectiveStatus as ObjectiveStatus,
+    type SubObjectiveCreated as SubObjectiveCreated,
+    type ToolApprovalRequested as ToolApprovalRequested,
+    type ToolApproved as ToolApproved,
+    type ToolCalled as ToolCalled,
+    type ToolDenied as ToolDenied,
+    type ToolError as ToolError,
+    type ToolResult as ToolResult,
+    type UserMessage as UserMessage,
     type ObjectiveContinueResponse as ObjectiveContinueResponse,
-    type ObjectiveListContextWindowsResponse as ObjectiveListContextWindowsResponse,
     type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
-    type ObjectiveListContextWindowsResponsesCursorPagination as ObjectiveListContextWindowsResponsesCursorPagination,
+    type ObjectiveContextWindowsCursorPagination as ObjectiveContextWindowsCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveListParams as ObjectiveListParams,

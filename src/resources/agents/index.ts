@@ -3,6 +3,7 @@
 export {
   Agents,
   type Agent,
+  type AgentInfo,
   type AgentSpec,
   type Page,
   type AgentCreateParams,
