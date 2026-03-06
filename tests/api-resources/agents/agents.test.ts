@@ -141,6 +141,7 @@ describe('resource agents', () => {
       client.agents.list(
         {
           cursor: 'cursor',
+          label: ['string'],
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',

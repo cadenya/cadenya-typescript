@@ -67,6 +67,15 @@ export interface WorkspaceSecret {
   metadata: Shared.ResourceMetadata;
 
   spec: WorkspaceSecretSpec;
+
+  /**
+   * Workspace secret information
+   */
+  info?: WorkspaceSecretInfo;
+}
+
+export interface WorkspaceSecretInfo {
+  lastUsedAt?: string;
 }
 
 export interface WorkspaceSecretSpec {
@@ -115,6 +124,7 @@ export interface WorkspaceSecretListParams extends CursorPaginationParams {
 export declare namespace WorkspaceSecrets {
   export {
     type WorkspaceSecret as WorkspaceSecret,
+    type WorkspaceSecretInfo as WorkspaceSecretInfo,
     type WorkspaceSecretSpec as WorkspaceSecretSpec,
     type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
     type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
