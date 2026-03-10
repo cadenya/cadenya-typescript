@@ -142,6 +142,7 @@ describe('resource toolSets', () => {
         {
           cursor: 'cursor',
           limit: 0,
+          prefix: 'prefix',
           sortOrder: 'sortOrder',
         },
         { path: '/_stainless_unknown_path' },

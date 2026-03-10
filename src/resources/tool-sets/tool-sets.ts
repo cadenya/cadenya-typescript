@@ -335,6 +335,11 @@ export interface ToolSetUpdateParams {
 
 export interface ToolSetListParams extends CursorPaginationParams {
   /**
+   * Filter expression (query param: prefix)
+   */
+  prefix?: string;
+
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
