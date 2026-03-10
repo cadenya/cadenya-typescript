@@ -77,6 +77,33 @@ export interface AgentVariation {
    * AgentVariationSpec defines the operational configuration for a variation
    */
   spec: AgentVariationSpec;
+
+  /**
+   * AgentVariationInfo provides read-only summary information about a variation
+   */
+  info?: AgentVariation.Info;
+}
+
+export namespace AgentVariation {
+  /**
+   * AgentVariationInfo provides read-only summary information about a variation
+   */
+  export interface Info {
+    /**
+     * Number of sub-agents assigned to this variation
+     */
+    subAgentCount?: number;
+
+    /**
+     * Number of individual tools assigned to this variation
+     */
+    toolCount?: number;
+
+    /**
+     * Number of tool sets assigned to this variation
+     */
+    toolSetCount?: number;
+  }
 }
 
 /**
