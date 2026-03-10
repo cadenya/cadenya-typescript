@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.26.0 (2026-03-10)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/cadenya/typescript-sdk/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* **api:** api update ([f758b9d](https://github.com/cadenya/typescript-sdk/commit/f758b9d77132bd90202e9a38da6c51840c92b0b0))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([5049ff0](https://github.com/cadenya/typescript-sdk/commit/5049ff04f9ee8b998064124ce6a5d29d1e9ceb16))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([bab3fcf](https://github.com/cadenya/typescript-sdk/commit/bab3fcf20d6b9938312522ccca7433db3673309d))
+
 ## 0.25.0 (2026-03-06)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/cadenya/typescript-sdk/compare/v0.24.0...v0.25.0)
