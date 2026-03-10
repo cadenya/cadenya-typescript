@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.27.0 (2026-03-10)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/cadenya/typescript-sdk/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* **api:** api update ([76f43a9](https://github.com/cadenya/typescript-sdk/commit/76f43a9636a62eade5eb241755b9a1893d2aacbd))
+
+
+### Chores
+
+* **internal:** update dependencies to address dependabot vulnerabilities ([1b04a9f](https://github.com/cadenya/typescript-sdk/commit/1b04a9fc750c3174e7b77a0fd14438f8d171f90e))
+
 ## 0.26.0 (2026-03-10)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/cadenya/typescript-sdk/compare/v0.25.0...v0.26.0)
