@@ -90,6 +90,7 @@ describe('resource documents', () => {
       client.documents.list(
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           namespaceId: 'namespaceId',
         },

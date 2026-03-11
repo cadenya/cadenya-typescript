@@ -87,6 +87,21 @@ export interface DocumentNamespace {
    * DocumentNamespaceSpec defines the properties of a document namespace.
    */
   spec: DocumentNamespaceSpec;
+
+  info?: DocumentNamespace.Info;
+}
+
+export namespace DocumentNamespace {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    documentCount?: number;
+  }
 }
 
 /**
@@ -141,7 +156,12 @@ export interface DocumentNamespaceUpdateParams {
   updateMask?: string;
 }
 
-export interface DocumentNamespaceListParams extends CursorPaginationParams {}
+export interface DocumentNamespaceListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+}
 
 export declare namespace DocumentNamespaces {
   export {

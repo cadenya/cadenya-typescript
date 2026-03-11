@@ -26,7 +26,11 @@ describe('resource toolCalls', () => {
     await expect(
       client.objectives.toolCalls.list(
         'objectiveId',
-        { cursor: 'cursor', limit: 0 },
+        {
+          cursor: 'cursor',
+          includeInfo: true,
+          limit: 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);

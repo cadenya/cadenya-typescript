@@ -198,6 +198,7 @@ describe('resource variations', () => {
         'agentId',
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           sortOrder: 'sortOrder',
         },

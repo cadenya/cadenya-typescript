@@ -74,6 +74,7 @@ describe('resource objectives', () => {
         {
           agentId: 'agentId',
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           parentObjectiveId: 'parentObjectiveId',
           profileId: 'profileId',
@@ -127,7 +128,11 @@ describe('resource objectives', () => {
     await expect(
       client.objectives.listContextWindows(
         'objectiveId',
-        { cursor: 'cursor', limit: 0 },
+        {
+          cursor: 'cursor',
+          includeInfo: true,
+          limit: 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
@@ -153,6 +158,7 @@ describe('resource objectives', () => {
         'objectiveId',
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           sortOrder: 'sortOrder',
         },

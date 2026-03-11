@@ -90,6 +90,13 @@ export namespace AgentVariation {
    */
   export interface Info {
     /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
      * Number of sub-agents assigned to this variation
      */
     subAgentCount?: number;
@@ -326,6 +333,11 @@ export interface VariationUpdateParams {
 }
 
 export interface VariationListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Sort order for results (asc or desc by creation time)
    */

@@ -110,6 +110,24 @@ export interface Tool {
   metadata: Shared.ResourceMetadata;
 
   spec: ToolSpec;
+
+  info?: Tool.Info;
+}
+
+export namespace Tool {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    toolSet?: Shared.ResourceMetadata;
+  }
 }
 
 export interface ToolSpec {
@@ -195,6 +213,11 @@ export interface ToolUpdateParams {
 }
 
 export interface ToolListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Filter expression (query param: prefix)
    */

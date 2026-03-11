@@ -89,6 +89,25 @@ export interface APIKey {
    * APIKeySpec contains the API Key-specific fields
    */
   spec: APIKeySpec;
+
+  info?: APIKey.Info;
+}
+
+export namespace APIKey {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * AccountResourceMetadata is used to represent a resource that is associated to an
+     * account but not to a workspace.
+     */
+    workspace?: Shared.AccountResourceMetadata;
+  }
 }
 
 /**
@@ -197,6 +216,11 @@ export namespace APIKeyUpdateParams {
 }
 
 export interface APIKeyListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Filter expression (query param: prefix)
    */
