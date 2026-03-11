@@ -144,6 +144,7 @@ describe('resource tools', () => {
         'toolSetId',
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',

@@ -118,6 +118,13 @@ export interface Agent {
  * reference
  */
 export interface AgentInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
+
   variationCount?: number;
 }
 
@@ -225,6 +232,11 @@ export interface AgentUpdateParams {
 }
 
 export interface AgentListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Filter expression (query param: prefix)
    */

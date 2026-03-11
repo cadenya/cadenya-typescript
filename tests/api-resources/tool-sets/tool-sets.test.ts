@@ -141,6 +141,7 @@ describe('resource toolSets', () => {
       client.toolSets.list(
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',
@@ -182,6 +183,7 @@ describe('resource toolSets', () => {
         'toolSetId',
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           sortOrder: 'sortOrder',
         },

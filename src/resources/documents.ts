@@ -1210,6 +1210,11 @@ export interface DocumentUpdateParams {
 
 export interface DocumentListParams extends CursorPaginationParams {
   /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
+  /**
    * Optional: Filter documents by namespace ID. If provided, only returns documents
    * that belong to this namespace.
    */

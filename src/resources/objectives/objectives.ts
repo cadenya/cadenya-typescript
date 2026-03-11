@@ -162,6 +162,25 @@ export interface ObjectiveContextWindow {
    * runs)
    */
   metadata: Shared.OperationMetadata;
+
+  info?: ObjectiveContextWindow.Info;
+}
+
+export namespace ObjectiveContextWindow {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective?: Shared.OperationMetadata;
+  }
 }
 
 export interface ObjectiveContextWindowData {
@@ -290,6 +309,13 @@ export interface ObjectiveInfo {
   callableTools?: Array<Shared.CallableTool>;
 
   /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
+
+  /**
    * Total number of context windows that this objective has generated
    */
   totalContextWindows?: number;
@@ -392,12 +418,24 @@ export interface ObjectiveContinueResponse {
 
   contextWindowId?: string;
 
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  profile?: Shared.Profile;
+  info?: ObjectiveContinueResponse.Info;
+}
+
+export namespace ObjectiveContinueResponse {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective?: Shared.OperationMetadata;
+  }
 }
 
 export interface ObjectiveListEventsResponse {
@@ -411,12 +449,24 @@ export interface ObjectiveListEventsResponse {
 
   contextWindowId?: string;
 
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  profile?: Shared.Profile;
+  info?: ObjectiveListEventsResponse.Info;
+}
+
+export namespace ObjectiveListEventsResponse {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective?: Shared.OperationMetadata;
+  }
 }
 
 export interface ObjectiveCreateParams {
@@ -443,6 +493,11 @@ export interface ObjectiveListParams extends CursorPaginationParams {
    * Agent ID for filtering
    */
   agentId?: string;
+
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
 
   /**
    * Optional filters
@@ -482,9 +537,19 @@ export interface ObjectiveContinueParams {
   message?: string;
 }
 
-export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {}
+export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+}
 
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Sort order for results (asc or desc by creation time)
    */

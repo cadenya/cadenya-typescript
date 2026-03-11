@@ -62,6 +62,11 @@ export interface WorkspaceCreateParams {
 
 export interface WorkspaceListParams extends CursorPaginationParams {
   /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;

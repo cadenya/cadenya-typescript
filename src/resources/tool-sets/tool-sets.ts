@@ -264,10 +264,28 @@ export interface ToolSetEvent {
    */
   event?: ToolSetEventData;
 
+  info?: ToolSetEvent.Info;
+
   /**
    * The tool set this event is associated with
    */
   toolSetId?: string;
+}
+
+export namespace ToolSetEvent {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    toolSet?: Shared.ResourceMetadata;
+  }
 }
 
 /**
@@ -297,6 +315,13 @@ export interface ToolSetEventData {
 
 export interface ToolSetInfo {
   agentCount?: number;
+
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
 
   lastSync?: string;
 
@@ -335,6 +360,11 @@ export interface ToolSetUpdateParams {
 
 export interface ToolSetListParams extends CursorPaginationParams {
   /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
+  /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;
@@ -346,6 +376,11 @@ export interface ToolSetListParams extends CursorPaginationParams {
 }
 
 export interface ToolSetListEventsParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
   /**
    * Sort order for results (asc or desc by creation time)
    */

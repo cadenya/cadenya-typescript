@@ -54,6 +54,7 @@ describe('resource workspaces', () => {
       client.workspaces.list(
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           sortOrder: 'sortOrder',
         },
