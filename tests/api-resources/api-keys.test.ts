@@ -78,6 +78,7 @@ describe('resource apiKeys', () => {
       client.apiKeys.list(
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',

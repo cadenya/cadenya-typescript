@@ -78,6 +78,7 @@ describe('resource workspaceSecrets', () => {
       client.workspaceSecrets.list(
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           sortOrder: 'sortOrder',

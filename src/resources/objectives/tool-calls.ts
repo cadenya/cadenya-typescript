@@ -109,6 +109,8 @@ export interface ObjectiveToolCall {
    */
   deniedBy?: Shared.Profile;
 
+  info?: ObjectiveToolCall.Info;
+
   /**
    * A memo supplied by the approver or denier
    */
@@ -125,7 +127,29 @@ export interface ObjectiveToolCall {
   result?: string;
 }
 
-export interface ToolCallListParams extends CursorPaginationParams {}
+export namespace ObjectiveToolCall {
+  export interface Info {
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    createdBy?: Shared.Profile;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective?: Shared.OperationMetadata;
+  }
+}
+
+export interface ToolCallListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+}
 
 export interface ToolCallApproveParams {
   /**
