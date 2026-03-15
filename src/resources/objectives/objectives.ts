@@ -532,9 +532,29 @@ export interface ObjectiveCancelParams {
 
 export interface ObjectiveContinueParams {
   /**
-   * The message to continue an objective that has completed.
+   * When set to true, the message will be enqueued for when the agent loop is
+   * available to process it.
+   */
+  enqueue?: boolean;
+
+  /**
+   * The message to continue an objective that has completed (or you are enqueing)
    */
   message?: string;
+
+  /**
+   * Secrets that should be included with the message. Helpful for when you need to
+   * update secrets on the objective (IE: A secret expires and needs to be refreshed)
+   */
+  secrets?: Array<ObjectiveContinueParams.Secret>;
+}
+
+export namespace ObjectiveContinueParams {
+  export interface Secret {
+    name?: string;
+
+    value?: string;
+  }
 }
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
