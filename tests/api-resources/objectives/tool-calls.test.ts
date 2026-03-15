@@ -30,7 +30,7 @@ describe('resource toolCalls', () => {
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
-          status: 'TOOL_CALL_STATUS_PENDING',
+          status: 'TOOL_CALL_STATUS_UNSPECIFIED',
         },
         { path: '/_stainless_unknown_path' },
       ),
