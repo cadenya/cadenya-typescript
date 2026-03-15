@@ -117,11 +117,9 @@ export interface AssistantToolCall {
    * CallableTool is a union that represents a tool that can be called by an agent.
    * In Cadenya, a tool that is used within an agent objective might be a
    * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-   * and a Cadenya Tool (one Cadenya provides). These tools
+   * or a Cadenya Tool (one Cadenya provides).
    */
   tool?: Shared.CallableTool;
-
-  toolCallId?: string;
 }
 
 export interface Objective {
@@ -365,28 +363,37 @@ export interface SubObjectiveCreated {
 
 export interface ToolApprovalRequested {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record. Use this ID with the ApproveToolCall
+   * or DenyToolCall RPCs to approve or deny the tool call.
    */
   toolCallId?: string;
 }
 
 export interface ToolApproved {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record that was approved via the
+   * ApproveToolCall RPC.
    */
   toolCallId?: string;
 }
 
 export interface ToolCalled {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record that was executed.
    */
   toolCallId?: string;
 }
 
 export interface ToolDenied {
   /**
-   * The ID of the tool call record
+   * The memo provided by the reviewer when denying the tool call. This is passed to
+   * the agent to provide further instructions.
+   */
+  memo?: string;
+
+  /**
+   * The ID of the objective tool call record that was denied via the DenyToolCall
+   * RPC.
    */
   toolCallId?: string;
 }
@@ -394,6 +401,10 @@ export interface ToolDenied {
 export interface ToolError {
   message?: string;
 
+  /**
+   * The ID of the objective tool call record that encountered an error during
+   * execution.
+   */
   toolCallId?: string;
 }
 
@@ -532,9 +543,29 @@ export interface ObjectiveCancelParams {
 
 export interface ObjectiveContinueParams {
   /**
-   * The message to continue an objective that has completed.
+   * When set to true, the message will be enqueued for when the agent loop is
+   * available to process it.
+   */
+  enqueue?: boolean;
+
+  /**
+   * The message to continue an objective that has completed (or you are enqueing)
    */
   message?: string;
+
+  /**
+   * Secrets that should be included with the message. Helpful for when you need to
+   * update secrets on the objective (IE: A secret expires and needs to be refreshed)
+   */
+  secrets?: Array<ObjectiveContinueParams.Secret>;
+}
+
+export namespace ObjectiveContinueParams {
+  export interface Secret {
+    name?: string;
+
+    value?: string;
+  }
 }
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
