@@ -42,7 +42,7 @@ export interface AccountResourceMetadata {
  * CallableTool is a union that represents a tool that can be called by an agent.
  * In Cadenya, a tool that is used within an agent objective might be a
  * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
- * and a Cadenya Tool (one Cadenya provides). These tools
+ * or a Cadenya Tool (one Cadenya provides).
  */
 export interface CallableTool {
   /**
