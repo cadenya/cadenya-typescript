@@ -77,10 +77,11 @@ export interface ObjectiveToolCall {
    * Current status of the tool call
    */
   status:
-    | 'TOOL_CALL_STATUS_PENDING'
+    | 'TOOL_CALL_STATUS_UNSPECIFIED'
+    | 'TOOL_CALL_STATUS_AUTO_APPROVED'
+    | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL'
     | 'TOOL_CALL_STATUS_APPROVED'
-    | 'TOOL_CALL_STATUS_DENIED'
-    | 'TOOL_CALL_STATUS_EXECUTED';
+    | 'TOOL_CALL_STATUS_DENIED';
 
   info?: ObjectiveToolCall.Info;
 }
@@ -144,10 +145,11 @@ export interface ToolCallListParams extends CursorPaginationParams {
    * Filter by tool call status
    */
   status?:
-    | 'TOOL_CALL_STATUS_PENDING'
+    | 'TOOL_CALL_STATUS_UNSPECIFIED'
+    | 'TOOL_CALL_STATUS_AUTO_APPROVED'
+    | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL'
     | 'TOOL_CALL_STATUS_APPROVED'
-    | 'TOOL_CALL_STATUS_DENIED'
-    | 'TOOL_CALL_STATUS_EXECUTED';
+    | 'TOOL_CALL_STATUS_DENIED';
 }
 
 export interface ToolCallApproveParams {
