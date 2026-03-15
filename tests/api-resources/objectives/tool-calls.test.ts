@@ -30,6 +30,7 @@ describe('resource toolCalls', () => {
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
+          status: 'TOOL_CALL_STATUS_PENDING',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -50,10 +51,7 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('approve: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.approve('toolCallId', {
-      objectiveId: 'objectiveId',
-      memo: 'memo',
-    });
+    const response = await client.objectives.toolCalls.approve('toolCallId', { objectiveId: 'objectiveId' });
   });
 
   // Mock server tests are disabled

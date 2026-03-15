@@ -25,8 +25,7 @@ export class ToolCalls extends APIResource {
 
   /**
    * When an agent attempts to use a tool that requires approval, use this endpoint
-   * to mark it as approved. You may optionally include a memo in the approval as
-   * well.
+   * to mark it as approved.
    */
   approve(
     toolCallID: string,
@@ -42,9 +41,8 @@ export class ToolCalls extends APIResource {
 
   /**
    * When an agent attempts to use a tool that requires approval, use this endpoint
-   * to mark it as denied. You may optionally include a memo in the denial as well.
-   * If provided, the memo is passed to the agent when a rejection occurs so you may
-   * provide further instructions.
+   * to mark it as denied. Use a memo to steer the LLM to a different decision or
+   * usage of the tool.
    */
   deny(
     toolCallID: string,
@@ -67,6 +65,8 @@ export type ObjectiveToolCallsCursorPagination = CursorPagination<ObjectiveToolC
  * denied, or executed.
  */
 export interface ObjectiveToolCall {
+  data: ObjectiveToolCall.Data;
+
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
@@ -82,52 +82,42 @@ export interface ObjectiveToolCall {
     | 'TOOL_CALL_STATUS_DENIED'
     | 'TOOL_CALL_STATUS_EXECUTED';
 
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  approvedBy?: Shared.Profile;
-
-  /**
-   * The arguments passed to the tool
-   */
-  arguments?: { [key: string]: unknown };
-
-  /**
-   * CallableTool is a union that represents a tool that can be called by an agent.
-   * In Cadenya, a tool that is used within an agent objective might be a
-   * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-   * and a Cadenya Tool (one Cadenya provides). These tools
-   */
-  callable?: Shared.CallableTool;
-
-  /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-   */
-  deniedBy?: Shared.Profile;
-
   info?: ObjectiveToolCall.Info;
-
-  /**
-   * A memo supplied by the approver or denier
-   */
-  memo?: string;
-
-  /**
-   * The objective this tool call belongs to
-   */
-  objectiveId?: string;
-
-  /**
-   * The result content returned by the tool after execution
-   */
-  result?: string;
 }
 
 export namespace ObjectiveToolCall {
+  export interface Data {
+    /**
+     * CallableTool is a union that represents a tool that can be called by an agent.
+     * In Cadenya, a tool that is used within an agent objective might be a
+     * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+     * or a Cadenya Tool (one Cadenya provides).
+     */
+    callable: Shared.CallableTool;
+
+    /**
+     * The arguments passed to the tool
+     */
+    arguments?: { [key: string]: unknown };
+
+    /**
+     * A memo supplied by the reviewer when denying the tool call
+     */
+    memo?: string;
+
+    /**
+     * The result content returned by the tool after execution
+     */
+    result?: string;
+
+    /**
+     * Profile represents a human user at the account level. Profiles are
+     * account-scoped resources that can be associated with multiple workspaces through
+     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     */
+    statusChangedBy?: Shared.Profile;
+  }
+
   export interface Info {
     /**
      * Profile represents a human user at the account level. Profiles are
@@ -149,18 +139,22 @@ export interface ToolCallListParams extends CursorPaginationParams {
    * When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
+
+  /**
+   * Filter by tool call status
+   */
+  status?:
+    | 'TOOL_CALL_STATUS_PENDING'
+    | 'TOOL_CALL_STATUS_APPROVED'
+    | 'TOOL_CALL_STATUS_DENIED'
+    | 'TOOL_CALL_STATUS_EXECUTED';
 }
 
 export interface ToolCallApproveParams {
   /**
-   * Path param: The ID of the objective. Supports "eid:" prefix for external IDs.
+   * The ID of the objective. Supports "eid:" prefix for external IDs.
    */
   objectiveId: string;
-
-  /**
-   * Body param: A memo to associate to the tool call approval
-   */
-  memo?: string;
 }
 
 export interface ToolCallDenyParams {
@@ -170,7 +164,8 @@ export interface ToolCallDenyParams {
   objectiveId: string;
 
   /**
-   * Body param: A memo to associate to the tool call denial
+   * Body param: A memo to associate to the tool call denial. Use a memo to steer the
+   * LLM to a different decision or usage of the tool.
    */
   memo?: string;
 }

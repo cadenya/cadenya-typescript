@@ -117,11 +117,9 @@ export interface AssistantToolCall {
    * CallableTool is a union that represents a tool that can be called by an agent.
    * In Cadenya, a tool that is used within an agent objective might be a
    * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-   * and a Cadenya Tool (one Cadenya provides). These tools
+   * or a Cadenya Tool (one Cadenya provides).
    */
   tool?: Shared.CallableTool;
-
-  toolCallId?: string;
 }
 
 export interface Objective {
@@ -365,28 +363,37 @@ export interface SubObjectiveCreated {
 
 export interface ToolApprovalRequested {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record. Use this ID with the ApproveToolCall
+   * or DenyToolCall RPCs to approve or deny the tool call.
    */
   toolCallId?: string;
 }
 
 export interface ToolApproved {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record that was approved via the
+   * ApproveToolCall RPC.
    */
   toolCallId?: string;
 }
 
 export interface ToolCalled {
   /**
-   * The ID of the tool call record
+   * The ID of the objective tool call record that was executed.
    */
   toolCallId?: string;
 }
 
 export interface ToolDenied {
   /**
-   * The ID of the tool call record
+   * The memo provided by the reviewer when denying the tool call. This is passed to
+   * the agent to provide further instructions.
+   */
+  memo?: string;
+
+  /**
+   * The ID of the objective tool call record that was denied via the DenyToolCall
+   * RPC.
    */
   toolCallId?: string;
 }
@@ -394,6 +401,10 @@ export interface ToolDenied {
 export interface ToolError {
   message?: string;
 
+  /**
+   * The ID of the objective tool call record that encountered an error during
+   * execution.
+   */
   toolCallId?: string;
 }
 
@@ -419,12 +430,6 @@ export interface ObjectiveContinueResponse {
   contextWindowId?: string;
 
   info?: ObjectiveContinueResponse.Info;
-
-  /**
-   * The tool call ID associated with this event, if applicable. Useful for webhook
-   * receivers that need to approve or deny tool calls.
-   */
-  objectiveToolCallId?: string;
 }
 
 export namespace ObjectiveContinueResponse {
@@ -456,12 +461,6 @@ export interface ObjectiveListEventsResponse {
   contextWindowId?: string;
 
   info?: ObjectiveListEventsResponse.Info;
-
-  /**
-   * The tool call ID associated with this event, if applicable. Useful for webhook
-   * receivers that need to approve or deny tool calls.
-   */
-  objectiveToolCallId?: string;
 }
 
 export namespace ObjectiveListEventsResponse {
