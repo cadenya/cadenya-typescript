@@ -419,6 +419,12 @@ export interface ObjectiveContinueResponse {
   contextWindowId?: string;
 
   info?: ObjectiveContinueResponse.Info;
+
+  /**
+   * The tool call ID associated with this event, if applicable. Useful for webhook
+   * receivers that need to approve or deny tool calls.
+   */
+  objectiveToolCallId?: string;
 }
 
 export namespace ObjectiveContinueResponse {
@@ -450,6 +456,12 @@ export interface ObjectiveListEventsResponse {
   contextWindowId?: string;
 
   info?: ObjectiveListEventsResponse.Info;
+
+  /**
+   * The tool call ID associated with this event, if applicable. Useful for webhook
+   * receivers that need to approve or deny tool calls.
+   */
+  objectiveToolCallId?: string;
 }
 
 export namespace ObjectiveListEventsResponse {
