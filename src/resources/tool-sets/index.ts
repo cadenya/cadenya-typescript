@@ -26,6 +26,7 @@ export {
   type ConfigHTTP,
   type ConfigMcp,
   type Tool,
+  type ToolInfo,
   type ToolSpec,
   type ToolSpecConfig,
   type ToolSpecContentFilter,
