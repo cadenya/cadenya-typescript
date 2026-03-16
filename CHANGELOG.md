@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.35.0 (2026-03-16)
+
+Full Changelog: [v0.34.0...v0.35.0](https://github.com/cadenya/typescript-sdk/compare/v0.34.0...v0.35.0)
+
+### Features
+
+* **api:** api update ([b464af7](https://github.com/cadenya/typescript-sdk/commit/b464af7901390fc3db24b7356ded8b0309671c08))
+
 ## 0.34.0 (2026-03-16)
 
 Full Changelog: [v0.33.0...v0.34.0](https://github.com/cadenya/typescript-sdk/compare/v0.33.0...v0.34.0)
