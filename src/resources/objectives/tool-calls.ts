@@ -65,7 +65,7 @@ export type ObjectiveToolCallsCursorPagination = CursorPagination<ObjectiveToolC
  * denied, or executed.
  */
 export interface ObjectiveToolCall {
-  data: ObjectiveToolCall.Data;
+  data: ObjectiveToolCallData;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -83,56 +83,54 @@ export interface ObjectiveToolCall {
     | 'TOOL_CALL_STATUS_APPROVED'
     | 'TOOL_CALL_STATUS_DENIED';
 
-  info?: ObjectiveToolCall.Info;
+  info?: ObjectiveToolCallInfo;
 }
 
-export namespace ObjectiveToolCall {
-  export interface Data {
-    /**
-     * CallableTool is a union that represents a tool that can be called by an agent.
-     * In Cadenya, a tool that is used within an agent objective might be a
-     * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
-     * or a Cadenya Tool (one Cadenya provides).
-     */
-    callable: Shared.CallableTool;
+export interface ObjectiveToolCallData {
+  /**
+   * CallableTool is a union that represents a tool that can be called by an agent.
+   * In Cadenya, a tool that is used within an agent objective might be a
+   * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+   * or a Cadenya Tool (one Cadenya provides).
+   */
+  callable: Shared.CallableTool;
 
-    /**
-     * The arguments passed to the tool
-     */
-    arguments?: { [key: string]: unknown };
+  /**
+   * The arguments passed to the tool
+   */
+  arguments?: { [key: string]: unknown };
 
-    /**
-     * A memo supplied by the reviewer when denying the tool call
-     */
-    memo?: string;
+  /**
+   * A memo supplied by the reviewer when denying the tool call
+   */
+  memo?: string;
 
-    /**
-     * The result content returned by the tool after execution
-     */
-    result?: string;
+  /**
+   * The result content returned by the tool after execution
+   */
+  result?: string;
 
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    statusChangedBy?: Shared.Profile;
-  }
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  statusChangedBy?: Shared.Profile;
+}
 
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
+export interface ObjectiveToolCallInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
 
-    /**
-     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-     * runs)
-     */
-    objective?: Shared.OperationMetadata;
-  }
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  objective?: Shared.OperationMetadata;
 }
 
 export interface ToolCallListParams extends CursorPaginationParams {
@@ -175,6 +173,8 @@ export interface ToolCallDenyParams {
 export declare namespace ToolCalls {
   export {
     type ObjectiveToolCall as ObjectiveToolCall,
+    type ObjectiveToolCallData as ObjectiveToolCallData,
+    type ObjectiveToolCallInfo as ObjectiveToolCallInfo,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
