@@ -39,6 +39,18 @@ export interface AccountResourceMetadata {
 }
 
 /**
+ * BareMetadata contains the minimal metadata for a resource, including the ID.
+ * These are used sparingly in Cadenya for resources where the full metadata is not
+ * needed. You will come across them in list responses and other places where the
+ * full metadata is not required like listing the tools that were assigned to an
+ * objective. Because these types records are commonly created by other processes
+ * in Cadenya, they do not have things like external IDs, labels, or names.
+ */
+export interface BareMetadata {
+  id: string;
+}
+
+/**
  * CallableTool is a union that represents a tool that can be called by an agent.
  * In Cadenya, a tool that is used within an agent objective might be a
  * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),

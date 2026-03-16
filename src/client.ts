@@ -69,6 +69,14 @@ import {
   Strings,
 } from './resources/documents';
 import {
+  Model,
+  ModelListParams,
+  ModelSetStatusParams,
+  ModelSpec,
+  Models,
+  ModelsCursorPagination,
+} from './resources/models';
+import {
   Search,
   SearchSearchToolsOrToolSetsParams,
   SearchSearchToolsOrToolSetsResponse,
@@ -115,6 +123,8 @@ import {
   ObjectiveDataSecret,
   ObjectiveError,
   ObjectiveEventData,
+  ObjectiveEventInfo,
+  ObjectiveEventWebhookData,
   ObjectiveInfo,
   ObjectiveListContextWindowsParams,
   ObjectiveListEventsParams,
@@ -921,6 +931,16 @@ export class Cadenya {
    */
   agents: API.Agents = new API.Agents(this);
   objectives: API.Objectives = new API.Objectives(this);
+  /**
+   * ModelService manages LLM models at the WORKSPACE level.
+   *  Models represent available LLM providers and families (e.g., "anthropic/claude-sonnet-4.6").
+   *  Models are seeded into workspaces and can be enabled or disabled.
+   *  All operations are implicitly scoped to the workspace determined by the JWT token.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
+  models: API.Models = new API.Models(this);
   search: API.Search = new API.Search(this);
   /**
    * ToolService manages tool sets and tools at the WORKSPACE level.
@@ -983,6 +1003,7 @@ export class Cadenya {
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
+Cadenya.Models = Models;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
@@ -1025,6 +1046,8 @@ export declare namespace Cadenya {
     type ObjectiveDataSecret as ObjectiveDataSecret,
     type ObjectiveError as ObjectiveError,
     type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveEventInfo as ObjectiveEventInfo,
+    type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveStatus as ObjectiveStatus,
     type SubObjectiveCreated as SubObjectiveCreated,
@@ -1046,6 +1069,15 @@ export declare namespace Cadenya {
     type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
+  };
+
+  export {
+    Models as Models,
+    type Model as Model,
+    type ModelSpec as ModelSpec,
+    type ModelsCursorPagination as ModelsCursorPagination,
+    type ModelListParams as ModelListParams,
+    type ModelSetStatusParams as ModelSetStatusParams,
   };
 
   export {
@@ -1146,6 +1178,7 @@ export declare namespace Cadenya {
   };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
+  export type BareMetadata = API.BareMetadata;
   export type CallableTool = API.CallableTool;
   export type CreateOperationMetadata = API.CreateOperationMetadata;
   export type CreateResourceMetadata = API.CreateResourceMetadata;

@@ -11,6 +11,8 @@ export {
   type ObjectiveDataSecret,
   type ObjectiveError,
   type ObjectiveEventData,
+  type ObjectiveEventInfo,
+  type ObjectiveEventWebhookData,
   type ObjectiveInfo,
   type ObjectiveStatus,
   type SubObjectiveCreated,
@@ -36,8 +38,11 @@ export {
 export {
   ToolCalls,
   type ObjectiveToolCall,
+  type ObjectiveToolCallData,
+  type ObjectiveToolCallInfo,
   type ToolCallListParams,
   type ToolCallApproveParams,
   type ToolCallDenyParams,
   type ObjectiveToolCallsCursorPagination,
 } from './tool-calls';
+export { Tools, type ObjectiveTool, type ToolListParams, type ObjectiveToolsCursorPagination } from './tools';

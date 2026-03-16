@@ -3,6 +3,7 @@
 Types:
 
 - <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">BareMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">CreateOperationMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CreateResourceMetadata</a></code>
@@ -85,6 +86,8 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveDataSecret</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveError</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventInfo</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveStatus</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">SubObjectiveCreated</a></code>
@@ -108,17 +111,42 @@ Methods:
 - <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
 - <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
+## Tools
+
+Types:
+
+- <code><a href="./src/resources/objectives/tools.ts">ObjectiveTool</a></code>
+
+Methods:
+
+- <code title="get /v1/objectives/{objectiveId}/tools">client.objectives.tools.<a href="./src/resources/objectives/tools.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolsCursorPagination</code>
+
 ## ToolCalls
 
 Types:
 
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCall</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallData</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallInfo</a></code>
 
 Methods:
 
 - <code title="get /v1/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+
+# Models
+
+Types:
+
+- <code><a href="./src/resources/models.ts">Model</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpec</a></code>
+
+Methods:
+
+- <code title="get /v1/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id) -> Model</code>
+- <code title="get /v1/models">client.models.<a href="./src/resources/models.ts">list</a>({ ...params }) -> ModelsCursorPagination</code>
+- <code title="put /v1/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
 
 # Search
 

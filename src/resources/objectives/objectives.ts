@@ -1,24 +1,30 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ObjectivesAPI from './objectives';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
 import * as VariationsAPI from '../agents/variations';
 import * as ToolCallsAPI from './tool-calls';
 import {
   ObjectiveToolCall,
+  ObjectiveToolCallData,
+  ObjectiveToolCallInfo,
   ObjectiveToolCallsCursorPagination,
   ToolCallApproveParams,
   ToolCallDenyParams,
   ToolCallListParams,
   ToolCalls,
 } from './tool-calls';
+import * as ToolsAPI from './tools';
+import { ObjectiveTool, ObjectiveToolsCursorPagination, ToolListParams, Tools } from './tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Objectives extends APIResource {
+  tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
   toolCalls: ToolCallsAPI.ToolCalls = new ToolCallsAPI.ToolCalls(this._client);
 
   /**
@@ -295,6 +301,57 @@ export interface ObjectiveEventData {
   userMessage?: UserMessage;
 }
 
+export interface ObjectiveEventInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  objective?: Shared.OperationMetadata;
+}
+
+/**
+ * The data sent for an objective event webhook. Includes the full objective
+ * alongside the event.
+ */
+export interface ObjectiveEventWebhookData {
+  data: ObjectiveEventWebhookData.Data;
+
+  timestamp: string;
+
+  type: string;
+}
+
+export namespace ObjectiveEventWebhookData {
+  export interface Data {
+    event: Data.Event;
+
+    objective: ObjectivesAPI.Objective;
+  }
+
+  export namespace Data {
+    export interface Event {
+      data: ObjectivesAPI.ObjectiveEventData;
+
+      /**
+       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+       * runs)
+       */
+      metadata: Shared.OperationMetadata;
+
+      contextWindowId?: string;
+
+      info?: ObjectivesAPI.ObjectiveEventInfo;
+    }
+  }
+}
+
 /**
  * ObjectiveInfo provides read-only aggregated statistics about an objective's
  * execution
@@ -429,24 +486,7 @@ export interface ObjectiveContinueResponse {
 
   contextWindowId?: string;
 
-  info?: ObjectiveContinueResponse.Info;
-}
-
-export namespace ObjectiveContinueResponse {
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
-
-    /**
-     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-     * runs)
-     */
-    objective?: Shared.OperationMetadata;
-  }
+  info?: ObjectiveEventInfo;
 }
 
 export interface ObjectiveListEventsResponse {
@@ -460,24 +500,7 @@ export interface ObjectiveListEventsResponse {
 
   contextWindowId?: string;
 
-  info?: ObjectiveListEventsResponse.Info;
-}
-
-export namespace ObjectiveListEventsResponse {
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
-
-    /**
-     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-     * runs)
-     */
-    objective?: Shared.OperationMetadata;
-  }
+  info?: ObjectiveEventInfo;
 }
 
 export interface ObjectiveCreateParams {
@@ -587,6 +610,7 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+Objectives.Tools = Tools;
 Objectives.ToolCalls = ToolCalls;
 
 export declare namespace Objectives {
@@ -600,6 +624,8 @@ export declare namespace Objectives {
     type ObjectiveDataSecret as ObjectiveDataSecret,
     type ObjectiveError as ObjectiveError,
     type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveEventInfo as ObjectiveEventInfo,
+    type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveStatus as ObjectiveStatus,
     type SubObjectiveCreated as SubObjectiveCreated,
@@ -624,8 +650,17 @@ export declare namespace Objectives {
   };
 
   export {
+    Tools as Tools,
+    type ObjectiveTool as ObjectiveTool,
+    type ObjectiveToolsCursorPagination as ObjectiveToolsCursorPagination,
+    type ToolListParams as ToolListParams,
+  };
+
+  export {
     ToolCalls as ToolCalls,
     type ObjectiveToolCall as ObjectiveToolCall,
+    type ObjectiveToolCallData as ObjectiveToolCallData,
+    type ObjectiveToolCallInfo as ObjectiveToolCallInfo,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
