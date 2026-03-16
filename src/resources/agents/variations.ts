@@ -97,6 +97,11 @@ export namespace AgentVariation {
     createdBy?: Shared.Profile;
 
     /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    model?: Shared.ResourceMetadata;
+
+    /**
      * Number of sub-agents assigned to this variation
      */
     subAgentCount?: number;
@@ -157,11 +162,6 @@ export interface AgentVariationSpec {
    * ModelConfig defines the model configuration for a variation
    */
   modelConfig?: AgentVariationSpecModelConfig;
-
-  /**
-   * The ID of the model to use for this variation
-   */
-  modelId?: string;
 
   /**
    * The system prompt for this variation
