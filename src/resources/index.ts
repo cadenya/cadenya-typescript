@@ -62,6 +62,14 @@ export {
   type DocumentsCursorPagination,
 } from './documents';
 export {
+  Models,
+  type Model,
+  type ModelSpec,
+  type ModelListParams,
+  type ModelSetStatusParams,
+  type ModelsCursorPagination,
+} from './models';
+export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
@@ -72,6 +80,8 @@ export {
   type ObjectiveDataSecret,
   type ObjectiveError,
   type ObjectiveEventData,
+  type ObjectiveEventInfo,
+  type ObjectiveEventWebhookData,
   type ObjectiveInfo,
   type ObjectiveStatus,
   type SubObjectiveCreated,
