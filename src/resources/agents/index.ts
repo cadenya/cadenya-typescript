@@ -14,6 +14,7 @@ export {
 export {
   Variations,
   type AgentVariation,
+  type AgentVariationInfo,
   type AgentVariationSpec,
   type AgentVariationSpecAgentDocument,
   type AgentVariationSpecAgentTool,

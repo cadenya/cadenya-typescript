@@ -5,6 +5,7 @@ import * as Shared from '../shared';
 import * as VariationsAPI from './variations';
 import {
   AgentVariation,
+  AgentVariationInfo,
   AgentVariationSpec,
   AgentVariationSpecAgentDocument,
   AgentVariationSpecAgentTool,
@@ -266,6 +267,7 @@ export declare namespace Agents {
   export {
     Variations as Variations,
     type AgentVariation as AgentVariation,
+    type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
     type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,

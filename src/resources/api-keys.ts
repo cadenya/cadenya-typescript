@@ -90,24 +90,22 @@ export interface APIKey {
    */
   spec: APIKeySpec;
 
-  info?: APIKey.Info;
+  info?: APIKeyInfo;
 }
 
-export namespace APIKey {
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
+export interface APIKeyInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
 
-    /**
-     * AccountResourceMetadata is used to represent a resource that is associated to an
-     * account but not to a workspace.
-     */
-    workspace?: Shared.AccountResourceMetadata;
-  }
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
+  workspace?: Shared.AccountResourceMetadata;
 }
 
 /**
@@ -235,6 +233,7 @@ export interface APIKeyListParams extends CursorPaginationParams {
 export declare namespace APIKeys {
   export {
     type APIKey as APIKey,
+    type APIKeyInfo as APIKeyInfo,
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,

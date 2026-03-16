@@ -81,41 +81,39 @@ export interface AgentVariation {
   /**
    * AgentVariationInfo provides read-only summary information about a variation
    */
-  info?: AgentVariation.Info;
+  info?: AgentVariationInfo;
 }
 
-export namespace AgentVariation {
+/**
+ * AgentVariationInfo provides read-only summary information about a variation
+ */
+export interface AgentVariationInfo {
   /**
-   * AgentVariationInfo provides read-only summary information about a variation
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
+  createdBy?: Shared.Profile;
 
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    model?: Shared.ResourceMetadata;
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  model?: Shared.ResourceMetadata;
 
-    /**
-     * Number of sub-agents assigned to this variation
-     */
-    subAgentCount?: number;
+  /**
+   * Number of sub-agents assigned to this variation
+   */
+  subAgentCount?: number;
 
-    /**
-     * Number of individual tools assigned to this variation
-     */
-    toolCount?: number;
+  /**
+   * Number of individual tools assigned to this variation
+   */
+  toolCount?: number;
 
-    /**
-     * Number of tool sets assigned to this variation
-     */
-    toolSetCount?: number;
-  }
+  /**
+   * Number of tool sets assigned to this variation
+   */
+  toolSetCount?: number;
 }
 
 /**
@@ -359,6 +357,7 @@ export interface VariationDeleteParams {
 export declare namespace Variations {
   export {
     type AgentVariation as AgentVariation,
+    type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
     type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
