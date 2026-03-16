@@ -159,6 +159,11 @@ export interface AgentVariationSpec {
   modelConfig?: AgentVariationSpecModelConfig;
 
   /**
+   * The ID of the model to use for this variation
+   */
+  modelId?: string;
+
+  /**
    * The system prompt for this variation
    */
   prompt?: string;
