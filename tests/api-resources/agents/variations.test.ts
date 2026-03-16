@@ -75,6 +75,7 @@ describe('resource variations', () => {
         enableEpisodicMemory: true,
         episodicMemoryTtl: 0,
         modelConfig: { modelId: 'modelId', temperature: 0 },
+        modelId: 'modelId',
         prompt: 'prompt',
         toolSelection: {
           assignedTools: { allowDiscovery: true },
@@ -167,6 +168,7 @@ describe('resource variations', () => {
         enableEpisodicMemory: true,
         episodicMemoryTtl: 0,
         modelConfig: { modelId: 'modelId', temperature: 0 },
+        modelId: 'modelId',
         prompt: 'prompt',
         toolSelection: {
           assignedTools: { allowDiscovery: true },
