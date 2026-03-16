@@ -46,6 +46,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationInfo</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentDocument</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
@@ -191,6 +192,7 @@ Types:
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">Tool</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfig</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecContentFilter</a></code>
@@ -208,6 +210,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/api-keys.ts">APIKey</a></code>
+- <code><a href="./src/resources/api-keys.ts">APIKeyInfo</a></code>
 - <code><a href="./src/resources/api-keys.ts">APIKeySpec</a></code>
 
 Methods:

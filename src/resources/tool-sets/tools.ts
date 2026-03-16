@@ -111,23 +111,21 @@ export interface Tool {
 
   spec: ToolSpec;
 
-  info?: Tool.Info;
+  info?: ToolInfo;
 }
 
-export namespace Tool {
-  export interface Info {
-    /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
-     */
-    createdBy?: Shared.Profile;
+export interface ToolInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: Shared.Profile;
 
-    /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-     */
-    toolSet?: Shared.ResourceMetadata;
-  }
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  toolSet?: Shared.ResourceMetadata;
 }
 
 export interface ToolSpec {
@@ -238,6 +236,7 @@ export declare namespace Tools {
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
     type Tool as Tool,
+    type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
     type ToolSpecContentFilter as ToolSpecContentFilter,

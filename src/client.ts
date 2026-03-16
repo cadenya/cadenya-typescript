@@ -23,6 +23,7 @@ import { Account, AccountResource } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
+  APIKeyInfo,
   APIKeyListParams,
   APIKeySpec,
   APIKeyUpdateParams,
@@ -1111,6 +1112,7 @@ export declare namespace Cadenya {
   export {
     APIKeys as APIKeys,
     type APIKey as APIKey,
+    type APIKeyInfo as APIKeyInfo,
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,
