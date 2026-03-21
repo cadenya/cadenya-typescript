@@ -956,13 +956,11 @@ export class Cadenya {
    */
   toolSets: API.ToolSets = new API.ToolSets(this);
   /**
-   * APIKeyService manages API Keys at the ACCOUNT level.
-   *  API Keys belong directly to accounts and can be associated with multiple
-   *  workspaces through the Actor model. This allows a single API Key to have
-   *  cross-workspace access.
+   * APIKeyService manages workspace-scoped API Keys.
+   *  Each API key belongs to a single workspace, ensuring isolation between environments.
    *
    *  Authentication: Bearer token (JWT)
-   *  Scope: Account-level operations
+   *  Scope: Workspace-level operations
    */
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);

@@ -9,39 +9,36 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * APIKeyService manages API Keys at the ACCOUNT level.
- *  API Keys belong directly to accounts and can be associated with multiple
- *  workspaces through the Actor model. This allows a single API Key to have
- *  cross-workspace access.
+ * APIKeyService manages workspace-scoped API Keys.
+ *  Each API key belongs to a single workspace, ensuring isolation between environments.
  *
  *  Authentication: Bearer token (JWT)
- *  Scope: Account-level operations
+ *  Scope: Workspace-level operations
  */
 export class APIKeys extends APIResource {
   /**
-   * Creates a new API key at the account level. The API key can then be associated
-   * with workspaces via the Actor model.
+   * Creates a new API key in the workspace.
    */
   create(body: APIKeyCreateParams, options?: RequestOptions): APIPromise<APIKey> {
     return this._client.post('/v1/api_keys', { body, ...options });
   }
 
   /**
-   * Retrieves an API key by ID from the account
+   * Retrieves an API key by ID from the workspace
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<APIKey> {
     return this._client.get(path`/v1/api_keys/${id}`, options);
   }
 
   /**
-   * Updates an API key at the account level
+   * Updates an API key in the workspace
    */
   update(id: string, body: APIKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey> {
     return this._client.patch(path`/v1/api_keys/${id}`, { body, ...options });
   }
 
   /**
-   * Lists all API keys in the account
+   * Lists all API keys in the workspace
    */
   list(
     query: APIKeyListParams | null | undefined = {},
@@ -51,7 +48,7 @@ export class APIKeys extends APIResource {
   }
 
   /**
-   * Deletes an API key from the account
+   * Deletes an API key from the workspace
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/api_keys/${id}`, {
@@ -72,18 +69,15 @@ export class APIKeys extends APIResource {
 export type APIKeysCursorPagination = CursorPagination<APIKey>;
 
 /**
- * APIKey represents a machine/service account at the account level. API Keys are
- * account-scoped resources that can be associated with multiple workspaces through
- * the Actor model. Authentication for API Keys is handled via Cadenya-issued JWTs.
- * A single API Key can now have actors in multiple workspaces, allowing for
- * cross-workspace service accounts.
+ * APIKey represents a workspace-scoped API key. Each API key belongs to exactly
+ * one workspace, ensuring workspace isolation. Authentication is handled via
+ * Cadenya-issued JWTs signed with the key's own signing secret.
  */
 export interface APIKey {
   /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  metadata: Shared.AccountResourceMetadata;
+  metadata: Shared.ResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -100,12 +94,6 @@ export interface APIKeyInfo {
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
   createdBy?: Shared.Profile;
-
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  workspace?: Shared.AccountResourceMetadata;
 }
 
 /**
@@ -113,7 +101,7 @@ export interface APIKeyInfo {
  */
 export interface APIKeySpec {
   /**
-   * The actual token value (only returned on creation, read-only)
+   * The actual token value (only returned on creation and rotation, read-only)
    */
   token?: string;
 
@@ -121,20 +109,15 @@ export interface APIKeySpec {
    * Description of what this API Key is used for
    */
   description?: string;
-
-  /**
-   * workspace_id is used when an API key is scoped to a workspace
-   */
-  workspaceId?: string;
 }
 
 export interface APIKeyCreateParams {
   /**
-   * CreateAccountResourceMetadata contains the user-provided fields for creating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata: APIKeyCreateParams.Metadata;
+  metadata: Shared.CreateResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -142,39 +125,13 @@ export interface APIKeyCreateParams {
   spec: APIKeySpec;
 }
 
-export namespace APIKeyCreateParams {
-  /**
-   * CreateAccountResourceMetadata contains the user-provided fields for creating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Production API Key", "Staging
-     * Workspace")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
-}
-
 export interface APIKeyUpdateParams {
   /**
-   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
+   * UpdateResourceMetadata contains the user-provided fields for updating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
    */
-  metadata?: APIKeyUpdateParams.Metadata;
+  metadata?: Shared.UpdateResourceMetadata;
 
   /**
    * APIKeySpec contains the API Key-specific fields
@@ -185,32 +142,6 @@ export interface APIKeyUpdateParams {
    * Fields to update
    */
   updateMask?: string;
-}
-
-export namespace APIKeyUpdateParams {
-  /**
-   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
-   */
-  export interface Metadata {
-    /**
-     * Human-readable name for the resource (e.g., "Production API Key", "Staging
-     * Workspace")
-     */
-    name: string;
-
-    /**
-     * External ID for the resource (e.g., a workflow ID from an external system)
-     */
-    externalId?: string;
-
-    /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
-     */
-    labels?: { [key: string]: string };
-  }
 }
 
 export interface APIKeyListParams extends CursorPaginationParams {
