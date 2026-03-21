@@ -634,6 +634,11 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
+
+  /**
+   * Optional context window ID to filter events by
+   */
+  windowId?: string;
 }
 
 Objectives.Tools = Tools;
