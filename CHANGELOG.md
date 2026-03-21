@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.36.0 (2026-03-21)
+
+Full Changelog: [v0.35.0...v0.36.0](https://github.com/cadenya/typescript-sdk/compare/v0.35.0...v0.36.0)
+
+### Features
+
+* **api:** api update ([6a417ba](https://github.com/cadenya/typescript-sdk/commit/6a417ba6d6751935180692739a1a1fd57383c69a))
+* **api:** api update ([694f259](https://github.com/cadenya/typescript-sdk/commit/694f2599a15f12178edd07595acb46040cf9edb5))
+* **api:** api update ([3379643](https://github.com/cadenya/typescript-sdk/commit/337964340c4e4253a7e0e7a87a3efb44feb2bcce))
+
+
+### Chores
+
+* **internal:** tweak CI branches ([eb5c172](https://github.com/cadenya/typescript-sdk/commit/eb5c17291c4bcbb529441c8c7acd90e724ae1db6))
+
 ## 0.35.0 (2026-03-16)
 
 Full Changelog: [v0.34.0...v0.35.0](https://github.com/cadenya/typescript-sdk/compare/v0.34.0...v0.35.0)
