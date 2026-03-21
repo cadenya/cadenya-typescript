@@ -317,26 +317,52 @@ export interface ObjectiveEventInfo {
 }
 
 /**
- * The data sent for an objective event webhook. Includes the full objective
- * alongside the event.
+ * The envelope for an objective event webhook delivery. Contains timestamp, event
+ * type, and the webhook data payload.
  */
 export interface ObjectiveEventWebhookData {
+  /**
+   * The webhook data payload with flat top-level keys for agent, variation,
+   * objective, and event.
+   */
   data: ObjectiveEventWebhookData.Data;
 
   timestamp: string;
 
+  /**
+   * The event type, prefixed with objective_event. (e.g.,
+   * objective_event.tool_result)
+   */
   type: string;
 }
 
 export namespace ObjectiveEventWebhookData {
+  /**
+   * The webhook data payload with flat top-level keys for agent, variation,
+   * objective, and event.
+   */
   export interface Data {
-    event: Data.Event;
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    agent: Shared.ResourceMetadata;
 
-    objective: ObjectivesAPI.Objective;
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    agentVariation: Shared.ResourceMetadata;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective: Shared.OperationMetadata;
+
+    objectiveEvent: Data.ObjectiveEvent;
   }
 
   export namespace Data {
-    export interface Event {
+    export interface ObjectiveEvent {
       data: ObjectivesAPI.ObjectiveEventData;
 
       /**
