@@ -161,6 +161,7 @@ describe('resource objectives', () => {
           includeInfo: true,
           limit: 0,
           sortOrder: 'sortOrder',
+          windowId: 'windowId',
         },
         { path: '/_stainless_unknown_path' },
       ),

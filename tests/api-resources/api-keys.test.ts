@@ -31,7 +31,7 @@ describe('resource apiKeys', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { description: 'description', workspaceId: 'workspaceId' },
+      spec: { description: 'description' },
     });
   });
 
