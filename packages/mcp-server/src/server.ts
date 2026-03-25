@@ -21,7 +21,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'cadenya_api',
-      version: '0.36.1',
+      version: '0.37.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),
