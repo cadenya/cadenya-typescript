@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.36.1 (2026-03-25)
+
+Full Changelog: [v0.36.0...v0.36.1](https://github.com/cadenya/typescript-sdk/compare/v0.36.0...v0.36.1)
+
+### Chores
+
+* **internal:** update gitignore ([59f9617](https://github.com/cadenya/typescript-sdk/commit/59f961709ea726228dfa70c50d586ee519bdbc9a))
+
 ## 0.36.0 (2026-03-21)
 
 Full Changelog: [v0.35.0...v0.36.0](https://github.com/cadenya/typescript-sdk/compare/v0.35.0...v0.36.0)
