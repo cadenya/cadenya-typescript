@@ -33,6 +33,7 @@ export {
 export {
   WebhookDeliveries,
   type WebhookDelivery,
+  type WebhookDeliveryData,
   type WebhookDeliveryListParams,
   type WebhookDeliveriesCursorPagination,
 } from './webhook-deliveries';

@@ -27,6 +27,7 @@ import {
   WebhookDeliveries,
   WebhookDeliveriesCursorPagination,
   WebhookDelivery,
+  WebhookDeliveryData,
   WebhookDeliveryListParams,
 } from './webhook-deliveries';
 import { APIPromise } from '../../core/api-promise';
@@ -287,6 +288,7 @@ export declare namespace Agents {
   export {
     WebhookDeliveries as WebhookDeliveries,
     type WebhookDelivery as WebhookDelivery,
+    type WebhookDeliveryData as WebhookDeliveryData,
     type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
     type WebhookDeliveryListParams as WebhookDeliveryListParams,
   };

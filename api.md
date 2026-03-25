@@ -69,6 +69,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDelivery</a></code>
+- <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDeliveryData</a></code>
 
 Methods:
 
