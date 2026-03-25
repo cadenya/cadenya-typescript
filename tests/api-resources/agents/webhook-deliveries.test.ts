@@ -26,7 +26,12 @@ describe('resource webhookDeliveries', () => {
     await expect(
       client.agents.webhookDeliveries.list(
         'agentId',
-        { cursor: 'cursor', limit: 0 },
+        {
+          cursor: 'cursor',
+          eventType: 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED',
+          limit: 0,
+          objectiveId: 'objectiveId',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
