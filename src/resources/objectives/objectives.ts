@@ -226,11 +226,6 @@ export interface ObjectiveData {
   agent?: AgentsAPI.Agent;
 
   /**
-   * The objective's events will be sent as an HTTP POST request to this endpoint
-   */
-  callbackUrl?: string;
-
-  /**
    * Represents a dynamically typed value which can be either null, a number, a
    * string, a boolean, a recursive struct value, or a list of values.
    */

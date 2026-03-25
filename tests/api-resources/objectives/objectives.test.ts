@@ -29,7 +29,6 @@ describe('resource objectives', () => {
     const response = await client.objectives.create({
       agentId: 'agentId',
       data: {
-        callbackUrl: 'callbackUrl',
         data: {},
         initialMessage: 'initialMessage',
         secrets: [{ name: 'name', value: 'value' }],
