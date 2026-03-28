@@ -63,6 +63,11 @@ export interface ModelSpec {
   family?: string;
 
   /**
+   * Cost per million input tokens in cents (e.g., 300 = $3.00)
+   */
+  inputPricePerMillionTokens?: string;
+
+  /**
    * Maximum number of input tokens the model supports
    */
   maxInputTokens?: number;
@@ -71,6 +76,11 @@ export interface ModelSpec {
    * Maximum number of output tokens the model can generate
    */
   maxOutputTokens?: number;
+
+  /**
+   * Cost per million output tokens in cents (e.g., 1500 = $15.00)
+   */
+  outputPricePerMillionTokens?: string;
 
   /**
    * The model provider (e.g., "anthropic", "openai", "google")
