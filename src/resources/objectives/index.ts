@@ -36,6 +36,14 @@ export {
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives';
 export {
+  Tasks,
+  type ObjectiveTask,
+  type ObjectiveTaskData,
+  type TaskRetrieveParams,
+  type TaskListParams,
+  type ObjectiveTasksCursorPagination,
+} from './tasks';
+export {
   ToolCalls,
   type ObjectiveToolCall,
   type ObjectiveToolCallData,

@@ -149,6 +149,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny',
   },
   {
+    clientCallName: 'client.objectives.tasks.retrieve',
+    fullyQualifiedName: 'objectives.tasks.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/objectives/{objectiveId}/tasks/{id}',
+  },
+  {
+    clientCallName: 'client.objectives.tasks.list',
+    fullyQualifiedName: 'objectives.tasks.list',
+    httpMethod: 'get',
+    httpPath: '/v1/objectives/{objectiveId}/tasks',
+  },
+  {
     clientCallName: 'client.models.retrieve',
     fullyQualifiedName: 'models.retrieve',
     httpMethod: 'get',
@@ -305,12 +317,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/workspace_secrets/{id}',
   },
   {
-    clientCallName: 'client.workspaces.create',
-    fullyQualifiedName: 'workspaces.create',
-    httpMethod: 'post',
-    httpPath: '/v1/workspaces',
-  },
-  {
     clientCallName: 'client.workspaces.list',
     fullyQualifiedName: 'workspaces.list',
     httpMethod: 'get',
@@ -321,66 +327,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'workspaces.get',
     httpMethod: 'get',
     httpPath: '/v1/workspaces/current',
-  },
-  {
-    clientCallName: 'client.documentNamespaces.create',
-    fullyQualifiedName: 'documentNamespaces.create',
-    httpMethod: 'post',
-    httpPath: '/v1/document_namespaces',
-  },
-  {
-    clientCallName: 'client.documentNamespaces.retrieve',
-    fullyQualifiedName: 'documentNamespaces.retrieve',
-    httpMethod: 'get',
-    httpPath: '/v1/document_namespaces/{id}',
-  },
-  {
-    clientCallName: 'client.documentNamespaces.update',
-    fullyQualifiedName: 'documentNamespaces.update',
-    httpMethod: 'patch',
-    httpPath: '/v1/document_namespaces/{id}',
-  },
-  {
-    clientCallName: 'client.documentNamespaces.list',
-    fullyQualifiedName: 'documentNamespaces.list',
-    httpMethod: 'get',
-    httpPath: '/v1/document_namespaces',
-  },
-  {
-    clientCallName: 'client.documentNamespaces.delete',
-    fullyQualifiedName: 'documentNamespaces.delete',
-    httpMethod: 'delete',
-    httpPath: '/v1/document_namespaces/{id}',
-  },
-  {
-    clientCallName: 'client.documents.create',
-    fullyQualifiedName: 'documents.create',
-    httpMethod: 'post',
-    httpPath: '/v1/documents',
-  },
-  {
-    clientCallName: 'client.documents.retrieve',
-    fullyQualifiedName: 'documents.retrieve',
-    httpMethod: 'get',
-    httpPath: '/v1/documents/{id}',
-  },
-  {
-    clientCallName: 'client.documents.update',
-    fullyQualifiedName: 'documents.update',
-    httpMethod: 'patch',
-    httpPath: '/v1/documents/{id}',
-  },
-  {
-    clientCallName: 'client.documents.list',
-    fullyQualifiedName: 'documents.list',
-    httpMethod: 'get',
-    httpPath: '/v1/documents',
-  },
-  {
-    clientCallName: 'client.documents.delete',
-    fullyQualifiedName: 'documents.delete',
-    httpMethod: 'delete',
-    httpPath: '/v1/documents/{id}',
   },
 ];
 
