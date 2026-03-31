@@ -23,45 +23,8 @@ export {
   type AgentListParams,
   type AgentsCursorPagination,
 } from './agents/agents';
-export {
-  DocumentNamespaces,
-  type DocumentNamespace,
-  type DocumentNamespaceSpec,
-  type DocumentNamespaceCreateParams,
-  type DocumentNamespaceUpdateParams,
-  type DocumentNamespaceListParams,
-  type DocumentNamespacesCursorPagination,
-} from './document-namespaces';
-export {
-  Documents,
-  type Any,
-  type AnyOrExpression,
-  type CallbacksOrReferences,
-  type Document,
-  type DocumentSpec,
-  type DocumentSpecInlineContent,
-  type DocumentSpecRemoteSource,
-  type Expression,
-  type GoogleProtobufAny,
-  type HeadersOrReferences,
-  type MediaTypes,
-  type NamedAny,
-  type NamedPathItem,
-  type NamedSchemaOrReference,
-  type NamedServerVariable,
-  type NamedString,
-  type OAuthFlow,
-  type Reference,
-  type SchemaOrReference,
-  type Server,
-  type ServerVariable,
-  type ServerVariables,
-  type Strings,
-  type DocumentCreateParams,
-  type DocumentUpdateParams,
-  type DocumentListParams,
-  type DocumentsCursorPagination,
-} from './documents';
+export { DocumentNamespaces } from './document-namespaces';
+export { Documents, type GoogleProtobufAny } from './documents';
 export {
   Models,
   type Model,
@@ -141,9 +104,4 @@ export {
   type WorkspaceSecretListParams,
   type WorkspaceSecretsCursorPagination,
 } from './workspace-secrets';
-export {
-  Workspaces,
-  type WorkspaceSpec,
-  type WorkspaceCreateParams,
-  type WorkspaceListParams,
-} from './workspaces';
+export { Workspaces, type WorkspaceSpec, type WorkspaceListParams } from './workspaces';

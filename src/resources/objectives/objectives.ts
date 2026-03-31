@@ -5,6 +5,15 @@ import * as ObjectivesAPI from './objectives';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
 import * as VariationsAPI from '../agents/variations';
+import * as TasksAPI from './tasks';
+import {
+  ObjectiveTask,
+  ObjectiveTaskData,
+  ObjectiveTasksCursorPagination,
+  TaskListParams,
+  TaskRetrieveParams,
+  Tasks,
+} from './tasks';
 import * as ToolCallsAPI from './tool-calls';
 import {
   ObjectiveToolCall,
@@ -26,6 +35,7 @@ import { path } from '../../internal/utils/path';
 export class Objectives extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
   toolCalls: ToolCallsAPI.ToolCalls = new ToolCallsAPI.ToolCalls(this._client);
+  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
 
   /**
    * Creates a new objective in the workspace
@@ -638,6 +648,7 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
 
 Objectives.Tools = Tools;
 Objectives.ToolCalls = ToolCalls;
+Objectives.Tasks = Tasks;
 
 export declare namespace Objectives {
   export {
@@ -691,5 +702,14 @@ export declare namespace Objectives {
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
     type ToolCallDenyParams as ToolCallDenyParams,
+  };
+
+  export {
+    Tasks as Tasks,
+    type ObjectiveTask as ObjectiveTask,
+    type ObjectiveTaskData as ObjectiveTaskData,
+    type ObjectiveTasksCursorPagination as ObjectiveTasksCursorPagination,
+    type TaskRetrieveParams as TaskRetrieveParams,
+    type TaskListParams as TaskListParams,
   };
 }

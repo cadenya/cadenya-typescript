@@ -30,45 +30,8 @@ import {
   APIKeys,
   APIKeysCursorPagination,
 } from './resources/api-keys';
-import {
-  DocumentNamespace,
-  DocumentNamespaceCreateParams,
-  DocumentNamespaceListParams,
-  DocumentNamespaceSpec,
-  DocumentNamespaceUpdateParams,
-  DocumentNamespaces,
-  DocumentNamespacesCursorPagination,
-} from './resources/document-namespaces';
-import {
-  Any,
-  AnyOrExpression,
-  CallbacksOrReferences,
-  Document,
-  DocumentCreateParams,
-  DocumentListParams,
-  DocumentSpec,
-  DocumentSpecInlineContent,
-  DocumentSpecRemoteSource,
-  DocumentUpdateParams,
-  Documents,
-  DocumentsCursorPagination,
-  Expression,
-  GoogleProtobufAny,
-  HeadersOrReferences,
-  MediaTypes,
-  NamedAny,
-  NamedPathItem,
-  NamedSchemaOrReference,
-  NamedServerVariable,
-  NamedString,
-  OAuthFlow,
-  Reference,
-  SchemaOrReference,
-  Server,
-  ServerVariable,
-  ServerVariables,
-  Strings,
-} from './resources/documents';
+import { DocumentNamespaces } from './resources/document-namespaces';
+import { Documents, GoogleProtobufAny } from './resources/documents';
 import {
   Model,
   ModelListParams,
@@ -92,12 +55,7 @@ import {
   WorkspaceSecrets,
   WorkspaceSecretsCursorPagination,
 } from './resources/workspace-secrets';
-import {
-  WorkspaceCreateParams,
-  WorkspaceListParams,
-  WorkspaceSpec,
-  Workspaces,
-} from './resources/workspaces';
+import { WorkspaceListParams, WorkspaceSpec, Workspaces } from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
@@ -973,29 +931,7 @@ export class Cadenya {
    *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
    */
   workspaces: API.Workspaces = new API.Workspaces(this);
-  /**
-   * DocumentService manages document namespaces and documents at the WORKSPACE level.
-   *  Document namespaces categorize documents for use cases such as customer-specific
-   *  documents, regionalized documentation, and agent-created episodic memories.
-   *  Documents are key primitives of the platform containing knowledge as inline content
-   *  or remote sources. Each document belongs to exactly one namespace.
-   *  All operations are implicitly scoped to the workspace determined by the JWT token.
-   *
-   *  Authentication: Bearer token (JWT)
-   *  Scope: Workspace-level operations
-   */
   documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
-  /**
-   * DocumentService manages document namespaces and documents at the WORKSPACE level.
-   *  Document namespaces categorize documents for use cases such as customer-specific
-   *  documents, regionalized documentation, and agent-created episodic memories.
-   *  Documents are key primitives of the platform containing knowledge as inline content
-   *  or remote sources. Each document belongs to exactly one namespace.
-   *  All operations are implicitly scoped to the workspace determined by the JWT token.
-   *
-   *  Authentication: Bearer token (JWT)
-   *  Scope: Workspace-level operations
-   */
   documents: API.Documents = new API.Documents(this);
 }
 
@@ -1132,50 +1068,12 @@ export declare namespace Cadenya {
   export {
     Workspaces as Workspaces,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
 
-  export {
-    DocumentNamespaces as DocumentNamespaces,
-    type DocumentNamespace as DocumentNamespace,
-    type DocumentNamespaceSpec as DocumentNamespaceSpec,
-    type DocumentNamespacesCursorPagination as DocumentNamespacesCursorPagination,
-    type DocumentNamespaceCreateParams as DocumentNamespaceCreateParams,
-    type DocumentNamespaceUpdateParams as DocumentNamespaceUpdateParams,
-    type DocumentNamespaceListParams as DocumentNamespaceListParams,
-  };
+  export { DocumentNamespaces as DocumentNamespaces };
 
-  export {
-    Documents as Documents,
-    type Any as Any,
-    type AnyOrExpression as AnyOrExpression,
-    type CallbacksOrReferences as CallbacksOrReferences,
-    type Document as Document,
-    type DocumentSpec as DocumentSpec,
-    type DocumentSpecInlineContent as DocumentSpecInlineContent,
-    type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
-    type Expression as Expression,
-    type GoogleProtobufAny as GoogleProtobufAny,
-    type HeadersOrReferences as HeadersOrReferences,
-    type MediaTypes as MediaTypes,
-    type NamedAny as NamedAny,
-    type NamedPathItem as NamedPathItem,
-    type NamedSchemaOrReference as NamedSchemaOrReference,
-    type NamedServerVariable as NamedServerVariable,
-    type NamedString as NamedString,
-    type OAuthFlow as OAuthFlow,
-    type Reference as Reference,
-    type SchemaOrReference as SchemaOrReference,
-    type Server as Server,
-    type ServerVariable as ServerVariable,
-    type ServerVariables as ServerVariables,
-    type Strings as Strings,
-    type DocumentsCursorPagination as DocumentsCursorPagination,
-    type DocumentCreateParams as DocumentCreateParams,
-    type DocumentUpdateParams as DocumentUpdateParams,
-    type DocumentListParams as DocumentListParams,
-  };
+  export { Documents as Documents, type GoogleProtobufAny as GoogleProtobufAny };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
   export type BareMetadata = API.BareMetadata;
