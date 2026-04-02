@@ -19,7 +19,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account } from './resources/account';
+import { Account, AccountResource, AccountSpec, Profile, ProfileSpec } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -53,7 +53,13 @@ import {
   WorkspaceSecrets,
   WorkspaceSecretsCursorPagination,
 } from './resources/workspace-secrets';
-import { WorkspaceListParams, Workspaces } from './resources/workspaces';
+import {
+  Workspace,
+  WorkspaceListParams,
+  WorkspaceSpec,
+  Workspaces,
+  WorkspacesCursorPagination,
+} from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
@@ -68,6 +74,7 @@ import {
 import {
   AssistantMessage,
   AssistantToolCall,
+  CallableTool,
   Objective,
   ObjectiveCancelParams,
   ObjectiveContextWindow,
@@ -853,7 +860,7 @@ export class Cadenya {
    *  Authentication: Bearer token (JWT)
    *  Scope: Account-level operations
    */
-  account: API.Account = new API.Account(this);
+  account: API.AccountResource = new API.AccountResource(this);
   /**
    * AgentService manages AI agents at the WORKSPACE level.
    *  Agents are workspace-scoped resources that define AI behavior and tool access.
@@ -907,7 +914,7 @@ export class Cadenya {
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
-Cadenya.Account = Account;
+Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.Models = Models;
@@ -926,7 +933,13 @@ export declare namespace Cadenya {
     type CursorPaginationResponse as CursorPaginationResponse,
   };
 
-  export { Account as Account };
+  export {
+    AccountResource as AccountResource,
+    type Account as Account,
+    type AccountSpec as AccountSpec,
+    type Profile as Profile,
+    type ProfileSpec as ProfileSpec,
+  };
 
   export {
     Agents as Agents,
@@ -944,6 +957,7 @@ export declare namespace Cadenya {
     Objectives as Objectives,
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
+    type CallableTool as CallableTool,
     type Objective as Objective,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
@@ -1035,20 +1049,19 @@ export declare namespace Cadenya {
     type WorkspaceSecretListParams as WorkspaceSecretListParams,
   };
 
-  export { Workspaces as Workspaces, type WorkspaceListParams as WorkspaceListParams };
+  export {
+    Workspaces as Workspaces,
+    type Workspace as Workspace,
+    type WorkspaceSpec as WorkspaceSpec,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
+    type WorkspaceListParams as WorkspaceListParams,
+  };
 
-  export type Account = API.Account;
   export type AccountResourceMetadata = API.AccountResourceMetadata;
-  export type AccountSpec = API.AccountSpec;
   export type BareMetadata = API.BareMetadata;
-  export type CallableTool = API.CallableTool;
   export type CreateOperationMetadata = API.CreateOperationMetadata;
   export type CreateResourceMetadata = API.CreateResourceMetadata;
   export type OperationMetadata = API.OperationMetadata;
-  export type Profile = API.Profile;
-  export type ProfileSpec = API.ProfileSpec;
   export type ResourceMetadata = API.ResourceMetadata;
   export type UpdateResourceMetadata = API.UpdateResourceMetadata;
-  export type Workspace = API.Workspace;
-  export type WorkspaceSpec = API.WorkspaceSpec;
 }

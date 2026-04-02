@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ToolSetsAPI from './tool-sets';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
@@ -279,7 +280,7 @@ export namespace ToolSetEvent {
      * account-scoped resources that can be associated with multiple workspaces through
      * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
      */
-    createdBy?: Shared.Profile;
+    createdBy?: AccountAPI.Profile;
 
     /**
      * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -321,7 +322,7 @@ export interface ToolSetInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   lastSync?: string;
 
