@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cadenya/typescript-sdk.git"
+    "url": "git+https://github.com/cadenya/cadenya-typescript.git"
   },
-  "homepage": "https://github.com/cadenya/typescript-sdk/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/cadenya/cadenya-typescript/tree/main/packages/mcp-server#readme",
   "documentation": "https://docs.cadenya.com",
   "server": {
     "type": "node",
