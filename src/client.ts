@@ -19,7 +19,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource } from './resources/account';
+import { AccountResource } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -53,7 +53,7 @@ import {
   WorkspaceSecrets,
   WorkspaceSecretsCursorPagination,
 } from './resources/workspace-secrets';
-import { WorkspaceListParams, WorkspaceSpec, Workspaces } from './resources/workspaces';
+import { WorkspaceListParams, Workspaces } from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
@@ -1041,7 +1041,9 @@ export declare namespace Cadenya {
     type WorkspaceListParams as WorkspaceListParams,
   };
 
+  export type Account = API.Account;
   export type AccountResourceMetadata = API.AccountResourceMetadata;
+  export type AccountSpec = API.AccountSpec;
   export type BareMetadata = API.BareMetadata;
   export type CallableTool = API.CallableTool;
   export type CreateOperationMetadata = API.CreateOperationMetadata;
@@ -1052,4 +1054,5 @@ export declare namespace Cadenya {
   export type ResourceMetadata = API.ResourceMetadata;
   export type UpdateResourceMetadata = API.UpdateResourceMetadata;
   export type Workspace = API.Workspace;
+  export type WorkspaceSpec = API.WorkspaceSpec;
 }

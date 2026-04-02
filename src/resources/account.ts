@@ -30,19 +30,7 @@ export interface Account {
    */
   metadata: Shared.AccountResourceMetadata;
 
-  spec: Account.Spec;
-}
-
-export namespace Account {
-  export interface Spec {
-    billingEmail?: string;
-
-    description?: string;
-
-    domain?: string;
-
-    workspaces?: Array<Shared.Workspace>;
-  }
+  spec: Shared.AccountSpec;
 }
 
 export declare namespace AccountResource {
