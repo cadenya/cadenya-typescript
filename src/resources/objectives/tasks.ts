@@ -54,24 +54,24 @@ export interface ObjectiveTask {
 
 export interface ObjectiveTaskData {
   /**
+   * Whether the task has been completed
+   */
+  completed: boolean;
+
+  /**
+   * The sequential number of this task within the objective (auto-assigned, 1-based)
+   */
+  number: number;
+
+  /**
    * Description of the task to be completed
    */
   task: string;
 
   /**
-   * Whether the task has been completed
-   */
-  completed?: boolean;
-
-  /**
    * Timestamp when the task was marked as completed
    */
   completedAt?: string;
-
-  /**
-   * The sequential number of this task within the objective (auto-assigned, 1-based)
-   */
-  number?: number;
 }
 
 export interface TaskRetrieveParams {
