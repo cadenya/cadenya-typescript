@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as VariationsAPI from './variations';
 import {
@@ -125,7 +126,7 @@ export interface AgentInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   variationCount?: number;
 }

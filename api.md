@@ -2,22 +2,22 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Account</a></code>
 - <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">AccountSpec</a></code>
 - <code><a href="./src/resources/shared.ts">BareMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">CreateOperationMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CreateResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">Profile</a></code>
-- <code><a href="./src/resources/shared.ts">ProfileSpec</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">Workspace</a></code>
-- <code><a href="./src/resources/shared.ts">WorkspaceSpec</a></code>
 
 # Account
+
+Types:
+
+- <code><a href="./src/resources/account.ts">Account</a></code>
+- <code><a href="./src/resources/account.ts">AccountSpec</a></code>
+- <code><a href="./src/resources/account.ts">Profile</a></code>
+- <code><a href="./src/resources/account.ts">ProfileSpec</a></code>
 
 Methods:
 
@@ -80,6 +80,7 @@ Types:
 
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
@@ -250,6 +251,11 @@ Methods:
 - <code title="delete /v1/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">delete</a>(id) -> void</code>
 
 # Workspaces
+
+Types:
+
+- <code><a href="./src/resources/workspaces.ts">Workspace</a></code>
+- <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
 
 Methods:
 

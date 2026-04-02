@@ -11,7 +11,7 @@ export {
   type APIKeyListParams,
   type APIKeysCursorPagination,
 } from './api-keys';
-export { Account } from './account';
+export { AccountResource, type Account, type AccountSpec, type Profile, type ProfileSpec } from './account';
 export {
   Agents,
   type Agent,
@@ -35,6 +35,7 @@ export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
+  type CallableTool,
   type Objective,
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
@@ -102,4 +103,10 @@ export {
   type WorkspaceSecretListParams,
   type WorkspaceSecretsCursorPagination,
 } from './workspace-secrets';
-export { Workspaces, type WorkspaceListParams } from './workspaces';
+export {
+  Workspaces,
+  type Workspace,
+  type WorkspaceSpec,
+  type WorkspaceListParams,
+  type WorkspacesCursorPagination,
+} from './workspaces';

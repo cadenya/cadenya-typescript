@@ -1,7 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
+import * as ObjectivesAPI from './objectives';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -93,7 +95,7 @@ export interface ObjectiveToolCallData {
    * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
    * or a Cadenya Tool (one Cadenya provides).
    */
-  callable: Shared.CallableTool;
+  callable: ObjectivesAPI.CallableTool;
 
   /**
    * The arguments passed to the tool
@@ -115,7 +117,7 @@ export interface ObjectiveToolCallData {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  statusChangedBy?: Shared.Profile;
+  statusChangedBy?: AccountAPI.Profile;
 }
 
 export interface ObjectiveToolCallInfo {
@@ -124,7 +126,7 @@ export interface ObjectiveToolCallInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,

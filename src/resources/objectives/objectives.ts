@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ObjectivesAPI from './objectives';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
 import * as VariationsAPI from '../agents/variations';
@@ -135,7 +136,30 @@ export interface AssistantToolCall {
    * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
    * or a Cadenya Tool (one Cadenya provides).
    */
-  tool?: Shared.CallableTool;
+  tool?: CallableTool;
+}
+
+/**
+ * CallableTool is a union that represents a tool that can be called by an agent.
+ * In Cadenya, a tool that is used within an agent objective might be a
+ * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+ * or a Cadenya Tool (one Cadenya provides).
+ */
+export interface CallableTool {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agent?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  cadenyaProvidedTool?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  tool?: Shared.ResourceMetadata;
 }
 
 export interface Objective {
@@ -187,7 +211,7 @@ export namespace ObjectiveContextWindow {
      * account-scoped resources that can be associated with multiple workspaces through
      * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
      */
-    createdBy?: Shared.Profile;
+    createdBy?: AccountAPI.Profile;
 
     /**
      * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -312,7 +336,7 @@ export interface ObjectiveEventInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -392,14 +416,14 @@ export interface ObjectiveInfo {
    * List of callable tools assigned to the agent for this objective Includes tools,
    * agents, and cadenya-provided tools from the agent's configuration
    */
-  callableTools?: Array<Shared.CallableTool>;
+  callableTools?: Array<CallableTool>;
 
   /**
    * Profile represents a human user at the account level. Profiles are
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Total number of context windows that this objective has generated
@@ -654,6 +678,7 @@ export declare namespace Objectives {
   export {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
+    type CallableTool as CallableTool,
     type Objective as Objective,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,

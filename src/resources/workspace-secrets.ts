@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AccountAPI from './account';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
@@ -80,7 +81,7 @@ export interface WorkspaceSecretInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   lastUsedAt?: string;
 }

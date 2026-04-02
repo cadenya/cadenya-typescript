@@ -4,6 +4,7 @@ export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
+  type CallableTool,
   type Objective,
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
