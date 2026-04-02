@@ -29,7 +29,6 @@ export {
   type ToolInfo,
   type ToolSpec,
   type ToolSpecConfig,
-  type ToolSpecContentFilter,
   type ToolCreateParams,
   type ToolRetrieveParams,
   type ToolUpdateParams,

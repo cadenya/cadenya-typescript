@@ -12,7 +12,12 @@ describe('resource tools', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.toolSets.tools.create('toolSetId', {
       metadata: { name: 'name' },
-      spec: { status: 'TOOL_STATUS_UNSPECIFIED' },
+      spec: {
+        config: {},
+        description: 'description',
+        parameters: { foo: 'bar' },
+        status: 'TOOL_STATUS_UNSPECIFIED',
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,7 +37,6 @@ describe('resource tools', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        status: 'TOOL_STATUS_UNSPECIFIED',
         config: {
           http: {
             requestMethod: 'GET',
@@ -49,11 +53,10 @@ describe('resource tools', () => {
             toolTitle: 'toolTitle',
           },
         },
-        contentFilter: { jq: 'jq', regex: 'regex' },
         description: 'description',
         parameters: { foo: 'bar' },
+        status: 'TOOL_STATUS_UNSPECIFIED',
         requiresApproval: true,
-        toolSetId: 'toolSetId',
       },
     });
   });
@@ -97,7 +100,6 @@ describe('resource tools', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        status: 'TOOL_STATUS_UNSPECIFIED',
         config: {
           http: {
             requestMethod: 'GET',
@@ -114,11 +116,10 @@ describe('resource tools', () => {
             toolTitle: 'toolTitle',
           },
         },
-        contentFilter: { jq: 'jq', regex: 'regex' },
         description: 'description',
         parameters: { foo: 'bar' },
+        status: 'TOOL_STATUS_UNSPECIFIED',
         requiresApproval: true,
-        toolSetId: 'toolSetId',
       },
       updateMask: 'updateMask',
     });

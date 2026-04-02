@@ -23,8 +23,6 @@ export {
   type AgentListParams,
   type AgentsCursorPagination,
 } from './agents/agents';
-export { DocumentNamespaces } from './document-namespaces';
-export { Documents, type GoogleProtobufAny } from './documents';
 export {
   Models,
   type Model,

@@ -30,8 +30,6 @@ import {
   APIKeys,
   APIKeysCursorPagination,
 } from './resources/api-keys';
-import { DocumentNamespaces } from './resources/document-namespaces';
-import { Documents, GoogleProtobufAny } from './resources/documents';
 import {
   Model,
   ModelListParams,
@@ -931,8 +929,6 @@ export class Cadenya {
    *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
    */
   workspaces: API.Workspaces = new API.Workspaces(this);
-  documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
-  documents: API.Documents = new API.Documents(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -944,8 +940,6 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.DocumentNamespaces = DocumentNamespaces;
-Cadenya.Documents = Documents;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -1070,10 +1064,6 @@ export declare namespace Cadenya {
     type WorkspaceSpec as WorkspaceSpec,
     type WorkspaceListParams as WorkspaceListParams,
   };
-
-  export { DocumentNamespaces as DocumentNamespaces };
-
-  export { Documents as Documents, type GoogleProtobufAny as GoogleProtobufAny };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
   export type BareMetadata = API.BareMetadata;
