@@ -19,10 +19,6 @@ Types:
 
 # Account
 
-Types:
-
-- <code><a href="./src/resources/account.ts">Account</a></code>
-
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
@@ -254,10 +250,6 @@ Methods:
 - <code title="delete /v1/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">delete</a>(id) -> void</code>
 
 # Workspaces
-
-Types:
-
-- <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
 
 Methods:
 

@@ -13,26 +13,12 @@ import { RequestOptions } from '../internal/request-options';
  *  Authentication: Bearer token (JWT)
  *  Scope: Account-level operations
  */
-export class AccountResource extends APIResource {
+export class Account extends APIResource {
   /**
    * Retrieves the current account for the token accessing the API. Useful to check
    * if the credentials are valid.
    */
-  retrieve(options?: RequestOptions): APIPromise<Account> {
+  retrieve(options?: RequestOptions): APIPromise<Shared.Account> {
     return this._client.get('/v1/account', options);
   }
-}
-
-export interface Account {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  metadata: Shared.AccountResourceMetadata;
-
-  spec: Shared.AccountSpec;
-}
-
-export declare namespace AccountResource {
-  export { type Account as Account };
 }

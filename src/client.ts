@@ -19,7 +19,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AccountResource } from './resources/account';
+import { Account } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -853,7 +853,7 @@ export class Cadenya {
    *  Authentication: Bearer token (JWT)
    *  Scope: Account-level operations
    */
-  account: API.AccountResource = new API.AccountResource(this);
+  account: API.Account = new API.Account(this);
   /**
    * AgentService manages AI agents at the WORKSPACE level.
    *  Agents are workspace-scoped resources that define AI behavior and tool access.
@@ -907,7 +907,7 @@ export class Cadenya {
   workspaces: API.Workspaces = new API.Workspaces(this);
 }
 
-Cadenya.AccountResource = AccountResource;
+Cadenya.Account = Account;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.Models = Models;
@@ -926,7 +926,7 @@ export declare namespace Cadenya {
     type CursorPaginationResponse as CursorPaginationResponse,
   };
 
-  export { AccountResource as AccountResource, type Account as Account };
+  export { Account as Account };
 
   export {
     Agents as Agents,
@@ -1035,11 +1035,7 @@ export declare namespace Cadenya {
     type WorkspaceSecretListParams as WorkspaceSecretListParams,
   };
 
-  export {
-    Workspaces as Workspaces,
-    type WorkspaceSpec as WorkspaceSpec,
-    type WorkspaceListParams as WorkspaceListParams,
-  };
+  export { Workspaces as Workspaces, type WorkspaceListParams as WorkspaceListParams };
 
   export type Account = API.Account;
   export type AccountResourceMetadata = API.AccountResourceMetadata;
