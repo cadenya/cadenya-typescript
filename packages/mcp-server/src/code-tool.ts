@@ -149,8 +149,7 @@ const remoteStainlessHandler = async ({
       readEnv('CADENYA_API_KEY') ?? client.apiKey,
       'set CADENYA_API_KEY environment variable or provide apiKey client option',
     ),
-    CADENYA_BASE_URL:
-      readEnv('CADENYA_BASE_URL') ?? readEnv('CADENYA_ENVIRONMENT') ? undefined : client.baseURL ?? undefined,
+    CADENYA_BASE_URL: readEnv('CADENYA_BASE_URL') ?? client.baseURL ?? undefined,
   };
   // Merge any upstream client envs from the request header, with upstream values taking precedence.
   const mergedClientEnvs = { ...localClientEnvs, ...reqContext.upstreamClientEnvs };
@@ -167,7 +166,7 @@ const remoteStainlessHandler = async ({
       project_name: 'cadenya',
       code,
       intent,
-      client_opts: { environment: (readEnv('CADENYA_ENVIRONMENT') || undefined) as any },
+      client_opts: {},
     } satisfies WorkerInput),
   });
 
