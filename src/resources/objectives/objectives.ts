@@ -6,6 +6,16 @@ import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
 import * as VariationsAPI from '../agents/variations';
+import * as FeedbackAPI from './feedback';
+import {
+  Feedback,
+  FeedbackCreateParams,
+  FeedbackListParams,
+  ObjectiveFeedback,
+  ObjectiveFeedbackData,
+  ObjectiveFeedbackInfo,
+  ObjectiveFeedbacksCursorPagination,
+} from './feedback';
 import * as TasksAPI from './tasks';
 import {
   ObjectiveTask,
@@ -37,6 +47,7 @@ export class Objectives extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
   toolCalls: ToolCallsAPI.ToolCalls = new ToolCallsAPI.ToolCalls(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  feedback: FeedbackAPI.Feedback = new FeedbackAPI.Feedback(this._client);
 
   /**
    * Creates a new objective in the workspace
@@ -673,6 +684,7 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
 Objectives.Tools = Tools;
 Objectives.ToolCalls = ToolCalls;
 Objectives.Tasks = Tasks;
+Objectives.Feedback = Feedback;
 
 export declare namespace Objectives {
   export {
@@ -736,5 +748,15 @@ export declare namespace Objectives {
     type ObjectiveTasksCursorPagination as ObjectiveTasksCursorPagination,
     type TaskRetrieveParams as TaskRetrieveParams,
     type TaskListParams as TaskListParams,
+  };
+
+  export {
+    Feedback as Feedback,
+    type ObjectiveFeedback as ObjectiveFeedback,
+    type ObjectiveFeedbackData as ObjectiveFeedbackData,
+    type ObjectiveFeedbackInfo as ObjectiveFeedbackInfo,
+    type ObjectiveFeedbacksCursorPagination as ObjectiveFeedbacksCursorPagination,
+    type FeedbackCreateParams as FeedbackCreateParams,
+    type FeedbackListParams as FeedbackListParams,
   };
 }

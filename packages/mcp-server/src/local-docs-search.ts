@@ -984,6 +984,77 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'create',
+    endpoint: '/v1/objectives/{objectiveId}/feedback',
+    httpMethod: 'post',
+    summary: 'Submit feedback for an objective',
+    description:
+      "Submits feedback for an objective's execution. Feedback scores are used by the agent variation scoring system to evaluate and rank variation performance.",
+    stainlessPath: '(resource) objectives.feedback > (method) create',
+    qualified: 'client.objectives.feedback.create',
+    params: ['objectiveId: string;', 'data: { attributes?: object; comment?: string; score?: number; };'],
+    response:
+      '{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }',
+    markdown:
+      '## create\n\n`client.objectives.feedback.create(objectiveId: string, data: { attributes?: object; comment?: string; score?: number; }): { data: objective_feedback_data; metadata: bare_metadata; info?: objective_feedback_info; }`\n\n**post** `/v1/objectives/{objectiveId}/feedback`\n\nSubmits feedback for an objective\'s execution. Feedback scores are used by the agent variation scoring system to evaluate and rank variation performance.\n\n### Parameters\n\n- `objectiveId: string`\n\n- `data: { attributes?: object; comment?: string; score?: number; }`\n  - `attributes?: object`\n    Arbitrary key-value pairs to identify the source of the feedback.\n Since the submitting profile is typically an API key, use this to pass through\n application-specific identifiers (e.g., {"user_id": "usr_123", "session_id": "abc"}).\n  - `comment?: string`\n    Optional human-readable comment explaining the feedback\n  - `score?: number`\n    A score between -1.0 and 1.0 representing the quality of the objective\'s execution.\n -1.0 is the worst possible score, 0.0 is neutral, and 1.0 is the best.\n\n### Returns\n\n- `{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }`\n  ObjectiveFeedback represents feedback submitted for an objective\'s execution.\n Feedback is used to score agent variations and improve agent performance over time.\n\n  - `data: { attributes?: object; comment?: string; score?: number; }`\n  - `metadata: { id: string; }`\n  - `info?: { submittedBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'cadenya\';\n\nconst client = new Cadenya();\n\nconst objectiveFeedback = await client.objectives.feedback.create(\'objectiveId\', { data: {} });\n\nconsole.log(objectiveFeedback);\n```',
+    perLanguage: {
+      cli: {
+        method: 'feedback create',
+        example:
+          "cadenya objectives:feedback create \\\n  --api-key 'My API Key' \\\n  --objective-id objectiveId \\\n  --data '{}'",
+      },
+      go: {
+        method: 'client.Objectives.Feedback.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveFeedback, err := client.Objectives.Feedback.New(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackNewParams{\n\t\t\tData: cadenya.F(cadenya.ObjectiveFeedbackDataParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveFeedback.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/objectives/$OBJECTIVE_ID/feedback \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "data": {}\n        }\'',
+      },
+      typescript: {
+        method: 'client.objectives.feedback.create',
+        example:
+          "import Cadenya from 'cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst objectiveFeedback = await client.objectives.feedback.create('objectiveId', { data: {} });\n\nconsole.log(objectiveFeedback.data);",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/objectives/{objectiveId}/feedback',
+    httpMethod: 'get',
+    summary: 'List feedback for an objective',
+    description: 'Lists all feedback submitted for an objective',
+    stainlessPath: '(resource) objectives.feedback > (method) list',
+    qualified: 'client.objectives.feedback.list',
+    params: ['objectiveId: string;', 'cursor?: string;', 'limit?: number;'],
+    response:
+      '{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }',
+    markdown:
+      "## list\n\n`client.objectives.feedback.list(objectiveId: string, cursor?: string, limit?: number): { data: objective_feedback_data; metadata: bare_metadata; info?: objective_feedback_info; }`\n\n**get** `/v1/objectives/{objectiveId}/feedback`\n\nLists all feedback submitted for an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n### Returns\n\n- `{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }`\n  ObjectiveFeedback represents feedback submitted for an objective's execution.\n Feedback is used to score agent variations and improve agent performance over time.\n\n  - `data: { attributes?: object; comment?: string; score?: number; }`\n  - `metadata: { id: string; }`\n  - `info?: { submittedBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveFeedback of client.objectives.feedback.list('objectiveId')) {\n  console.log(objectiveFeedback);\n}\n```",
+    perLanguage: {
+      cli: {
+        method: 'feedback list',
+        example:
+          "cadenya objectives:feedback list \\\n  --api-key 'My API Key' \\\n  --objective-id objectiveId",
+      },
+      go: {
+        method: 'client.Objectives.Feedback.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Feedback.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/objectives/$OBJECTIVE_ID/feedback \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.objectives.feedback.list',
+        example:
+          "import Cadenya from 'cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveFeedback of client.objectives.feedback.list('objectiveId')) {\n  console.log(objectiveFeedback.data);\n}",
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/v1/models',
     httpMethod: 'get',
