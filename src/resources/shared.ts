@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
 export interface Account {
@@ -295,7 +294,7 @@ export interface Workspace {
    */
   metadata: AccountResourceMetadata;
 
-  spec: WorkspacesAPI.WorkspaceSpec;
+  spec: WorkspaceSpec;
 }
 
 export interface WorkspaceSpec {

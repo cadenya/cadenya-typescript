@@ -11,7 +11,7 @@ export {
   type APIKeyListParams,
   type APIKeysCursorPagination,
 } from './api-keys';
-export { AccountResource, type Account } from './account';
+export { Account } from './account';
 export {
   Agents,
   type Agent,
@@ -102,4 +102,4 @@ export {
   type WorkspaceSecretListParams,
   type WorkspaceSecretsCursorPagination,
 } from './workspace-secrets';
-export { Workspaces, type WorkspaceSpec, type WorkspaceListParams } from './workspaces';
+export { Workspaces, type WorkspaceListParams } from './workspaces';

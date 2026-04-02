@@ -38,10 +38,6 @@ export class Workspaces extends APIResource {
   }
 }
 
-export interface WorkspaceSpec {
-  description?: string;
-}
-
 export interface WorkspaceListParams extends CursorPaginationParams {
   /**
    * When set to true you may use more of your alloted API rate-limit
@@ -55,7 +51,7 @@ export interface WorkspaceListParams extends CursorPaginationParams {
 }
 
 export declare namespace Workspaces {
-  export { type WorkspaceSpec as WorkspaceSpec, type WorkspaceListParams as WorkspaceListParams };
+  export { type WorkspaceListParams as WorkspaceListParams };
 }
 
 export { type WorkspacesCursorPagination };
