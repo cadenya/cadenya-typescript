@@ -3,6 +3,16 @@
 import * as WorkspacesAPI from './workspaces';
 import { CursorPagination } from '../core/pagination';
 
+export interface Account {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
+  metadata: AccountResourceMetadata;
+
+  spec: AccountSpec;
+}
+
 /**
  * AccountResourceMetadata is used to represent a resource that is associated to an
  * account but not to a workspace.
@@ -36,6 +46,16 @@ export interface AccountResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
+}
+
+export interface AccountSpec {
+  billingEmail?: string;
+
+  description?: string;
+
+  domain?: string;
+
+  workspaces?: Array<Workspace>;
 }
 
 /**
@@ -276,6 +296,10 @@ export interface Workspace {
   metadata: AccountResourceMetadata;
 
   spec: WorkspacesAPI.WorkspaceSpec;
+}
+
+export interface WorkspaceSpec {
+  description?: string;
 }
 
 export type WorkspacesCursorPagination = CursorPagination<Workspace>;

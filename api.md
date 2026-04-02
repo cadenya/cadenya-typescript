@@ -2,7 +2,9 @@
 
 Types:
 
+- <code><a href="./src/resources/shared.ts">Account</a></code>
 - <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
+- <code><a href="./src/resources/shared.ts">AccountSpec</a></code>
 - <code><a href="./src/resources/shared.ts">BareMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">CreateOperationMetadata</a></code>
@@ -13,6 +15,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">Workspace</a></code>
+- <code><a href="./src/resources/shared.ts">WorkspaceSpec</a></code>
 
 # Account
 
