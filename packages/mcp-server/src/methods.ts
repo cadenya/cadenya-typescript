@@ -161,6 +161,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/objectives/{objectiveId}/tasks',
   },
   {
+    clientCallName: 'client.objectives.feedback.create',
+    fullyQualifiedName: 'objectives.feedback.create',
+    httpMethod: 'post',
+    httpPath: '/v1/objectives/{objectiveId}/feedback',
+  },
+  {
+    clientCallName: 'client.objectives.feedback.list',
+    fullyQualifiedName: 'objectives.feedback.list',
+    httpMethod: 'get',
+    httpPath: '/v1/objectives/{objectiveId}/feedback',
+  },
+  {
     clientCallName: 'client.models.retrieve',
     fullyQualifiedName: 'models.retrieve',
     httpMethod: 'get',

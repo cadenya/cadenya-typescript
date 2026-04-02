@@ -129,6 +129,8 @@ const fuse = new Fuse(
     'client.objectives.toolCalls.list',
     'client.objectives.tasks.list',
     'client.objectives.tasks.retrieve',
+    'client.objectives.feedback.create',
+    'client.objectives.feedback.list',
     'client.models.list',
     'client.models.retrieve',
     'client.models.setStatus',

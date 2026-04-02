@@ -1,6 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Feedback,
+  type ObjectiveFeedback,
+  type ObjectiveFeedbackData,
+  type ObjectiveFeedbackInfo,
+  type FeedbackCreateParams,
+  type FeedbackListParams,
+  type ObjectiveFeedbacksCursorPagination,
+} from './feedback';
+export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
