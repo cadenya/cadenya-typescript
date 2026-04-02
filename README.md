@@ -33,7 +33,6 @@ import Cadenya from 'cadenya';
 
 const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-  environment: 'production', // defaults to 'staging'
 });
 
 const account = await client.account.retrieve();
@@ -51,7 +50,6 @@ import Cadenya from 'cadenya';
 
 const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-  environment: 'production', // defaults to 'staging'
 });
 
 const account: Cadenya.Account = await client.account.retrieve();

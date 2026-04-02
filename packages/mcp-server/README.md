@@ -10,7 +10,6 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export CADENYA_API_KEY="My API Key"
-export CADENYA_ENVIRONMENT="staging"
 npx -y cadenya-mcp@latest
 ```
 
@@ -28,8 +27,7 @@ For clients with a configuration JSON, it might look something like this:
       "command": "npx",
       "args": ["-y", "cadenya-mcp"],
       "env": {
-        "CADENYA_API_KEY": "My API Key",
-        "CADENYA_ENVIRONMENT": "staging"
+        "CADENYA_API_KEY": "My API Key"
       }
     }
   }
