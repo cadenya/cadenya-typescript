@@ -4,21 +4,20 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">AccountResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">BareMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">CallableTool</a></code>
 - <code><a href="./src/resources/shared.ts">CreateOperationMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">CreateResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">OperationMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">Profile</a></code>
-- <code><a href="./src/resources/shared.ts">ProfileSpec</a></code>
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
-- <code><a href="./src/resources/shared.ts">Workspace</a></code>
 
 # Account
 
 Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
+- <code><a href="./src/resources/account.ts">AccountSpec</a></code>
+- <code><a href="./src/resources/account.ts">Profile</a></code>
+- <code><a href="./src/resources/account.ts">ProfileSpec</a></code>
 
 Methods:
 
@@ -69,6 +68,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDelivery</a></code>
+- <code><a href="./src/resources/agents/webhook-deliveries.ts">WebhookDeliveryData</a></code>
 
 Methods:
 
@@ -80,6 +80,7 @@ Types:
 
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
@@ -135,6 +136,18 @@ Methods:
 - <code title="get /v1/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 - <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+
+## Tasks
+
+Types:
+
+- <code><a href="./src/resources/objectives/tasks.ts">ObjectiveTask</a></code>
+- <code><a href="./src/resources/objectives/tasks.ts">ObjectiveTaskData</a></code>
+
+Methods:
+
+- <code title="get /v1/objectives/{objectiveId}/tasks/{id}">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">retrieve</a>(id, { ...params }) -> ObjectiveTask</code>
+- <code title="get /v1/objectives/{objectiveId}/tasks">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">list</a>(objectiveID, { ...params }) -> ObjectiveTasksCursorPagination</code>
 
 # Models
 
@@ -195,7 +208,6 @@ Types:
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfig</a></code>
-- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecContentFilter</a></code>
 
 Methods:
 
@@ -242,61 +254,10 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/workspaces.ts">Workspace</a></code>
 - <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
 
 Methods:
 
-- <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
 - <code title="get /v1/workspaces/current">client.workspaces.<a href="./src/resources/workspaces.ts">get</a>() -> Workspace</code>
-
-# DocumentNamespaces
-
-Types:
-
-- <code><a href="./src/resources/document-namespaces.ts">DocumentNamespace</a></code>
-- <code><a href="./src/resources/document-namespaces.ts">DocumentNamespaceSpec</a></code>
-
-Methods:
-
-- <code title="post /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">create</a>({ ...params }) -> DocumentNamespace</code>
-- <code title="get /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">retrieve</a>(id) -> DocumentNamespace</code>
-- <code title="patch /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">update</a>(id, { ...params }) -> DocumentNamespace</code>
-- <code title="get /v1/document_namespaces">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">list</a>({ ...params }) -> DocumentNamespacesCursorPagination</code>
-- <code title="delete /v1/document_namespaces/{id}">client.documentNamespaces.<a href="./src/resources/document-namespaces.ts">delete</a>(id) -> void</code>
-
-# Documents
-
-Types:
-
-- <code><a href="./src/resources/documents.ts">Any</a></code>
-- <code><a href="./src/resources/documents.ts">AnyOrExpression</a></code>
-- <code><a href="./src/resources/documents.ts">CallbacksOrReferences</a></code>
-- <code><a href="./src/resources/documents.ts">Document</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentSpec</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentSpecInlineContent</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentSpecRemoteSource</a></code>
-- <code><a href="./src/resources/documents.ts">Expression</a></code>
-- <code><a href="./src/resources/documents.ts">GoogleProtobufAny</a></code>
-- <code><a href="./src/resources/documents.ts">HeadersOrReferences</a></code>
-- <code><a href="./src/resources/documents.ts">MediaTypes</a></code>
-- <code><a href="./src/resources/documents.ts">NamedAny</a></code>
-- <code><a href="./src/resources/documents.ts">NamedPathItem</a></code>
-- <code><a href="./src/resources/documents.ts">NamedSchemaOrReference</a></code>
-- <code><a href="./src/resources/documents.ts">NamedServerVariable</a></code>
-- <code><a href="./src/resources/documents.ts">NamedString</a></code>
-- <code><a href="./src/resources/documents.ts">OAuthFlow</a></code>
-- <code><a href="./src/resources/documents.ts">Reference</a></code>
-- <code><a href="./src/resources/documents.ts">SchemaOrReference</a></code>
-- <code><a href="./src/resources/documents.ts">Server</a></code>
-- <code><a href="./src/resources/documents.ts">ServerVariable</a></code>
-- <code><a href="./src/resources/documents.ts">ServerVariables</a></code>
-- <code><a href="./src/resources/documents.ts">Strings</a></code>
-
-Methods:
-
-- <code title="post /v1/documents">client.documents.<a href="./src/resources/documents.ts">create</a>({ ...params }) -> Document</code>
-- <code title="get /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(id) -> Document</code>
-- <code title="patch /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(id, { ...params }) -> Document</code>
-- <code title="get /v1/documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsCursorPagination</code>
-- <code title="delete /v1/documents/{id}">client.documents.<a href="./src/resources/documents.ts">delete</a>(id) -> void</code>

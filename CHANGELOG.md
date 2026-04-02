@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.38.0 (2026-04-02)
+
+Full Changelog: [v0.37.0...v0.38.0](https://github.com/cadenya/cadenya-typescript/compare/v0.37.0...v0.38.0)
+
+### Features
+
+* **api:** api update ([ec9d398](https://github.com/cadenya/cadenya-typescript/commit/ec9d398af57a8badb8e83f9935bdb71a1687a878))
+* **api:** api update ([3c48e91](https://github.com/cadenya/cadenya-typescript/commit/3c48e9193903b68367a794ec6c0207277ed87e6f))
+* **api:** api update ([fb613b9](https://github.com/cadenya/cadenya-typescript/commit/fb613b93c8fdb0e9946ceb4cad88d7f22819e0f6))
+* **api:** api update ([ef359a0](https://github.com/cadenya/cadenya-typescript/commit/ef359a054c60179b54f43bcde99ca950c1689688))
+* **api:** api update ([7b06bb5](https://github.com/cadenya/cadenya-typescript/commit/7b06bb52c205752b945ff2cc33dcbb64200353ef))
+* **api:** api update ([02068a6](https://github.com/cadenya/cadenya-typescript/commit/02068a69d2534458c03b99ddfd0e6a43d161af9d))
+* **api:** api update ([6857457](https://github.com/cadenya/cadenya-typescript/commit/6857457d9b61d48ebc9991eb89e0446277d689f5))
+* **api:** api update ([712aaea](https://github.com/cadenya/cadenya-typescript/commit/712aaea4fa4ee0b06c6881a6c25a0ff19f6261a1))
+* **api:** api update ([92a5b2d](https://github.com/cadenya/cadenya-typescript/commit/92a5b2d4f9edfbc6129776ecff707324fe38e362))
+* **api:** api update ([81a5a83](https://github.com/cadenya/cadenya-typescript/commit/81a5a8375ec24ba0eb445a04b42afea6a7887a6d))
+* **api:** api update ([00ed0ba](https://github.com/cadenya/cadenya-typescript/commit/00ed0ba0a8a6aa58ca64d5935536823a80098db5))
+* **api:** api update ([4c63838](https://github.com/cadenya/cadenya-typescript/commit/4c63838f3834787617cb5474a18fdf4c7ca3d9f0))
+
+
+### Bug Fixes
+
+* **internal:** gitignore generated `oidc` dir ([010abef](https://github.com/cadenya/cadenya-typescript/commit/010abef8816ccafded4489c884932ed78c14daf6))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([da46c5b](https://github.com/cadenya/cadenya-typescript/commit/da46c5b38eeb4ae79aa712730b43eb6b37c76872))
+* **ci:** skip lint on metadata-only changes ([f7f9b6a](https://github.com/cadenya/cadenya-typescript/commit/f7f9b6acf112237f269ac56482f675feafa25b58))
+* **internal:** improve local docs search for MCP servers ([4fa1986](https://github.com/cadenya/cadenya-typescript/commit/4fa19865f3f954f101cbcae6779b4353350f024f))
+* **internal:** improve local docs search for MCP servers ([cfb28c2](https://github.com/cadenya/cadenya-typescript/commit/cfb28c268a90aff095bf4d20de2e2bb8f75ecadb))
+* **internal:** support custom-instructions-path flag in MCP servers ([f3b04e5](https://github.com/cadenya/cadenya-typescript/commit/f3b04e5c22e948e8c056aa5c82331e9885f06c6a))
+* **internal:** support local docs search in MCP servers ([c392548](https://github.com/cadenya/cadenya-typescript/commit/c3925487f21651d41b2130edda193e6ef67be3c0))
+* **mcp-server:** add support for session id, forward client info ([52e1b5d](https://github.com/cadenya/cadenya-typescript/commit/52e1b5d8845543992b018c61258a2cf4fb7fd897))
+
 ## 0.37.0 (2026-03-25)
 
 Full Changelog: [v0.36.1...v0.37.0](https://github.com/cadenya/typescript-sdk/compare/v0.36.1...v0.37.0)

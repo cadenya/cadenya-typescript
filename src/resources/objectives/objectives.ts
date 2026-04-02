@@ -2,9 +2,19 @@
 
 import { APIResource } from '../../core/resource';
 import * as ObjectivesAPI from './objectives';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
 import * as VariationsAPI from '../agents/variations';
+import * as TasksAPI from './tasks';
+import {
+  ObjectiveTask,
+  ObjectiveTaskData,
+  ObjectiveTasksCursorPagination,
+  TaskListParams,
+  TaskRetrieveParams,
+  Tasks,
+} from './tasks';
 import * as ToolCallsAPI from './tool-calls';
 import {
   ObjectiveToolCall,
@@ -26,6 +36,7 @@ import { path } from '../../internal/utils/path';
 export class Objectives extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
   toolCalls: ToolCallsAPI.ToolCalls = new ToolCallsAPI.ToolCalls(this._client);
+  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
 
   /**
    * Creates a new objective in the workspace
@@ -125,7 +136,30 @@ export interface AssistantToolCall {
    * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
    * or a Cadenya Tool (one Cadenya provides).
    */
-  tool?: Shared.CallableTool;
+  tool?: CallableTool;
+}
+
+/**
+ * CallableTool is a union that represents a tool that can be called by an agent.
+ * In Cadenya, a tool that is used within an agent objective might be a
+ * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+ * or a Cadenya Tool (one Cadenya provides).
+ */
+export interface CallableTool {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agent?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  cadenyaProvidedTool?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  tool?: Shared.ResourceMetadata;
 }
 
 export interface Objective {
@@ -177,7 +211,7 @@ export namespace ObjectiveContextWindow {
      * account-scoped resources that can be associated with multiple workspaces through
      * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
      */
-    createdBy?: Shared.Profile;
+    createdBy?: AccountAPI.Profile;
 
     /**
      * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -302,7 +336,7 @@ export interface ObjectiveEventInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -382,14 +416,14 @@ export interface ObjectiveInfo {
    * List of callable tools assigned to the agent for this objective Includes tools,
    * agents, and cadenya-provided tools from the agent's configuration
    */
-  callableTools?: Array<Shared.CallableTool>;
+  callableTools?: Array<CallableTool>;
 
   /**
    * Profile represents a human user at the account level. Profiles are
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Total number of context windows that this objective has generated
@@ -638,11 +672,13 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
 
 Objectives.Tools = Tools;
 Objectives.ToolCalls = ToolCalls;
+Objectives.Tasks = Tasks;
 
 export declare namespace Objectives {
   export {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
+    type CallableTool as CallableTool,
     type Objective as Objective,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
@@ -691,5 +727,14 @@ export declare namespace Objectives {
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
     type ToolCallDenyParams as ToolCallDenyParams,
+  };
+
+  export {
+    Tasks as Tasks,
+    type ObjectiveTask as ObjectiveTask,
+    type ObjectiveTaskData as ObjectiveTaskData,
+    type ObjectiveTasksCursorPagination as ObjectiveTasksCursorPagination,
+    type TaskRetrieveParams as TaskRetrieveParams,
+    type TaskListParams as TaskListParams,
   };
 }

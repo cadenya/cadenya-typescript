@@ -37,7 +37,7 @@ export interface WebhookDelivery {
   /**
    * Webhook delivery data
    */
-  data: WebhookDelivery.Data;
+  data: WebhookDeliveryData;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -46,54 +46,97 @@ export interface WebhookDelivery {
   metadata: Shared.OperationMetadata;
 }
 
-export namespace WebhookDelivery {
+export interface WebhookDeliveryData {
   /**
-   * Webhook delivery data
+   * Related resources
    */
-  export interface Data {
-    status:
-      | 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED'
-      | 'WEBHOOK_DELIVERY_STATUS_PENDING'
-      | 'WEBHOOK_DELIVERY_STATUS_COMPLETED'
-      | 'WEBHOOK_DELIVERY_STATUS_FAILED'
-      | 'WEBHOOK_DELIVERY_STATUS_DISABLED';
+  agentId: string;
 
-    /**
-     * Related resources
-     */
-    agentId?: string;
+  attemptCount: number;
 
-    attemptCount?: number;
+  /**
+   * The type of objective event that triggered this webhook delivery
+   */
+  eventType:
+    | 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED'
+    | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED'
+    | 'OBJECTIVE_EVENT_TYPE_SUB_OBJECTIVE_CREATED'
+    | 'OBJECTIVE_EVENT_TYPE_ERROR'
+    | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR';
 
-    errorMessage?: string;
+  /**
+   * Response details (no response_body to avoid storing large payloads)
+   */
+  httpStatusCode: number;
 
-    /**
-     * Response details (no response_body to avoid storing large payloads)
-     */
-    httpStatusCode?: number;
+  lastAttemptAt: string;
 
-    lastAttemptAt?: string;
+  latencyMs: number;
 
-    latencyMs?: number;
+  objectiveEventId: string;
 
-    objectiveEventId?: string;
+  objectiveId: string;
 
-    objectiveId?: string;
+  /**
+   * Content length of the response body in bytes
+   */
+  responseContentLength: string;
 
-    webhookId?: string;
+  status:
+    | 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED'
+    | 'WEBHOOK_DELIVERY_STATUS_PENDING'
+    | 'WEBHOOK_DELIVERY_STATUS_COMPLETED'
+    | 'WEBHOOK_DELIVERY_STATUS_FAILED'
+    | 'WEBHOOK_DELIVERY_STATUS_DISABLED';
 
-    /**
-     * Webhook delivery details
-     */
-    webhookUrl?: string;
-  }
+  webhookId: string;
+
+  /**
+   * Webhook delivery details
+   */
+  webhookUrl: string;
+
+  errorMessage?: string;
+
+  /**
+   * Response headers received from the webhook endpoint
+   */
+  responseHeaders?: { [key: string]: string };
 }
 
-export interface WebhookDeliveryListParams extends CursorPaginationParams {}
+export interface WebhookDeliveryListParams extends CursorPaginationParams {
+  /**
+   * Optional filter by event type
+   */
+  eventType?:
+    | 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED'
+    | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED'
+    | 'OBJECTIVE_EVENT_TYPE_SUB_OBJECTIVE_CREATED'
+    | 'OBJECTIVE_EVENT_TYPE_ERROR'
+    | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT'
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR';
+
+  /**
+   * Optional filter by objective ID
+   */
+  objectiveId?: string;
+}
 
 export declare namespace WebhookDeliveries {
   export {
     type WebhookDelivery as WebhookDelivery,
+    type WebhookDeliveryData as WebhookDeliveryData,
     type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
     type WebhookDeliveryListParams as WebhookDeliveryListParams,
   };

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
@@ -120,7 +121,7 @@ export interface ToolInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -129,28 +130,24 @@ export interface ToolInfo {
 }
 
 export interface ToolSpec {
+  /**
+   * Config defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  config: ToolSpecConfig;
+
+  description: string;
+
+  parameters: { [key: string]: unknown };
+
   status:
     | 'TOOL_STATUS_UNSPECIFIED'
     | 'TOOL_STATUS_AVAILABLE'
     | 'TOOL_STATUS_FILTERED'
     | 'TOOL_STATUS_ARCHIVED';
 
-  /**
-   * Config defines the adapter to use for the tool. This is used to determine how
-   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
-   * be Http. If the tool is an inline tool, the adapter will be Inline.
-   */
-  config?: ToolSpecConfig;
-
-  contentFilter?: ToolSpecContentFilter;
-
-  description?: string;
-
-  parameters?: { [key: string]: unknown };
-
   requiresApproval?: boolean;
-
-  toolSetId?: string;
 }
 
 /**
@@ -162,12 +159,6 @@ export interface ToolSpecConfig {
   http?: ConfigHTTP;
 
   mcp?: ConfigMcp;
-}
-
-export interface ToolSpecContentFilter {
-  jq?: string;
-
-  regex?: string;
 }
 
 export interface ToolCreateParams {
@@ -239,7 +230,6 @@ export declare namespace Tools {
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
-    type ToolSpecContentFilter as ToolSpecContentFilter,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

@@ -1,8 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as WorkspacesAPI from './workspaces';
-import { CursorPagination } from '../core/pagination';
-
 /**
  * AccountResourceMetadata is used to represent a resource that is associated to an
  * account but not to a workspace.
@@ -48,29 +45,6 @@ export interface AccountResourceMetadata {
  */
 export interface BareMetadata {
   id: string;
-}
-
-/**
- * CallableTool is a union that represents a tool that can be called by an agent.
- * In Cadenya, a tool that is used within an agent objective might be a
- * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
- * or a Cadenya Tool (one Cadenya provides).
- */
-export interface CallableTool {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  agent?: ResourceMetadata;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  cadenyaProvidedTool?: ResourceMetadata;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  tool?: ResourceMetadata;
 }
 
 /**
@@ -159,45 +133,6 @@ export interface OperationMetadata {
 }
 
 /**
- * Profile represents a human user at the account level. Profiles are
- * account-scoped resources that can be associated with multiple workspaces through
- * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
- */
-export interface Profile {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  metadata: AccountResourceMetadata;
-
-  /**
-   * ProfileSpec contains the profile-specific fields
-   */
-  spec: ProfileSpec;
-}
-
-/**
- * ProfileSpec contains the profile-specific fields
- */
-export interface ProfileSpec {
-  /**
-   * Type is the type of profile. User's are humans, API keys are computers. You know
-   * the deal.
-   */
-  type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
-
-  /**
-   * Email address of the user (required, unique per account)
-   */
-  email?: string;
-
-  /**
-   * Display name for the user (e.g., "Bobby Tables")
-   */
-  name?: string;
-}
-
-/**
  * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
  */
 export interface ResourceMetadata {
@@ -267,15 +202,3 @@ export interface UpdateResourceMetadata {
    */
   labels?: { [key: string]: string };
 }
-
-export interface Workspace {
-  /**
-   * AccountResourceMetadata is used to represent a resource that is associated to an
-   * account but not to a workspace.
-   */
-  metadata: AccountResourceMetadata;
-
-  spec: WorkspacesAPI.WorkspaceSpec;
-}
-
-export type WorkspacesCursorPagination = CursorPagination<Workspace>;

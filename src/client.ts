@@ -19,7 +19,7 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource } from './resources/account';
+import { Account, AccountResource, AccountSpec, Profile, ProfileSpec } from './resources/account';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -30,45 +30,6 @@ import {
   APIKeys,
   APIKeysCursorPagination,
 } from './resources/api-keys';
-import {
-  DocumentNamespace,
-  DocumentNamespaceCreateParams,
-  DocumentNamespaceListParams,
-  DocumentNamespaceSpec,
-  DocumentNamespaceUpdateParams,
-  DocumentNamespaces,
-  DocumentNamespacesCursorPagination,
-} from './resources/document-namespaces';
-import {
-  Any,
-  AnyOrExpression,
-  CallbacksOrReferences,
-  Document,
-  DocumentCreateParams,
-  DocumentListParams,
-  DocumentSpec,
-  DocumentSpecInlineContent,
-  DocumentSpecRemoteSource,
-  DocumentUpdateParams,
-  Documents,
-  DocumentsCursorPagination,
-  Expression,
-  GoogleProtobufAny,
-  HeadersOrReferences,
-  MediaTypes,
-  NamedAny,
-  NamedPathItem,
-  NamedSchemaOrReference,
-  NamedServerVariable,
-  NamedString,
-  OAuthFlow,
-  Reference,
-  SchemaOrReference,
-  Server,
-  ServerVariable,
-  ServerVariables,
-  Strings,
-} from './resources/documents';
 import {
   Model,
   ModelListParams,
@@ -93,10 +54,11 @@ import {
   WorkspaceSecretsCursorPagination,
 } from './resources/workspace-secrets';
 import {
-  WorkspaceCreateParams,
+  Workspace,
   WorkspaceListParams,
   WorkspaceSpec,
   Workspaces,
+  WorkspacesCursorPagination,
 } from './resources/workspaces';
 import {
   Agent,
@@ -112,6 +74,7 @@ import {
 import {
   AssistantMessage,
   AssistantToolCall,
+  CallableTool,
   Objective,
   ObjectiveCancelParams,
   ObjectiveContextWindow,
@@ -178,26 +141,11 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
-const environments = {
-  staging: 'https://api.cadenya.dev',
-  production: 'https://api.cadenya.com',
-};
-type Environment = keyof typeof environments;
-
 export interface ClientOptions {
   /**
    * Defaults to process.env['CADENYA_API_KEY'].
    */
   apiKey?: string | undefined;
-
-  /**
-   * Specifies the environment to use for the API.
-   *
-   * Each environment maps to a different base URL:
-   * - `staging` corresponds to `https://api.cadenya.dev`
-   * - `production` corresponds to `https://api.cadenya.com`
-   */
-  environment?: Environment | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -290,8 +238,7 @@ export class Cadenya {
    * API Client for interfacing with the Cadenya API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['CADENYA_API_KEY'] ?? undefined]
-   * @param {Environment} [opts.environment=staging] - Specifies the environment URL to use for the API.
-   * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.cadenya.dev] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.cadenya.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -313,17 +260,10 @@ export class Cadenya {
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL,
-      environment: opts.environment ?? 'staging',
+      baseURL: baseURL || `https://api.cadenya.com`,
     };
 
-    if (baseURL && opts.environment) {
-      throw new Errors.CadenyaError(
-        'Ambiguous URL; The `baseURL` option (or CADENYA_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
-      );
-    }
-
-    this.baseURL = options.baseURL || environments[options.environment || 'staging'];
+    this.baseURL = options.baseURL!;
     this.timeout = options.timeout ?? Cadenya.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -349,8 +289,7 @@ export class Cadenya {
   withOptions(options: Partial<ClientOptions>): this {
     const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
-      environment: options.environment ? options.environment : undefined,
-      baseURL: options.environment ? undefined : this.baseURL,
+      baseURL: this.baseURL,
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
@@ -367,7 +306,7 @@ export class Cadenya {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== environments[this._options.environment || 'staging'];
+    return this.baseURL !== 'https://api.cadenya.com';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -973,30 +912,6 @@ export class Cadenya {
    *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
    */
   workspaces: API.Workspaces = new API.Workspaces(this);
-  /**
-   * DocumentService manages document namespaces and documents at the WORKSPACE level.
-   *  Document namespaces categorize documents for use cases such as customer-specific
-   *  documents, regionalized documentation, and agent-created episodic memories.
-   *  Documents are key primitives of the platform containing knowledge as inline content
-   *  or remote sources. Each document belongs to exactly one namespace.
-   *  All operations are implicitly scoped to the workspace determined by the JWT token.
-   *
-   *  Authentication: Bearer token (JWT)
-   *  Scope: Workspace-level operations
-   */
-  documentNamespaces: API.DocumentNamespaces = new API.DocumentNamespaces(this);
-  /**
-   * DocumentService manages document namespaces and documents at the WORKSPACE level.
-   *  Document namespaces categorize documents for use cases such as customer-specific
-   *  documents, regionalized documentation, and agent-created episodic memories.
-   *  Documents are key primitives of the platform containing knowledge as inline content
-   *  or remote sources. Each document belongs to exactly one namespace.
-   *  All operations are implicitly scoped to the workspace determined by the JWT token.
-   *
-   *  Authentication: Bearer token (JWT)
-   *  Scope: Workspace-level operations
-   */
-  documents: API.Documents = new API.Documents(this);
 }
 
 Cadenya.AccountResource = AccountResource;
@@ -1008,8 +923,6 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
-Cadenya.DocumentNamespaces = DocumentNamespaces;
-Cadenya.Documents = Documents;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -1020,7 +933,13 @@ export declare namespace Cadenya {
     type CursorPaginationResponse as CursorPaginationResponse,
   };
 
-  export { AccountResource as AccountResource, type Account as Account };
+  export {
+    AccountResource as AccountResource,
+    type Account as Account,
+    type AccountSpec as AccountSpec,
+    type Profile as Profile,
+    type ProfileSpec as ProfileSpec,
+  };
 
   export {
     Agents as Agents,
@@ -1038,6 +957,7 @@ export declare namespace Cadenya {
     Objectives as Objectives,
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
+    type CallableTool as CallableTool,
     type Objective as Objective,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
@@ -1131,61 +1051,17 @@ export declare namespace Cadenya {
 
   export {
     Workspaces as Workspaces,
+    type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspaceCreateParams as WorkspaceCreateParams,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceListParams as WorkspaceListParams,
-  };
-
-  export {
-    DocumentNamespaces as DocumentNamespaces,
-    type DocumentNamespace as DocumentNamespace,
-    type DocumentNamespaceSpec as DocumentNamespaceSpec,
-    type DocumentNamespacesCursorPagination as DocumentNamespacesCursorPagination,
-    type DocumentNamespaceCreateParams as DocumentNamespaceCreateParams,
-    type DocumentNamespaceUpdateParams as DocumentNamespaceUpdateParams,
-    type DocumentNamespaceListParams as DocumentNamespaceListParams,
-  };
-
-  export {
-    Documents as Documents,
-    type Any as Any,
-    type AnyOrExpression as AnyOrExpression,
-    type CallbacksOrReferences as CallbacksOrReferences,
-    type Document as Document,
-    type DocumentSpec as DocumentSpec,
-    type DocumentSpecInlineContent as DocumentSpecInlineContent,
-    type DocumentSpecRemoteSource as DocumentSpecRemoteSource,
-    type Expression as Expression,
-    type GoogleProtobufAny as GoogleProtobufAny,
-    type HeadersOrReferences as HeadersOrReferences,
-    type MediaTypes as MediaTypes,
-    type NamedAny as NamedAny,
-    type NamedPathItem as NamedPathItem,
-    type NamedSchemaOrReference as NamedSchemaOrReference,
-    type NamedServerVariable as NamedServerVariable,
-    type NamedString as NamedString,
-    type OAuthFlow as OAuthFlow,
-    type Reference as Reference,
-    type SchemaOrReference as SchemaOrReference,
-    type Server as Server,
-    type ServerVariable as ServerVariable,
-    type ServerVariables as ServerVariables,
-    type Strings as Strings,
-    type DocumentsCursorPagination as DocumentsCursorPagination,
-    type DocumentCreateParams as DocumentCreateParams,
-    type DocumentUpdateParams as DocumentUpdateParams,
-    type DocumentListParams as DocumentListParams,
   };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
   export type BareMetadata = API.BareMetadata;
-  export type CallableTool = API.CallableTool;
   export type CreateOperationMetadata = API.CreateOperationMetadata;
   export type CreateResourceMetadata = API.CreateResourceMetadata;
   export type OperationMetadata = API.OperationMetadata;
-  export type Profile = API.Profile;
-  export type ProfileSpec = API.ProfileSpec;
   export type ResourceMetadata = API.ResourceMetadata;
   export type UpdateResourceMetadata = API.UpdateResourceMetadata;
-  export type Workspace = API.Workspace;
 }

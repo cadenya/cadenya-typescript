@@ -4,6 +4,7 @@ export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
+  type CallableTool,
   type Objective,
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
@@ -35,6 +36,14 @@ export {
   type ObjectiveContextWindowsCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives';
+export {
+  Tasks,
+  type ObjectiveTask,
+  type ObjectiveTaskData,
+  type TaskRetrieveParams,
+  type TaskListParams,
+  type ObjectiveTasksCursorPagination,
+} from './tasks';
 export {
   ToolCalls,
   type ObjectiveToolCall,

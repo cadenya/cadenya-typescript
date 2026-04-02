@@ -11,7 +11,7 @@ export {
   type APIKeyListParams,
   type APIKeysCursorPagination,
 } from './api-keys';
-export { AccountResource, type Account } from './account';
+export { AccountResource, type Account, type AccountSpec, type Profile, type ProfileSpec } from './account';
 export {
   Agents,
   type Agent,
@@ -24,45 +24,6 @@ export {
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
-  DocumentNamespaces,
-  type DocumentNamespace,
-  type DocumentNamespaceSpec,
-  type DocumentNamespaceCreateParams,
-  type DocumentNamespaceUpdateParams,
-  type DocumentNamespaceListParams,
-  type DocumentNamespacesCursorPagination,
-} from './document-namespaces';
-export {
-  Documents,
-  type Any,
-  type AnyOrExpression,
-  type CallbacksOrReferences,
-  type Document,
-  type DocumentSpec,
-  type DocumentSpecInlineContent,
-  type DocumentSpecRemoteSource,
-  type Expression,
-  type GoogleProtobufAny,
-  type HeadersOrReferences,
-  type MediaTypes,
-  type NamedAny,
-  type NamedPathItem,
-  type NamedSchemaOrReference,
-  type NamedServerVariable,
-  type NamedString,
-  type OAuthFlow,
-  type Reference,
-  type SchemaOrReference,
-  type Server,
-  type ServerVariable,
-  type ServerVariables,
-  type Strings,
-  type DocumentCreateParams,
-  type DocumentUpdateParams,
-  type DocumentListParams,
-  type DocumentsCursorPagination,
-} from './documents';
-export {
   Models,
   type Model,
   type ModelSpec,
@@ -74,6 +35,7 @@ export {
   Objectives,
   type AssistantMessage,
   type AssistantToolCall,
+  type CallableTool,
   type Objective,
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
@@ -143,7 +105,8 @@ export {
 } from './workspace-secrets';
 export {
   Workspaces,
+  type Workspace,
   type WorkspaceSpec,
-  type WorkspaceCreateParams,
   type WorkspaceListParams,
+  type WorkspacesCursorPagination,
 } from './workspaces';

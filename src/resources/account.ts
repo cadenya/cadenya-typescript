@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
+import * as WorkspacesAPI from './workspaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -30,21 +31,63 @@ export interface Account {
    */
   metadata: Shared.AccountResourceMetadata;
 
-  spec: Account.Spec;
+  spec: AccountSpec;
 }
 
-export namespace Account {
-  export interface Spec {
-    billingEmail?: string;
+export interface AccountSpec {
+  billingEmail?: string;
 
-    description?: string;
+  description?: string;
 
-    domain?: string;
+  domain?: string;
 
-    workspaces?: Array<Shared.Workspace>;
-  }
+  workspaces?: Array<WorkspacesAPI.Workspace>;
+}
+
+/**
+ * Profile represents a human user at the account level. Profiles are
+ * account-scoped resources that can be associated with multiple workspaces through
+ * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+ */
+export interface Profile {
+  /**
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
+   */
+  metadata: Shared.AccountResourceMetadata;
+
+  /**
+   * ProfileSpec contains the profile-specific fields
+   */
+  spec: ProfileSpec;
+}
+
+/**
+ * ProfileSpec contains the profile-specific fields
+ */
+export interface ProfileSpec {
+  /**
+   * Type is the type of profile. User's are humans, API keys are computers. You know
+   * the deal.
+   */
+  type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+
+  /**
+   * Email address of the user (required, unique per account)
+   */
+  email?: string;
+
+  /**
+   * Display name for the user (e.g., "Bobby Tables")
+   */
+  name?: string;
 }
 
 export declare namespace AccountResource {
-  export { type Account as Account };
+  export {
+    type Account as Account,
+    type AccountSpec as AccountSpec,
+    type Profile as Profile,
+    type ProfileSpec as ProfileSpec,
+  };
 }

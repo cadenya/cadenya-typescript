@@ -11,20 +11,27 @@ import { ClientOptions } from 'cadenya';
 import Cadenya from 'cadenya';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
+import { setLocalSearch } from './docs-search-tool';
+import { LocalDocsSearch } from './local-docs-search';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
 import { blockedMethodsForCodeTool } from './methods';
 import { HandlerFunction, McpRequestContext, ToolCallResult, McpTool } from './types';
-import { readEnv } from './util';
 
-export const newMcpServer = async (stainlessApiKey: string | undefined) =>
+export const newMcpServer = async ({
+  stainlessApiKey,
+  customInstructionsPath,
+}: {
+  stainlessApiKey?: string | undefined;
+  customInstructionsPath?: string | undefined;
+}) =>
   new McpServer(
     {
       name: 'cadenya_api',
-      version: '0.37.0',
+      version: '0.38.0',
     },
     {
-      instructions: await getInstructions(stainlessApiKey),
+      instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
       capabilities: { tools: {}, logging: {} },
     },
   );
@@ -39,6 +46,8 @@ export async function initMcpServer(params: {
   mcpOptions?: McpOptions;
   stainlessApiKey?: string | undefined;
   upstreamClientEnvs?: Record<string, string> | undefined;
+  mcpSessionId?: string | undefined;
+  mcpClientInfo?: { name: string; version: string } | undefined;
 }) {
   const server = params.server instanceof McpServer ? params.server.server : params.server;
 
@@ -57,6 +66,12 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
+  if (params.mcpOptions?.docsSearchMode === 'local') {
+    const docsDir = params.mcpOptions?.docsDir;
+    const localSearch = await LocalDocsSearch.create(docsDir ? { docsDir } : undefined);
+    setLocalSearch(localSearch);
+  }
+
   let _client: Cadenya | undefined;
   let _clientError: Error | undefined;
   let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
@@ -66,7 +81,6 @@ export async function initMcpServer(params: {
     if (!_client) {
       try {
         _client = new Cadenya({
-          ...{ environment: (readEnv('CADENYA_ENVIRONMENT') || undefined) as any },
           logger,
           ...params.clientOptions,
           defaultHeaders: {
@@ -122,6 +136,8 @@ export async function initMcpServer(params: {
         client,
         stainlessApiKey: params.stainlessApiKey ?? params.mcpOptions?.stainlessApiKey,
         upstreamClientEnvs: params.upstreamClientEnvs,
+        mcpSessionId: params.mcpSessionId,
+        mcpClientInfo: params.mcpClientInfo,
       },
       args,
     });

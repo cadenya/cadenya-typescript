@@ -33,7 +33,6 @@ import Cadenya from 'cadenya';
 
 const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-  environment: 'production', // defaults to 'staging'
 });
 
 const account = await client.account.retrieve();
@@ -51,7 +50,6 @@ import Cadenya from 'cadenya';
 
 const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
-  environment: 'production', // defaults to 'staging'
 });
 
 const account: Cadenya.Account = await client.account.retrieve();
@@ -374,7 +372,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/cadenya/typescript-sdk/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

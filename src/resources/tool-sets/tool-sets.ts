@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ToolSetsAPI from './tool-sets';
+import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
@@ -15,7 +16,6 @@ import {
   ToolRetrieveParams,
   ToolSpec,
   ToolSpecConfig,
-  ToolSpecContentFilter,
   ToolUpdateParams,
   Tools,
   ToolsCursorPagination,
@@ -280,7 +280,7 @@ export namespace ToolSetEvent {
      * account-scoped resources that can be associated with multiple workspaces through
      * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
      */
-    createdBy?: Shared.Profile;
+    createdBy?: AccountAPI.Profile;
 
     /**
      * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -322,7 +322,7 @@ export interface ToolSetInfo {
    * account-scoped resources that can be associated with multiple workspaces through
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
-  createdBy?: Shared.Profile;
+  createdBy?: AccountAPI.Profile;
 
   lastSync?: string;
 
@@ -420,7 +420,6 @@ export declare namespace ToolSets {
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
-    type ToolSpecContentFilter as ToolSpecContentFilter,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

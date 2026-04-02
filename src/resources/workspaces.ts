@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { WorkspacesCursorPagination } from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -17,47 +16,38 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Workspaces extends APIResource {
   /**
-   * Creates a new workspace for the account
-   */
-  create(body: WorkspaceCreateParams, options?: RequestOptions): APIPromise<Shared.Workspace> {
-    return this._client.post('/v1/workspaces', { body, ...options });
-  }
-
-  /**
    * Lists all workspaces for the current account
    */
   list(
     query: WorkspaceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<WorkspacesCursorPagination, Shared.Workspace> {
-    return this._client.getAPIList('/v1/workspaces', CursorPagination<Shared.Workspace>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<WorkspacesCursorPagination, Workspace> {
+    return this._client.getAPIList('/v1/workspaces', CursorPagination<Workspace>, { query, ...options });
   }
 
   /**
    * Retrieves the workspace associated with the current API token. Useful for
    * workspace-scoped tokens to identify which workspace they belong to.
    */
-  get(options?: RequestOptions): APIPromise<Shared.Workspace> {
+  get(options?: RequestOptions): APIPromise<Workspace> {
     return this._client.get('/v1/workspaces/current', options);
   }
 }
 
-export interface WorkspaceSpec {
-  description?: string;
-}
+export type WorkspacesCursorPagination = CursorPagination<Workspace>;
 
-export interface WorkspaceCreateParams {
+export interface Workspace {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * AccountResourceMetadata is used to represent a resource that is associated to an
+   * account but not to a workspace.
    */
-  metadata: Shared.CreateResourceMetadata;
+  metadata: Shared.AccountResourceMetadata;
 
   spec: WorkspaceSpec;
+}
+
+export interface WorkspaceSpec {
+  description?: string;
 }
 
 export interface WorkspaceListParams extends CursorPaginationParams {
@@ -74,10 +64,9 @@ export interface WorkspaceListParams extends CursorPaginationParams {
 
 export declare namespace Workspaces {
   export {
+    type Workspace as Workspace,
     type WorkspaceSpec as WorkspaceSpec,
-    type WorkspaceCreateParams as WorkspaceCreateParams,
+    type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceListParams as WorkspaceListParams,
   };
 }
-
-export { type WorkspacesCursorPagination };
