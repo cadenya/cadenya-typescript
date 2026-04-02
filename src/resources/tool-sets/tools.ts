@@ -129,28 +129,24 @@ export interface ToolInfo {
 }
 
 export interface ToolSpec {
+  /**
+   * Config defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  config: ToolSpecConfig;
+
+  description: string;
+
+  parameters: { [key: string]: unknown };
+
   status:
     | 'TOOL_STATUS_UNSPECIFIED'
     | 'TOOL_STATUS_AVAILABLE'
     | 'TOOL_STATUS_FILTERED'
     | 'TOOL_STATUS_ARCHIVED';
 
-  /**
-   * Config defines the adapter to use for the tool. This is used to determine how
-   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
-   * be Http. If the tool is an inline tool, the adapter will be Inline.
-   */
-  config?: ToolSpecConfig;
-
-  contentFilter?: ToolSpecContentFilter;
-
-  description?: string;
-
-  parameters?: { [key: string]: unknown };
-
   requiresApproval?: boolean;
-
-  toolSetId?: string;
 }
 
 /**
@@ -162,12 +158,6 @@ export interface ToolSpecConfig {
   http?: ConfigHTTP;
 
   mcp?: ConfigMcp;
-}
-
-export interface ToolSpecContentFilter {
-  jq?: string;
-
-  regex?: string;
 }
 
 export interface ToolCreateParams {
@@ -239,7 +229,6 @@ export declare namespace Tools {
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
-    type ToolSpecContentFilter as ToolSpecContentFilter,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,
