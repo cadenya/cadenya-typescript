@@ -37,7 +37,7 @@ COPY . .
 RUN yarn install --frozen-lockfile && \
     yarn build && \
     # Remove the symlink to the SDK so it doesn't interfere with the explicit COPY below
-    rm -Rf packages/mcp-server/node_modules/cadenya
+    rm -Rf packages/mcp-server/node_modules/@cadenya/cadenya
 
 FROM denoland/deno:alpine-2.7.1
 
@@ -58,8 +58,8 @@ COPY --from=builder /build/packages/mcp-server/dist ./
 # Copy node_modules from mcp-server (includes all production deps)
 COPY --from=builder /build/packages/mcp-server/node_modules ./node_modules
 
-# Copy the built cadenya into node_modules
-COPY --from=builder /build/dist ./node_modules/cadenya
+# Copy the built @cadenya/cadenya into node_modules
+COPY --from=builder /build/dist ./node_modules/@cadenya/cadenya
 
 # Change ownership to nodejs user
 RUN chown -R nodejs:nodejs /app

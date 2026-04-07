@@ -7,8 +7,8 @@ import {
   ListToolsRequestSchema,
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from 'cadenya';
-import Cadenya from 'cadenya';
+import { ClientOptions } from '@cadenya/cadenya';
+import Cadenya from '@cadenya/cadenya';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
 import { setLocalSearch } from './docs-search-tool';
@@ -27,8 +27,8 @@ export const newMcpServer = async ({
 }) =>
   new McpServer(
     {
-      name: 'cadenya_api',
-      version: '0.39.0',
+      name: 'cadenya_cadenya_api',
+      version: '0.40.0',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
