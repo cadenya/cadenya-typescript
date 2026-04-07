@@ -2,7 +2,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { ClientOptions } from 'cadenya';
+import { ClientOptions } from '@cadenya/cadenya';
 import express from 'express';
 import pino from 'pino';
 import pinoHttp from 'pino-http';

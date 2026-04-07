@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^cadenya$': '<rootDir>/src/index.ts',
-    '^cadenya/(.*)$': '<rootDir>/src/$1',
+    '^@cadenya/cadenya$': '<rootDir>/src/index.ts',
+    '^@cadenya/cadenya/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
