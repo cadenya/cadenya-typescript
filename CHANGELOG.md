@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.39.0 (2026-04-03)
+
+Full Changelog: [v0.38.0...v0.39.0](https://github.com/cadenya/cadenya-typescript/compare/v0.38.0...v0.39.0)
+
+### Features
+
+* **api:** api update ([5194267](https://github.com/cadenya/cadenya-typescript/commit/519426725bcad672a7543fb46025cf7c2c88a307))
+* **api:** api update ([e3adce4](https://github.com/cadenya/cadenya-typescript/commit/e3adce4e483d510082e023b82184a7e3a8276167))
+* **api:** api update ([31ee4ef](https://github.com/cadenya/cadenya-typescript/commit/31ee4ef6d2b85b5a3766646dbf795c7caccc3eb9))
+* **api:** api update ([d68d0b6](https://github.com/cadenya/cadenya-typescript/commit/d68d0b605b03026d16f3dbf57866ee3514e07e8d))
+
+
+### Chores
+
+* **internal:** fix MCP docker image builds in yarn projects ([22fba30](https://github.com/cadenya/cadenya-typescript/commit/22fba30c6331451d6d9e90a923a7a983fc8ffb71))
+* **internal:** support type annotations when running MCP in local execution mode ([964369c](https://github.com/cadenya/cadenya-typescript/commit/964369c4b9191fd86ff8d6c475bc5e9fdf3a2b21))
+* **internal:** use link instead of file in MCP server package.json files ([e6546ae](https://github.com/cadenya/cadenya-typescript/commit/e6546ae4fa8cd51d25cf8fcf416272220dcc06f3))
+* **mcp-server:** log client info ([c76f868](https://github.com/cadenya/cadenya-typescript/commit/c76f8688a60781a7a8122bb1386e81c743d78171))
+
 ## 0.38.0 (2026-04-02)
 
 Full Changelog: [v0.37.0...v0.38.0](https://github.com/cadenya/cadenya-typescript/compare/v0.37.0...v0.38.0)

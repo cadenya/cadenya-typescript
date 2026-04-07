@@ -149,6 +149,19 @@ Methods:
 - <code title="get /v1/objectives/{objectiveId}/tasks/{id}">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">retrieve</a>(id, { ...params }) -> ObjectiveTask</code>
 - <code title="get /v1/objectives/{objectiveId}/tasks">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">list</a>(objectiveID, { ...params }) -> ObjectiveTasksCursorPagination</code>
 
+## Feedback
+
+Types:
+
+- <code><a href="./src/resources/objectives/feedback.ts">ObjectiveFeedback</a></code>
+- <code><a href="./src/resources/objectives/feedback.ts">ObjectiveFeedbackData</a></code>
+- <code><a href="./src/resources/objectives/feedback.ts">ObjectiveFeedbackInfo</a></code>
+
+Methods:
+
+- <code title="post /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">create</a>(objectiveID, { ...params }) -> ObjectiveFeedback</code>
+- <code title="get /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">list</a>(objectiveID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
+
 # Models
 
 Types:

@@ -71,7 +71,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Account.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Metadata)\n}\n',
       },
       http: {
         example:
@@ -111,7 +111,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.List(context.TODO(), gocadenyacomcadenyago.AgentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.List(context.TODO(), cadenya.AgentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example: 'curl https://api.cadenya.com/v1/agents \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
@@ -149,7 +149,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.New(context.TODO(), gocadenyacomcadenyago.AgentNewParams{\n\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t}),\n\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.AgentSpecParam{\n\t\t\tStatus:                 gocadenyacomcadenyago.F(gocadenyacomcadenyago.AgentSpecStatusAgentStatusUnspecified),\n\t\t\tVariationSelectionMode: gocadenyacomcadenyago.F(gocadenyacomcadenyago.AgentSpecVariationSelectionModeVariationSelectionModeUnspecified),\n\t\t}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.New(context.TODO(), cadenya.AgentNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.AgentSpecParam{\n\t\t\tStatus:                 cadenya.F(cadenya.AgentSpecStatusAgentStatusUnspecified),\n\t\t\tVariationSelectionMode: cadenya.F(cadenya.AgentSpecVariationSelectionModeVariationSelectionModeUnspecified),\n\t\t}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
       },
       http: {
         example:
@@ -183,7 +183,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
       },
       http: {
         example:
@@ -215,7 +215,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -254,7 +254,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgocadenyacomcadenyago.AgentUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.AgentUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
       },
       http: {
         example:
@@ -294,7 +294,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Variations.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Variations.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tgocadenyacomcadenyago.AgentVariationListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Variations.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -333,7 +333,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Variations.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.New(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tgocadenyacomcadenyago.AgentVariationNewParams{\n\t\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t\t}),\n\t\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.AgentVariationSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.New(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentVariationSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
@@ -368,7 +368,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Variations.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Get(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Get(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
@@ -401,7 +401,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Variations.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.Delete(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.Delete(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -442,7 +442,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Variations.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Update(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t\tgocadenyacomcadenyago.AgentVariationUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Update(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
@@ -483,7 +483,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.WebhookDeliveries.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.WebhookDeliveries.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tgocadenyacomcadenyago.AgentWebhookDeliveryListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.WebhookDeliveries.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentWebhookDeliveryListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -526,7 +526,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.List(context.TODO(), gocadenyacomcadenyago.ObjectiveListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.List(context.TODO(), cadenya.ObjectiveListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -566,7 +566,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.New(context.TODO(), gocadenyacomcadenyago.ObjectiveNewParams{\n\t\tAgentID:  gocadenyacomcadenyago.F("agentId"),\n\t\tData:     gocadenyacomcadenyago.F(gocadenyacomcadenyago.ObjectiveDataParam{}),\n\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateOperationMetadataParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.New(context.TODO(), cadenya.ObjectiveNewParams{\n\t\tAgentID:  cadenya.F("agentId"),\n\t\tData:     cadenya.F(cadenya.ObjectiveDataParam{}),\n\t\tMetadata: cadenya.F(shared.CreateOperationMetadataParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
       },
       http: {
         example:
@@ -600,7 +600,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
       },
       http: {
         example:
@@ -642,7 +642,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.ListEvents',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListEvents(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListEvents(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -681,7 +681,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Continue',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Objectives.Continue(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveContinueParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Objectives.Continue(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveContinueParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
       },
       http: {
         example:
@@ -716,7 +716,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Cancel',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Cancel(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Cancel(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
       },
       http: {
         example:
@@ -752,7 +752,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.ListContextWindows',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListContextWindows(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveListContextWindowsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListContextWindows(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveListContextWindowsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -787,7 +787,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Tools.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tools.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tools.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -828,7 +828,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.ToolCalls.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ToolCalls.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveToolCallListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ToolCalls.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveToolCallListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -864,7 +864,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.ToolCalls.Approve',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Approve(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tgocadenyacomcadenyago.ObjectiveToolCallApproveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Approve(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tcadenya.ObjectiveToolCallApproveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
       },
       http: {
         example:
@@ -900,7 +900,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.ToolCalls.Deny',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Deny(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tgocadenyacomcadenyago.ObjectiveToolCallDenyParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Deny(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tcadenya.ObjectiveToolCallDenyParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
       },
       http: {
         example:
@@ -923,9 +923,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.objectives.tasks.list',
     params: ['objectiveId: string;', 'cursor?: string;', 'limit?: number;', 'sortOrder?: string;'],
     response:
-      '{ data: { task: string; completed?: boolean; completedAt?: string; number?: number; }; metadata: { id: string; }; }',
+      '{ data: { completed: boolean; number: number; task: string; completedAt?: string; }; metadata: { id: string; }; }',
     markdown:
-      "## list\n\n`client.objectives.tasks.list(objectiveId: string, cursor?: string, limit?: number, sortOrder?: string): { data: objective_task_data; metadata: bare_metadata; }`\n\n**get** `/v1/objectives/{objectiveId}/tasks`\n\nLists all tasks for an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `sortOrder?: string`\n  Sort order for results\n\n### Returns\n\n- `{ data: { task: string; completed?: boolean; completedAt?: string; number?: number; }; metadata: { id: string; }; }`\n  ObjectiveTask represents a task within an objective, typically created and managed by an AI agent\n to track progress toward completing the objective.\n\n  - `data: { task: string; completed?: boolean; completedAt?: string; number?: number; }`\n  - `metadata: { id: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveTask of client.objectives.tasks.list('objectiveId')) {\n  console.log(objectiveTask);\n}\n```",
+      "## list\n\n`client.objectives.tasks.list(objectiveId: string, cursor?: string, limit?: number, sortOrder?: string): { data: objective_task_data; metadata: bare_metadata; }`\n\n**get** `/v1/objectives/{objectiveId}/tasks`\n\nLists all tasks for an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `sortOrder?: string`\n  Sort order for results\n\n### Returns\n\n- `{ data: { completed: boolean; number: number; task: string; completedAt?: string; }; metadata: { id: string; }; }`\n  ObjectiveTask represents a task within an objective, typically created and managed by an AI agent\n to track progress toward completing the objective.\n\n  - `data: { completed: boolean; number: number; task: string; completedAt?: string; }`\n  - `metadata: { id: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveTask of client.objectives.tasks.list('objectiveId')) {\n  console.log(objectiveTask);\n}\n```",
     perLanguage: {
       cli: {
         method: 'tasks list',
@@ -935,7 +935,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Tasks.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tasks.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tgocadenyacomcadenyago.ObjectiveTaskListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tasks.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveTaskListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -958,9 +958,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.objectives.tasks.retrieve',
     params: ['objectiveId: string;', 'id: string;'],
     response:
-      '{ data: { task: string; completed?: boolean; completedAt?: string; number?: number; }; metadata: { id: string; }; }',
+      '{ data: { completed: boolean; number: number; task: string; completedAt?: string; }; metadata: { id: string; }; }',
     markdown:
-      "## retrieve\n\n`client.objectives.tasks.retrieve(objectiveId: string, id: string): { data: objective_task_data; metadata: bare_metadata; }`\n\n**get** `/v1/objectives/{objectiveId}/tasks/{id}`\n\nRetrieves a task by ID from an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ data: { task: string; completed?: boolean; completedAt?: string; number?: number; }; metadata: { id: string; }; }`\n  ObjectiveTask represents a task within an objective, typically created and managed by an AI agent\n to track progress toward completing the objective.\n\n  - `data: { task: string; completed?: boolean; completedAt?: string; number?: number; }`\n  - `metadata: { id: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\nconst objectiveTask = await client.objectives.tasks.retrieve('id', { objectiveId: 'objectiveId' });\n\nconsole.log(objectiveTask);\n```",
+      "## retrieve\n\n`client.objectives.tasks.retrieve(objectiveId: string, id: string): { data: objective_task_data; metadata: bare_metadata; }`\n\n**get** `/v1/objectives/{objectiveId}/tasks/{id}`\n\nRetrieves a task by ID from an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ data: { completed: boolean; number: number; task: string; completedAt?: string; }; metadata: { id: string; }; }`\n  ObjectiveTask represents a task within an objective, typically created and managed by an AI agent\n to track progress toward completing the objective.\n\n  - `data: { completed: boolean; number: number; task: string; completedAt?: string; }`\n  - `metadata: { id: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\nconst objectiveTask = await client.objectives.tasks.retrieve('id', { objectiveId: 'objectiveId' });\n\nconsole.log(objectiveTask);\n```",
     perLanguage: {
       cli: {
         method: 'tasks retrieve',
@@ -970,7 +970,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Objectives.Tasks.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveTask, err := client.Objectives.Tasks.Get(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveTask.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveTask, err := client.Objectives.Tasks.Get(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveTask.Data)\n}\n',
       },
       http: {
         example:
@@ -980,6 +980,77 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.objectives.tasks.retrieve',
         example:
           "import Cadenya from 'cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst objectiveTask = await client.objectives.tasks.retrieve('id', { objectiveId: 'objectiveId' });\n\nconsole.log(objectiveTask.data);",
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/objectives/{objectiveId}/feedback',
+    httpMethod: 'post',
+    summary: 'Submit feedback for an objective',
+    description:
+      "Submits feedback for an objective's execution. Feedback scores are used by the agent variation scoring system to evaluate and rank variation performance.",
+    stainlessPath: '(resource) objectives.feedback > (method) create',
+    qualified: 'client.objectives.feedback.create',
+    params: ['objectiveId: string;', 'data: { attributes?: object; comment?: string; score?: number; };'],
+    response:
+      '{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }',
+    markdown:
+      '## create\n\n`client.objectives.feedback.create(objectiveId: string, data: { attributes?: object; comment?: string; score?: number; }): { data: objective_feedback_data; metadata: bare_metadata; info?: objective_feedback_info; }`\n\n**post** `/v1/objectives/{objectiveId}/feedback`\n\nSubmits feedback for an objective\'s execution. Feedback scores are used by the agent variation scoring system to evaluate and rank variation performance.\n\n### Parameters\n\n- `objectiveId: string`\n\n- `data: { attributes?: object; comment?: string; score?: number; }`\n  - `attributes?: object`\n    Arbitrary key-value pairs to identify the source of the feedback.\n Since the submitting profile is typically an API key, use this to pass through\n application-specific identifiers (e.g., {"user_id": "usr_123", "session_id": "abc"}).\n  - `comment?: string`\n    Optional human-readable comment explaining the feedback\n  - `score?: number`\n    A score between -1.0 and 1.0 representing the quality of the objective\'s execution.\n -1.0 is the worst possible score, 0.0 is neutral, and 1.0 is the best.\n\n### Returns\n\n- `{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }`\n  ObjectiveFeedback represents feedback submitted for an objective\'s execution.\n Feedback is used to score agent variations and improve agent performance over time.\n\n  - `data: { attributes?: object; comment?: string; score?: number; }`\n  - `metadata: { id: string; }`\n  - `info?: { submittedBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'cadenya\';\n\nconst client = new Cadenya();\n\nconst objectiveFeedback = await client.objectives.feedback.create(\'objectiveId\', { data: {} });\n\nconsole.log(objectiveFeedback);\n```',
+    perLanguage: {
+      cli: {
+        method: 'feedback create',
+        example:
+          "cadenya objectives:feedback create \\\n  --api-key 'My API Key' \\\n  --objective-id objectiveId \\\n  --data '{}'",
+      },
+      go: {
+        method: 'client.Objectives.Feedback.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveFeedback, err := client.Objectives.Feedback.New(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackNewParams{\n\t\t\tData: cadenya.F(cadenya.ObjectiveFeedbackDataParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveFeedback.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/objectives/$OBJECTIVE_ID/feedback \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "data": {}\n        }\'',
+      },
+      typescript: {
+        method: 'client.objectives.feedback.create',
+        example:
+          "import Cadenya from 'cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst objectiveFeedback = await client.objectives.feedback.create('objectiveId', { data: {} });\n\nconsole.log(objectiveFeedback.data);",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/objectives/{objectiveId}/feedback',
+    httpMethod: 'get',
+    summary: 'List feedback for an objective',
+    description: 'Lists all feedback submitted for an objective',
+    stainlessPath: '(resource) objectives.feedback > (method) list',
+    qualified: 'client.objectives.feedback.list',
+    params: ['objectiveId: string;', 'cursor?: string;', 'limit?: number;'],
+    response:
+      '{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }',
+    markdown:
+      "## list\n\n`client.objectives.feedback.list(objectiveId: string, cursor?: string, limit?: number): { data: objective_feedback_data; metadata: bare_metadata; info?: objective_feedback_info; }`\n\n**get** `/v1/objectives/{objectiveId}/feedback`\n\nLists all feedback submitted for an objective\n\n### Parameters\n\n- `objectiveId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n### Returns\n\n- `{ data: { attributes?: object; comment?: string; score?: number; }; metadata: { id: string; }; info?: { submittedBy?: profile; }; }`\n  ObjectiveFeedback represents feedback submitted for an objective's execution.\n Feedback is used to score agent variations and improve agent performance over time.\n\n  - `data: { attributes?: object; comment?: string; score?: number; }`\n  - `metadata: { id: string; }`\n  - `info?: { submittedBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from 'cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveFeedback of client.objectives.feedback.list('objectiveId')) {\n  console.log(objectiveFeedback);\n}\n```",
+    perLanguage: {
+      cli: {
+        method: 'feedback list',
+        example:
+          "cadenya objectives:feedback list \\\n  --api-key 'My API Key' \\\n  --objective-id objectiveId",
+      },
+      go: {
+        method: 'client.Objectives.Feedback.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Feedback.List(\n\t\tcontext.TODO(),\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/objectives/$OBJECTIVE_ID/feedback \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.objectives.feedback.list',
+        example:
+          "import Cadenya from 'cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const objectiveFeedback of client.objectives.feedback.list('objectiveId')) {\n  console.log(objectiveFeedback.data);\n}",
       },
     },
   },
@@ -1010,7 +1081,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Models.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Models.List(context.TODO(), gocadenyacomcadenyago.ModelListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Models.List(context.TODO(), cadenya.ModelListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example: 'curl https://api.cadenya.com/v1/models \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
@@ -1043,7 +1114,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Models.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1080,7 +1151,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Models.SetStatus',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.SetStatus(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgocadenyacomcadenyago.ModelSetStatusParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.SetStatus(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.ModelSetStatusParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1114,7 +1185,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Search.SearchToolsOrToolSets',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Search.SearchToolsOrToolSets(context.TODO(), gocadenyacomcadenyago.SearchSearchToolsOrToolSetsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Agents)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Search.SearchToolsOrToolSets(context.TODO(), cadenya.SearchSearchToolsOrToolSetsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Agents)\n}\n',
       },
       http: {
         example:
@@ -1154,7 +1225,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.List(context.TODO(), gocadenyacomcadenyago.ToolSetListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.List(context.TODO(), cadenya.ToolSetListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1192,7 +1263,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.New(context.TODO(), gocadenyacomcadenyago.ToolSetNewParams{\n\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t}),\n\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.ToolSetSpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.New(context.TODO(), cadenya.ToolSetNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.ToolSetSpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1226,7 +1297,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1265,7 +1336,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgocadenyacomcadenyago.ToolSetUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.ToolSetUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1297,7 +1368,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -1337,7 +1408,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.ListEvents',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.ListEvents(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tgocadenyacomcadenyago.ToolSetListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.ListEvents(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tcadenya.ToolSetListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1378,7 +1449,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Tools.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.Tools.List(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tgocadenyacomcadenyago.ToolSetToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.Tools.List(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tcadenya.ToolSetToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1417,7 +1488,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Tools.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.New(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tgocadenyacomcadenyago.ToolSetToolNewParams{\n\t\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t\t}),\n\t\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.ToolSpecParam{\n\t\t\t\tConfig:      gocadenyacomcadenyago.F(gocadenyacomcadenyago.ToolSpecConfigParam{}),\n\t\t\t\tDescription: gocadenyacomcadenyago.F("description"),\n\t\t\t\tParameters: gocadenyacomcadenyago.F(map[string]interface{}{\n\t\t\t\t\t"foo": "bar",\n\t\t\t\t}),\n\t\t\t\tStatus: gocadenyacomcadenyago.F(gocadenyacomcadenyago.ToolSpecStatusToolStatusUnspecified),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.New(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\tcadenya.ToolSetToolNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.ToolSpecParam{\n\t\t\t\tConfig:      cadenya.F(cadenya.ToolSpecConfigParam{}),\n\t\t\t\tDescription: cadenya.F("description"),\n\t\t\t\tParameters: cadenya.F(map[string]interface{}{\n\t\t\t\t\t"foo": "bar",\n\t\t\t\t}),\n\t\t\t\tStatus: cadenya.F(cadenya.ToolSpecStatusToolStatusUnspecified),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1452,7 +1523,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Tools.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Get(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Get(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1493,7 +1564,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Tools.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Update(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t\tgocadenyacomcadenyago.ToolSetToolUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Update(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t\tcadenya.ToolSetToolUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1526,7 +1597,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.ToolSets.Tools.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Tools.Delete(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Tools.Delete(\n\t\tcontext.TODO(),\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -1566,7 +1637,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.List(context.TODO(), gocadenyacomcadenyago.APIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.List(context.TODO(), cadenya.APIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1604,7 +1675,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.New(context.TODO(), gocadenyacomcadenyago.APIKeyNewParams{\n\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t}),\n\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.APIKeySpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.New(context.TODO(), cadenya.APIKeyNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.APIKeySpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1638,7 +1709,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1670,7 +1741,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -1709,7 +1780,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgocadenyacomcadenyago.APIKeyUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1744,7 +1815,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.APIKeys.Rotate',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Rotate(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Rotate(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1784,7 +1855,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.WorkspaceSecrets.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.WorkspaceSecrets.List(context.TODO(), gocadenyacomcadenyago.WorkspaceSecretListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.WorkspaceSecrets.List(context.TODO(), cadenya.WorkspaceSecretListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1822,7 +1893,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.WorkspaceSecrets.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.New(context.TODO(), gocadenyacomcadenyago.WorkspaceSecretNewParams{\n\t\tMetadata: gocadenyacomcadenyago.F(shared.CreateResourceMetadataParam{\n\t\t\tName: gocadenyacomcadenyago.F("name"),\n\t\t}),\n\t\tSpec: gocadenyacomcadenyago.F(gocadenyacomcadenyago.WorkspaceSecretSpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.New(context.TODO(), cadenya.WorkspaceSecretNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.WorkspaceSecretSpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1856,7 +1927,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.WorkspaceSecrets.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1888,7 +1959,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.WorkspaceSecrets.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.WorkspaceSecrets.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.WorkspaceSecrets.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
@@ -1927,7 +1998,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.WorkspaceSecrets.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgocadenyacomcadenyago.WorkspaceSecretUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.WorkspaceSecretUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
       http: {
         example:
@@ -1961,7 +2032,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Workspaces.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Workspaces.List(context.TODO(), gocadenyacomcadenyago.WorkspaceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Workspaces.List(context.TODO(), cadenya.WorkspaceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
@@ -1995,7 +2066,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Workspaces.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspace, err := client.Workspaces.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspace.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspace, err := client.Workspaces.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspace.Metadata)\n}\n',
       },
       http: {
         example:
@@ -2014,7 +2085,7 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
   {
     language: 'go',
     content:
-      '# Cadenya Go API Library\n\n<a href="https://pkg.go.dev/github.com/cadenya/cadenya-go"><img src="https://pkg.go.dev/badge/github.com/cadenya/cadenya-go.svg" alt="Go Reference"></a>\n\nThe Cadenya Go library provides convenient access to the [Cadenya REST API](https://docs.cadenya.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n<!-- x-release-please-start-version -->\n\n```go\nimport (\n\t"github.com/cadenya/cadenya-go" // imported as SDK_PackageName\n)\n```\n\n<!-- x-release-please-end -->\n\nOr to pin the version:\n\n<!-- x-release-please-start-version -->\n\n```sh\ngo get -u \'github.com/cadenya/cadenya-go@v0.0.1\'\n```\n\n<!-- x-release-please-end -->\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := gocadenyacomcadenyago.NewClient(\n\t\toption.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CADENYA_API_KEY")\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Metadata)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Account.Get(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/cadenya/cadenya-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.Agents.ListAutoPaging(context.TODO(), gocadenyacomcadenyago.AgentListParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\tagent := iter.Current()\n\tfmt.Printf("%+v\\n", agent)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.Agents.List(context.TODO(), gocadenyacomcadenyago.AgentListParams{})\nfor page != nil {\n\tfor _, agent := range page.Items {\n\t\tfmt.Printf("%+v\\n", agent)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Account.Get(context.TODO())\nif err != nil {\n\tvar apierr *gocadenyacomcadenyago.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/account": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Account.Get(\n\tctx,\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := gocadenyacomcadenyago.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Account.Get(context.TODO(), option.WithMaxRetries(5))\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\naccount, err := client.Account.Get(context.TODO(), option.WithResponseInto(&response))\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", account)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+      '# Cadenya Go API Library\n\n<a href="https://pkg.go.dev/github.com/cadenya/cadenya-go"><img src="https://pkg.go.dev/badge/github.com/cadenya/cadenya-go.svg" alt="Go Reference"></a>\n\nThe Cadenya Go library provides convenient access to the [Cadenya REST API](https://docs.cadenya.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n<!-- x-release-please-start-version -->\n\n```go\nimport (\n\t"github.com/cadenya/cadenya-go" // imported as SDK_PackageName\n)\n```\n\n<!-- x-release-please-end -->\n\nOr to pin the version:\n\n<!-- x-release-please-start-version -->\n\n```sh\ngo get -u \'github.com/cadenya/cadenya-go@v0.0.1\'\n```\n\n<!-- x-release-please-end -->\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CADENYA_API_KEY")\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Metadata)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Account.Get(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/cadenya/cadenya-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.Agents.ListAutoPaging(context.TODO(), cadenya.AgentListParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\tagent := iter.Current()\n\tfmt.Printf("%+v\\n", agent)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.Agents.List(context.TODO(), cadenya.AgentListParams{})\nfor page != nil {\n\tfor _, agent := range page.Items {\n\t\tfmt.Printf("%+v\\n", agent)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Account.Get(context.TODO())\nif err != nil {\n\tvar apierr *cadenya.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/account": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Account.Get(\n\tctx,\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := cadenya.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Account.Get(context.TODO(), option.WithMaxRetries(5))\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\naccount, err := client.Account.Get(context.TODO(), option.WithResponseInto(&response))\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", account)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
   },
   {
     language: 'typescript',
@@ -2024,7 +2095,7 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
   {
     language: 'cli',
     content:
-      "# Cadenya CLI\n\nThe official CLI for the [Cadenya REST API](https://docs.cadenya.com).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/cadenya/cli/cmd/cadenya@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\ncadenya [resource] <command> [flags...]\n~~~\n\n~~~sh\ncadenya account retrieve \\\n  --api-key 'My API Key'\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable | Required |\n| -------------------- | -------- |\n| `CADENYA_API_KEY`    | yes      |\n\n### Global flags\n\n- `--api-key` (can also be set with `CADENYA_API_KEY` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\ncadenya <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\ncadenya <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\ncadenya <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\ncadenya <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\ncadenya <command> --arg @data://file.txt\n~~~\n",
+      "# Cadenya CLI\n\nThe official CLI for the [Cadenya REST API](https://docs.cadenya.com).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/cadenya/cadenya-cli/cmd/cadenya@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\ncadenya [resource] <command> [flags...]\n~~~\n\n~~~sh\ncadenya account retrieve \\\n  --api-key 'My API Key'\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable | Required |\n| -------------------- | -------- |\n| `CADENYA_API_KEY`    | yes      |\n\n### Global flags\n\n- `--api-key` (can also be set with `CADENYA_API_KEY` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\ncadenya <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\ncadenya <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\ncadenya <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\ncadenya <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\ncadenya <command> --arg @data://file.txt\n~~~\n",
   },
 ];
 
