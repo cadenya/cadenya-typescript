@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'cadenya/internal/uploads';
-import { toFile } from 'cadenya/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@cadenya/cadenya/internal/uploads';
+import { toFile } from '@cadenya/cadenya/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {
