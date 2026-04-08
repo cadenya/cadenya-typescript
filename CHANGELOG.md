@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.41.0 (2026-04-08)
+
+Full Changelog: [v0.40.0...v0.41.0](https://github.com/cadenya/cadenya-typescript/compare/v0.40.0...v0.41.0)
+
+### Features
+
+* **api:** api update ([2b789b3](https://github.com/cadenya/cadenya-typescript/commit/2b789b353553e9efcec2943525891a170ddbc957))
+
+
+### Chores
+
+* **internal:** fix MCP server import ordering ([907695c](https://github.com/cadenya/cadenya-typescript/commit/907695c11719a56ca5488c318a09d6d36a67a694))
+
 ## 0.40.0 (2026-04-07)
 
 Full Changelog: [v0.39.0...v0.40.0](https://github.com/cadenya/cadenya-typescript/compare/v0.39.0...v0.40.0)
