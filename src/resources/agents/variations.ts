@@ -97,9 +97,20 @@ export interface AgentVariationInfo {
   createdBy?: AccountAPI.Profile;
 
   /**
+   * Total number of objective feedbacks received for this variation
+   */
+  feedbackCount?: number;
+
+  /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   model?: Shared.ResourceMetadata;
+
+  /**
+   * Thompson Sampling score: posterior mean of Beta(ts_alpha, ts_beta). Range [0, 1]
+   * where 0.5 = neutral, >0.5 = positive, <0.5 = negative.
+   */
+  score?: number;
 
   /**
    * Number of sub-agents assigned to this variation
