@@ -133,15 +133,15 @@ export interface AgentVariationInfo {
  */
 export interface AgentVariationSpec {
   /**
-   * Documents assigned to this variation. Can include individual documents or entire
-   * document namespaces (which include all documents in the namespace).
-   */
-  agentDocuments?: Array<AgentVariationSpecAgentDocument>;
-
-  /**
    * Tools assigned to this variation
    */
   agentTools?: Array<AgentVariationSpecAgentTool>;
+
+  /**
+   * CompactionConfig defines how context window compaction behaves for objectives
+   * using this variation.
+   */
+  compactionConfig?: AgentVariationSpecCompactionConfig;
 
   /**
    * Execution constraints
@@ -192,22 +192,6 @@ export interface AgentVariationSpec {
   weight?: number;
 }
 
-export interface AgentVariationSpecAgentDocument {
-  documentId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  documentMetadata?: Shared.ResourceMetadata;
-
-  documentNamespaceId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  documentNamespaceMetadata?: Shared.ResourceMetadata;
-}
-
 export interface AgentVariationSpecAgentTool {
   agentId?: string;
 
@@ -229,6 +213,30 @@ export interface AgentVariationSpecAgentTool {
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   toolSetMetadata?: Shared.ResourceMetadata;
+}
+
+/**
+ * CompactionConfig defines how context window compaction behaves for objectives
+ * using this variation.
+ */
+export interface AgentVariationSpecCompactionConfig {
+  /**
+   * SummarizationStrategy configures LLM-powered summarization of older conversation
+   * turns.
+   */
+  summarization?: CompactionConfigSummarizationStrategy;
+
+  /**
+   * ToolResultClearingStrategy configures clearing of older tool result content.
+   */
+  toolResultClearing?: CompactionConfigToolResultClearingStrategy;
+
+  /**
+   * Trigger threshold as a percentage of the model's context window (0.0 to 1.0).
+   * When input tokens reach this percentage of the model's limit, compaction
+   * triggers. Default: 0.75 (75%)
+   */
+  triggerThreshold?: number;
 }
 
 export interface AgentVariationSpecConstraints {
@@ -276,6 +284,38 @@ export interface AgentVariationSpecToolSelection {
    * the best tools for the task.
    */
   autoDiscovery?: ToolSelectionAutoDiscovery;
+}
+
+/**
+ * SummarizationStrategy configures LLM-powered summarization of older conversation
+ * turns.
+ */
+export interface CompactionConfigSummarizationStrategy {
+  /**
+   * Custom instructions that guide what the summarizer preserves. Replaces the
+   * default summarization prompt entirely. Example: "Preserve all code snippets,
+   * variable names, and technical decisions."
+   */
+  instructions?: string;
+
+  /**
+   * Minimum number of recent message turns to always preserve during compaction.
+   * These turns are never summarized, ensuring recent context stays intact. Default:
+   * 4
+   */
+  minPreserveTurns?: number;
+}
+
+/**
+ * ToolResultClearingStrategy configures clearing of older tool result content.
+ */
+export interface CompactionConfigToolResultClearingStrategy {
+  /**
+   * Number of most recent tool call results to keep intact. Older tool results have
+   * their content replaced with "[result cleared]" while preserving the assistant
+   * tool call message (function name, arguments). Default: 2
+   */
+  preserveRecentResults?: number;
 }
 
 /**
@@ -371,11 +411,13 @@ export declare namespace Variations {
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecAgentDocument as AgentVariationSpecAgentDocument,
     type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
+    type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
     type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
+    type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
+    type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
     type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
