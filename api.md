@@ -47,11 +47,13 @@ Types:
 - <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationInfo</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentDocument</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecCompactionConfig</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
+- <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
+- <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
 - <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
 
@@ -81,6 +83,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ContextWindowCompacted</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
@@ -100,6 +103,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ToolError</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolResult</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">UserMessage</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveCompactResponse</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContinueResponse</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListEventsResponse</a></code>
 
@@ -109,6 +113,7 @@ Methods:
 - <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieve</a>(id) -> Objective</code>
 - <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
 - <code title="post /v1/objectives/{objectiveId}/cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
+- <code title="post /v1/objectives/{objectiveId}/compact">client.objectives.<a href="./src/resources/objectives/objectives.ts">compact</a>(objectiveID, { ...params }) -> ObjectiveCompactResponse</code>
 - <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
 - <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
 - <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>

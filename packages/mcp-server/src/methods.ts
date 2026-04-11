@@ -107,6 +107,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/objectives/{objectiveId}/cancel',
   },
   {
+    clientCallName: 'client.objectives.compact',
+    fullyQualifiedName: 'objectives.compact',
+    httpMethod: 'post',
+    httpPath: '/v1/objectives/{objectiveId}/compact',
+  },
+  {
     clientCallName: 'client.objectives.continue',
     fullyQualifiedName: 'objectives.continue',
     httpMethod: 'post',

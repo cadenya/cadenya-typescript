@@ -68,7 +68,8 @@ export interface WebhookDeliveryData {
     | 'OBJECTIVE_EVENT_TYPE_ERROR'
     | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE'
     | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT'
-    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR';
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR'
+    | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED';
 
   /**
    * Response details (no response_body to avoid storing large payloads)
@@ -125,7 +126,8 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_ERROR'
     | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE'
     | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT'
-    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR';
+    | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR'
+    | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED';
 
   /**
    * Optional filter by objective ID
