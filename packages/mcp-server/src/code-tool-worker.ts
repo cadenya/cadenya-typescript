@@ -121,6 +121,7 @@ const fuse = new Fuse(
     'client.agents.variations.update',
     'client.agents.webhookDeliveries.list',
     'client.objectives.cancel',
+    'client.objectives.compact',
     'client.objectives.continue',
     'client.objectives.create',
     'client.objectives.list',

@@ -47,22 +47,6 @@ describe('resource agents', () => {
           labels: { foo: 'string' },
         },
         spec: {
-          agentDocuments: [
-            {
-              documentId: 'documentId',
-              documentMetadata: {
-                name: 'name',
-                externalId: 'externalId',
-                labels: { foo: 'string' },
-              },
-              documentNamespaceId: 'documentNamespaceId',
-              documentNamespaceMetadata: {
-                name: 'name',
-                externalId: 'externalId',
-                labels: { foo: 'string' },
-              },
-            },
-          ],
           agentTools: [
             {
               agentId: 'agentId',
@@ -85,6 +69,11 @@ describe('resource agents', () => {
               },
             },
           ],
+          compactionConfig: {
+            summarization: { instructions: 'instructions', minPreserveTurns: 0 },
+            toolResultClearing: { preserveRecentResults: 0 },
+            triggerThreshold: 0,
+          },
           constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
           description: 'description',
           enableEpisodicMemory: true,

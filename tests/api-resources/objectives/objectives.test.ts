@@ -98,6 +98,18 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('compact', async () => {
+    const responsePromise = client.objectives.compact('objectiveId', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('continue', async () => {
     const responsePromise = client.objectives.continue('objectiveId', {});
     const rawResponse = await responsePromise.asResponse();
