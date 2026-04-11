@@ -297,13 +297,6 @@ export interface CompactionConfigSummarizationStrategy {
    * variable names, and technical decisions."
    */
   instructions?: string;
-
-  /**
-   * Minimum number of recent message turns to always preserve during compaction.
-   * These turns are never summarized, ensuring recent context stays intact. Default:
-   * 4
-   */
-  minPreserveTurns?: number;
 }
 
 /**

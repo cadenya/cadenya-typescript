@@ -70,7 +70,7 @@ describe('resource agents', () => {
             },
           ],
           compactionConfig: {
-            summarization: { instructions: 'instructions', minPreserveTurns: 0 },
+            summarization: { instructions: 'instructions' },
             toolResultClearing: { preserveRecentResults: 0 },
             triggerThreshold: 0,
           },
