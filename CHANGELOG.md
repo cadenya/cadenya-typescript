@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.42.0 (2026-04-11)
+
+Full Changelog: [v0.41.0...v0.42.0](https://github.com/cadenya/cadenya-typescript/compare/v0.41.0...v0.42.0)
+
+### Features
+
+* **api:** api update ([d75fa1b](https://github.com/cadenya/cadenya-typescript/commit/d75fa1b75d7896e395a8f92108f1fb06ce3a0490))
+* **api:** api update ([045ced9](https://github.com/cadenya/cadenya-typescript/commit/045ced92d1c5844ccbd31dd95978781b3e36355b))
+
+
+### Chores
+
+* **internal:** codegen related update ([0394349](https://github.com/cadenya/cadenya-typescript/commit/0394349ec040ccb13b153d095d878f1aa82ac22f))
+* **internal:** show error causes in MCP servers when running in local mode ([963e275](https://github.com/cadenya/cadenya-typescript/commit/963e2753c231a345bfa49d830c8aec112e937d1e))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([828c193](https://github.com/cadenya/cadenya-typescript/commit/828c193912705e9c7c619aa0b839578af0904dbd))
+
 ## 0.41.0 (2026-04-08)
 
 Full Changelog: [v0.40.0...v0.41.0](https://github.com/cadenya/cadenya-typescript/compare/v0.40.0...v0.41.0)
