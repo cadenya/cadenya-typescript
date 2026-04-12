@@ -1,19 +1,23 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
-import * as AccountAPI from '../account';
-import * as Shared from '../shared';
-import { APIPromise } from '../../core/api-promise';
-import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
-import { buildHeaders } from '../../internal/headers';
-import { RequestOptions } from '../../internal/request-options';
-import { path } from '../../internal/utils/path';
+import { APIResource } from '../core/resource';
+import * as AccountAPI from './account';
+import * as Shared from './shared';
+import { APIPromise } from '../core/api-promise';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
+import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
-export class Variations extends APIResource {
+export class AgentVariations extends APIResource {
   /**
    * Creates a new variation for an agent
    */
-  create(agentID: string, body: VariationCreateParams, options?: RequestOptions): APIPromise<AgentVariation> {
+  create(
+    agentID: string,
+    body: AgentVariationCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentVariation> {
     return this._client.post(path`/v1/agents/${agentID}/variations`, { body, ...options });
   }
 
@@ -22,7 +26,7 @@ export class Variations extends APIResource {
    */
   retrieve(
     id: string,
-    params: VariationRetrieveParams,
+    params: AgentVariationRetrieveParams,
     options?: RequestOptions,
   ): APIPromise<AgentVariation> {
     const { agentId } = params;
@@ -32,7 +36,11 @@ export class Variations extends APIResource {
   /**
    * Updates a variation for an agent
    */
-  update(id: string, params: VariationUpdateParams, options?: RequestOptions): APIPromise<AgentVariation> {
+  update(
+    id: string,
+    params: AgentVariationUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentVariation> {
     const { agentId, ...body } = params;
     return this._client.patch(path`/v1/agents/${agentId}/variations/${id}`, { body, ...options });
   }
@@ -42,7 +50,7 @@ export class Variations extends APIResource {
    */
   list(
     agentID: string,
-    query: VariationListParams | null | undefined = {},
+    query: AgentVariationListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentVariationsCursorPagination, AgentVariation> {
     return this._client.getAPIList(path`/v1/agents/${agentID}/variations`, CursorPagination<AgentVariation>, {
@@ -54,9 +62,40 @@ export class Variations extends APIResource {
   /**
    * Deletes a variation from an agent
    */
-  delete(id: string, params: VariationDeleteParams, options?: RequestOptions): APIPromise<void> {
+  delete(id: string, params: AgentVariationDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { agentId } = params;
     return this._client.delete(path`/v1/agents/${agentId}/variations/${id}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Assigns a tool, tool set, or sub-agent to a variation. Exactly one target ID
+   * must be set.
+   */
+  addAssignment(
+    agentVariationID: string,
+    body: AgentVariationAddAssignmentParams,
+    options?: RequestOptions,
+  ): APIPromise<VariationAssignment> {
+    return this._client.post(path`/v1/agent_variations/${agentVariationID}/assignments`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Detaches an assignment from a variation, identified by the assignment ID
+   * returned when it was added.
+   */
+  removeAssignment(
+    id: string,
+    params: AgentVariationRemoveAssignmentParams,
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { agentVariationId } = params;
+    return this._client.delete(path`/v1/agent_variations/${agentVariationId}/assignments/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -89,6 +128,13 @@ export interface AgentVariation {
  * AgentVariationInfo provides read-only summary information about a variation
  */
 export interface AgentVariationInfo {
+  /**
+   * All tools, tool sets, and sub-agents assigned to this variation. Populated on
+   * reads so clients can render a variation's full assignment list without calling
+   * the add/remove endpoints just to enumerate.
+   */
+  assignments?: Array<VariationAssignment>;
+
   /**
    * Profile represents a human user at the account level. Profiles are
    * account-scoped resources that can be associated with multiple workspaces through
@@ -132,11 +178,6 @@ export interface AgentVariationInfo {
  * AgentVariationSpec defines the operational configuration for a variation
  */
 export interface AgentVariationSpec {
-  /**
-   * Tools assigned to this variation
-   */
-  agentTools?: Array<AgentVariationSpecAgentTool>;
-
   /**
    * CompactionConfig defines how context window compaction behaves for objectives
    * using this variation.
@@ -190,29 +231,6 @@ export interface AgentVariationSpec {
    * on CreateObjectiveRequest.
    */
   weight?: number;
-}
-
-export interface AgentVariationSpecAgentTool {
-  agentId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  agentMetadata?: Shared.ResourceMetadata;
-
-  toolId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  toolMetadata?: Shared.ResourceMetadata;
-
-  toolSetId?: string;
-
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  toolSetMetadata?: Shared.ResourceMetadata;
 }
 
 /**
@@ -333,7 +351,51 @@ export interface ToolSelectionAutoDiscovery {
   maxTools?: number;
 }
 
-export interface VariationCreateParams {
+/**
+ * VariationAssignment is a read-only reference to a single tool, tool set, or
+ * sub-agent attached to a variation. Clients read the full set of assignments via
+ * `AgentVariationInfo.assignments`; mutations go through the dedicated add/remove
+ * assignment endpoints under /v1/agent_variations/{id}/assignments.
+ *
+ * The `id` identifies the assignment row itself (not the referenced resource) and
+ * is the handle used to remove the assignment. It is returned by the add endpoint
+ * and present on every entry in AgentVariationInfo.assignments.
+ */
+export interface VariationAssignment {
+  id?: string;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  agent?: Shared.BareMetadata;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  tool?: Shared.BareMetadata;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  toolSet?: Shared.BareMetadata;
+}
+
+export interface AgentVariationCreateParams {
   /**
    * CreateResourceMetadata contains the user-provided fields for creating a
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
@@ -347,14 +409,14 @@ export interface VariationCreateParams {
   spec: AgentVariationSpec;
 }
 
-export interface VariationRetrieveParams {
+export interface AgentVariationRetrieveParams {
   /**
    * Agent ID (from path)
    */
   agentId: string;
 }
 
-export interface VariationUpdateParams {
+export interface AgentVariationUpdateParams {
   /**
    * Path param: Agent ID (from path)
    */
@@ -380,7 +442,7 @@ export interface VariationUpdateParams {
   updateMask?: string;
 }
 
-export interface VariationListParams extends CursorPaginationParams {
+export interface AgentVariationListParams extends CursorPaginationParams {
   /**
    * When set to true you may use more of your alloted API rate-limit
    */
@@ -392,19 +454,30 @@ export interface VariationListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
-export interface VariationDeleteParams {
+export interface AgentVariationDeleteParams {
   /**
    * Agent ID (from path)
    */
   agentId: string;
 }
 
-export declare namespace Variations {
+export interface AgentVariationAddAssignmentParams {
+  subAgentId?: string;
+
+  toolId?: string;
+
+  toolSetId?: string;
+}
+
+export interface AgentVariationRemoveAssignmentParams {
+  agentVariationId: string;
+}
+
+export declare namespace AgentVariations {
   export {
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
     type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
@@ -413,11 +486,14 @@ export declare namespace Variations {
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
     type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
+    type VariationAssignment as VariationAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
-    type VariationCreateParams as VariationCreateParams,
-    type VariationRetrieveParams as VariationRetrieveParams,
-    type VariationUpdateParams as VariationUpdateParams,
-    type VariationListParams as VariationListParams,
-    type VariationDeleteParams as VariationDeleteParams,
+    type AgentVariationCreateParams as AgentVariationCreateParams,
+    type AgentVariationRetrieveParams as AgentVariationRetrieveParams,
+    type AgentVariationUpdateParams as AgentVariationUpdateParams,
+    type AgentVariationListParams as AgentVariationListParams,
+    type AgentVariationDeleteParams as AgentVariationDeleteParams,
+    type AgentVariationAddAssignmentParams as AgentVariationAddAssignmentParams,
+    type AgentVariationRemoveAssignmentParams as AgentVariationRemoveAssignmentParams,
   };
 }

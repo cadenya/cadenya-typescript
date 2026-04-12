@@ -27,7 +27,7 @@ For example:
 async function run(client) {
   const account = await client.account.retrieve();
 
-  console.log(account.metadata);
+  console.log(account.info);
 }
 \`\`\`
 
@@ -149,6 +149,7 @@ const remoteStainlessHandler = async ({
       readEnv('CADENYA_API_KEY') ?? client.apiKey,
       'set CADENYA_API_KEY environment variable or provide apiKey client option',
     ),
+    CADENYA_WEBHOOK_KEY: readEnv('CADENYA_WEBHOOK_KEY') ?? client.webhookKey ?? undefined,
     CADENYA_BASE_URL: readEnv('CADENYA_BASE_URL') ?? client.baseURL ?? undefined,
   };
   // Merge any upstream client envs from the request header, with upstream values taking precedence.
@@ -288,6 +289,7 @@ const localDenoHandler = async ({
       const opts = {
         ...(client.baseURL != null ? { baseURL: client.baseURL } : undefined),
         ...(client.apiKey != null ? { apiKey: client.apiKey } : undefined),
+        ...(client.webhookKey != null ? { webhookKey: client.webhookKey } : undefined),
         defaultHeaders: {
           'X-Stainless-MCP': 'true',
         },

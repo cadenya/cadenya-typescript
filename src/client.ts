@@ -19,7 +19,37 @@ import { AbstractPage, type CursorPaginationParams, CursorPaginationResponse } f
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountResource, AccountSpec, Profile, ProfileSpec } from './resources/account';
+import {
+  Account,
+  AccountResource,
+  AccountSpec,
+  Profile,
+  ProfileSpec,
+  RotateWebhookSigningKeyResponse,
+} from './resources/account';
+import {
+  AgentVariation,
+  AgentVariationAddAssignmentParams,
+  AgentVariationCreateParams,
+  AgentVariationDeleteParams,
+  AgentVariationInfo,
+  AgentVariationListParams,
+  AgentVariationRemoveAssignmentParams,
+  AgentVariationRetrieveParams,
+  AgentVariationSpec,
+  AgentVariationSpecCompactionConfig,
+  AgentVariationSpecConstraints,
+  AgentVariationSpecModelConfig,
+  AgentVariationSpecToolSelection,
+  AgentVariationUpdateParams,
+  AgentVariations,
+  AgentVariationsCursorPagination,
+  CompactionConfigSummarizationStrategy,
+  CompactionConfigToolResultClearingStrategy,
+  ToolSelectionAssignedTools,
+  ToolSelectionAutoDiscovery,
+  VariationAssignment,
+} from './resources/agent-variations';
 import {
   APIKey,
   APIKeyCreateParams,
@@ -43,6 +73,7 @@ import {
   SearchSearchToolsOrToolSetsParams,
   SearchSearchToolsOrToolSetsResponse,
 } from './resources/search';
+import { UnsafeUnwrapWebhookEvent, UnwrapWebhookEvent, Webhooks } from './resources/webhooks';
 import {
   WorkspaceSecret,
   WorkspaceSecretCreateParams,
@@ -151,6 +182,11 @@ export interface ClientOptions {
   apiKey?: string | undefined;
 
   /**
+   * Defaults to process.env['CADENYA_WEBHOOK_KEY'].
+   */
+  webhookKey?: string | null | undefined;
+
+  /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
    * Defaults to process.env['CADENYA_BASE_URL'].
@@ -224,6 +260,7 @@ export interface ClientOptions {
  */
 export class Cadenya {
   apiKey: string;
+  webhookKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -241,6 +278,7 @@ export class Cadenya {
    * API Client for interfacing with the Cadenya API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['CADENYA_API_KEY'] ?? undefined]
+   * @param {string | null | undefined} [opts.webhookKey=process.env['CADENYA_WEBHOOK_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.cadenya.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -252,6 +290,7 @@ export class Cadenya {
   constructor({
     baseURL = readEnv('CADENYA_BASE_URL'),
     apiKey = readEnv('CADENYA_API_KEY'),
+    webhookKey = readEnv('CADENYA_WEBHOOK_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
@@ -262,6 +301,7 @@ export class Cadenya {
 
     const options: ClientOptions = {
       apiKey,
+      webhookKey,
       ...opts,
       baseURL: baseURL || `https://api.cadenya.com`,
     };
@@ -284,6 +324,7 @@ export class Cadenya {
     this._options = options;
 
     this.apiKey = apiKey;
+    this.webhookKey = webhookKey;
   }
 
   /**
@@ -300,6 +341,7 @@ export class Cadenya {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      webhookKey: this.webhookKey,
       ...options,
     });
     return client;
@@ -873,6 +915,7 @@ export class Cadenya {
    *  Scope: Workspace-level operations
    */
   agents: API.Agents = new API.Agents(this);
+  agentVariations: API.AgentVariations = new API.AgentVariations(this);
   objectives: API.Objectives = new API.Objectives(this);
   /**
    * ModelService manages LLM models at the WORKSPACE level.
@@ -915,10 +958,12 @@ export class Cadenya {
    *  Scope: Account-level operations (manages workspaces themselves, not resources within workspaces)
    */
   workspaces: API.Workspaces = new API.Workspaces(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
+Cadenya.AgentVariations = AgentVariations;
 Cadenya.Objectives = Objectives;
 Cadenya.Models = Models;
 Cadenya.Search = Search;
@@ -926,6 +971,7 @@ Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
+Cadenya.Webhooks = Webhooks;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -942,6 +988,7 @@ export declare namespace Cadenya {
     type AccountSpec as AccountSpec,
     type Profile as Profile,
     type ProfileSpec as ProfileSpec,
+    type RotateWebhookSigningKeyResponse as RotateWebhookSigningKeyResponse,
   };
 
   export {
@@ -954,6 +1001,30 @@ export declare namespace Cadenya {
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
+  };
+
+  export {
+    AgentVariations as AgentVariations,
+    type AgentVariation as AgentVariation,
+    type AgentVariationInfo as AgentVariationInfo,
+    type AgentVariationSpec as AgentVariationSpec,
+    type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
+    type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
+    type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
+    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
+    type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
+    type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
+    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
+    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
+    type VariationAssignment as VariationAssignment,
+    type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
+    type AgentVariationCreateParams as AgentVariationCreateParams,
+    type AgentVariationRetrieveParams as AgentVariationRetrieveParams,
+    type AgentVariationUpdateParams as AgentVariationUpdateParams,
+    type AgentVariationListParams as AgentVariationListParams,
+    type AgentVariationDeleteParams as AgentVariationDeleteParams,
+    type AgentVariationAddAssignmentParams as AgentVariationAddAssignmentParams,
+    type AgentVariationRemoveAssignmentParams as AgentVariationRemoveAssignmentParams,
   };
 
   export {
@@ -1061,6 +1132,12 @@ export declare namespace Cadenya {
     type WorkspaceSpec as WorkspaceSpec,
     type WorkspacesCursorPagination as WorkspacesCursorPagination,
     type WorkspaceListParams as WorkspaceListParams,
+  };
+
+  export {
+    Webhooks as Webhooks,
+    type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
+    type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;

@@ -47,28 +47,6 @@ describe('resource agents', () => {
           labels: { foo: 'string' },
         },
         spec: {
-          agentTools: [
-            {
-              agentId: 'agentId',
-              agentMetadata: {
-                name: 'name',
-                externalId: 'externalId',
-                labels: { foo: 'string' },
-              },
-              toolId: 'toolId',
-              toolMetadata: {
-                name: 'name',
-                externalId: 'externalId',
-                labels: { foo: 'string' },
-              },
-              toolSetId: 'toolSetId',
-              toolSetMetadata: {
-                name: 'name',
-                externalId: 'externalId',
-                labels: { foo: 'string' },
-              },
-            },
-          ],
           compactionConfig: {
             summarization: { instructions: 'instructions' },
             toolResultClearing: { preserveRecentResults: 0 },
