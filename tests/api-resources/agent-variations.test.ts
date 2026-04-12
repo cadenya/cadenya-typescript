@@ -7,10 +7,10 @@ const client = new Cadenya({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource variations', () => {
+describe('resource agentVariations', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.agents.variations.create('agentId', {
+    const responsePromise = client.agentVariations.create('agentId', {
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,35 +25,13 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.agents.variations.create('agentId', {
+    const response = await client.agentVariations.create('agentId', {
       metadata: {
         name: 'name',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
       spec: {
-        agentTools: [
-          {
-            agentId: 'agentId',
-            agentMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-            toolId: 'toolId',
-            toolMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-            toolSetId: 'toolSetId',
-            toolSetMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-          },
-        ],
         compactionConfig: {
           summarization: { instructions: 'instructions' },
           toolResultClearing: { preserveRecentResults: 0 },
@@ -76,7 +54,7 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.agents.variations.retrieve('id', { agentId: 'agentId' });
+    const responsePromise = client.agentVariations.retrieve('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -88,12 +66,12 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.agents.variations.retrieve('id', { agentId: 'agentId' });
+    const response = await client.agentVariations.retrieve('id', { agentId: 'agentId' });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.agents.variations.update('id', { agentId: 'agentId' });
+    const responsePromise = client.agentVariations.update('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -105,7 +83,7 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.agents.variations.update('id', {
+    const response = await client.agentVariations.update('id', {
       agentId: 'agentId',
       metadata: {
         name: 'name',
@@ -113,28 +91,6 @@ describe('resource variations', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        agentTools: [
-          {
-            agentId: 'agentId',
-            agentMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-            toolId: 'toolId',
-            toolMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-            toolSetId: 'toolSetId',
-            toolSetMetadata: {
-              name: 'name',
-              externalId: 'externalId',
-              labels: { foo: 'string' },
-            },
-          },
-        ],
         compactionConfig: {
           summarization: { instructions: 'instructions' },
           toolResultClearing: { preserveRecentResults: 0 },
@@ -158,7 +114,7 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.agents.variations.list('agentId');
+    const responsePromise = client.agentVariations.list('agentId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -172,7 +128,7 @@ describe('resource variations', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.agents.variations.list(
+      client.agentVariations.list(
         'agentId',
         {
           cursor: 'cursor',
@@ -187,7 +143,7 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.agents.variations.delete('id', { agentId: 'agentId' });
+    const responsePromise = client.agentVariations.delete('id', { agentId: 'agentId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -199,6 +155,39 @@ describe('resource variations', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.agents.variations.delete('id', { agentId: 'agentId' });
+    const response = await client.agentVariations.delete('id', { agentId: 'agentId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('addAssignment', async () => {
+    const responsePromise = client.agentVariations.addAssignment('agentVariationId', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeAssignment: only required params', async () => {
+    const responsePromise = client.agentVariations.removeAssignment('id', {
+      agentVariationId: 'agentVariationId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeAssignment: required and optional params', async () => {
+    const response = await client.agentVariations.removeAssignment('id', {
+      agentVariationId: 'agentVariationId',
+    });
   });
 });

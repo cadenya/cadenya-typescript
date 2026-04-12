@@ -11,7 +11,37 @@ export {
   type APIKeyListParams,
   type APIKeysCursorPagination,
 } from './api-keys';
-export { AccountResource, type Account, type AccountSpec, type Profile, type ProfileSpec } from './account';
+export {
+  AccountResource,
+  type Account,
+  type AccountSpec,
+  type Profile,
+  type ProfileSpec,
+  type RotateWebhookSigningKeyResponse,
+} from './account';
+export {
+  AgentVariations,
+  type AgentVariation,
+  type AgentVariationInfo,
+  type AgentVariationSpec,
+  type AgentVariationSpecCompactionConfig,
+  type AgentVariationSpecConstraints,
+  type AgentVariationSpecModelConfig,
+  type AgentVariationSpecToolSelection,
+  type CompactionConfigSummarizationStrategy,
+  type CompactionConfigToolResultClearingStrategy,
+  type ToolSelectionAssignedTools,
+  type ToolSelectionAutoDiscovery,
+  type VariationAssignment,
+  type AgentVariationCreateParams,
+  type AgentVariationRetrieveParams,
+  type AgentVariationUpdateParams,
+  type AgentVariationListParams,
+  type AgentVariationDeleteParams,
+  type AgentVariationAddAssignmentParams,
+  type AgentVariationRemoveAssignmentParams,
+  type AgentVariationsCursorPagination,
+} from './agent-variations';
 export {
   Agents,
   type Agent,
@@ -96,6 +126,7 @@ export {
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
 } from './tool-sets/tool-sets';
+export { Webhooks, type UnsafeUnwrapWebhookEvent, type UnwrapWebhookEvent } from './webhooks';
 export {
   WorkspaceSecrets,
   type WorkspaceSecret,

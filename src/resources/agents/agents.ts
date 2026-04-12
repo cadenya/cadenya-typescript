@@ -2,29 +2,8 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
+import * as AgentVariationsAPI from '../agent-variations';
 import * as Shared from '../shared';
-import * as VariationsAPI from './variations';
-import {
-  AgentVariation,
-  AgentVariationInfo,
-  AgentVariationSpec,
-  AgentVariationSpecAgentTool,
-  AgentVariationSpecCompactionConfig,
-  AgentVariationSpecConstraints,
-  AgentVariationSpecModelConfig,
-  AgentVariationSpecToolSelection,
-  AgentVariationsCursorPagination,
-  CompactionConfigSummarizationStrategy,
-  CompactionConfigToolResultClearingStrategy,
-  ToolSelectionAssignedTools,
-  ToolSelectionAutoDiscovery,
-  VariationCreateParams,
-  VariationDeleteParams,
-  VariationListParams,
-  VariationRetrieveParams,
-  VariationUpdateParams,
-  Variations,
-} from './variations';
 import * as WebhookDeliveriesAPI from './webhook-deliveries';
 import {
   WebhookDeliveries,
@@ -48,7 +27,6 @@ import { path } from '../../internal/utils/path';
  *  Scope: Workspace-level operations
  */
 export class Agents extends APIResource {
-  variations: VariationsAPI.Variations = new VariationsAPI.Variations(this._client);
   webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(
     this._client,
   );
@@ -161,13 +139,6 @@ export interface AgentSpec {
   description?: string;
 
   /**
-   * The generated secret that will sign all webhooks that are sent to your
-   * configured Webhook URL. Formatted as "wh_asdf1234" per the
-   * https://www.standardwebhooks.com/ format.
-   */
-  webhookEventsHmacSecret?: string;
-
-  /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
   webhookEventsUrl?: string;
@@ -213,7 +184,7 @@ export namespace AgentCreateParams {
     /**
      * AgentVariationSpec defines the operational configuration for a variation
      */
-    spec: VariationsAPI.AgentVariationSpec;
+    spec: AgentVariationsAPI.AgentVariationSpec;
   }
 }
 
@@ -253,7 +224,6 @@ export interface AgentListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
-Agents.Variations = Variations;
 Agents.WebhookDeliveries = WebhookDeliveries;
 
 export declare namespace Agents {
@@ -266,28 +236,6 @@ export declare namespace Agents {
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
-  };
-
-  export {
-    Variations as Variations,
-    type AgentVariation as AgentVariation,
-    type AgentVariationInfo as AgentVariationInfo,
-    type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecAgentTool as AgentVariationSpecAgentTool,
-    type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
-    type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
-    type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
-    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
-    type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
-    type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
-    type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
-    type VariationCreateParams as VariationCreateParams,
-    type VariationRetrieveParams as VariationRetrieveParams,
-    type VariationUpdateParams as VariationUpdateParams,
-    type VariationListParams as VariationListParams,
-    type VariationDeleteParams as VariationDeleteParams,
   };
 
   export {

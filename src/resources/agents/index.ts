@@ -12,27 +12,6 @@ export {
   type AgentsCursorPagination,
 } from './agents';
 export {
-  Variations,
-  type AgentVariation,
-  type AgentVariationInfo,
-  type AgentVariationSpec,
-  type AgentVariationSpecAgentTool,
-  type AgentVariationSpecCompactionConfig,
-  type AgentVariationSpecConstraints,
-  type AgentVariationSpecModelConfig,
-  type AgentVariationSpecToolSelection,
-  type CompactionConfigSummarizationStrategy,
-  type CompactionConfigToolResultClearingStrategy,
-  type ToolSelectionAssignedTools,
-  type ToolSelectionAutoDiscovery,
-  type VariationCreateParams,
-  type VariationRetrieveParams,
-  type VariationUpdateParams,
-  type VariationListParams,
-  type VariationDeleteParams,
-  type AgentVariationsCursorPagination,
-} from './variations';
-export {
   WebhookDeliveries,
   type WebhookDelivery,
   type WebhookDeliveryData,

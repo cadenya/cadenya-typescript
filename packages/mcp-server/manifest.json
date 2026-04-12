@@ -22,7 +22,8 @@
         "${__dirname}/index.js"
       ],
       "env": {
-        "CADENYA_API_KEY": "${user_config.CADENYA_API_KEY}"
+        "CADENYA_API_KEY": "${user_config.CADENYA_API_KEY}",
+        "CADENYA_WEBHOOK_KEY": "${user_config.CADENYA_WEBHOOK_KEY}"
       }
     }
   },
@@ -31,6 +32,12 @@
       "title": "api_key",
       "description": "",
       "required": true,
+      "type": "string"
+    },
+    "CADENYA_WEBHOOK_KEY": {
+      "title": "webhook_key",
+      "description": "",
+      "required": false,
       "type": "string"
     }
   },
