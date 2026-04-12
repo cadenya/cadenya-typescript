@@ -18,10 +18,12 @@ Types:
 - <code><a href="./src/resources/account.ts">AccountSpec</a></code>
 - <code><a href="./src/resources/account.ts">Profile</a></code>
 - <code><a href="./src/resources/account.ts">ProfileSpec</a></code>
+- <code><a href="./src/resources/account.ts">RotateWebhookSigningKeyResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
+- <code title="post /v1/account/rotate_webhook_signing_key">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
 
 # Agents
 
@@ -40,31 +42,6 @@ Methods:
 - <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsCursorPagination</code>
 - <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
 
-## Variations
-
-Types:
-
-- <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationInfo</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecAgentTool</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecCompactionConfig</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
-- <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
-- <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
-- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
-- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
-
-Methods:
-
-- <code title="post /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
-
 ## WebhookDeliveries
 
 Types:
@@ -75,6 +52,33 @@ Types:
 Methods:
 
 - <code title="get /v1/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
+
+# AgentVariations
+
+Types:
+
+- <code><a href="./src/resources/agent-variations.ts">AgentVariation</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationInfo</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpec</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecCompactionConfig</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecConstraints</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecModelConfig</a></code>
+- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecToolSelection</a></code>
+- <code><a href="./src/resources/agent-variations.ts">CompactionConfigSummarizationStrategy</a></code>
+- <code><a href="./src/resources/agent-variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
+- <code><a href="./src/resources/agent-variations.ts">ToolSelectionAssignedTools</a></code>
+- <code><a href="./src/resources/agent-variations.ts">ToolSelectionAutoDiscovery</a></code>
+- <code><a href="./src/resources/agent-variations.ts">VariationAssignment</a></code>
+
+Methods:
+
+- <code title="post /v1/agents/{agentId}/variations">client.agentVariations.<a href="./src/resources/agent-variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations">client.agentVariations.<a href="./src/resources/agent-variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/agent_variations/{agentVariationId}/assignments">client.agentVariations.<a href="./src/resources/agent-variations.ts">addAssignment</a>(agentVariationID, { ...params }) -> VariationAssignment</code>
+- <code title="delete /v1/agent_variations/{agentVariationId}/assignments/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
 
 # Objectives
 
@@ -279,3 +283,15 @@ Methods:
 
 - <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
 - <code title="get /v1/workspaces/current">client.workspaces.<a href="./src/resources/workspaces.ts">get</a>() -> Workspace</code>
+
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">UnsafeUnwrapWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
+
+Methods:
+
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unsafeUnwrap</a>(body) -> void</code>
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>

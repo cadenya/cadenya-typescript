@@ -17,6 +17,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/account',
   },
   {
+    clientCallName: 'client.account.rotateWebhookSigningKey',
+    fullyQualifiedName: 'account.rotateWebhookSigningKey',
+    httpMethod: 'post',
+    httpPath: '/v1/account/rotate_webhook_signing_key',
+  },
+  {
     clientCallName: 'client.agents.create',
     fullyQualifiedName: 'agents.create',
     httpMethod: 'post',
@@ -47,40 +53,52 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/agents/{id}',
   },
   {
-    clientCallName: 'client.agents.variations.create',
-    fullyQualifiedName: 'agents.variations.create',
-    httpMethod: 'post',
-    httpPath: '/v1/agents/{agentId}/variations',
-  },
-  {
-    clientCallName: 'client.agents.variations.retrieve',
-    fullyQualifiedName: 'agents.variations.retrieve',
-    httpMethod: 'get',
-    httpPath: '/v1/agents/{agentId}/variations/{id}',
-  },
-  {
-    clientCallName: 'client.agents.variations.update',
-    fullyQualifiedName: 'agents.variations.update',
-    httpMethod: 'patch',
-    httpPath: '/v1/agents/{agentId}/variations/{id}',
-  },
-  {
-    clientCallName: 'client.agents.variations.list',
-    fullyQualifiedName: 'agents.variations.list',
-    httpMethod: 'get',
-    httpPath: '/v1/agents/{agentId}/variations',
-  },
-  {
-    clientCallName: 'client.agents.variations.delete',
-    fullyQualifiedName: 'agents.variations.delete',
-    httpMethod: 'delete',
-    httpPath: '/v1/agents/{agentId}/variations/{id}',
-  },
-  {
     clientCallName: 'client.agents.webhookDeliveries.list',
     fullyQualifiedName: 'agents.webhookDeliveries.list',
     httpMethod: 'get',
     httpPath: '/v1/agents/{agentId}/webhook_deliveries',
+  },
+  {
+    clientCallName: 'client.agentVariations.create',
+    fullyQualifiedName: 'agentVariations.create',
+    httpMethod: 'post',
+    httpPath: '/v1/agents/{agentId}/variations',
+  },
+  {
+    clientCallName: 'client.agentVariations.retrieve',
+    fullyQualifiedName: 'agentVariations.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/agents/{agentId}/variations/{id}',
+  },
+  {
+    clientCallName: 'client.agentVariations.update',
+    fullyQualifiedName: 'agentVariations.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/agents/{agentId}/variations/{id}',
+  },
+  {
+    clientCallName: 'client.agentVariations.list',
+    fullyQualifiedName: 'agentVariations.list',
+    httpMethod: 'get',
+    httpPath: '/v1/agents/{agentId}/variations',
+  },
+  {
+    clientCallName: 'client.agentVariations.delete',
+    fullyQualifiedName: 'agentVariations.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/agents/{agentId}/variations/{id}',
+  },
+  {
+    clientCallName: 'client.agentVariations.addAssignment',
+    fullyQualifiedName: 'agentVariations.addAssignment',
+    httpMethod: 'post',
+    httpPath: '/v1/agent_variations/{agentVariationId}/assignments',
+  },
+  {
+    clientCallName: 'client.agentVariations.removeAssignment',
+    fullyQualifiedName: 'agentVariations.removeAssignment',
+    httpMethod: 'delete',
+    httpPath: '/v1/agent_variations/{agentVariationId}/assignments/{id}',
   },
   {
     clientCallName: 'client.objectives.create',
@@ -346,6 +364,8 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'get',
     httpPath: '/v1/workspaces/current',
   },
+  { clientCallName: 'client.webhooks.unsafeUnwrap', fullyQualifiedName: 'webhooks.unsafeUnwrap' },
+  { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {
