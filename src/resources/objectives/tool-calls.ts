@@ -161,14 +161,15 @@ export interface ToolCallListParams extends CursorPaginationParams {
 
 export interface ToolCallApproveParams {
   /**
-   * The ID of the objective. Supports "eid:" prefix for external IDs.
+   * The ID of the objective. Supports "external_id:" prefix for external IDs.
    */
   objectiveId: string;
 }
 
 export interface ToolCallDenyParams {
   /**
-   * Path param: The ID of the objective. Supports "eid:" prefix for external IDs.
+   * Path param: The ID of the objective. Supports "external_id:" prefix for external
+   * IDs.
    */
   objectiveId: string;
 
