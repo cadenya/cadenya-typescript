@@ -73,6 +73,13 @@ import {
   SearchSearchToolsOrToolSetsParams,
   SearchSearchToolsOrToolSetsResponse,
 } from './resources/search';
+import {
+  Upload,
+  UploadCreateParams,
+  UploadInfo,
+  UploadSpec,
+  Uploads as UploadsAPIUploads,
+} from './resources/uploads';
 import { UnsafeUnwrapWebhookEvent, UnwrapWebhookEvent, Webhooks } from './resources/webhooks';
 import {
   WorkspaceSecret,
@@ -102,6 +109,16 @@ import {
   AgentsCursorPagination,
   Page,
 } from './resources/agents/agents';
+import {
+  MemoryLayer,
+  MemoryLayerCreateParams,
+  MemoryLayerInfo,
+  MemoryLayerListParams,
+  MemoryLayerSpec,
+  MemoryLayerUpdateParams,
+  MemoryLayers,
+  MemoryLayersCursorPagination,
+} from './resources/memory-layers/memory-layers';
 import {
   AssistantMessage,
   AssistantToolCall,
@@ -918,6 +935,29 @@ export class Cadenya {
   agentVariations: API.AgentVariations = new API.AgentVariations(this);
   objectives: API.Objectives = new API.Objectives(this);
   /**
+   * MemoryService manages memory layers and their entries at the WORKSPACE level.
+   *  Layers are named containers that can be composed into an objective's memory
+   *  stack; entries are the keyed values within a layer.
+   *
+   *  All operations are implicitly scoped to the workspace determined by the JWT
+   *  token. System-managed layers (e.g., episodic layers created by the runtime)
+   *  cannot be mutated through this API.
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
+  memoryLayers: API.MemoryLayers = new API.MemoryLayers(this);
+  /**
+   * UploadService issues short-lived presigned URLs for direct client-to-object-
+   *  storage uploads at the WORKSPACE level. Created uploads can be referenced by
+   *  id when creating or updating resources that accept binary content (e.g.,
+   *  MemoryEntry).
+   *
+   *  Authentication: Bearer token (JWT)
+   *  Scope: Workspace-level operations
+   */
+  uploads: API.Uploads = new API.Uploads(this);
+  /**
    * ModelService manages LLM models at the WORKSPACE level.
    *  Models represent available LLM providers and families (e.g., "anthropic/claude-sonnet-4.6").
    *  Models are seeded into workspaces and can be enabled or disabled.
@@ -965,6 +1005,8 @@ Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.AgentVariations = AgentVariations;
 Cadenya.Objectives = Objectives;
+Cadenya.MemoryLayers = MemoryLayers;
+Cadenya.Uploads = UploadsAPIUploads;
 Cadenya.Models = Models;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
@@ -1065,6 +1107,25 @@ export declare namespace Cadenya {
     type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
+  };
+
+  export {
+    MemoryLayers as MemoryLayers,
+    type MemoryLayer as MemoryLayer,
+    type MemoryLayerInfo as MemoryLayerInfo,
+    type MemoryLayerSpec as MemoryLayerSpec,
+    type MemoryLayersCursorPagination as MemoryLayersCursorPagination,
+    type MemoryLayerCreateParams as MemoryLayerCreateParams,
+    type MemoryLayerUpdateParams as MemoryLayerUpdateParams,
+    type MemoryLayerListParams as MemoryLayerListParams,
+  };
+
+  export {
+    UploadsAPIUploads as Uploads,
+    type Upload as Upload,
+    type UploadInfo as UploadInfo,
+    type UploadSpec as UploadSpec,
+    type UploadCreateParams as UploadCreateParams,
   };
 
   export {

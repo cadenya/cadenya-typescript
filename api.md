@@ -171,6 +171,54 @@ Methods:
 - <code title="post /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">create</a>(objectiveID, { ...params }) -> ObjectiveFeedback</code>
 - <code title="get /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">list</a>(objectiveID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
 
+# MemoryLayers
+
+Types:
+
+- <code><a href="./src/resources/memory-layers/memory-layers.ts">MemoryLayer</a></code>
+- <code><a href="./src/resources/memory-layers/memory-layers.ts">MemoryLayerInfo</a></code>
+- <code><a href="./src/resources/memory-layers/memory-layers.ts">MemoryLayerSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">create</a>({ ...params }) -> MemoryLayer</code>
+- <code title="get /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">retrieve</a>(id) -> MemoryLayer</code>
+- <code title="patch /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">update</a>(id, { ...params }) -> MemoryLayer</code>
+- <code title="get /v1/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">list</a>({ ...params }) -> MemoryLayersCursorPagination</code>
+- <code title="delete /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">delete</a>(id) -> void</code>
+
+## Entries
+
+Types:
+
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntry</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryCreateSpec</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryDetail</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryInfo</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntrySpec</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryUpdateSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">create</a>(memoryLayerID, { ...params }) -> MemoryEntryDetail</code>
+- <code title="get /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">retrieve</a>(id, { ...params }) -> MemoryEntryDetail</code>
+- <code title="patch /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">update</a>(id, { ...params }) -> MemoryEntryDetail</code>
+- <code title="get /v1/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">list</a>(memoryLayerID, { ...params }) -> MemoryEntriesCursorPagination</code>
+- <code title="delete /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">delete</a>(id, { ...params }) -> void</code>
+
+# Uploads
+
+Types:
+
+- <code><a href="./src/resources/uploads.ts">Upload</a></code>
+- <code><a href="./src/resources/uploads.ts">UploadInfo</a></code>
+- <code><a href="./src/resources/uploads.ts">UploadSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/uploads">client.uploads.<a href="./src/resources/uploads.ts">create</a>({ ...params }) -> Upload</code>
+- <code title="get /v1/uploads/{id}">client.uploads.<a href="./src/resources/uploads.ts">retrieve</a>(id) -> Upload</code>
+
 # Models
 
 Types:
