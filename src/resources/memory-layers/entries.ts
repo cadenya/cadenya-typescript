@@ -1,0 +1,325 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
+import * as Shared from '../shared';
+import { APIPromise } from '../../core/api-promise';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
+
+/**
+ * MemoryService manages memory layers and their entries at the WORKSPACE level.
+ *  Layers are named containers that can be composed into an objective's memory
+ *  stack; entries are the keyed values within a layer.
+ *
+ *  All operations are implicitly scoped to the workspace determined by the JWT
+ *  token. System-managed layers (e.g., episodic layers created by the runtime)
+ *  cannot be mutated through this API.
+ *
+ *  Authentication: Bearer token (JWT)
+ *  Scope: Workspace-level operations
+ */
+export class Entries extends APIResource {
+  /**
+   * Creates a new entry in a memory layer. Returns the detail view, including the
+   * resolved content body.
+   */
+  create(
+    memoryLayerID: string,
+    body: EntryCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<MemoryEntryDetail> {
+    return this._client.post(path`/v1/memory_layers/${memoryLayerID}/entries`, { body, ...options });
+  }
+
+  /**
+   * Retrieves a memory entry by ID from a memory layer. Returns the detail view,
+   * including the content body.
+   */
+  retrieve(id: string, params: EntryRetrieveParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
+    const { memoryLayerId } = params;
+    return this._client.get(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, options);
+  }
+
+  /**
+   * Updates a memory entry in a memory layer. Returns the detail view, including the
+   * resolved content body.
+   */
+  update(id: string, params: EntryUpdateParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
+    const { memoryLayerId, ...body } = params;
+    return this._client.patch(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, { body, ...options });
+  }
+
+  /**
+   * Lists all entries in a memory layer
+   */
+  list(
+    memoryLayerID: string,
+    query: EntryListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<MemoryEntriesCursorPagination, MemoryEntry> {
+    return this._client.getAPIList(
+      path`/v1/memory_layers/${memoryLayerID}/entries`,
+      CursorPagination<MemoryEntry>,
+      { query, ...options },
+    );
+  }
+
+  /**
+   * Deletes a memory entry from a memory layer
+   */
+  delete(id: string, params: EntryDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { memoryLayerId } = params;
+    return this._client.delete(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+}
+
+export type MemoryEntriesCursorPagination = CursorPagination<MemoryEntry>;
+
+/**
+ * MemoryEntry is a single keyed value within a MemoryLayer. Entries are addressed
+ * by their key, which follows the S3 object key safe-character convention (see
+ * MemoryEntrySpec.key for the full rule). Keys are unique within a single layer;
+ * the same key may appear in multiple layers, in which case the LIFO stack-walk
+ * determines which one wins for a given objective.
+ *
+ * MemoryEntry is the summary shape, returned by ListMemoryEntries. It does not
+ * carry the entry body — callers that need the body must fetch the entry
+ * individually via GetMemoryEntry, which returns a MemoryEntryDetail.
+ */
+export interface MemoryEntry {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  metadata: Shared.ResourceMetadata;
+
+  /**
+   * MemoryEntrySpec is the metadata portion of an entry — the fields that identify
+   * and describe it, without the body. It appears on both the summary (MemoryEntry)
+   * and detail (MemoryEntryDetail) views.
+   */
+  spec: MemoryEntrySpec;
+
+  info?: MemoryEntryInfo;
+}
+
+/**
+ * MemoryEntryCreateSpec is the input shape for CreateMemoryEntry. It accepts
+ * either inline content or a reference to a completed Upload; exactly one of the
+ * two must be set.
+ */
+export interface MemoryEntryCreateSpec {
+  /**
+   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
+   */
+  key: string;
+
+  /**
+   * Inline content, written directly into the entry.
+   */
+  content?: string;
+
+  description?: string;
+
+  title?: string;
+
+  /**
+   * ID of a COMPLETE Upload. The server reads the object from storage, copies its
+   * bytes into the entry, and marks the upload consumed.
+   */
+  uploadId?: string;
+}
+
+/**
+ * MemoryEntryDetail is the full representation of an entry, including the resolved
+ * content body. Returned by GetMemoryEntry, CreateMemoryEntry, and
+ * UpdateMemoryEntry.
+ */
+export interface MemoryEntryDetail {
+  /**
+   * The resolved body of the entry. For entries created or updated via an upload_id,
+   * this is the ingested content, not the original upload handle. May be empty; an
+   * entry with only a key, title, and description is valid (e.g., a stub skill being
+   * drafted, or an entry where the frontmatter alone is the payload).
+   */
+  content: string;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  metadata: Shared.ResourceMetadata;
+
+  /**
+   * MemoryEntrySpec is the metadata portion of an entry — the fields that identify
+   * and describe it, without the body. It appears on both the summary (MemoryEntry)
+   * and detail (MemoryEntryDetail) views.
+   */
+  spec: MemoryEntrySpec;
+
+  info?: MemoryEntryInfo;
+}
+
+export interface MemoryEntryInfo {
+  /**
+   * Profile represents a human user at the account level. Profiles are
+   * account-scoped resources that can be associated with multiple workspaces through
+   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   */
+  createdBy?: AccountAPI.Profile;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  memoryLayer?: Shared.ResourceMetadata;
+}
+
+/**
+ * MemoryEntrySpec is the metadata portion of an entry — the fields that identify
+ * and describe it, without the body. It appears on both the summary (MemoryEntry)
+ * and detail (MemoryEntryDetail) views.
+ */
+export interface MemoryEntrySpec {
+  /**
+   * The lookup key for this entry within its layer. Must conform to the S3 object
+   * key safe-characters spec: ASCII alphanumerics and the special characters !, -,
+   * \_, ., \*, ', (, ), and /. Forward slashes may be used to suggest hierarchy
+   * (e.g., "skills/postmortem/write"), but lookups are flat — the key is a single
+   * opaque string, not a path.
+   *
+   * Additional rules enforced by the service:
+   *
+   * - May not begin or end with /
+   * - May not contain consecutive slashes (//)
+   * - May not begin with reserved prefixes (cadenya/, system/)
+   * - Case-sensitive
+   * - Unique within the parent layer
+   *
+   * For skills entries, this key is also the id the model passes to
+   * memory_load_skill when it decides to load the entry's content.
+   */
+  key: string;
+
+  /**
+   * One-line "when to use this" hint shown in the frontmatter manifest for skills
+   * entries. The model uses this to decide whether to load the body, so it should be
+   * written for the model as the audience. Ignored for layer types that do not
+   * advertise frontmatter.
+   */
+  description?: string;
+
+  /**
+   * Short human/LLM-readable title shown in the frontmatter manifest for skills
+   * entries. Ignored for layer types that do not advertise frontmatter.
+   */
+  title?: string;
+}
+
+/**
+ * MemoryEntryUpdateSpec is the input shape for UpdateMemoryEntry. Fields present
+ * in the request's update_mask are applied; unset fields are left alone. The
+ * source oneof is optional for updates — omit it to leave the body untouched, or
+ * set exactly one branch to replace it.
+ */
+export interface MemoryEntryUpdateSpec {
+  content?: string;
+
+  description?: string;
+
+  key?: string;
+
+  title?: string;
+
+  uploadId?: string;
+}
+
+export interface EntryCreateParams {
+  /**
+   * CreateResourceMetadata contains the user-provided fields for creating a
+   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
+   * profile_id, created_at) are excluded since they are set by the server.
+   */
+  metadata: Shared.CreateResourceMetadata;
+
+  /**
+   * MemoryEntryCreateSpec is the input shape for CreateMemoryEntry. It accepts
+   * either inline content or a reference to a completed Upload; exactly one of the
+   * two must be set.
+   */
+  spec: MemoryEntryCreateSpec;
+}
+
+export interface EntryRetrieveParams {
+  memoryLayerId: string;
+}
+
+export interface EntryUpdateParams {
+  /**
+   * Path param
+   */
+  memoryLayerId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
+   */
+  metadata?: Shared.UpdateResourceMetadata;
+
+  /**
+   * Body param: MemoryEntryUpdateSpec is the input shape for UpdateMemoryEntry.
+   * Fields present in the request's update_mask are applied; unset fields are left
+   * alone. The source oneof is optional for updates — omit it to leave the body
+   * untouched, or set exactly one branch to replace it.
+   */
+  spec?: MemoryEntryUpdateSpec;
+
+  /**
+   * Body param
+   */
+  updateMask?: string;
+}
+
+export interface EntryListParams extends CursorPaginationParams {
+  /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
+  /**
+   * Filter by key prefix (e.g., "skills/postmortem/" to list all entries under that
+   * hierarchy). Matches against the entry's key, not its name.
+   */
+  prefix?: string;
+
+  /**
+   * Sort order for results (asc or desc by creation time)
+   */
+  sortOrder?: string;
+}
+
+export interface EntryDeleteParams {
+  memoryLayerId: string;
+}
+
+export declare namespace Entries {
+  export {
+    type MemoryEntry as MemoryEntry,
+    type MemoryEntryCreateSpec as MemoryEntryCreateSpec,
+    type MemoryEntryDetail as MemoryEntryDetail,
+    type MemoryEntryInfo as MemoryEntryInfo,
+    type MemoryEntrySpec as MemoryEntrySpec,
+    type MemoryEntryUpdateSpec as MemoryEntryUpdateSpec,
+    type MemoryEntriesCursorPagination as MemoryEntriesCursorPagination,
+    type EntryCreateParams as EntryCreateParams,
+    type EntryRetrieveParams as EntryRetrieveParams,
+    type EntryUpdateParams as EntryUpdateParams,
+    type EntryListParams as EntryListParams,
+    type EntryDeleteParams as EntryDeleteParams,
+  };
+}
