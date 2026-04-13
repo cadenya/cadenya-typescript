@@ -76,7 +76,7 @@ export interface ObjectiveTaskData {
 
 export interface TaskRetrieveParams {
   /**
-   * The ID of the objective. Supports "eid:" prefix for external IDs.
+   * The ID of the objective. Supports "external_id:" prefix for external IDs.
    */
   objectiveId: string;
 }
