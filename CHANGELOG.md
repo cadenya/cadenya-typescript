@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.45.0 (2026-04-13)
+
+Full Changelog: [v0.44.0...v0.45.0](https://github.com/cadenya/cadenya-typescript/compare/v0.44.0...v0.45.0)
+
+### Features
+
+* Add memory service and upload service ([07651af](https://github.com/cadenya/cadenya-typescript/commit/07651af3519e126dd7649f3d4259ef54f8fed9a8))
+
 ## 0.44.0 (2026-04-13)
 
 Full Changelog: [v0.43.0...v0.44.0](https://github.com/cadenya/cadenya-typescript/compare/v0.43.0...v0.44.0)
