@@ -1195,6 +1195,456 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'list',
+    endpoint: '/v1/memory_layers',
+    httpMethod: 'get',
+    summary: 'List memory layers',
+    description: 'Lists all memory layers in the workspace',
+    stainlessPath: '(resource) memory_layers > (method) list',
+    qualified: 'client.memoryLayers.list',
+    params: [
+      'cursor?: string;',
+      'includeInfo?: boolean;',
+      'limit?: number;',
+      'prefix?: string;',
+      'sortOrder?: string;',
+      "type?: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';",
+    ],
+    response:
+      "{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }",
+    markdown:
+      "## list\n\n`client.memoryLayers.list(cursor?: string, includeInfo?: boolean, limit?: number, prefix?: string, sortOrder?: string, type?: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'): { metadata: resource_metadata; spec: memory_layer_spec; info?: memory_layer_info; }`\n\n**get** `/v1/memory_layers`\n\nLists all memory layers in the workspace\n\n### Parameters\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `includeInfo?: boolean`\n  When set to true you may use more of your alloted API rate-limit\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `prefix?: string`\n  Filter expression (query param: prefix)\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n- `type?: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'`\n  Filter by layer type\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }`\n  MemoryLayer is a named container of memory entries that can be composed into\n an objective's memory stack. Layers are workspace-scoped resources. The layer\n type controls how its entries participate in the agent loop — see\n MemoryLayerType for details.\n\n Memory stacks are LIFO: when an objective resolves a key, layers are walked\n from the top of the stack downward, and the first matching entry wins.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; entryCount?: number; lastUsedAt?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const memoryLayer of client.memoryLayers.list()) {\n  console.log(memoryLayer);\n}\n```",
+    perLanguage: {
+      cli: {
+        method: 'memory_layers list',
+        example: "cadenya memory-layers list \\\n  --api-key 'My API Key'",
+      },
+      go: {
+        method: 'client.MemoryLayers.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.MemoryLayers.List(context.TODO(), cadenya.MemoryLayerListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const memoryLayer of client.memoryLayers.list()) {\n  console.log(memoryLayer.metadata);\n}",
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/memory_layers',
+    httpMethod: 'post',
+    summary: 'Create a new memory layer',
+    description: 'Creates a new memory layer in the workspace',
+    stainlessPath: '(resource) memory_layers > (method) create',
+    qualified: 'client.memoryLayers.create',
+    params: [
+      'metadata: { name: string; externalId?: string; labels?: object; };',
+      "spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; };",
+    ],
+    response:
+      "{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }",
+    markdown:
+      "## create\n\n`client.memoryLayers.create(metadata: { name: string; externalId?: string; labels?: object; }, spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }): { metadata: resource_metadata; spec: memory_layer_spec; info?: memory_layer_info; }`\n\n**post** `/v1/memory_layers`\n\nCreates a new memory layer in the workspace\n\n### Parameters\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., \"Customer Support Agent\", \"Email Tool\")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {\"environment\": \"production\", \"team\": \"platform\", \"version\": \"v2\"}\n\n- `spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'`\n  - `description?: string`\n    Human-readable description of the layer's purpose. Encouraged for\n user-created layers; system-managed layers may have a generated description.\n  - `expiresAt?: string`\n    For layers with a finite lifetime (e.g., episodic), the time at which the\n layer becomes eligible for cleanup. Set by the system; unset for\n persistent layers.\n  - `systemManaged?: boolean`\n    Server-set. True for layers managed by the system (e.g., episodic layers\n created automatically when an objective uses an episodic_key). System-managed\n layers cannot be assigned to objective stacks via the API and cannot be\n mutated by clients — their lifecycle is controlled entirely by the runtime.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }`\n  MemoryLayer is a named container of memory entries that can be composed into\n an objective's memory stack. Layers are workspace-scoped resources. The layer\n type controls how its entries participate in the agent loop — see\n MemoryLayerType for details.\n\n Memory stacks are LIFO: when an objective resolves a key, layers are walked\n from the top of the stack downward, and the first matching entry wins.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; entryCount?: number; lastUsedAt?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst memoryLayer = await client.memoryLayers.create({\n  metadata: { name: 'name' },\n  spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' },\n});\n\nconsole.log(memoryLayer);\n```",
+    perLanguage: {
+      cli: {
+        method: 'memory_layers create',
+        example:
+          "cadenya memory-layers create \\\n  --api-key 'My API Key' \\\n  --metadata '{name: name}' \\\n  --spec '{type: MEMORY_LAYER_TYPE_UNSPECIFIED}'",
+      },
+      go: {
+        method: 'client.MemoryLayers.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.New(context.TODO(), cadenya.MemoryLayerNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.MemoryLayerSpecParam{\n\t\t\tType: cadenya.F(cadenya.MemoryLayerSpecTypeMemoryLayerTypeUnspecified),\n\t\t}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {\n            "type": "MEMORY_LAYER_TYPE_UNSPECIFIED"\n          }\n        }\'',
+      },
+      typescript: {
+        method: 'client.memoryLayers.create',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryLayer = await client.memoryLayers.create({\n  metadata: { name: 'name' },\n  spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' },\n});\n\nconsole.log(memoryLayer.metadata);",
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/memory_layers/{id}',
+    httpMethod: 'get',
+    summary: 'Get a memory layer by ID',
+    description: 'Retrieves a memory layer by ID from the workspace',
+    stainlessPath: '(resource) memory_layers > (method) retrieve',
+    qualified: 'client.memoryLayers.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }",
+    markdown:
+      "## retrieve\n\n`client.memoryLayers.retrieve(id: string): { metadata: resource_metadata; spec: memory_layer_spec; info?: memory_layer_info; }`\n\n**get** `/v1/memory_layers/{id}`\n\nRetrieves a memory layer by ID from the workspace\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }`\n  MemoryLayer is a named container of memory entries that can be composed into\n an objective's memory stack. Layers are workspace-scoped resources. The layer\n type controls how its entries participate in the agent loop — see\n MemoryLayerType for details.\n\n Memory stacks are LIFO: when an objective resolves a key, layers are walked\n from the top of the stack downward, and the first matching entry wins.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; entryCount?: number; lastUsedAt?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst memoryLayer = await client.memoryLayers.retrieve('id');\n\nconsole.log(memoryLayer);\n```",
+    perLanguage: {
+      cli: {
+        method: 'memory_layers retrieve',
+        example: "cadenya memory-layers retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.retrieve',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryLayer = await client.memoryLayers.retrieve('id');\n\nconsole.log(memoryLayer.metadata);",
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/memory_layers/{id}',
+    httpMethod: 'patch',
+    summary: 'Update a memory layer',
+    description: 'Updates a memory layer in the workspace',
+    stainlessPath: '(resource) memory_layers > (method) update',
+    qualified: 'client.memoryLayers.update',
+    params: [
+      'id: string;',
+      'metadata?: { name: string; externalId?: string; labels?: object; };',
+      "spec?: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; };",
+      'updateMask?: string;',
+    ],
+    response:
+      "{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }",
+    markdown:
+      "## update\n\n`client.memoryLayers.update(id: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }, updateMask?: string): { metadata: resource_metadata; spec: memory_layer_spec; info?: memory_layer_info; }`\n\n**patch** `/v1/memory_layers/{id}`\n\nUpdates a memory layer in the workspace\n\n### Parameters\n\n- `id: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateResourceMetadata contains the user-provided fields for updating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., \"Customer Support Agent\", \"Email Tool\")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {\"environment\": \"production\", \"team\": \"platform\", \"version\": \"v2\"}\n\n- `spec?: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'`\n  - `description?: string`\n    Human-readable description of the layer's purpose. Encouraged for\n user-created layers; system-managed layers may have a generated description.\n  - `expiresAt?: string`\n    For layers with a finite lifetime (e.g., episodic), the time at which the\n layer becomes eligible for cleanup. Set by the system; unset for\n persistent layers.\n  - `systemManaged?: boolean`\n    Server-set. True for layers managed by the system (e.g., episodic layers\n created automatically when an objective uses an episodic_key). System-managed\n layers cannot be assigned to objective stacks via the API and cannot be\n mutated by clients — their lifecycle is controlled entirely by the runtime.\n\n- `updateMask?: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }; info?: { createdBy?: profile; entryCount?: number; lastUsedAt?: string; }; }`\n  MemoryLayer is a named container of memory entries that can be composed into\n an objective's memory stack. Layers are workspace-scoped resources. The layer\n type controls how its entries participate in the agent loop — see\n MemoryLayerType for details.\n\n Memory stacks are LIFO: when an objective resolves a key, layers are walked\n from the top of the stack downward, and the first matching entry wins.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS'; description?: string; expiresAt?: string; systemManaged?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; entryCount?: number; lastUsedAt?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst memoryLayer = await client.memoryLayers.update('id');\n\nconsole.log(memoryLayer);\n```",
+    perLanguage: {
+      cli: {
+        method: 'memory_layers update',
+        example: "cadenya memory-layers update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.MemoryLayerUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://api.cadenya.com/v1/memory_layers/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.memoryLayers.update',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryLayer = await client.memoryLayers.update('id');\n\nconsole.log(memoryLayer.metadata);",
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/memory_layers/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete a memory layer',
+    description: 'Deletes a memory layer from the workspace',
+    stainlessPath: '(resource) memory_layers > (method) delete',
+    qualified: 'client.memoryLayers.delete',
+    params: ['id: string;'],
+    markdown:
+      "## delete\n\n`client.memoryLayers.delete(id: string): void`\n\n**delete** `/v1/memory_layers/{id}`\n\nDeletes a memory layer from the workspace\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.memoryLayers.delete('id')\n```",
+    perLanguage: {
+      cli: {
+        method: 'memory_layers delete',
+        example: "cadenya memory-layers delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.MemoryLayers.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.delete',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.memoryLayers.delete('id');",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/memory_layers/{memoryLayerId}/entries',
+    httpMethod: 'get',
+    summary: 'List memory entries',
+    description: 'Lists all entries in a memory layer',
+    stainlessPath: '(resource) memory_layers.entries > (method) list',
+    qualified: 'client.memoryLayers.entries.list',
+    params: [
+      'memoryLayerId: string;',
+      'cursor?: string;',
+      'includeInfo?: boolean;',
+      'limit?: number;',
+      'prefix?: string;',
+      'sortOrder?: string;',
+    ],
+    response:
+      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }',
+    markdown:
+      "## list\n\n`client.memoryLayers.entries.list(memoryLayerId: string, cursor?: string, includeInfo?: boolean, limit?: number, prefix?: string, sortOrder?: string): { metadata: resource_metadata; spec: memory_entry_spec; info?: memory_entry_info; }`\n\n**get** `/v1/memory_layers/{memoryLayerId}/entries`\n\nLists all entries in a memory layer\n\n### Parameters\n\n- `memoryLayerId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `includeInfo?: boolean`\n  When set to true you may use more of your alloted API rate-limit\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `prefix?: string`\n  Filter by key prefix (e.g., \"skills/postmortem/\" to list all entries\n under that hierarchy). Matches against the entry's key, not its name.\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }`\n  MemoryEntry is a single keyed value within a MemoryLayer. Entries are\n addressed by their key, which follows the S3 object key safe-character\n convention (see MemoryEntrySpec.key for the full rule). Keys are unique\n within a single layer; the same key may appear in multiple layers, in which\n case the LIFO stack-walk determines which one wins for a given objective.\n\n MemoryEntry is the summary shape, returned by ListMemoryEntries. It does\n not carry the entry body — callers that need the body must fetch the entry\n individually via GetMemoryEntry, which returns a MemoryEntryDetail.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { key: string; description?: string; title?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; memoryLayer?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const memoryEntry of client.memoryLayers.entries.list('memoryLayerId')) {\n  console.log(memoryEntry);\n}\n```",
+    perLanguage: {
+      cli: {
+        method: 'entries list',
+        example:
+          "cadenya memory-layers:entries list \\\n  --api-key 'My API Key' \\\n  --memory-layer-id memoryLayerId",
+      },
+      go: {
+        method: 'client.MemoryLayers.Entries.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.MemoryLayers.Entries.List(\n\t\tcontext.TODO(),\n\t\t"memoryLayerId",\n\t\tcadenya.MemoryLayerEntryListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$MEMORY_LAYER_ID/entries \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.entries.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const memoryEntry of client.memoryLayers.entries.list('memoryLayerId')) {\n  console.log(memoryEntry.metadata);\n}",
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/memory_layers/{memoryLayerId}/entries',
+    httpMethod: 'post',
+    summary: 'Create a new memory entry',
+    description:
+      'Creates a new entry in a memory layer. Returns the detail view, including the resolved content body.',
+    stainlessPath: '(resource) memory_layers.entries > (method) create',
+    qualified: 'client.memoryLayers.entries.create',
+    params: [
+      'memoryLayerId: string;',
+      'metadata: { name: string; externalId?: string; labels?: object; };',
+      'spec: { key: string; content?: string; description?: string; title?: string; uploadId?: string; };',
+    ],
+    response:
+      '{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }',
+    markdown:
+      '## create\n\n`client.memoryLayers.entries.create(memoryLayerId: string, metadata: { name: string; externalId?: string; labels?: object; }, spec: { key: string; content?: string; description?: string; title?: string; uploadId?: string; }): { content: string; metadata: resource_metadata; spec: memory_entry_spec; info?: memory_entry_info; }`\n\n**post** `/v1/memory_layers/{memoryLayerId}/entries`\n\nCreates a new entry in a memory layer. Returns the detail view, including the resolved content body.\n\n### Parameters\n\n- `memoryLayerId: string`\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { key: string; content?: string; description?: string; title?: string; uploadId?: string; }`\n  MemoryEntryCreateSpec is the input shape for CreateMemoryEntry. It accepts\n either inline content or a reference to a completed Upload; exactly one of\n the two must be set.\n  - `key: string`\n    See MemoryEntrySpec.key for the full rule set. Same constraints apply\n here.\n  - `content?: string`\n    Inline content, written directly into the entry.\n  - `description?: string`\n  - `title?: string`\n  - `uploadId?: string`\n    ID of a COMPLETE Upload. The server reads the object from storage,\n copies its bytes into the entry, and marks the upload consumed.\n\n### Returns\n\n- `{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }`\n  MemoryEntryDetail is the full representation of an entry, including the\n resolved content body. Returned by GetMemoryEntry, CreateMemoryEntry, and\n UpdateMemoryEntry.\n\n  - `content: string`\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { key: string; description?: string; title?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; memoryLayer?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst memoryEntryDetail = await client.memoryLayers.entries.create(\'memoryLayerId\', {\n  metadata: { name: \'name\' },\n  spec: { key: \'key\' },\n});\n\nconsole.log(memoryEntryDetail);\n```',
+    perLanguage: {
+      cli: {
+        method: 'entries create',
+        example:
+          "cadenya memory-layers:entries create \\\n  --api-key 'My API Key' \\\n  --memory-layer-id memoryLayerId \\\n  --metadata '{name: name}' \\\n  --spec '{key: key}'",
+      },
+      go: {
+        method: 'client.MemoryLayers.Entries.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.New(\n\t\tcontext.TODO(),\n\t\t"memoryLayerId",\n\t\tcadenya.MemoryLayerEntryNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.MemoryEntryCreateSpecParam{\n\t\t\t\tKey: cadenya.F("key"),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$MEMORY_LAYER_ID/entries \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {\n            "key": "key"\n          }\n        }\'',
+      },
+      typescript: {
+        method: 'client.memoryLayers.entries.create',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryEntryDetail = await client.memoryLayers.entries.create('memoryLayerId', {\n  metadata: { name: 'name' },\n  spec: { key: 'key' },\n});\n\nconsole.log(memoryEntryDetail.content);",
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/memory_layers/{memoryLayerId}/entries/{id}',
+    httpMethod: 'get',
+    summary: 'Get a memory entry by ID',
+    description:
+      'Retrieves a memory entry by ID from a memory layer. Returns the detail view, including the content body.',
+    stainlessPath: '(resource) memory_layers.entries > (method) retrieve',
+    qualified: 'client.memoryLayers.entries.retrieve',
+    params: ['memoryLayerId: string;', 'id: string;'],
+    response:
+      '{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }',
+    markdown:
+      "## retrieve\n\n`client.memoryLayers.entries.retrieve(memoryLayerId: string, id: string): { content: string; metadata: resource_metadata; spec: memory_entry_spec; info?: memory_entry_info; }`\n\n**get** `/v1/memory_layers/{memoryLayerId}/entries/{id}`\n\nRetrieves a memory entry by ID from a memory layer. Returns the detail view, including the content body.\n\n### Parameters\n\n- `memoryLayerId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }`\n  MemoryEntryDetail is the full representation of an entry, including the\n resolved content body. Returned by GetMemoryEntry, CreateMemoryEntry, and\n UpdateMemoryEntry.\n\n  - `content: string`\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { key: string; description?: string; title?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; memoryLayer?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst memoryEntryDetail = await client.memoryLayers.entries.retrieve('id', { memoryLayerId: 'memoryLayerId' });\n\nconsole.log(memoryEntryDetail);\n```",
+    perLanguage: {
+      cli: {
+        method: 'entries retrieve',
+        example:
+          "cadenya memory-layers:entries retrieve \\\n  --api-key 'My API Key' \\\n  --memory-layer-id memoryLayerId \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Entries.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.Get(\n\t\tcontext.TODO(),\n\t\t"memoryLayerId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$MEMORY_LAYER_ID/entries/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.entries.retrieve',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryEntryDetail = await client.memoryLayers.entries.retrieve('id', {\n  memoryLayerId: 'memoryLayerId',\n});\n\nconsole.log(memoryEntryDetail.content);",
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/memory_layers/{memoryLayerId}/entries/{id}',
+    httpMethod: 'patch',
+    summary: 'Update a memory entry',
+    description:
+      'Updates a memory entry in a memory layer. Returns the detail view, including the resolved content body.',
+    stainlessPath: '(resource) memory_layers.entries > (method) update',
+    qualified: 'client.memoryLayers.entries.update',
+    params: [
+      'memoryLayerId: string;',
+      'id: string;',
+      'metadata?: { name: string; externalId?: string; labels?: object; };',
+      'spec?: { content?: string; description?: string; key?: string; title?: string; uploadId?: string; };',
+      'updateMask?: string;',
+    ],
+    response:
+      '{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }',
+    markdown:
+      '## update\n\n`client.memoryLayers.entries.update(memoryLayerId: string, id: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { content?: string; description?: string; key?: string; title?: string; uploadId?: string; }, updateMask?: string): { content: string; metadata: resource_metadata; spec: memory_entry_spec; info?: memory_entry_info; }`\n\n**patch** `/v1/memory_layers/{memoryLayerId}/entries/{id}`\n\nUpdates a memory entry in a memory layer. Returns the detail view, including the resolved content body.\n\n### Parameters\n\n- `memoryLayerId: string`\n\n- `id: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateResourceMetadata contains the user-provided fields for updating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec?: { content?: string; description?: string; key?: string; title?: string; uploadId?: string; }`\n  MemoryEntryUpdateSpec is the input shape for UpdateMemoryEntry. Fields\n present in the request\'s update_mask are applied; unset fields are left\n alone. The source oneof is optional for updates — omit it to leave the\n body untouched, or set exactly one branch to replace it.\n  - `content?: string`\n  - `description?: string`\n  - `key?: string`\n  - `title?: string`\n  - `uploadId?: string`\n\n- `updateMask?: string`\n\n### Returns\n\n- `{ content: string; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { key: string; description?: string; title?: string; }; info?: { createdBy?: profile; memoryLayer?: resource_metadata; }; }`\n  MemoryEntryDetail is the full representation of an entry, including the\n resolved content body. Returned by GetMemoryEntry, CreateMemoryEntry, and\n UpdateMemoryEntry.\n\n  - `content: string`\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { key: string; description?: string; title?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; memoryLayer?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst memoryEntryDetail = await client.memoryLayers.entries.update(\'id\', { memoryLayerId: \'memoryLayerId\' });\n\nconsole.log(memoryEntryDetail);\n```',
+    perLanguage: {
+      cli: {
+        method: 'entries update',
+        example:
+          "cadenya memory-layers:entries update \\\n  --api-key 'My API Key' \\\n  --memory-layer-id memoryLayerId \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Entries.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.Update(\n\t\tcontext.TODO(),\n\t\t"memoryLayerId",\n\t\t"id",\n\t\tcadenya.MemoryLayerEntryUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://api.cadenya.com/v1/memory_layers/$MEMORY_LAYER_ID/entries/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.memoryLayers.entries.update',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst memoryEntryDetail = await client.memoryLayers.entries.update('id', {\n  memoryLayerId: 'memoryLayerId',\n});\n\nconsole.log(memoryEntryDetail.content);",
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/memory_layers/{memoryLayerId}/entries/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete a memory entry',
+    description: 'Deletes a memory entry from a memory layer',
+    stainlessPath: '(resource) memory_layers.entries > (method) delete',
+    qualified: 'client.memoryLayers.entries.delete',
+    params: ['memoryLayerId: string;', 'id: string;'],
+    markdown:
+      "## delete\n\n`client.memoryLayers.entries.delete(memoryLayerId: string, id: string): void`\n\n**delete** `/v1/memory_layers/{memoryLayerId}/entries/{id}`\n\nDeletes a memory entry from a memory layer\n\n### Parameters\n\n- `memoryLayerId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.memoryLayers.entries.delete('id', { memoryLayerId: 'memoryLayerId' })\n```",
+    perLanguage: {
+      cli: {
+        method: 'entries delete',
+        example:
+          "cadenya memory-layers:entries delete \\\n  --api-key 'My API Key' \\\n  --memory-layer-id memoryLayerId \\\n  --id id",
+      },
+      go: {
+        method: 'client.MemoryLayers.Entries.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.MemoryLayers.Entries.Delete(\n\t\tcontext.TODO(),\n\t\t"memoryLayerId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/memory_layers/$MEMORY_LAYER_ID/entries/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.memoryLayers.entries.delete',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.memoryLayers.entries.delete('id', { memoryLayerId: 'memoryLayerId' });",
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/uploads',
+    httpMethod: 'post',
+    summary: 'Create an upload',
+    description:
+      'Issues a short-lived presigned URL for direct upload to object storage. The returned id is used to reference the upload from resources that accept binary content.',
+    stainlessPath: '(resource) uploads > (method) create',
+    qualified: 'client.uploads.create',
+    params: [
+      'metadata: { name: string; externalId?: string; labels?: object; };',
+      'spec: { contentType: string; filename: string; sizeBytes: string; };',
+    ],
+    response:
+      '{ info: { createdBy?: profile; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { contentType: string; filename: string; sizeBytes: string; }; }',
+    markdown:
+      '## create\n\n`client.uploads.create(metadata: { name: string; externalId?: string; labels?: object; }, spec: { contentType: string; filename: string; sizeBytes: string; }): { info: upload_info; metadata: resource_metadata; spec: upload_spec; }`\n\n**post** `/v1/uploads`\n\nIssues a short-lived presigned URL for direct upload to object storage. The returned id is used to reference the upload from resources that accept binary content.\n\n### Parameters\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { contentType: string; filename: string; sizeBytes: string; }`\n  - `contentType: string`\n    MIME type the client will send. Baked into the presigned URL\'s signature\n — the PUT must match exactly or object storage will reject it.\n  - `filename: string`\n    Client-supplied filename. Used for audit and display only; does not\n control the object\'s storage path.\n  - `sizeBytes: string`\n    Expected size of the upload in bytes. Baked into the presigned URL as a\n Content-Length constraint.\n\n### Returns\n\n- `{ info: { createdBy?: profile; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { contentType: string; filename: string; sizeBytes: string; }; }`\n  Upload is a workspace-scoped handle representing a single file upload flow.\n Clients call CreateUpload to receive a short-lived presigned URL, PUT the\n file directly to object storage, then reference the upload by id when\n creating or updating resources that accept binary content.\n\n Uploads are one-shot: once consumed by a creating or updating resource, the\n upload transitions to UPLOAD_STATUS_CONSUMED and cannot be reused. Unused\n uploads expire and are garbage-collected by the runtime.\n\n  - `info: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { contentType: string; filename: string; sizeBytes: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst upload = await client.uploads.create({\n  metadata: { name: \'name\' },\n  spec: {\n  contentType: \'contentType\',\n  filename: \'filename\',\n  sizeBytes: \'sizeBytes\',\n},\n});\n\nconsole.log(upload);\n```',
+    perLanguage: {
+      cli: {
+        method: 'uploads create',
+        example:
+          "cadenya uploads create \\\n  --api-key 'My API Key' \\\n  --metadata '{name: name}' \\\n  --spec '{contentType: contentType, filename: filename, sizeBytes: sizeBytes}'",
+      },
+      go: {
+        method: 'client.Uploads.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tupload, err := client.Uploads.New(context.TODO(), cadenya.UploadNewParams{\n\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.UploadSpecParam{\n\t\t\tContentType: cadenya.F("contentType"),\n\t\t\tFilename:    cadenya.F("filename"),\n\t\t\tSizeBytes:   cadenya.F("sizeBytes"),\n\t\t}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", upload.Info)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/uploads \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {\n            "contentType": "contentType",\n            "filename": "filename",\n            "sizeBytes": "sizeBytes"\n          }\n        }\'',
+      },
+      typescript: {
+        method: 'client.uploads.create',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst upload = await client.uploads.create({\n  metadata: { name: 'name' },\n  spec: {\n    contentType: 'contentType',\n    filename: 'filename',\n    sizeBytes: 'sizeBytes',\n  },\n});\n\nconsole.log(upload.info);",
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/uploads/{id}',
+    httpMethod: 'get',
+    summary: 'Get an upload by ID',
+    description: 'Retrieves the current state of an upload, including its lifecycle status',
+    stainlessPath: '(resource) uploads > (method) retrieve',
+    qualified: 'client.uploads.retrieve',
+    params: ['id: string;'],
+    response:
+      '{ info: { createdBy?: profile; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { contentType: string; filename: string; sizeBytes: string; }; }',
+    markdown:
+      "## retrieve\n\n`client.uploads.retrieve(id: string): { info: upload_info; metadata: resource_metadata; spec: upload_spec; }`\n\n**get** `/v1/uploads/{id}`\n\nRetrieves the current state of an upload, including its lifecycle status\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ info: { createdBy?: profile; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }; metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { contentType: string; filename: string; sizeBytes: string; }; }`\n  Upload is a workspace-scoped handle representing a single file upload flow.\n Clients call CreateUpload to receive a short-lived presigned URL, PUT the\n file directly to object storage, then reference the upload by id when\n creating or updating resources that accept binary content.\n\n Uploads are one-shot: once consumed by a creating or updating resource, the\n upload transitions to UPLOAD_STATUS_CONSUMED and cannot be reused. Unused\n uploads expire and are garbage-collected by the runtime.\n\n  - `info: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; status?: string; uploadUrl?: string; uploadUrlExpiresAt?: string; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { contentType: string; filename: string; sizeBytes: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst upload = await client.uploads.retrieve('id');\n\nconsole.log(upload);\n```",
+    perLanguage: {
+      cli: {
+        method: 'uploads retrieve',
+        example: "cadenya uploads retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      go: {
+        method: 'client.Uploads.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tupload, err := client.Uploads.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", upload.Info)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/uploads/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+      typescript: {
+        method: 'client.uploads.retrieve',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst upload = await client.uploads.retrieve('id');\n\nconsole.log(upload.info);",
+      },
+    },
+  },
+  {
+    name: 'list',
     endpoint: '/v1/models',
     httpMethod: 'get',
     summary: 'List models',

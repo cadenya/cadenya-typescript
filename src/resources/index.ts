@@ -54,6 +54,16 @@ export {
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
+  MemoryLayers,
+  type MemoryLayer,
+  type MemoryLayerInfo,
+  type MemoryLayerSpec,
+  type MemoryLayerCreateParams,
+  type MemoryLayerUpdateParams,
+  type MemoryLayerListParams,
+  type MemoryLayersCursorPagination,
+} from './memory-layers/memory-layers';
+export {
   Models,
   type Model,
   type ModelSpec,
@@ -126,6 +136,7 @@ export {
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
 } from './tool-sets/tool-sets';
+export { Uploads, type Upload, type UploadInfo, type UploadSpec, type UploadCreateParams } from './uploads';
 export { Webhooks, type UnsafeUnwrapWebhookEvent, type UnwrapWebhookEvent } from './webhooks';
 export {
   WorkspaceSecrets,
