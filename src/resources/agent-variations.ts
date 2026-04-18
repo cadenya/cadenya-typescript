@@ -86,6 +86,21 @@ export class AgentVariations extends APIResource {
   }
 
   /**
+   * Attaches a memory layer to a variation at a given position in the variation's
+   * baseline memory stack.
+   */
+  addMemoryLayer(
+    agentVariationID: string,
+    body: AgentVariationAddMemoryLayerParams,
+    options?: RequestOptions,
+  ): APIPromise<VariationMemoryLayerAssignment> {
+    return this._client.post(path`/v1/agent_variations/${agentVariationID}/memory_layers`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
    * Detaches an assignment from a variation, identified by the assignment ID
    * returned when it was added.
    */
@@ -98,6 +113,37 @@ export class AgentVariations extends APIResource {
     return this._client.delete(path`/v1/agent_variations/${agentVariationId}/assignments/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Detaches a memory layer assignment from a variation, identified by the
+   * assignment id.
+   */
+  removeMemoryLayer(
+    id: string,
+    params: AgentVariationRemoveMemoryLayerParams,
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { agentVariationId } = params;
+    return this._client.delete(path`/v1/agent_variations/${agentVariationId}/memory_layers/${id}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Updates the position of a memory layer assignment on a variation.
+   */
+  updateMemoryLayer(
+    id: string,
+    params: AgentVariationUpdateMemoryLayerParams,
+    options?: RequestOptions,
+  ): APIPromise<VariationMemoryLayerAssignment> {
+    const { agentVariationId, ...body } = params;
+    return this._client.patch(path`/v1/agent_variations/${agentVariationId}/memory_layers/${id}`, {
+      body,
+      ...options,
     });
   }
 }
@@ -146,6 +192,17 @@ export interface AgentVariationInfo {
    * Total number of objective feedbacks received for this variation
    */
   feedbackCount?: number;
+
+  /**
+   * Read-only list of memory layer assignments for this variation, returned in
+   * ascending `position` (bottom → top). Capped at 10 entries.
+   */
+  memoryLayerAssignments?: Array<VariationMemoryLayerAssignment>;
+
+  /**
+   * Count of memory layer assignments.
+   */
+  memoryLayerCount?: number;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -395,6 +452,41 @@ export interface VariationAssignment {
   toolSet?: Shared.BareMetadata;
 }
 
+/**
+ * VariationMemoryLayerAssignment attaches a single MemoryLayer to a variation at a
+ * given position in the variation's baseline memory stack. A variation has at most
+ * one assignment per memory_layer_id.
+ *
+ * Variations only support whole-layer attachments — entry pinning is an
+ * objective-level capability.
+ */
+export interface VariationMemoryLayerAssignment {
+  /**
+   * Assignment row id — handle for removing the assignment. Distinct from the
+   * referenced memory layer's id.
+   */
+  id?: string;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  memoryLayer?: Shared.BareMetadata;
+
+  /**
+   * Position in the variation's baseline stack. Lower values sit lower; the
+   * highest-position assignment is on top of the variation's baseline. Gaps are fine
+   * — only relative position matters. Positions must be unique within a variation; a
+   * request that would collide with an existing assignment's position is rejected
+   * with InvalidArgument.
+   */
+  position?: number;
+}
+
 export interface AgentVariationCreateParams {
   /**
    * CreateResourceMetadata contains the user-provided fields for creating a
@@ -469,8 +561,36 @@ export interface AgentVariationAddAssignmentParams {
   toolSetId?: string;
 }
 
+export interface AgentVariationAddMemoryLayerParams {
+  /**
+   * Layer to attach. Accepts memlyr\_… or external_id:… form.
+   */
+  memoryLayerId?: string;
+
+  /**
+   * Position in the stack. If omitted, server appends (max existing position + 1).
+   */
+  position?: number;
+}
+
 export interface AgentVariationRemoveAssignmentParams {
   agentVariationId: string;
+}
+
+export interface AgentVariationRemoveMemoryLayerParams {
+  agentVariationId: string;
+}
+
+export interface AgentVariationUpdateMemoryLayerParams {
+  /**
+   * Path param
+   */
+  agentVariationId: string;
+
+  /**
+   * Body param: New position. Only field currently updatable on an assignment.
+   */
+  position?: number;
 }
 
 export declare namespace AgentVariations {
@@ -487,6 +607,7 @@ export declare namespace AgentVariations {
     type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
     type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type VariationAssignment as VariationAssignment,
+    type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
     type AgentVariationCreateParams as AgentVariationCreateParams,
     type AgentVariationRetrieveParams as AgentVariationRetrieveParams,
@@ -494,6 +615,9 @@ export declare namespace AgentVariations {
     type AgentVariationListParams as AgentVariationListParams,
     type AgentVariationDeleteParams as AgentVariationDeleteParams,
     type AgentVariationAddAssignmentParams as AgentVariationAddAssignmentParams,
+    type AgentVariationAddMemoryLayerParams as AgentVariationAddMemoryLayerParams,
     type AgentVariationRemoveAssignmentParams as AgentVariationRemoveAssignmentParams,
+    type AgentVariationRemoveMemoryLayerParams as AgentVariationRemoveMemoryLayerParams,
+    type AgentVariationUpdateMemoryLayerParams as AgentVariationUpdateMemoryLayerParams,
   };
 }

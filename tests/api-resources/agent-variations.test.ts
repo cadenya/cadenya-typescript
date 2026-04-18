@@ -171,6 +171,18 @@ describe('resource agentVariations', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('addMemoryLayer', async () => {
+    const responsePromise = client.agentVariations.addMemoryLayer('agentVariationId', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('removeAssignment: only required params', async () => {
     const responsePromise = client.agentVariations.removeAssignment('id', {
       agentVariationId: 'agentVariationId',
@@ -188,6 +200,49 @@ describe('resource agentVariations', () => {
   test.skip('removeAssignment: required and optional params', async () => {
     const response = await client.agentVariations.removeAssignment('id', {
       agentVariationId: 'agentVariationId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeMemoryLayer: only required params', async () => {
+    const responsePromise = client.agentVariations.removeMemoryLayer('id', {
+      agentVariationId: 'agentVariationId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeMemoryLayer: required and optional params', async () => {
+    const response = await client.agentVariations.removeMemoryLayer('id', {
+      agentVariationId: 'agentVariationId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateMemoryLayer: only required params', async () => {
+    const responsePromise = client.agentVariations.updateMemoryLayer('id', {
+      agentVariationId: 'agentVariationId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateMemoryLayer: required and optional params', async () => {
+    const response = await client.agentVariations.updateMemoryLayer('id', {
+      agentVariationId: 'agentVariationId',
+      position: 0,
     });
   });
 });

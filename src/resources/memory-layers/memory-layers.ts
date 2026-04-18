@@ -90,8 +90,7 @@ export type MemoryLayersCursorPagination = CursorPagination<MemoryLayer>;
  * controls how its entries participate in the agent loop — see MemoryLayerType for
  * details.
  *
- * Memory stacks are LIFO: when an objective resolves a key, layers are walked from
- * the top of the stack downward, and the first matching entry wins.
+ * See "Memory stack composition" above for how layers compose at lookup time.
  */
 export interface MemoryLayer {
   /**
