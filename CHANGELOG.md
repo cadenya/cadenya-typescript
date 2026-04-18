@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.46.0 (2026-04-18)
+
+Full Changelog: [v0.45.0...v0.46.0](https://github.com/cadenya/cadenya-typescript/compare/v0.45.0...v0.46.0)
+
+### Features
+
+* Add memory stack to objectives and agent variations ([b3052c5](https://github.com/cadenya/cadenya-typescript/commit/b3052c5e6ed73f6b4148a001e479a98ae62b1f77))
+
+
+### Chores
+
+* **ci:** remove release-doctor workflow ([d78f6a4](https://github.com/cadenya/cadenya-typescript/commit/d78f6a491349eaef3c8990cb93a597b4e8359e37))
+* update CLI documentation ([dde46cb](https://github.com/cadenya/cadenya-typescript/commit/dde46cb0a96cf8ce3fbdce9f1cc38f65724502c0))
+
 ## 0.45.0 (2026-04-13)
 
 Full Changelog: [v0.44.0...v0.45.0](https://github.com/cadenya/cadenya-typescript/compare/v0.44.0...v0.45.0)
