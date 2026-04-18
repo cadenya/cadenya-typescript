@@ -207,6 +207,51 @@ export interface ContextWindowCompacted {
   summary?: string;
 }
 
+/**
+ * MemoryRead is emitted each time the agent resolves a key against the memory
+ * stack and loads an entry. Lookups that miss (key not found in any layer) do not
+ * emit this event.
+ */
+export interface MemoryRead {
+  /**
+   * The specific entry that was read.
+   */
+  memoryEntryId?: string;
+
+  /**
+   * The layer the entry resolved to. The top-most layer that contained the key —
+   * other layers beneath it that also contained the key are shadowed and not
+   * referenced here.
+   */
+  memoryLayerId?: string;
+
+  /**
+   * Human-readable description of the read, set by the runtime. For example: "Loaded
+   * skill", "Resolved context key". Not machine-parsed; intended for UI display
+   * alongside the other events in an objective's timeline.
+   */
+  message?: string;
+}
+
+/**
+ * MemoryReference identifies a memory layer or a specific entry within one, for
+ * composition into a memory stack. Used on objectives (where entry pinning is
+ * permitted).
+ *
+ * memory*layer_id accepts both the canonical form (memlyr*…) and the external-id
+ * form (external_id:my-custom-id). The same applies to memory_entry_id.
+ */
+export interface MemoryReference {
+  /**
+   * When set, pushes only this entry from memory_layer_id onto the stack — behaves
+   * as a single-entry layer (only this key resolves at this position). The entry
+   * must belong to memory_layer_id; mismatches are rejected with InvalidArgument.
+   */
+  memoryEntryId?: string;
+
+  memoryLayerId?: string;
+}
+
 export interface Objective {
   data: ObjectiveData;
 
@@ -317,6 +362,29 @@ export interface ObjectiveData {
   initialMessage?: string;
 
   /**
+   * Memory layers/entries to push onto this objective's memory stack on top of the
+   * baseline stack inherited from the selected variation.
+   *
+   * See "Memory stack composition" in memory.proto for lookup semantics.
+   *
+   * Array order is push order: the first element sits lower in the objective's
+   * contribution to the stack; the LAST element ends up on top of the effective
+   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
+   * position.
+   *
+   * System-managed layers (e.g., episodic) cannot be referenced here; they attach
+   * themselves automatically via the runtime based on episodic_key.
+   *
+   * Stack size cap: the TOTAL effective stack (variation's memory layers
+   *
+   * - this field) must not exceed 10 entries. A request that would produce an
+   *   effective stack larger than 10 is rejected with InvalidArgument. Variations
+   *   themselves are capped at 10 memory layer assignments, so a variation that is
+   *   already "full" leaves no room for objective-level references.
+   */
+  memoryStack?: Array<MemoryReference>;
+
+  /**
    * A parent objective means the objective was spawned off using a separate agent to
    * complete an objective
    */
@@ -357,6 +425,13 @@ export interface ObjectiveEventData {
   contextWindowCompacted?: ContextWindowCompacted;
 
   error?: ObjectiveError;
+
+  /**
+   * MemoryRead is emitted each time the agent resolves a key against the memory
+   * stack and loads an entry. Lookups that miss (key not found in any layer) do not
+   * emit this event.
+   */
+  memoryRead?: MemoryRead;
 
   subObjectiveCreated?: SubObjectiveCreated;
 
@@ -471,6 +546,14 @@ export interface ObjectiveInfo {
    * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
    */
   createdBy?: AccountAPI.Profile;
+
+  /**
+   * The effective memory stack at objective creation time, flattened from the
+   * variation's baseline plus ObjectiveData.memory_stack. Order is push order (last
+   * = top). Returned on reads so clients can see exactly what stack the objective is
+   * using without having to re-join variation state.
+   */
+  effectiveMemoryStack?: Array<MemoryReference>;
 
   /**
    * Total number of context windows that this objective has generated
@@ -746,6 +829,8 @@ export declare namespace Objectives {
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
     type ContextWindowCompacted as ContextWindowCompacted,
+    type MemoryRead as MemoryRead,
+    type MemoryReference as MemoryReference,
     type Objective as Objective,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,

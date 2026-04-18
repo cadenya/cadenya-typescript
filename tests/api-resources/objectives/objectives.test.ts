@@ -31,6 +31,7 @@ describe('resource objectives', () => {
       data: {
         data: {},
         initialMessage: 'initialMessage',
+        memoryStack: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
         secrets: [{ name: 'name', value: 'value' }],
       },
       metadata: {

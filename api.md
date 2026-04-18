@@ -69,6 +69,7 @@ Types:
 - <code><a href="./src/resources/agent-variations.ts">ToolSelectionAssignedTools</a></code>
 - <code><a href="./src/resources/agent-variations.ts">ToolSelectionAutoDiscovery</a></code>
 - <code><a href="./src/resources/agent-variations.ts">VariationAssignment</a></code>
+- <code><a href="./src/resources/agent-variations.ts">VariationMemoryLayerAssignment</a></code>
 
 Methods:
 
@@ -78,7 +79,10 @@ Methods:
 - <code title="get /v1/agents/{agentId}/variations">client.agentVariations.<a href="./src/resources/agent-variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
 - <code title="delete /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">delete</a>(id, { ...params }) -> void</code>
 - <code title="post /v1/agent_variations/{agentVariationId}/assignments">client.agentVariations.<a href="./src/resources/agent-variations.ts">addAssignment</a>(agentVariationID, { ...params }) -> VariationAssignment</code>
+- <code title="post /v1/agent_variations/{agentVariationId}/memory_layers">client.agentVariations.<a href="./src/resources/agent-variations.ts">addMemoryLayer</a>(agentVariationID, { ...params }) -> VariationMemoryLayerAssignment</code>
 - <code title="delete /v1/agent_variations/{agentVariationId}/assignments/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
+- <code title="delete /v1/agent_variations/{agentVariationId}/memory_layers/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
+- <code title="patch /v1/agent_variations/{agentVariationId}/memory_layers/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
 
 # Objectives
 
@@ -88,6 +92,8 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ContextWindowCompacted</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">MemoryRead</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">MemoryReference</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Objective</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
