@@ -95,10 +95,28 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/agent_variations/{agentVariationId}/assignments',
   },
   {
+    clientCallName: 'client.agentVariations.addMemoryLayer',
+    fullyQualifiedName: 'agentVariations.addMemoryLayer',
+    httpMethod: 'post',
+    httpPath: '/v1/agent_variations/{agentVariationId}/memory_layers',
+  },
+  {
     clientCallName: 'client.agentVariations.removeAssignment',
     fullyQualifiedName: 'agentVariations.removeAssignment',
     httpMethod: 'delete',
     httpPath: '/v1/agent_variations/{agentVariationId}/assignments/{id}',
+  },
+  {
+    clientCallName: 'client.agentVariations.removeMemoryLayer',
+    fullyQualifiedName: 'agentVariations.removeMemoryLayer',
+    httpMethod: 'delete',
+    httpPath: '/v1/agent_variations/{agentVariationId}/memory_layers/{id}',
+  },
+  {
+    clientCallName: 'client.agentVariations.updateMemoryLayer',
+    fullyQualifiedName: 'agentVariations.updateMemoryLayer',
+    httpMethod: 'patch',
+    httpPath: '/v1/agent_variations/{agentVariationId}/memory_layers/{id}',
   },
   {
     clientCallName: 'client.objectives.create',

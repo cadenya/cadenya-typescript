@@ -15,6 +15,8 @@ export {
   type AssistantToolCall,
   type CallableTool,
   type ContextWindowCompacted,
+  type MemoryRead,
+  type MemoryReference,
   type Objective,
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
