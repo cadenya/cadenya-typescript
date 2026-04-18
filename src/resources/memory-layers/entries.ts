@@ -126,8 +126,6 @@ export interface MemoryEntryCreateSpec {
 
   description?: string;
 
-  title?: string;
-
   /**
    * ID of a COMPLETE Upload. The server reads the object from storage, copies its
    * bytes into the entry, and marks the upload consumed.
@@ -144,7 +142,7 @@ export interface MemoryEntryDetail {
   /**
    * The resolved body of the entry. For entries created or updated via an upload_id,
    * this is the ingested content, not the original upload handle. May be empty; an
-   * entry with only a key, title, and description is valid (e.g., a stub skill being
+   * entry with only a key and description is valid (e.g., a stub skill being
    * drafted, or an entry where the frontmatter alone is the payload).
    */
   content: string;
@@ -211,12 +209,6 @@ export interface MemoryEntrySpec {
    * advertise frontmatter.
    */
   description?: string;
-
-  /**
-   * Short human/LLM-readable title shown in the frontmatter manifest for skills
-   * entries. Ignored for layer types that do not advertise frontmatter.
-   */
-  title?: string;
 }
 
 /**
@@ -231,8 +223,6 @@ export interface MemoryEntryUpdateSpec {
   description?: string;
 
   key?: string;
-
-  title?: string;
 
   uploadId?: string;
 }

@@ -35,7 +35,6 @@ describe('resource entries', () => {
         key: 'key',
         content: 'content',
         description: 'description',
-        title: 'title',
         uploadId: 'uploadId',
       },
     });
@@ -83,7 +82,6 @@ describe('resource entries', () => {
         content: 'content',
         description: 'description',
         key: 'key',
-        title: 'title',
         uploadId: 'uploadId',
       },
       updateMask: 'updateMask',
