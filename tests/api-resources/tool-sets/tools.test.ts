@@ -39,7 +39,7 @@ describe('resource tools', () => {
       spec: {
         config: {
           http: {
-            requestMethod: 'GET',
+            requestMethod: 'HTTP_METHOD_UNSPECIFIED',
             headers: { foo: 'string' },
             path: 'path',
             query: 'query',
@@ -102,7 +102,7 @@ describe('resource tools', () => {
       spec: {
         config: {
           http: {
-            requestMethod: 'GET',
+            requestMethod: 'HTTP_METHOD_UNSPECIFIED',
             headers: { foo: 'string' },
             path: 'path',
             query: 'query',
