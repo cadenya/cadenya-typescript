@@ -486,14 +486,16 @@ export interface VariationCreateParams {
 
 export interface VariationRetrieveParams {
   /**
-   * Agent ID (from path)
+   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 }
 
 export interface VariationUpdateParams {
   /**
-   * Path param: Agent ID (from path)
+   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 
@@ -531,14 +533,16 @@ export interface VariationListParams extends CursorPaginationParams {
 
 export interface VariationDeleteParams {
   /**
-   * Agent ID (from path)
+   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 }
 
 export interface VariationAddAssignmentParams {
   /**
-   * Path param
+   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 
@@ -560,12 +564,14 @@ export interface VariationAddAssignmentParams {
 
 export interface VariationAddMemoryLayerParams {
   /**
-   * Path param
+   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 
   /**
-   * Body param: Layer to attach. Accepts memlyr\_… or external_id:… form.
+   * Body param: Layer to attach. Accepts canonical memlyr\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   memoryLayerId?: string;
 
@@ -577,25 +583,43 @@ export interface VariationAddMemoryLayerParams {
 }
 
 export interface VariationRemoveAssignmentParams {
+  /**
+   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   agentId: string;
 
+  /**
+   * Variation ID (from path). Accepts canonical av\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   variationId: string;
 }
 
 export interface VariationRemoveMemoryLayerParams {
+  /**
+   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   agentId: string;
 
+  /**
+   * Variation ID (from path). Accepts canonical av\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   variationId: string;
 }
 
 export interface VariationUpdateMemoryLayerParams {
   /**
-   * Path param
+   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   agentId: string;
 
   /**
-   * Path param
+   * Path param: Variation ID (from path). Accepts canonical av\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   variationId: string;
 
