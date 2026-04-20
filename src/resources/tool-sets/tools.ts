@@ -73,7 +73,7 @@ export class Tools extends APIResource {
 export type ToolsCursorPagination = CursorPagination<Tool>;
 
 export interface ConfigHTTP {
-  requestMethod: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  requestMethod: 'HTTP_METHOD_UNSPECIFIED' | 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
   headers?: { [key: string]: string };
 
