@@ -38,6 +38,7 @@ describe('resource agents', () => {
         status: 'AGENT_STATUS_UNSPECIFIED',
         variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
         description: 'description',
+        inputDataSchema: {},
         webhookEventsUrl: 'webhookEventsUrl',
       },
       defaultVariation: {
@@ -57,11 +58,12 @@ describe('resource agents', () => {
           enableEpisodicMemory: true,
           episodicMemoryTtl: 0,
           modelConfig: { modelId: 'modelId', temperature: 0 },
-          prompt: 'prompt',
-          toolSelection: {
-            assignedTools: { allowDiscovery: true },
-            autoDiscovery: { hints: ['string'], maxTools: 0 },
+          progressiveDiscovery: {
+            hints: ['string'],
+            maxTools: 0,
+            rerankThreshold: 0,
           },
+          prompt: 'prompt',
           weight: 0,
         },
       },

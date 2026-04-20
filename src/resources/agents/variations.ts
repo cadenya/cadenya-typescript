@@ -266,14 +266,18 @@ export interface AgentVariationSpec {
   modelConfig?: AgentVariationSpecModelConfig;
 
   /**
+   * ProgressiveDiscovery is used to indicate that the agent should automatically
+   * discover tools that are not explicitly assigned to it. Max tools is the maximum
+   * number of tools that can be discovered per search. Hints are optional hints for
+   * tool search. These are used in conjunction with the context-aware tool search
+   * and can help select the best tools for the task.
+   */
+  progressiveDiscovery?: AgentVariationSpec.ProgressiveDiscovery;
+
+  /**
    * The system prompt for this variation
    */
   prompt?: string;
-
-  /**
-   * Tool selection strategy
-   */
-  toolSelection?: AgentVariationSpecToolSelection;
 
   /**
    * Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).
@@ -282,6 +286,30 @@ export interface AgentVariationSpec {
    * on CreateObjectiveRequest.
    */
   weight?: number;
+}
+
+export namespace AgentVariationSpec {
+  /**
+   * ProgressiveDiscovery is used to indicate that the agent should automatically
+   * discover tools that are not explicitly assigned to it. Max tools is the maximum
+   * number of tools that can be discovered per search. Hints are optional hints for
+   * tool search. These are used in conjunction with the context-aware tool search
+   * and can help select the best tools for the task.
+   */
+  export interface ProgressiveDiscovery {
+    hints?: Array<string>;
+
+    maxTools?: number;
+
+    /**
+     * Rerank Threshold is an optional value that instructs whether or not to run a
+     * search result through a embedding/reranker process which can improve performance
+     * and reduce context bloat when tools reach the configured threshold. If a tool
+     * match must exceed 0.8, for example, the tool very closely match the query the
+     * tool search performed.
+     */
+    rerankThreshold?: number;
+  }
 }
 
 /**
@@ -337,24 +365,6 @@ export interface AgentVariationSpecModelConfig {
   temperature?: number;
 }
 
-export interface AgentVariationSpecToolSelection {
-  /**
-   * AssignedTools is used to indicate that the agent should only use the tools/tool
-   * sets that are explicitly assigned to it. Allow discovery is used when the agent
-   * thinks it needs to discover more tools.
-   */
-  assignedTools?: ToolSelectionAssignedTools;
-
-  /**
-   * AutoDiscovery is used to indicate that the agent should automatically discover
-   * tools that are not explicitly assigned to it. Max tools is the maximum number of
-   * tools that can be discovered. Hints are optional hints for tool search. These
-   * are used in conjunction with the context-aware tool search and can help select
-   * the best tools for the task.
-   */
-  autoDiscovery?: ToolSelectionAutoDiscovery;
-}
-
 /**
  * SummarizationStrategy configures LLM-powered summarization of older conversation
  * turns.
@@ -378,28 +388,6 @@ export interface CompactionConfigToolResultClearingStrategy {
    * tool call message (function name, arguments). Default: 2
    */
   preserveRecentResults?: number;
-}
-
-/**
- * AssignedTools is used to indicate that the agent should only use the tools/tool
- * sets that are explicitly assigned to it. Allow discovery is used when the agent
- * thinks it needs to discover more tools.
- */
-export interface ToolSelectionAssignedTools {
-  allowDiscovery?: boolean;
-}
-
-/**
- * AutoDiscovery is used to indicate that the agent should automatically discover
- * tools that are not explicitly assigned to it. Max tools is the maximum number of
- * tools that can be discovered. Hints are optional hints for tool search. These
- * are used in conjunction with the context-aware tool search and can help select
- * the best tools for the task.
- */
-export interface ToolSelectionAutoDiscovery {
-  hints?: Array<string>;
-
-  maxTools?: number;
 }
 
 /**
@@ -625,11 +613,8 @@ export declare namespace Variations {
     type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
-    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type VariationAssignment as VariationAssignment,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,

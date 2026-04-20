@@ -63,11 +63,8 @@ Types:
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecCompactionConfig</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
-- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
-- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
-- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
 - <code><a href="./src/resources/agents/variations.ts">VariationAssignment</a></code>
 - <code><a href="./src/resources/agents/variations.ts">VariationMemoryLayerAssignment</a></code>
 
