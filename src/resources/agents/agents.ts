@@ -11,12 +11,9 @@ import {
   AgentVariationSpecCompactionConfig,
   AgentVariationSpecConstraints,
   AgentVariationSpecModelConfig,
-  AgentVariationSpecToolSelection,
   AgentVariationsCursorPagination,
   CompactionConfigSummarizationStrategy,
   CompactionConfigToolResultClearingStrategy,
-  ToolSelectionAssignedTools,
-  ToolSelectionAutoDiscovery,
   VariationAddAssignmentParams,
   VariationAddMemoryLayerParams,
   VariationAssignment,
@@ -167,6 +164,15 @@ export interface AgentSpec {
   description?: string;
 
   /**
+   * InputDataSchema is used for enforcing a data input when objectives are created.
+   * This is valuable when using liquid formatting in agent variation prompts. Input
+   * data schema is also valuable when using an agent as a sub-agent, as the schema
+   * is used as the tool's input parameter schema. If omitted, the sub-agent schema
+   * will be loaded with a simple "prompt" free text string as its schema.
+   */
+  inputDataSchema?: unknown;
+
+  /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
   webhookEventsUrl?: string;
@@ -283,11 +289,8 @@ export declare namespace Agents {
     type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
-    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
     type VariationAssignment as VariationAssignment,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
