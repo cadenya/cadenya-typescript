@@ -1,23 +1,19 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../core/resource';
-import * as AccountAPI from './account';
-import * as Shared from './shared';
-import { APIPromise } from '../core/api-promise';
-import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
-import { buildHeaders } from '../internal/headers';
-import { RequestOptions } from '../internal/request-options';
-import { path } from '../internal/utils/path';
+import { APIResource } from '../../core/resource';
+import * as AccountAPI from '../account';
+import * as Shared from '../shared';
+import { APIPromise } from '../../core/api-promise';
+import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
-export class AgentVariations extends APIResource {
+export class Variations extends APIResource {
   /**
    * Creates a new variation for an agent
    */
-  create(
-    agentID: string,
-    body: AgentVariationCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<AgentVariation> {
+  create(agentID: string, body: VariationCreateParams, options?: RequestOptions): APIPromise<AgentVariation> {
     return this._client.post(path`/v1/agents/${agentID}/variations`, { body, ...options });
   }
 
@@ -26,7 +22,7 @@ export class AgentVariations extends APIResource {
    */
   retrieve(
     id: string,
-    params: AgentVariationRetrieveParams,
+    params: VariationRetrieveParams,
     options?: RequestOptions,
   ): APIPromise<AgentVariation> {
     const { agentId } = params;
@@ -36,11 +32,7 @@ export class AgentVariations extends APIResource {
   /**
    * Updates a variation for an agent
    */
-  update(
-    id: string,
-    params: AgentVariationUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<AgentVariation> {
+  update(id: string, params: VariationUpdateParams, options?: RequestOptions): APIPromise<AgentVariation> {
     const { agentId, ...body } = params;
     return this._client.patch(path`/v1/agents/${agentId}/variations/${id}`, { body, ...options });
   }
@@ -50,7 +42,7 @@ export class AgentVariations extends APIResource {
    */
   list(
     agentID: string,
-    query: AgentVariationListParams | null | undefined = {},
+    query: VariationListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentVariationsCursorPagination, AgentVariation> {
     return this._client.getAPIList(path`/v1/agents/${agentID}/variations`, CursorPagination<AgentVariation>, {
@@ -62,7 +54,7 @@ export class AgentVariations extends APIResource {
   /**
    * Deletes a variation from an agent
    */
-  delete(id: string, params: AgentVariationDeleteParams, options?: RequestOptions): APIPromise<void> {
+  delete(id: string, params: VariationDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { agentId } = params;
     return this._client.delete(path`/v1/agents/${agentId}/variations/${id}`, {
       ...options,
@@ -75,11 +67,12 @@ export class AgentVariations extends APIResource {
    * must be set.
    */
   addAssignment(
-    agentVariationID: string,
-    body: AgentVariationAddAssignmentParams,
+    variationID: string,
+    params: VariationAddAssignmentParams,
     options?: RequestOptions,
   ): APIPromise<VariationAssignment> {
-    return this._client.post(path`/v1/agent_variations/${agentVariationID}/assignments`, {
+    const { agentId, ...body } = params;
+    return this._client.post(path`/v1/agents/${agentId}/variations/${variationID}/assignments`, {
       body,
       ...options,
     });
@@ -90,11 +83,12 @@ export class AgentVariations extends APIResource {
    * baseline memory stack.
    */
   addMemoryLayer(
-    agentVariationID: string,
-    body: AgentVariationAddMemoryLayerParams,
+    variationID: string,
+    params: VariationAddMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    return this._client.post(path`/v1/agent_variations/${agentVariationID}/memory_layers`, {
+    const { agentId, ...body } = params;
+    return this._client.post(path`/v1/agents/${agentId}/variations/${variationID}/memory_layer_assignments`, {
       body,
       ...options,
     });
@@ -106,11 +100,11 @@ export class AgentVariations extends APIResource {
    */
   removeAssignment(
     id: string,
-    params: AgentVariationRemoveAssignmentParams,
+    params: VariationRemoveAssignmentParams,
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { agentVariationId } = params;
-    return this._client.delete(path`/v1/agent_variations/${agentVariationId}/assignments/${id}`, {
+    const { agentId, variationId } = params;
+    return this._client.delete(path`/v1/agents/${agentId}/variations/${variationId}/assignments/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -122,14 +116,14 @@ export class AgentVariations extends APIResource {
    */
   removeMemoryLayer(
     id: string,
-    params: AgentVariationRemoveMemoryLayerParams,
+    params: VariationRemoveMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { agentVariationId } = params;
-    return this._client.delete(path`/v1/agent_variations/${agentVariationId}/memory_layers/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { agentId, variationId } = params;
+    return this._client.delete(
+      path`/v1/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
+    );
   }
 
   /**
@@ -137,14 +131,14 @@ export class AgentVariations extends APIResource {
    */
   updateMemoryLayer(
     id: string,
-    params: AgentVariationUpdateMemoryLayerParams,
+    params: VariationUpdateMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    const { agentVariationId, ...body } = params;
-    return this._client.patch(path`/v1/agent_variations/${agentVariationId}/memory_layers/${id}`, {
-      body,
-      ...options,
-    });
+    const { agentId, variationId, ...body } = params;
+    return this._client.patch(
+      path`/v1/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      { body, ...options },
+    );
   }
 }
 
@@ -412,7 +406,8 @@ export interface ToolSelectionAutoDiscovery {
  * VariationAssignment is a read-only reference to a single tool, tool set, or
  * sub-agent attached to a variation. Clients read the full set of assignments via
  * `AgentVariationInfo.assignments`; mutations go through the dedicated add/remove
- * assignment endpoints under /v1/agent_variations/{id}/assignments.
+ * assignment endpoints under
+ * /v1/agents/{agent_id}/variations/{variation_id}/assignments.
  *
  * The `id` identifies the assignment row itself (not the referenced resource) and
  * is the handle used to remove the assignment. It is returned by the add endpoint
@@ -487,7 +482,7 @@ export interface VariationMemoryLayerAssignment {
   position?: number;
 }
 
-export interface AgentVariationCreateParams {
+export interface VariationCreateParams {
   /**
    * CreateResourceMetadata contains the user-provided fields for creating a
    * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
@@ -501,14 +496,14 @@ export interface AgentVariationCreateParams {
   spec: AgentVariationSpec;
 }
 
-export interface AgentVariationRetrieveParams {
+export interface VariationRetrieveParams {
   /**
    * Agent ID (from path)
    */
   agentId: string;
 }
 
-export interface AgentVariationUpdateParams {
+export interface VariationUpdateParams {
   /**
    * Path param: Agent ID (from path)
    */
@@ -534,7 +529,7 @@ export interface AgentVariationUpdateParams {
   updateMask?: string;
 }
 
-export interface AgentVariationListParams extends CursorPaginationParams {
+export interface VariationListParams extends CursorPaginationParams {
   /**
    * When set to true you may use more of your alloted API rate-limit
    */
@@ -546,46 +541,75 @@ export interface AgentVariationListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
-export interface AgentVariationDeleteParams {
+export interface VariationDeleteParams {
   /**
    * Agent ID (from path)
    */
   agentId: string;
 }
 
-export interface AgentVariationAddAssignmentParams {
+export interface VariationAddAssignmentParams {
+  /**
+   * Path param
+   */
+  agentId: string;
+
+  /**
+   * Body param
+   */
   subAgentId?: string;
 
+  /**
+   * Body param
+   */
   toolId?: string;
 
+  /**
+   * Body param
+   */
   toolSetId?: string;
 }
 
-export interface AgentVariationAddMemoryLayerParams {
+export interface VariationAddMemoryLayerParams {
   /**
-   * Layer to attach. Accepts memlyr\_… or external_id:… form.
+   * Path param
+   */
+  agentId: string;
+
+  /**
+   * Body param: Layer to attach. Accepts memlyr\_… or external_id:… form.
    */
   memoryLayerId?: string;
 
   /**
-   * Position in the stack. If omitted, server appends (max existing position + 1).
+   * Body param: Position in the stack. If omitted, server appends (max existing
+   * position + 1).
    */
   position?: number;
 }
 
-export interface AgentVariationRemoveAssignmentParams {
-  agentVariationId: string;
+export interface VariationRemoveAssignmentParams {
+  agentId: string;
+
+  variationId: string;
 }
 
-export interface AgentVariationRemoveMemoryLayerParams {
-  agentVariationId: string;
+export interface VariationRemoveMemoryLayerParams {
+  agentId: string;
+
+  variationId: string;
 }
 
-export interface AgentVariationUpdateMemoryLayerParams {
+export interface VariationUpdateMemoryLayerParams {
   /**
    * Path param
    */
-  agentVariationId: string;
+  agentId: string;
+
+  /**
+   * Path param
+   */
+  variationId: string;
 
   /**
    * Body param: New position. Only field currently updatable on an assignment.
@@ -593,7 +617,7 @@ export interface AgentVariationUpdateMemoryLayerParams {
   position?: number;
 }
 
-export declare namespace AgentVariations {
+export declare namespace Variations {
   export {
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
@@ -609,15 +633,15 @@ export declare namespace AgentVariations {
     type VariationAssignment as VariationAssignment,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
-    type AgentVariationCreateParams as AgentVariationCreateParams,
-    type AgentVariationRetrieveParams as AgentVariationRetrieveParams,
-    type AgentVariationUpdateParams as AgentVariationUpdateParams,
-    type AgentVariationListParams as AgentVariationListParams,
-    type AgentVariationDeleteParams as AgentVariationDeleteParams,
-    type AgentVariationAddAssignmentParams as AgentVariationAddAssignmentParams,
-    type AgentVariationAddMemoryLayerParams as AgentVariationAddMemoryLayerParams,
-    type AgentVariationRemoveAssignmentParams as AgentVariationRemoveAssignmentParams,
-    type AgentVariationRemoveMemoryLayerParams as AgentVariationRemoveMemoryLayerParams,
-    type AgentVariationUpdateMemoryLayerParams as AgentVariationUpdateMemoryLayerParams,
+    type VariationCreateParams as VariationCreateParams,
+    type VariationRetrieveParams as VariationRetrieveParams,
+    type VariationUpdateParams as VariationUpdateParams,
+    type VariationListParams as VariationListParams,
+    type VariationDeleteParams as VariationDeleteParams,
+    type VariationAddAssignmentParams as VariationAddAssignmentParams,
+    type VariationAddMemoryLayerParams as VariationAddMemoryLayerParams,
+    type VariationRemoveAssignmentParams as VariationRemoveAssignmentParams,
+    type VariationRemoveMemoryLayerParams as VariationRemoveMemoryLayerParams,
+    type VariationUpdateMemoryLayerParams as VariationUpdateMemoryLayerParams,
   };
 }

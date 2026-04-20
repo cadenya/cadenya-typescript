@@ -2,8 +2,35 @@
 
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
-import * as AgentVariationsAPI from '../agent-variations';
 import * as Shared from '../shared';
+import * as VariationsAPI from './variations';
+import {
+  AgentVariation,
+  AgentVariationInfo,
+  AgentVariationSpec,
+  AgentVariationSpecCompactionConfig,
+  AgentVariationSpecConstraints,
+  AgentVariationSpecModelConfig,
+  AgentVariationSpecToolSelection,
+  AgentVariationsCursorPagination,
+  CompactionConfigSummarizationStrategy,
+  CompactionConfigToolResultClearingStrategy,
+  ToolSelectionAssignedTools,
+  ToolSelectionAutoDiscovery,
+  VariationAddAssignmentParams,
+  VariationAddMemoryLayerParams,
+  VariationAssignment,
+  VariationCreateParams,
+  VariationDeleteParams,
+  VariationListParams,
+  VariationMemoryLayerAssignment,
+  VariationRemoveAssignmentParams,
+  VariationRemoveMemoryLayerParams,
+  VariationRetrieveParams,
+  VariationUpdateMemoryLayerParams,
+  VariationUpdateParams,
+  Variations,
+} from './variations';
 import * as WebhookDeliveriesAPI from './webhook-deliveries';
 import {
   WebhookDeliveries,
@@ -30,6 +57,7 @@ export class Agents extends APIResource {
   webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(
     this._client,
   );
+  variations: VariationsAPI.Variations = new VariationsAPI.Variations(this._client);
 
   /**
    * Creates a new agent in the workspace
@@ -184,7 +212,7 @@ export namespace AgentCreateParams {
     /**
      * AgentVariationSpec defines the operational configuration for a variation
      */
-    spec: AgentVariationsAPI.AgentVariationSpec;
+    spec: VariationsAPI.AgentVariationSpec;
   }
 }
 
@@ -225,6 +253,7 @@ export interface AgentListParams extends CursorPaginationParams {
 }
 
 Agents.WebhookDeliveries = WebhookDeliveries;
+Agents.Variations = Variations;
 
 export declare namespace Agents {
   export {
@@ -244,5 +273,33 @@ export declare namespace Agents {
     type WebhookDeliveryData as WebhookDeliveryData,
     type WebhookDeliveriesCursorPagination as WebhookDeliveriesCursorPagination,
     type WebhookDeliveryListParams as WebhookDeliveryListParams,
+  };
+
+  export {
+    Variations as Variations,
+    type AgentVariation as AgentVariation,
+    type AgentVariationInfo as AgentVariationInfo,
+    type AgentVariationSpec as AgentVariationSpec,
+    type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
+    type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
+    type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
+    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
+    type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
+    type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
+    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
+    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
+    type VariationAssignment as VariationAssignment,
+    type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
+    type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
+    type VariationCreateParams as VariationCreateParams,
+    type VariationRetrieveParams as VariationRetrieveParams,
+    type VariationUpdateParams as VariationUpdateParams,
+    type VariationListParams as VariationListParams,
+    type VariationDeleteParams as VariationDeleteParams,
+    type VariationAddAssignmentParams as VariationAddAssignmentParams,
+    type VariationAddMemoryLayerParams as VariationAddMemoryLayerParams,
+    type VariationRemoveAssignmentParams as VariationRemoveAssignmentParams,
+    type VariationRemoveMemoryLayerParams as VariationRemoveMemoryLayerParams,
+    type VariationUpdateMemoryLayerParams as VariationUpdateMemoryLayerParams,
   };
 }
