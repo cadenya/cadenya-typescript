@@ -346,8 +346,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'List variations',
     description: 'Lists all variations for an agent',
-    stainlessPath: '(resource) agent_variations > (method) list',
-    qualified: 'client.agentVariations.list',
+    stainlessPath: '(resource) agents.variations > (method) list',
+    qualified: 'client.agents.variations.list',
     params: [
       'agentId: string;',
       'cursor?: string;',
@@ -358,25 +358,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }',
     markdown:
-      "## list\n\n`client.agentVariations.list(agentId: string, cursor?: string, includeInfo?: boolean, limit?: number, sortOrder?: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**get** `/v1/agents/{agentId}/variations`\n\nLists all variations for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `includeInfo?: boolean`\n  When set to true you may use more of your alloted API rate-limit\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const agentVariation of client.agentVariations.list('agentId')) {\n  console.log(agentVariation);\n}\n```",
+      "## list\n\n`client.agents.variations.list(agentId: string, cursor?: string, includeInfo?: boolean, limit?: number, sortOrder?: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**get** `/v1/agents/{agentId}/variations`\n\nLists all variations for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `includeInfo?: boolean`\n  When set to true you may use more of your alloted API rate-limit\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const agentVariation of client.agents.variations.list('agentId')) {\n  console.log(agentVariation);\n}\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations list',
-        example: "cadenya agent-variations list \\\n  --api-key 'My API Key' \\\n  --agent-id agentId",
+        method: 'variations list',
+        example: "cadenya agents:variations list \\\n  --api-key 'My API Key' \\\n  --agent-id agentId",
       },
       go: {
-        method: 'client.AgentVariations.List',
+        method: 'client.Agents.Variations.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AgentVariations.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Variations.List(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       http: {
         example:
           'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
       typescript: {
-        method: 'client.agentVariations.list',
+        method: 'client.agents.variations.list',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentVariation of client.agentVariations.list('agentId')) {\n  console.log(agentVariation.metadata);\n}",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentVariation of client.agents.variations.list('agentId')) {\n  console.log(agentVariation.metadata);\n}",
       },
     },
   },
@@ -386,8 +386,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Create a new variation',
     description: 'Creates a new variation for an agent',
-    stainlessPath: '(resource) agent_variations > (method) create',
-    qualified: 'client.agentVariations.create',
+    stainlessPath: '(resource) agents.variations > (method) create',
+    qualified: 'client.agents.variations.create',
     params: [
       'agentId: string;',
       'metadata: { name: string; externalId?: string; labels?: object; };',
@@ -396,26 +396,26 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }',
     markdown:
-      '## create\n\n`client.agentVariations.create(agentId: string, metadata: { name: string; externalId?: string; labels?: object; }, spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**post** `/v1/agents/{agentId}/variations`\n\nCreates a new variation for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  AgentVariationSpec defines the operational configuration for a variation\n  - `compactionConfig?: { summarization?: { instructions?: string; }; toolResultClearing?: { preserveRecentResults?: number; }; triggerThreshold?: number; }`\n    CompactionConfig defines how context window compaction behaves for objectives using this variation.\n  - `constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }`\n    Execution constraints\n  - `description?: string`\n    Human-readable description of what this variation does or when it should be used\n  - `enableEpisodicMemory?: boolean`\n    Enable episodic memory for objectives using this variation.\n When true, the system automatically creates a document namespace for each objective\n using the objective\'s episodic_key as the external_id, allowing the agent to\n store and retrieve documents specific to that episode.\n  - `episodicMemoryTtl?: number`\n    How long episodic memories should be retained.\n After this duration, episodic document namespaces can be automatically cleaned up.\n If not set, episodic memories are retained indefinitely.\n  - `modelConfig?: { modelId?: string; temperature?: number; }`\n    ModelConfig defines the model configuration for a variation\n  - `prompt?: string`\n    The system prompt for this variation\n  - `toolSelection?: { assignedTools?: { allowDiscovery?: boolean; }; autoDiscovery?: { hints?: string[]; maxTools?: number; }; }`\n    Tool selection strategy\n  - `weight?: number`\n    Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).\n Only used when the agent\'s variation_selection_mode is WEIGHTED. A weight of 0 means never auto-selected, but can still be chosen explicitly via variation_id on CreateObjectiveRequest.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agentVariations.create(\'agentId\', {\n  metadata: { name: \'name\' },\n  spec: {},\n});\n\nconsole.log(agentVariation);\n```',
+      '## create\n\n`client.agents.variations.create(agentId: string, metadata: { name: string; externalId?: string; labels?: object; }, spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**post** `/v1/agents/{agentId}/variations`\n\nCreates a new variation for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  AgentVariationSpec defines the operational configuration for a variation\n  - `compactionConfig?: { summarization?: { instructions?: string; }; toolResultClearing?: { preserveRecentResults?: number; }; triggerThreshold?: number; }`\n    CompactionConfig defines how context window compaction behaves for objectives using this variation.\n  - `constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }`\n    Execution constraints\n  - `description?: string`\n    Human-readable description of what this variation does or when it should be used\n  - `enableEpisodicMemory?: boolean`\n    Enable episodic memory for objectives using this variation.\n When true, the system automatically creates a document namespace for each objective\n using the objective\'s episodic_key as the external_id, allowing the agent to\n store and retrieve documents specific to that episode.\n  - `episodicMemoryTtl?: number`\n    How long episodic memories should be retained.\n After this duration, episodic document namespaces can be automatically cleaned up.\n If not set, episodic memories are retained indefinitely.\n  - `modelConfig?: { modelId?: string; temperature?: number; }`\n    ModelConfig defines the model configuration for a variation\n  - `prompt?: string`\n    The system prompt for this variation\n  - `toolSelection?: { assignedTools?: { allowDiscovery?: boolean; }; autoDiscovery?: { hints?: string[]; maxTools?: number; }; }`\n    Tool selection strategy\n  - `weight?: number`\n    Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).\n Only used when the agent\'s variation_selection_mode is WEIGHTED. A weight of 0 means never auto-selected, but can still be chosen explicitly via variation_id on CreateObjectiveRequest.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agents.variations.create(\'agentId\', {\n  metadata: { name: \'name\' },\n  spec: {},\n});\n\nconsole.log(agentVariation);\n```',
     perLanguage: {
       cli: {
-        method: 'agent_variations create',
+        method: 'variations create',
         example:
-          "cadenya agent-variations create \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --metadata '{name: name}' \\\n  --spec '{}'",
+          "cadenya agents:variations create \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --metadata '{name: name}' \\\n  --spec '{}'",
       },
       go: {
-        method: 'client.AgentVariations.New',
+        method: 'client.Agents.Variations.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.AgentVariations.New(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentVariationSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.New(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tcadenya.AgentVariationNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentVariationSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
           'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {}\n        }\'',
       },
       typescript: {
-        method: 'client.agentVariations.create',
+        method: 'client.agents.variations.create',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agentVariations.create('agentId', {\n  metadata: { name: 'name' },\n  spec: {},\n});\n\nconsole.log(agentVariation.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agents.variations.create('agentId', {\n  metadata: { name: 'name' },\n  spec: {},\n});\n\nconsole.log(agentVariation.metadata);",
       },
     },
   },
@@ -425,32 +425,32 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'Get a variation by ID',
     description: 'Retrieves a variation by ID from an agent',
-    stainlessPath: '(resource) agent_variations > (method) retrieve',
-    qualified: 'client.agentVariations.retrieve',
+    stainlessPath: '(resource) agents.variations > (method) retrieve',
+    qualified: 'client.agents.variations.retrieve',
     params: ['agentId: string;', 'id: string;'],
     response:
       '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }',
     markdown:
-      "## retrieve\n\n`client.agentVariations.retrieve(agentId: string, id: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**get** `/v1/agents/{agentId}/variations/{id}`\n\nRetrieves a variation by ID from an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agentVariations.retrieve('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation);\n```",
+      "## retrieve\n\n`client.agents.variations.retrieve(agentId: string, id: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**get** `/v1/agents/{agentId}/variations/{id}`\n\nRetrieves a variation by ID from an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agents.variations.retrieve('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation);\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations retrieve',
+        method: 'variations retrieve',
         example:
-          "cadenya agent-variations retrieve \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
+          "cadenya agents:variations retrieve \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.Get',
+        method: 'client.Agents.Variations.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.AgentVariations.Get(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Get(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
           'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
       typescript: {
-        method: 'client.agentVariations.retrieve',
+        method: 'client.agents.variations.retrieve',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agentVariations.retrieve('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agents.variations.retrieve('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation.metadata);",
       },
     },
   },
@@ -460,30 +460,30 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'delete',
     summary: 'Delete a variation',
     description: 'Deletes a variation from an agent',
-    stainlessPath: '(resource) agent_variations > (method) delete',
-    qualified: 'client.agentVariations.delete',
+    stainlessPath: '(resource) agents.variations > (method) delete',
+    qualified: 'client.agents.variations.delete',
     params: ['agentId: string;', 'id: string;'],
     markdown:
-      "## delete\n\n`client.agentVariations.delete(agentId: string, id: string): void`\n\n**delete** `/v1/agents/{agentId}/variations/{id}`\n\nDeletes a variation from an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agentVariations.delete('id', { agentId: 'agentId' })\n```",
+      "## delete\n\n`client.agents.variations.delete(agentId: string, id: string): void`\n\n**delete** `/v1/agents/{agentId}/variations/{id}`\n\nDeletes a variation from an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agents.variations.delete('id', { agentId: 'agentId' })\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations delete',
+        method: 'variations delete',
         example:
-          "cadenya agent-variations delete \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
+          "cadenya agents:variations delete \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.Delete',
+        method: 'client.Agents.Variations.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.AgentVariations.Delete(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.Delete(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
           'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
       typescript: {
-        method: 'client.agentVariations.delete',
+        method: 'client.agents.variations.delete',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agentVariations.delete('id', { agentId: 'agentId' });",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agents.variations.delete('id', { agentId: 'agentId' });",
       },
     },
   },
@@ -493,8 +493,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'patch',
     summary: 'Update a variation',
     description: 'Updates a variation for an agent',
-    stainlessPath: '(resource) agent_variations > (method) update',
-    qualified: 'client.agentVariations.update',
+    stainlessPath: '(resource) agents.variations > (method) update',
+    qualified: 'client.agents.variations.update',
     params: [
       'agentId: string;',
       'id: string;',
@@ -505,197 +505,203 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }',
     markdown:
-      '## update\n\n`client.agentVariations.update(agentId: string, id: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }, updateMask?: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**patch** `/v1/agents/{agentId}/variations/{id}`\n\nUpdates a variation for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateResourceMetadata contains the user-provided fields for updating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec?: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  AgentVariationSpec defines the operational configuration for a variation\n  - `compactionConfig?: { summarization?: { instructions?: string; }; toolResultClearing?: { preserveRecentResults?: number; }; triggerThreshold?: number; }`\n    CompactionConfig defines how context window compaction behaves for objectives using this variation.\n  - `constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }`\n    Execution constraints\n  - `description?: string`\n    Human-readable description of what this variation does or when it should be used\n  - `enableEpisodicMemory?: boolean`\n    Enable episodic memory for objectives using this variation.\n When true, the system automatically creates a document namespace for each objective\n using the objective\'s episodic_key as the external_id, allowing the agent to\n store and retrieve documents specific to that episode.\n  - `episodicMemoryTtl?: number`\n    How long episodic memories should be retained.\n After this duration, episodic document namespaces can be automatically cleaned up.\n If not set, episodic memories are retained indefinitely.\n  - `modelConfig?: { modelId?: string; temperature?: number; }`\n    ModelConfig defines the model configuration for a variation\n  - `prompt?: string`\n    The system prompt for this variation\n  - `toolSelection?: { assignedTools?: { allowDiscovery?: boolean; }; autoDiscovery?: { hints?: string[]; maxTools?: number; }; }`\n    Tool selection strategy\n  - `weight?: number`\n    Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).\n Only used when the agent\'s variation_selection_mode is WEIGHTED. A weight of 0 means never auto-selected, but can still be chosen explicitly via variation_id on CreateObjectiveRequest.\n\n- `updateMask?: string`\n  Fields to update\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agentVariations.update(\'id\', { agentId: \'agentId\' });\n\nconsole.log(agentVariation);\n```',
+      '## update\n\n`client.agents.variations.update(agentId: string, id: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }, updateMask?: string): { metadata: resource_metadata; spec: agent_variation_spec; info?: agent_variation_info; }`\n\n**patch** `/v1/agents/{agentId}/variations/{id}`\n\nUpdates a variation for an agent\n\n### Parameters\n\n- `agentId: string`\n\n- `id: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateResourceMetadata contains the user-provided fields for updating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec?: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  AgentVariationSpec defines the operational configuration for a variation\n  - `compactionConfig?: { summarization?: { instructions?: string; }; toolResultClearing?: { preserveRecentResults?: number; }; triggerThreshold?: number; }`\n    CompactionConfig defines how context window compaction behaves for objectives using this variation.\n  - `constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }`\n    Execution constraints\n  - `description?: string`\n    Human-readable description of what this variation does or when it should be used\n  - `enableEpisodicMemory?: boolean`\n    Enable episodic memory for objectives using this variation.\n When true, the system automatically creates a document namespace for each objective\n using the objective\'s episodic_key as the external_id, allowing the agent to\n store and retrieve documents specific to that episode.\n  - `episodicMemoryTtl?: number`\n    How long episodic memories should be retained.\n After this duration, episodic document namespaces can be automatically cleaned up.\n If not set, episodic memories are retained indefinitely.\n  - `modelConfig?: { modelId?: string; temperature?: number; }`\n    ModelConfig defines the model configuration for a variation\n  - `prompt?: string`\n    The system prompt for this variation\n  - `toolSelection?: { assignedTools?: { allowDiscovery?: boolean; }; autoDiscovery?: { hints?: string[]; maxTools?: number; }; }`\n    Tool selection strategy\n  - `weight?: number`\n    Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).\n Only used when the agent\'s variation_selection_mode is WEIGHTED. A weight of 0 means never auto-selected, but can still be chosen explicitly via variation_id on CreateObjectiveRequest.\n\n- `updateMask?: string`\n  Fields to update\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; spec: { compactionConfig?: agent_variation_spec_compaction_config; constraints?: agent_variation_spec_constraints; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: agent_variation_spec_model_config; prompt?: string; toolSelection?: agent_variation_spec_tool_selection; weight?: number; }; info?: { assignments?: variation_assignment[]; createdBy?: profile; feedbackCount?: number; memoryLayerAssignments?: variation_memory_layer_assignment[]; memoryLayerCount?: number; model?: resource_metadata; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }; }`\n  AgentVariation resource\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `spec: { compactionConfig?: { summarization?: compaction_config_summarization_strategy; toolResultClearing?: compaction_config_tool_result_clearing_strategy; triggerThreshold?: number; }; constraints?: { maxSubObjectives?: number; maxToolCalls?: number; }; description?: string; enableEpisodicMemory?: boolean; episodicMemoryTtl?: number; modelConfig?: { modelId?: string; temperature?: number; }; prompt?: string; toolSelection?: { assignedTools?: tool_selection_assigned_tools; autoDiscovery?: tool_selection_auto_discovery; }; weight?: number; }`\n  - `info?: { assignments?: { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }[]; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; feedbackCount?: number; memoryLayerAssignments?: { id?: string; memoryLayer?: bare_metadata; position?: number; }[]; memoryLayerCount?: number; model?: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; score?: number; subAgentCount?: number; toolCount?: number; toolSetCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst agentVariation = await client.agents.variations.update(\'id\', { agentId: \'agentId\' });\n\nconsole.log(agentVariation);\n```',
     perLanguage: {
       cli: {
-        method: 'agent_variations update',
+        method: 'variations update',
         example:
-          "cadenya agent-variations update \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
+          "cadenya agents:variations update \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.Update',
+        method: 'client.Agents.Variations.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.AgentVariations.Update(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Update(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
       http: {
         example:
           "curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
       },
       typescript: {
-        method: 'client.agentVariations.update',
+        method: 'client.agents.variations.update',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agentVariations.update('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentVariation = await client.agents.variations.update('id', { agentId: 'agentId' });\n\nconsole.log(agentVariation.metadata);",
       },
     },
   },
   {
     name: 'add_assignment',
-    endpoint: '/v1/agent_variations/{agentVariationId}/assignments',
+    endpoint: '/v1/agents/{agentId}/variations/{variationId}/assignments',
     httpMethod: 'post',
     summary: 'Add an assignment to a variation',
     description: 'Assigns a tool, tool set, or sub-agent to a variation. Exactly one target ID must be set.',
-    stainlessPath: '(resource) agent_variations > (method) add_assignment',
-    qualified: 'client.agentVariations.addAssignment',
-    params: ['agentVariationId: string;', 'subAgentId?: string;', 'toolId?: string;', 'toolSetId?: string;'],
+    stainlessPath: '(resource) agents.variations > (method) add_assignment',
+    qualified: 'client.agents.variations.addAssignment',
+    params: [
+      'agentId: string;',
+      'variationId: string;',
+      'subAgentId?: string;',
+      'toolId?: string;',
+      'toolSetId?: string;',
+    ],
     response:
       '{ id?: string; agent?: { id?: string; name?: string; }; tool?: { id?: string; name?: string; }; toolSet?: { id?: string; name?: string; }; }',
     markdown:
-      "## add_assignment\n\n`client.agentVariations.addAssignment(agentVariationId: string, subAgentId?: string, toolId?: string, toolSetId?: string): { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }`\n\n**post** `/v1/agent_variations/{agentVariationId}/assignments`\n\nAssigns a tool, tool set, or sub-agent to a variation. Exactly one target ID must be set.\n\n### Parameters\n\n- `agentVariationId: string`\n\n- `subAgentId?: string`\n\n- `toolId?: string`\n\n- `toolSetId?: string`\n\n### Returns\n\n- `{ id?: string; agent?: { id?: string; name?: string; }; tool?: { id?: string; name?: string; }; toolSet?: { id?: string; name?: string; }; }`\n  VariationAssignment is a read-only reference to a single tool, tool set, or\n sub-agent attached to a variation. Clients read the full set of assignments\n via `AgentVariationInfo.assignments`; mutations go through the dedicated\n add/remove assignment endpoints under /v1/agent_variations/{id}/assignments.\n\n The `id` identifies the assignment row itself (not the referenced resource)\n and is the handle used to remove the assignment. It is returned by the add\n endpoint and present on every entry in AgentVariationInfo.assignments.\n\n  - `id?: string`\n  - `agent?: { id?: string; name?: string; }`\n  - `tool?: { id?: string; name?: string; }`\n  - `toolSet?: { id?: string; name?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationAssignment = await client.agentVariations.addAssignment('agentVariationId');\n\nconsole.log(variationAssignment);\n```",
+      "## add_assignment\n\n`client.agents.variations.addAssignment(agentId: string, variationId: string, subAgentId?: string, toolId?: string, toolSetId?: string): { id?: string; agent?: bare_metadata; tool?: bare_metadata; toolSet?: bare_metadata; }`\n\n**post** `/v1/agents/{agentId}/variations/{variationId}/assignments`\n\nAssigns a tool, tool set, or sub-agent to a variation. Exactly one target ID must be set.\n\n### Parameters\n\n- `agentId: string`\n\n- `variationId: string`\n\n- `subAgentId?: string`\n\n- `toolId?: string`\n\n- `toolSetId?: string`\n\n### Returns\n\n- `{ id?: string; agent?: { id?: string; name?: string; }; tool?: { id?: string; name?: string; }; toolSet?: { id?: string; name?: string; }; }`\n  VariationAssignment is a read-only reference to a single tool, tool set, or\n sub-agent attached to a variation. Clients read the full set of assignments\n via `AgentVariationInfo.assignments`; mutations go through the dedicated\n add/remove assignment endpoints under\n /v1/agents/{agent_id}/variations/{variation_id}/assignments.\n\n The `id` identifies the assignment row itself (not the referenced resource)\n and is the handle used to remove the assignment. It is returned by the add\n endpoint and present on every entry in AgentVariationInfo.assignments.\n\n  - `id?: string`\n  - `agent?: { id?: string; name?: string; }`\n  - `tool?: { id?: string; name?: string; }`\n  - `toolSet?: { id?: string; name?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationAssignment = await client.agents.variations.addAssignment('variationId', { agentId: 'agentId' });\n\nconsole.log(variationAssignment);\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations add_assignment',
+        method: 'variations add_assignment',
         example:
-          "cadenya agent-variations add-assignment \\\n  --api-key 'My API Key' \\\n  --agent-variation-id agentVariationId",
+          "cadenya agents:variations add-assignment \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --variation-id variationId",
       },
       go: {
-        method: 'client.AgentVariations.AddAssignment',
+        method: 'client.Agents.Variations.AddAssignment',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationAssignment, err := client.AgentVariations.AddAssignment(\n\t\tcontext.TODO(),\n\t\t"agentVariationId",\n\t\tcadenya.AgentVariationAddAssignmentParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationAssignment.ID)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationAssignment, err := client.Agents.Variations.AddAssignment(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"variationId",\n\t\tcadenya.AgentVariationAddAssignmentParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationAssignment.ID)\n}\n',
       },
       http: {
         example:
-          "curl https://api.cadenya.com/v1/agent_variations/$AGENT_VARIATION_ID/assignments \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+          "curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$VARIATION_ID/assignments \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
       },
       typescript: {
-        method: 'client.agentVariations.addAssignment',
+        method: 'client.agents.variations.addAssignment',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationAssignment = await client.agentVariations.addAssignment('agentVariationId');\n\nconsole.log(variationAssignment.id);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationAssignment = await client.agents.variations.addAssignment('variationId', {\n  agentId: 'agentId',\n});\n\nconsole.log(variationAssignment.id);",
       },
     },
   },
   {
     name: 'remove_assignment',
-    endpoint: '/v1/agent_variations/{agentVariationId}/assignments/{id}',
+    endpoint: '/v1/agents/{agentId}/variations/{variationId}/assignments/{id}',
     httpMethod: 'delete',
     summary: 'Remove an assignment from a variation',
     description:
       'Detaches an assignment from a variation, identified by the assignment ID returned when it was added.',
-    stainlessPath: '(resource) agent_variations > (method) remove_assignment',
-    qualified: 'client.agentVariations.removeAssignment',
-    params: ['agentVariationId: string;', 'id: string;'],
+    stainlessPath: '(resource) agents.variations > (method) remove_assignment',
+    qualified: 'client.agents.variations.removeAssignment',
+    params: ['agentId: string;', 'variationId: string;', 'id: string;'],
     markdown:
-      "## remove_assignment\n\n`client.agentVariations.removeAssignment(agentVariationId: string, id: string): void`\n\n**delete** `/v1/agent_variations/{agentVariationId}/assignments/{id}`\n\nDetaches an assignment from a variation, identified by the assignment ID returned when it was added.\n\n### Parameters\n\n- `agentVariationId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agentVariations.removeAssignment('id', { agentVariationId: 'agentVariationId' })\n```",
+      "## remove_assignment\n\n`client.agents.variations.removeAssignment(agentId: string, variationId: string, id: string): void`\n\n**delete** `/v1/agents/{agentId}/variations/{variationId}/assignments/{id}`\n\nDetaches an assignment from a variation, identified by the assignment ID returned when it was added.\n\n### Parameters\n\n- `agentId: string`\n\n- `variationId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agents.variations.removeAssignment('id', { agentId: 'agentId', variationId: 'variationId' })\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations remove_assignment',
+        method: 'variations remove_assignment',
         example:
-          "cadenya agent-variations remove-assignment \\\n  --api-key 'My API Key' \\\n  --agent-variation-id agentVariationId \\\n  --id id",
+          "cadenya agents:variations remove-assignment \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --variation-id variationId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.RemoveAssignment',
+        method: 'client.Agents.Variations.RemoveAssignment',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.AgentVariations.RemoveAssignment(\n\t\tcontext.TODO(),\n\t\t"agentVariationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.RemoveAssignment(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/agent_variations/$AGENT_VARIATION_ID/assignments/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$VARIATION_ID/assignments/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
       typescript: {
-        method: 'client.agentVariations.removeAssignment',
+        method: 'client.agents.variations.removeAssignment',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agentVariations.removeAssignment('id', { agentVariationId: 'agentVariationId' });",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agents.variations.removeAssignment('id', {\n  agentId: 'agentId',\n  variationId: 'variationId',\n});",
       },
     },
   },
   {
     name: 'add_memory_layer',
-    endpoint: '/v1/agent_variations/{agentVariationId}/memory_layers',
+    endpoint: '/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments',
     httpMethod: 'post',
     summary: 'Attach a memory layer to a variation',
     description:
       "Attaches a memory layer to a variation at a given position in the variation's baseline memory stack.",
-    stainlessPath: '(resource) agent_variations > (method) add_memory_layer',
-    qualified: 'client.agentVariations.addMemoryLayer',
-    params: ['agentVariationId: string;', 'memoryLayerId?: string;', 'position?: number;'],
+    stainlessPath: '(resource) agents.variations > (method) add_memory_layer',
+    qualified: 'client.agents.variations.addMemoryLayer',
+    params: ['agentId: string;', 'variationId: string;', 'memoryLayerId?: string;', 'position?: number;'],
     response: '{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }',
     markdown:
-      "## add_memory_layer\n\n`client.agentVariations.addMemoryLayer(agentVariationId: string, memoryLayerId?: string, position?: number): { id?: string; memoryLayer?: bare_metadata; position?: number; }`\n\n**post** `/v1/agent_variations/{agentVariationId}/memory_layers`\n\nAttaches a memory layer to a variation at a given position in the variation's baseline memory stack.\n\n### Parameters\n\n- `agentVariationId: string`\n\n- `memoryLayerId?: string`\n  Layer to attach. Accepts memlyr_… or external_id:… form.\n\n- `position?: number`\n  Position in the stack. If omitted, server appends\n (max existing position + 1).\n\n### Returns\n\n- `{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }`\n  VariationMemoryLayerAssignment attaches a single MemoryLayer to a\n variation at a given position in the variation's baseline memory\n stack. A variation has at most one assignment per memory_layer_id.\n\n Variations only support whole-layer attachments — entry pinning is an\n objective-level capability.\n\n  - `id?: string`\n  - `memoryLayer?: { id?: string; name?: string; }`\n  - `position?: number`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationMemoryLayerAssignment = await client.agentVariations.addMemoryLayer('agentVariationId');\n\nconsole.log(variationMemoryLayerAssignment);\n```",
+      "## add_memory_layer\n\n`client.agents.variations.addMemoryLayer(agentId: string, variationId: string, memoryLayerId?: string, position?: number): { id?: string; memoryLayer?: bare_metadata; position?: number; }`\n\n**post** `/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments`\n\nAttaches a memory layer to a variation at a given position in the variation's baseline memory stack.\n\n### Parameters\n\n- `agentId: string`\n\n- `variationId: string`\n\n- `memoryLayerId?: string`\n  Layer to attach. Accepts memlyr_… or external_id:… form.\n\n- `position?: number`\n  Position in the stack. If omitted, server appends\n (max existing position + 1).\n\n### Returns\n\n- `{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }`\n  VariationMemoryLayerAssignment attaches a single MemoryLayer to a\n variation at a given position in the variation's baseline memory\n stack. A variation has at most one assignment per memory_layer_id.\n\n Variations only support whole-layer attachments — entry pinning is an\n objective-level capability.\n\n  - `id?: string`\n  - `memoryLayer?: { id?: string; name?: string; }`\n  - `position?: number`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationMemoryLayerAssignment = await client.agents.variations.addMemoryLayer('variationId', { agentId: 'agentId' });\n\nconsole.log(variationMemoryLayerAssignment);\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations add_memory_layer',
+        method: 'variations add_memory_layer',
         example:
-          "cadenya agent-variations add-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-variation-id agentVariationId",
+          "cadenya agents:variations add-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --variation-id variationId",
       },
       go: {
-        method: 'client.AgentVariations.AddMemoryLayer',
+        method: 'client.Agents.Variations.AddMemoryLayer',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.AgentVariations.AddMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentVariationId",\n\t\tcadenya.AgentVariationAddMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.Agents.Variations.AddMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"variationId",\n\t\tcadenya.AgentVariationAddMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
       },
       http: {
         example:
-          "curl https://api.cadenya.com/v1/agent_variations/$AGENT_VARIATION_ID/memory_layers \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+          "curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$VARIATION_ID/memory_layer_assignments \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
       },
       typescript: {
-        method: 'client.agentVariations.addMemoryLayer',
+        method: 'client.agents.variations.addMemoryLayer',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationMemoryLayerAssignment = await client.agentVariations.addMemoryLayer(\n  'agentVariationId',\n);\n\nconsole.log(variationMemoryLayerAssignment.id);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationMemoryLayerAssignment = await client.agents.variations.addMemoryLayer(\n  'variationId',\n  { agentId: 'agentId' },\n);\n\nconsole.log(variationMemoryLayerAssignment.id);",
       },
     },
   },
   {
     name: 'update_memory_layer',
-    endpoint: '/v1/agent_variations/{agentVariationId}/memory_layers/{id}',
+    endpoint: '/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}',
     httpMethod: 'patch',
     summary: "Update a variation's memory layer assignment",
     description: 'Updates the position of a memory layer assignment on a variation.',
-    stainlessPath: '(resource) agent_variations > (method) update_memory_layer',
-    qualified: 'client.agentVariations.updateMemoryLayer',
-    params: ['agentVariationId: string;', 'id: string;', 'position?: number;'],
+    stainlessPath: '(resource) agents.variations > (method) update_memory_layer',
+    qualified: 'client.agents.variations.updateMemoryLayer',
+    params: ['agentId: string;', 'variationId: string;', 'id: string;', 'position?: number;'],
     response: '{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }',
     markdown:
-      "## update_memory_layer\n\n`client.agentVariations.updateMemoryLayer(agentVariationId: string, id: string, position?: number): { id?: string; memoryLayer?: bare_metadata; position?: number; }`\n\n**patch** `/v1/agent_variations/{agentVariationId}/memory_layers/{id}`\n\nUpdates the position of a memory layer assignment on a variation.\n\n### Parameters\n\n- `agentVariationId: string`\n\n- `id: string`\n\n- `position?: number`\n  New position. Only field currently updatable on an assignment.\n\n### Returns\n\n- `{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }`\n  VariationMemoryLayerAssignment attaches a single MemoryLayer to a\n variation at a given position in the variation's baseline memory\n stack. A variation has at most one assignment per memory_layer_id.\n\n Variations only support whole-layer attachments — entry pinning is an\n objective-level capability.\n\n  - `id?: string`\n  - `memoryLayer?: { id?: string; name?: string; }`\n  - `position?: number`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationMemoryLayerAssignment = await client.agentVariations.updateMemoryLayer('id', { agentVariationId: 'agentVariationId' });\n\nconsole.log(variationMemoryLayerAssignment);\n```",
+      "## update_memory_layer\n\n`client.agents.variations.updateMemoryLayer(agentId: string, variationId: string, id: string, position?: number): { id?: string; memoryLayer?: bare_metadata; position?: number; }`\n\n**patch** `/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}`\n\nUpdates the position of a memory layer assignment on a variation.\n\n### Parameters\n\n- `agentId: string`\n\n- `variationId: string`\n\n- `id: string`\n\n- `position?: number`\n  New position. Only field currently updatable on an assignment.\n\n### Returns\n\n- `{ id?: string; memoryLayer?: { id?: string; name?: string; }; position?: number; }`\n  VariationMemoryLayerAssignment attaches a single MemoryLayer to a\n variation at a given position in the variation's baseline memory\n stack. A variation has at most one assignment per memory_layer_id.\n\n Variations only support whole-layer attachments — entry pinning is an\n objective-level capability.\n\n  - `id?: string`\n  - `memoryLayer?: { id?: string; name?: string; }`\n  - `position?: number`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst variationMemoryLayerAssignment = await client.agents.variations.updateMemoryLayer('id', { agentId: 'agentId', variationId: 'variationId' });\n\nconsole.log(variationMemoryLayerAssignment);\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations update_memory_layer',
+        method: 'variations update_memory_layer',
         example:
-          "cadenya agent-variations update-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-variation-id agentVariationId \\\n  --id id",
+          "cadenya agents:variations update-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --variation-id variationId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.UpdateMemoryLayer',
+        method: 'client.Agents.Variations.UpdateMemoryLayer',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.AgentVariations.UpdateMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentVariationId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.Agents.Variations.UpdateMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
       },
       http: {
         example:
-          "curl https://api.cadenya.com/v1/agent_variations/$AGENT_VARIATION_ID/memory_layers/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+          "curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$VARIATION_ID/memory_layer_assignments/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
       },
       typescript: {
-        method: 'client.agentVariations.updateMemoryLayer',
+        method: 'client.agents.variations.updateMemoryLayer',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationMemoryLayerAssignment = await client.agentVariations.updateMemoryLayer('id', {\n  agentVariationId: 'agentVariationId',\n});\n\nconsole.log(variationMemoryLayerAssignment.id);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst variationMemoryLayerAssignment = await client.agents.variations.updateMemoryLayer('id', {\n  agentId: 'agentId',\n  variationId: 'variationId',\n});\n\nconsole.log(variationMemoryLayerAssignment.id);",
       },
     },
   },
   {
     name: 'remove_memory_layer',
-    endpoint: '/v1/agent_variations/{agentVariationId}/memory_layers/{id}',
+    endpoint: '/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}',
     httpMethod: 'delete',
     summary: 'Remove a memory layer assignment from a variation',
     description: 'Detaches a memory layer assignment from a variation, identified by the assignment id.',
-    stainlessPath: '(resource) agent_variations > (method) remove_memory_layer',
-    qualified: 'client.agentVariations.removeMemoryLayer',
-    params: ['agentVariationId: string;', 'id: string;'],
+    stainlessPath: '(resource) agents.variations > (method) remove_memory_layer',
+    qualified: 'client.agents.variations.removeMemoryLayer',
+    params: ['agentId: string;', 'variationId: string;', 'id: string;'],
     markdown:
-      "## remove_memory_layer\n\n`client.agentVariations.removeMemoryLayer(agentVariationId: string, id: string): void`\n\n**delete** `/v1/agent_variations/{agentVariationId}/memory_layers/{id}`\n\nDetaches a memory layer assignment from a variation, identified by the assignment id.\n\n### Parameters\n\n- `agentVariationId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agentVariations.removeMemoryLayer('id', { agentVariationId: 'agentVariationId' })\n```",
+      "## remove_memory_layer\n\n`client.agents.variations.removeMemoryLayer(agentId: string, variationId: string, id: string): void`\n\n**delete** `/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}`\n\nDetaches a memory layer assignment from a variation, identified by the assignment id.\n\n### Parameters\n\n- `agentId: string`\n\n- `variationId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.agents.variations.removeMemoryLayer('id', { agentId: 'agentId', variationId: 'variationId' })\n```",
     perLanguage: {
       cli: {
-        method: 'agent_variations remove_memory_layer',
+        method: 'variations remove_memory_layer',
         example:
-          "cadenya agent-variations remove-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-variation-id agentVariationId \\\n  --id id",
+          "cadenya agents:variations remove-memory-layer \\\n  --api-key 'My API Key' \\\n  --agent-id agentId \\\n  --variation-id variationId \\\n  --id id",
       },
       go: {
-        method: 'client.AgentVariations.RemoveMemoryLayer',
+        method: 'client.Agents.Variations.RemoveMemoryLayer',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.AgentVariations.RemoveMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentVariationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.RemoveMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/agent_variations/$AGENT_VARIATION_ID/memory_layers/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/agents/$AGENT_ID/variations/$VARIATION_ID/memory_layer_assignments/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
       typescript: {
-        method: 'client.agentVariations.removeMemoryLayer',
+        method: 'client.agents.variations.removeMemoryLayer',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agentVariations.removeMemoryLayer('id', { agentVariationId: 'agentVariationId' });",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agents.variations.removeMemoryLayer('id', {\n  agentId: 'agentId',\n  variationId: 'variationId',\n});",
       },
     },
   },
