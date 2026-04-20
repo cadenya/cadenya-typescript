@@ -173,12 +173,17 @@ export interface ToolCreateParams {
 }
 
 export interface ToolRetrieveParams {
+  /**
+   * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   toolSetId: string;
 }
 
 export interface ToolUpdateParams {
   /**
-   * Path param
+   * Path param: Tool set ID (from path). Accepts canonical ts\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   toolSetId: string;
 
@@ -219,6 +224,10 @@ export interface ToolListParams extends CursorPaginationParams {
 }
 
 export interface ToolDeleteParams {
+  /**
+   * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
+   * form (see common.proto "Path-parameter ID resolution").
+   */
   toolSetId: string;
 }
 

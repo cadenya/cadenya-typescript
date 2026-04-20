@@ -244,12 +244,17 @@ export interface EntryCreateParams {
 }
 
 export interface EntryRetrieveParams {
+  /**
+   * Memory layer ID (from path). Accepts canonical memlyr\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   */
   memoryLayerId: string;
 }
 
 export interface EntryUpdateParams {
   /**
-   * Path param
+   * Path param: Memory layer ID (from path). Accepts canonical memlyr\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
   memoryLayerId: string;
 
@@ -294,6 +299,10 @@ export interface EntryListParams extends CursorPaginationParams {
 }
 
 export interface EntryDeleteParams {
+  /**
+   * Memory layer ID (from path). Accepts canonical memlyr\_… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   */
   memoryLayerId: string;
 }
 
