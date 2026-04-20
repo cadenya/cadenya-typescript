@@ -1,6 +1,6 @@
 {
   "name": "@cadenya/cadenya",
-  "version": "0.48.0",
+  "version": "0.49.0",
   "description": "The official TypeScript library for the Cadenya API",
   "author": "Cadenya <support@cadenya.com>",
   "types": "dist/index.d.ts",
