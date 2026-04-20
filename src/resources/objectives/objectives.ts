@@ -3,9 +3,9 @@
 import { APIResource } from '../../core/resource';
 import * as ObjectivesAPI from './objectives';
 import * as AccountAPI from '../account';
-import * as AgentVariationsAPI from '../agent-variations';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
+import * as VariationsAPI from '../agents/variations';
 import * as FeedbackAPI from './feedback';
 import {
   Feedback,
@@ -404,7 +404,7 @@ export interface ObjectiveData {
   /**
    * AgentVariation resource
    */
-  variation?: AgentVariationsAPI.AgentVariation;
+  variation?: VariationsAPI.AgentVariation;
 }
 
 export interface ObjectiveDataSecret {
@@ -764,7 +764,7 @@ export interface ObjectiveCompactParams {
    * CompactionConfig defines how context window compaction behaves for objectives
    * using this variation.
    */
-  compactionConfig?: AgentVariationsAPI.AgentVariationSpecCompactionConfig;
+  compactionConfig?: VariationsAPI.AgentVariationSpecCompactionConfig;
 }
 
 export interface ObjectiveContinueParams {

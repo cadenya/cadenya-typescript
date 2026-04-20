@@ -28,33 +28,6 @@ import {
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
-  AgentVariation,
-  AgentVariationAddAssignmentParams,
-  AgentVariationAddMemoryLayerParams,
-  AgentVariationCreateParams,
-  AgentVariationDeleteParams,
-  AgentVariationInfo,
-  AgentVariationListParams,
-  AgentVariationRemoveAssignmentParams,
-  AgentVariationRemoveMemoryLayerParams,
-  AgentVariationRetrieveParams,
-  AgentVariationSpec,
-  AgentVariationSpecCompactionConfig,
-  AgentVariationSpecConstraints,
-  AgentVariationSpecModelConfig,
-  AgentVariationSpecToolSelection,
-  AgentVariationUpdateMemoryLayerParams,
-  AgentVariationUpdateParams,
-  AgentVariations,
-  AgentVariationsCursorPagination,
-  CompactionConfigSummarizationStrategy,
-  CompactionConfigToolResultClearingStrategy,
-  ToolSelectionAssignedTools,
-  ToolSelectionAutoDiscovery,
-  VariationAssignment,
-  VariationMemoryLayerAssignment,
-} from './resources/agent-variations';
-import {
   APIKey,
   APIKeyCreateParams,
   APIKeyInfo,
@@ -938,7 +911,6 @@ export class Cadenya {
    *  Scope: Workspace-level operations
    */
   agents: API.Agents = new API.Agents(this);
-  agentVariations: API.AgentVariations = new API.AgentVariations(this);
   objectives: API.Objectives = new API.Objectives(this);
   /**
    * MemoryService manages memory layers and their entries at the WORKSPACE level.
@@ -1009,7 +981,6 @@ export class Cadenya {
 
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
-Cadenya.AgentVariations = AgentVariations;
 Cadenya.Objectives = Objectives;
 Cadenya.MemoryLayers = MemoryLayers;
 Cadenya.Uploads = UploadsAPIUploads;
@@ -1049,34 +1020,6 @@ export declare namespace Cadenya {
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
-  };
-
-  export {
-    AgentVariations as AgentVariations,
-    type AgentVariation as AgentVariation,
-    type AgentVariationInfo as AgentVariationInfo,
-    type AgentVariationSpec as AgentVariationSpec,
-    type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
-    type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
-    type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
-    type AgentVariationSpecToolSelection as AgentVariationSpecToolSelection,
-    type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
-    type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
-    type ToolSelectionAssignedTools as ToolSelectionAssignedTools,
-    type ToolSelectionAutoDiscovery as ToolSelectionAutoDiscovery,
-    type VariationAssignment as VariationAssignment,
-    type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
-    type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
-    type AgentVariationCreateParams as AgentVariationCreateParams,
-    type AgentVariationRetrieveParams as AgentVariationRetrieveParams,
-    type AgentVariationUpdateParams as AgentVariationUpdateParams,
-    type AgentVariationListParams as AgentVariationListParams,
-    type AgentVariationDeleteParams as AgentVariationDeleteParams,
-    type AgentVariationAddAssignmentParams as AgentVariationAddAssignmentParams,
-    type AgentVariationAddMemoryLayerParams as AgentVariationAddMemoryLayerParams,
-    type AgentVariationRemoveAssignmentParams as AgentVariationRemoveAssignmentParams,
-    type AgentVariationRemoveMemoryLayerParams as AgentVariationRemoveMemoryLayerParams,
-    type AgentVariationUpdateMemoryLayerParams as AgentVariationUpdateMemoryLayerParams,
   };
 
   export {

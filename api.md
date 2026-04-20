@@ -53,36 +53,36 @@ Methods:
 
 - <code title="get /v1/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
 
-# AgentVariations
+## Variations
 
 Types:
 
-- <code><a href="./src/resources/agent-variations.ts">AgentVariation</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationInfo</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpec</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecCompactionConfig</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecConstraints</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecModelConfig</a></code>
-- <code><a href="./src/resources/agent-variations.ts">AgentVariationSpecToolSelection</a></code>
-- <code><a href="./src/resources/agent-variations.ts">CompactionConfigSummarizationStrategy</a></code>
-- <code><a href="./src/resources/agent-variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
-- <code><a href="./src/resources/agent-variations.ts">ToolSelectionAssignedTools</a></code>
-- <code><a href="./src/resources/agent-variations.ts">ToolSelectionAutoDiscovery</a></code>
-- <code><a href="./src/resources/agent-variations.ts">VariationAssignment</a></code>
-- <code><a href="./src/resources/agent-variations.ts">VariationMemoryLayerAssignment</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationInfo</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecCompactionConfig</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecToolSelection</a></code>
+- <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
+- <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAssignedTools</a></code>
+- <code><a href="./src/resources/agents/variations.ts">ToolSelectionAutoDiscovery</a></code>
+- <code><a href="./src/resources/agents/variations.ts">VariationAssignment</a></code>
+- <code><a href="./src/resources/agents/variations.ts">VariationMemoryLayerAssignment</a></code>
 
 Methods:
 
-- <code title="post /v1/agents/{agentId}/variations">client.agentVariations.<a href="./src/resources/agent-variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations">client.agentVariations.<a href="./src/resources/agent-variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">delete</a>(id, { ...params }) -> void</code>
-- <code title="post /v1/agent_variations/{agentVariationId}/assignments">client.agentVariations.<a href="./src/resources/agent-variations.ts">addAssignment</a>(agentVariationID, { ...params }) -> VariationAssignment</code>
-- <code title="post /v1/agent_variations/{agentVariationId}/memory_layers">client.agentVariations.<a href="./src/resources/agent-variations.ts">addMemoryLayer</a>(agentVariationID, { ...params }) -> VariationMemoryLayerAssignment</code>
-- <code title="delete /v1/agent_variations/{agentVariationId}/assignments/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
-- <code title="delete /v1/agent_variations/{agentVariationId}/memory_layers/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
-- <code title="patch /v1/agent_variations/{agentVariationId}/memory_layers/{id}">client.agentVariations.<a href="./src/resources/agent-variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
+- <code title="post /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/agents/{agentId}/variations/{variationId}/assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addAssignment</a>(variationID, { ...params }) -> VariationAssignment</code>
+- <code title="post /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addMemoryLayer</a>(variationID, { ...params }) -> VariationMemoryLayerAssignment</code>
+- <code title="delete /v1/agents/{agentId}/variations/{variationId}/assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
+- <code title="delete /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
+- <code title="patch /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
 
 # Objectives
 
