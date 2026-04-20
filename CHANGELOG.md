@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.0 (2026-04-20)
+
+Full Changelog: [v0.47.0...v0.48.0](https://github.com/cadenya/cadenya-typescript/compare/v0.47.0...v0.48.0)
+
+### Features
+
+* Make agent variations API AIP-122 compliant ([bc8040c](https://github.com/cadenya/cadenya-typescript/commit/bc8040c46009564915f7eeb38ac5bfff93db7903))
+
 ## 0.47.0 (2026-04-18)
 
 Full Changelog: [v0.46.0...v0.47.0](https://github.com/cadenya/cadenya-typescript/compare/v0.46.0...v0.47.0)
