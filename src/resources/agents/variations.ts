@@ -272,7 +272,7 @@ export interface AgentVariationSpec {
    * tool search. These are used in conjunction with the context-aware tool search
    * and can help select the best tools for the task.
    */
-  progressiveDiscovery?: AgentVariationSpec.ProgressiveDiscovery;
+  progressiveDiscovery?: AgentVariationSpecProgressiveDiscovery;
 
   /**
    * The system prompt for this variation
@@ -286,30 +286,6 @@ export interface AgentVariationSpec {
    * on CreateObjectiveRequest.
    */
   weight?: number;
-}
-
-export namespace AgentVariationSpec {
-  /**
-   * ProgressiveDiscovery is used to indicate that the agent should automatically
-   * discover tools that are not explicitly assigned to it. Max tools is the maximum
-   * number of tools that can be discovered per search. Hints are optional hints for
-   * tool search. These are used in conjunction with the context-aware tool search
-   * and can help select the best tools for the task.
-   */
-  export interface ProgressiveDiscovery {
-    hints?: Array<string>;
-
-    maxTools?: number;
-
-    /**
-     * Rerank Threshold is an optional value that instructs whether or not to run a
-     * search result through a embedding/reranker process which can improve performance
-     * and reduce context bloat when tools reach the configured threshold. If a tool
-     * match must exceed 0.8, for example, the tool very closely match the query the
-     * tool search performed.
-     */
-    rerankThreshold?: number;
-  }
 }
 
 /**
@@ -363,6 +339,28 @@ export interface AgentVariationSpecModelConfig {
    * deterministic outputs, higher values increase randomness
    */
   temperature?: number;
+}
+
+/**
+ * ProgressiveDiscovery is used to indicate that the agent should automatically
+ * discover tools that are not explicitly assigned to it. Max tools is the maximum
+ * number of tools that can be discovered per search. Hints are optional hints for
+ * tool search. These are used in conjunction with the context-aware tool search
+ * and can help select the best tools for the task.
+ */
+export interface AgentVariationSpecProgressiveDiscovery {
+  hints?: Array<string>;
+
+  maxTools?: number;
+
+  /**
+   * Rerank Threshold is an optional value that instructs whether or not to run a
+   * search result through a embedding/reranker process which can improve performance
+   * and reduce context bloat when tools reach the configured threshold. If a tool
+   * match must exceed 0.8, for example, the tool very closely match the query the
+   * tool search performed.
+   */
+  rerankThreshold?: number;
 }
 
 /**
@@ -637,6 +635,7 @@ export declare namespace Variations {
     type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
+    type AgentVariationSpecProgressiveDiscovery as AgentVariationSpecProgressiveDiscovery,
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type VariationAssignment as VariationAssignment,

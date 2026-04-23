@@ -42,6 +42,12 @@ Methods:
 - <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsCursorPagination</code>
 - <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
 
+## Feedback
+
+Methods:
+
+- <code title="get /v1/agents/{agentId}/feedback">client.agents.feedback.<a href="./src/resources/agents/feedback.ts">list</a>(agentID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
+
 ## WebhookDeliveries
 
 Types:
@@ -63,6 +69,7 @@ Types:
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecCompactionConfig</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecConstraints</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecModelConfig</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AgentVariationSpecProgressiveDiscovery</a></code>
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">VariationAssignment</a></code>
