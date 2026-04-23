@@ -11,6 +11,7 @@ export {
   type AgentListParams,
   type AgentsCursorPagination,
 } from './agents';
+export { Feedback, type FeedbackListParams } from './feedback';
 export {
   Variations,
   type AgentVariation,
@@ -19,6 +20,7 @@ export {
   type AgentVariationSpecCompactionConfig,
   type AgentVariationSpecConstraints,
   type AgentVariationSpecModelConfig,
+  type AgentVariationSpecProgressiveDiscovery,
   type CompactionConfigSummarizationStrategy,
   type CompactionConfigToolResultClearingStrategy,
   type VariationAssignment,
