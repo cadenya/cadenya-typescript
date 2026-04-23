@@ -3,6 +3,8 @@
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
+import * as FeedbackAPI from './feedback';
+import { Feedback, FeedbackListParams } from './feedback';
 import * as VariationsAPI from './variations';
 import {
   AgentVariation,
@@ -11,6 +13,7 @@ import {
   AgentVariationSpecCompactionConfig,
   AgentVariationSpecConstraints,
   AgentVariationSpecModelConfig,
+  AgentVariationSpecProgressiveDiscovery,
   AgentVariationsCursorPagination,
   CompactionConfigSummarizationStrategy,
   CompactionConfigToolResultClearingStrategy,
@@ -51,6 +54,7 @@ import { path } from '../../internal/utils/path';
  *  Scope: Workspace-level operations
  */
 export class Agents extends APIResource {
+  feedback: FeedbackAPI.Feedback = new FeedbackAPI.Feedback(this._client);
   webhookDeliveries: WebhookDeliveriesAPI.WebhookDeliveries = new WebhookDeliveriesAPI.WebhookDeliveries(
     this._client,
   );
@@ -258,6 +262,7 @@ export interface AgentListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+Agents.Feedback = Feedback;
 Agents.WebhookDeliveries = WebhookDeliveries;
 Agents.Variations = Variations;
 
@@ -272,6 +277,8 @@ export declare namespace Agents {
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
   };
+
+  export { Feedback as Feedback, type FeedbackListParams as FeedbackListParams };
 
   export {
     WebhookDeliveries as WebhookDeliveries,
@@ -289,6 +296,7 @@ export declare namespace Agents {
     type AgentVariationSpecCompactionConfig as AgentVariationSpecCompactionConfig,
     type AgentVariationSpecConstraints as AgentVariationSpecConstraints,
     type AgentVariationSpecModelConfig as AgentVariationSpecModelConfig,
+    type AgentVariationSpecProgressiveDiscovery as AgentVariationSpecProgressiveDiscovery,
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type VariationAssignment as VariationAssignment,

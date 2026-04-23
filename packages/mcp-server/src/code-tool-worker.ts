@@ -115,6 +115,7 @@ const fuse = new Fuse(
     'client.agents.list',
     'client.agents.retrieve',
     'client.agents.update',
+    'client.agents.feedback.list',
     'client.agents.webhookDeliveries.list',
     'client.agents.variations.addAssignment',
     'client.agents.variations.addMemoryLayer',

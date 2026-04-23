@@ -53,6 +53,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/agents/{id}',
   },
   {
+    clientCallName: 'client.agents.feedback.list',
+    fullyQualifiedName: 'agents.feedback.list',
+    httpMethod: 'get',
+    httpPath: '/v1/agents/{agentId}/feedback',
+  },
+  {
     clientCallName: 'client.agents.webhookDeliveries.list',
     fullyQualifiedName: 'agents.webhookDeliveries.list',
     httpMethod: 'get',
