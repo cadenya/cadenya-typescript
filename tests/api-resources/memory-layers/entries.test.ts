@@ -111,6 +111,7 @@ describe('resource entries', () => {
           includeInfo: true,
           limit: 0,
           prefix: 'prefix',
+          query: 'query',
           sortOrder: 'sortOrder',
         },
         { path: '/_stainless_unknown_path' },

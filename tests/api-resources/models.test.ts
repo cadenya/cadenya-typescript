@@ -41,6 +41,7 @@ describe('resource models', () => {
           cursor: 'cursor',
           limit: 0,
           prefix: 'prefix',
+          query: 'query',
           sortOrder: 'sortOrder',
           status: 'MODEL_STATUS_UNSPECIFIED',
         },
