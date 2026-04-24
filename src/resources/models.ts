@@ -100,6 +100,11 @@ export interface ModelListParams extends CursorPaginationParams {
   prefix?: string;
 
   /**
+   * Free-form search query
+   */
+  query?: string;
+
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;

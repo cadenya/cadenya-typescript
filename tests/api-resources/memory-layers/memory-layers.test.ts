@@ -81,6 +81,7 @@ describe('resource memoryLayers', () => {
           includeInfo: true,
           limit: 0,
           prefix: 'prefix',
+          query: 'query',
           sortOrder: 'sortOrder',
           type: 'MEMORY_LAYER_TYPE_UNSPECIFIED',
         },
