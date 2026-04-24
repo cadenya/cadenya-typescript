@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.53.0 (2026-04-24)
+
+Full Changelog: [v0.52.0...v0.53.0](https://github.com/cadenya/cadenya-typescript/compare/v0.52.0...v0.53.0)
+
+### Features
+
+* **api:** api update ([29d99c3](https://github.com/cadenya/cadenya-typescript/commit/29d99c3bbdab1da53c0b0b9a697308db7225e5b0))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([11c8adc](https://github.com/cadenya/cadenya-typescript/commit/11c8adc835bfc9d0236eaac4acda9c89cdcf0137))
+* **internal:** update docs ordering ([df5c847](https://github.com/cadenya/cadenya-typescript/commit/df5c84740eae72fc49ae4432d8e0790475f02c22))
+
 ## 0.52.0 (2026-04-23)
 
 Full Changelog: [v0.51.0...v0.52.0](https://github.com/cadenya/cadenya-typescript/compare/v0.51.0...v0.52.0)
