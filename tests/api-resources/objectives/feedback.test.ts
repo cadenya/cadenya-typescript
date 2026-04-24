@@ -10,7 +10,10 @@ const client = new Cadenya({
 describe('resource feedback', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.objectives.feedback.create('objectiveId', { data: {} });
+    const responsePromise = client.objectives.feedback.create('objectiveId', {
+      data: {},
+      metadata: {},
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,10 +26,10 @@ describe('resource feedback', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.objectives.feedback.create('objectiveId', {
-      data: {
-        attributes: { foo: 'string' },
-        comment: 'comment',
-        score: 0,
+      data: { comment: 'comment', score: 0 },
+      metadata: {
+        externalId: 'externalId',
+        labels: { foo: 'string' },
       },
     });
   });
