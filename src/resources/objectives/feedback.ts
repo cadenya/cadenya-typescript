@@ -48,27 +48,15 @@ export interface ObjectiveFeedback {
   data: ObjectiveFeedbackData;
 
   /**
-   * BareMetadata contains the minimal metadata for a resource: the ID and an
-   * optional human-readable name. These are used for reference fields where the full
-   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
-   * e.g., the tool references inside an agent variation spec or the tools assigned
-   * to an objective. Both fields are server-populated; clients provide IDs through
-   * sibling fields rather than by constructing a BareMetadata themselves.
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
    */
-  metadata: Shared.BareMetadata;
+  metadata: Shared.OperationMetadata;
 
   info?: ObjectiveFeedbackInfo;
 }
 
 export interface ObjectiveFeedbackData {
-  /**
-   * Arbitrary key-value pairs to identify the source of the feedback. Since the
-   * submitting profile is typically an API key, use this to pass through
-   * application-specific identifiers (e.g., {"user_id": "usr_123", "session_id":
-   * "abc"}).
-   */
-  attributes?: { [key: string]: string };
-
   /**
    * Optional human-readable comment explaining the feedback
    */
@@ -113,6 +101,13 @@ export interface ObjectiveFeedbackInfo {
 
 export interface FeedbackCreateParams {
   data: ObjectiveFeedbackData;
+
+  /**
+   * CreateOperationMetadata contains the user-provided fields for creating an
+   * operation. Read-only fields (id, account_id, workspace_id, created_at,
+   * profile_id) are excluded since they are set by the server.
+   */
+  metadata: Shared.CreateOperationMetadata;
 }
 
 export interface FeedbackListParams extends CursorPaginationParams {}
