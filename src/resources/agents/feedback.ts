@@ -52,6 +52,11 @@ export interface FeedbackListParams extends CursorPaginationParams {
   createdBefore?: string;
 
   /**
+   * When set to true you may use more of your alloted API rate-limit
+   */
+  includeInfo?: boolean;
+
+  /**
    * Free-text search applied to the feedback comment. Case-insensitive substring
    * match.
    */
