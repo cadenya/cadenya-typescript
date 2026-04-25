@@ -73,6 +73,7 @@ describe('resource objectives', () => {
       client.objectives.list(
         {
           agentId: 'agentId',
+          agentScheduleId: 'agentScheduleId',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
