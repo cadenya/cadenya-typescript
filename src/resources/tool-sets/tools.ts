@@ -144,7 +144,7 @@ export interface ToolSpec {
   status:
     | 'TOOL_STATUS_UNSPECIFIED'
     | 'TOOL_STATUS_AVAILABLE'
-    | 'TOOL_STATUS_FILTERED'
+    | 'TOOL_STATUS_OMITTED'
     | 'TOOL_STATUS_ARCHIVED';
 
   requiresApproval?: boolean;
@@ -213,6 +213,11 @@ export interface ToolListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filter by tool name (exact match). Multiple values are OR'd together.
+   */
+  names?: Array<string>;
+
+  /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;
@@ -226,6 +231,13 @@ export interface ToolListParams extends CursorPaginationParams {
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
+
+  /**
+   * Filter by tool status. Multiple values are OR'd together.
+   */
+  statuses?: Array<
+    'TOOL_STATUS_UNSPECIFIED' | 'TOOL_STATUS_AVAILABLE' | 'TOOL_STATUS_OMITTED' | 'TOOL_STATUS_ARCHIVED'
+  >;
 }
 
 export interface ToolDeleteParams {
