@@ -13,6 +13,22 @@ export {
 } from './agents';
 export { Feedback, type FeedbackListParams } from './feedback';
 export {
+  Schedules,
+  type AgentSchedule,
+  type AgentScheduleInfo,
+  type AgentScheduleSpec,
+  type AgentScheduleSpecSchedule,
+  type ScheduleCalendar,
+  type ScheduleInterval,
+  type ScheduleRange,
+  type ScheduleCreateParams,
+  type ScheduleRetrieveParams,
+  type ScheduleUpdateParams,
+  type ScheduleListParams,
+  type ScheduleDeleteParams,
+  type AgentSchedulesCursorPagination,
+} from './schedules';
+export {
   Variations,
   type AgentVariation,
   type AgentVariationInfo,
