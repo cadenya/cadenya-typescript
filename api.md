@@ -88,6 +88,26 @@ Methods:
 - <code title="delete /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
 - <code title="patch /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
 
+## Schedules
+
+Types:
+
+- <code><a href="./src/resources/agents/schedules.ts">AgentSchedule</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">AgentScheduleInfo</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">AgentScheduleSpec</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">AgentScheduleSpecSchedule</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">ScheduleCalendar</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">ScheduleInterval</a></code>
+- <code><a href="./src/resources/agents/schedules.ts">ScheduleRange</a></code>
+
+Methods:
+
+- <code title="post /v1/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">create</a>(agentID, { ...params }) -> AgentSchedule</code>
+- <code title="get /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">retrieve</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="patch /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">update</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="get /v1/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">list</a>(agentID, { ...params }) -> AgentSchedulesCursorPagination</code>
+- <code title="delete /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">delete</a>(id, { ...params }) -> void</code>
+
 # Objectives
 
 Types:

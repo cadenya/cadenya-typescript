@@ -397,6 +397,14 @@ export interface ObjectiveData {
   secrets?: Array<ObjectiveDataSecret>;
 
   /**
+   * ID of the AgentSchedule that produced this objective, when applicable.
+   * Read-only; populated by the runtime when the objective is created from a
+   * schedule fire. Empty when the objective was created via CreateObjective
+   * directly.
+   */
+  sourceScheduleId?: string;
+
+  /**
    * system_prompt is read-only, derived from the selected variation's prompt
    */
   systemPrompt?: string;

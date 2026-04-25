@@ -125,6 +125,36 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}',
   },
   {
+    clientCallName: 'client.agents.schedules.create',
+    fullyQualifiedName: 'agents.schedules.create',
+    httpMethod: 'post',
+    httpPath: '/v1/agents/{agentId}/schedules',
+  },
+  {
+    clientCallName: 'client.agents.schedules.retrieve',
+    fullyQualifiedName: 'agents.schedules.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/agents/{agentId}/schedules/{id}',
+  },
+  {
+    clientCallName: 'client.agents.schedules.update',
+    fullyQualifiedName: 'agents.schedules.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/agents/{agentId}/schedules/{id}',
+  },
+  {
+    clientCallName: 'client.agents.schedules.list',
+    fullyQualifiedName: 'agents.schedules.list',
+    httpMethod: 'get',
+    httpPath: '/v1/agents/{agentId}/schedules',
+  },
+  {
+    clientCallName: 'client.agents.schedules.delete',
+    fullyQualifiedName: 'agents.schedules.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/agents/{agentId}/schedules/{id}',
+  },
+  {
     clientCallName: 'client.objectives.create',
     fullyQualifiedName: 'objectives.create',
     httpMethod: 'post',

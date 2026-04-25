@@ -5,6 +5,23 @@ import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as FeedbackAPI from './feedback';
 import { Feedback, FeedbackListParams } from './feedback';
+import * as SchedulesAPI from './schedules';
+import {
+  AgentSchedule,
+  AgentScheduleInfo,
+  AgentScheduleSpec,
+  AgentScheduleSpecSchedule,
+  AgentSchedulesCursorPagination,
+  ScheduleCalendar,
+  ScheduleCreateParams,
+  ScheduleDeleteParams,
+  ScheduleInterval,
+  ScheduleListParams,
+  ScheduleRange,
+  ScheduleRetrieveParams,
+  ScheduleUpdateParams,
+  Schedules,
+} from './schedules';
 import * as VariationsAPI from './variations';
 import {
   AgentVariation,
@@ -59,6 +76,7 @@ export class Agents extends APIResource {
     this._client,
   );
   variations: VariationsAPI.Variations = new VariationsAPI.Variations(this._client);
+  schedules: SchedulesAPI.Schedules = new SchedulesAPI.Schedules(this._client);
 
   /**
    * Creates a new agent in the workspace
@@ -270,6 +288,7 @@ export interface AgentListParams extends CursorPaginationParams {
 Agents.Feedback = Feedback;
 Agents.WebhookDeliveries = WebhookDeliveries;
 Agents.Variations = Variations;
+Agents.Schedules = Schedules;
 
 export declare namespace Agents {
   export {
@@ -317,5 +336,22 @@ export declare namespace Agents {
     type VariationRemoveAssignmentParams as VariationRemoveAssignmentParams,
     type VariationRemoveMemoryLayerParams as VariationRemoveMemoryLayerParams,
     type VariationUpdateMemoryLayerParams as VariationUpdateMemoryLayerParams,
+  };
+
+  export {
+    Schedules as Schedules,
+    type AgentSchedule as AgentSchedule,
+    type AgentScheduleInfo as AgentScheduleInfo,
+    type AgentScheduleSpec as AgentScheduleSpec,
+    type AgentScheduleSpecSchedule as AgentScheduleSpecSchedule,
+    type ScheduleCalendar as ScheduleCalendar,
+    type ScheduleInterval as ScheduleInterval,
+    type ScheduleRange as ScheduleRange,
+    type AgentSchedulesCursorPagination as AgentSchedulesCursorPagination,
+    type ScheduleCreateParams as ScheduleCreateParams,
+    type ScheduleRetrieveParams as ScheduleRetrieveParams,
+    type ScheduleUpdateParams as ScheduleUpdateParams,
+    type ScheduleListParams as ScheduleListParams,
+    type ScheduleDeleteParams as ScheduleDeleteParams,
   };
 }
