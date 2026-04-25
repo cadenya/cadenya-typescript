@@ -732,6 +732,13 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   agentId?: string;
 
   /**
+   * Filter to objectives produced by a specific AgentSchedule. Matches
+   * ObjectiveData.source*schedule_id. Accepts canonical as*… form or
+   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   */
+  agentScheduleId?: string;
+
+  /**
    * When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
