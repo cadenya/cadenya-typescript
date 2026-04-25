@@ -150,6 +150,7 @@ describe('resource tools', () => {
           names: ['string'],
           prefix: 'prefix',
           query: 'query',
+          requiresApproval: true,
           sortOrder: 'sortOrder',
           statuses: ['TOOL_STATUS_UNSPECIFIED'],
         },
