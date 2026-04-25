@@ -228,6 +228,12 @@ export interface ToolListParams extends CursorPaginationParams {
   query?: string;
 
   /**
+   * Filter by approval requirement. Omitted = no filter; true = only tools requiring
+   * approval; false = only tools not requiring approval.
+   */
+  requiresApproval?: boolean;
+
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
