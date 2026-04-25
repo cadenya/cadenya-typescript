@@ -31,6 +31,7 @@ describe('resource feedback', () => {
           createdAfter: '2019-12-27T18:11:19.117Z',
           createdBefore: '2019-12-27T18:11:19.117Z',
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           query: 'query',
           sentiment: 'FEEDBACK_SENTIMENT_UNSPECIFIED',
