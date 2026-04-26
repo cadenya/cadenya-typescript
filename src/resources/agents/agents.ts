@@ -283,6 +283,23 @@ export interface AgentListParams extends CursorPaginationParams {
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
+
+  /**
+   * Filter by agent publication status
+   */
+  status?:
+    | 'AGENT_STATUS_UNSPECIFIED'
+    | 'AGENT_STATUS_DRAFT'
+    | 'AGENT_STATUS_PUBLISHED'
+    | 'AGENT_STATUS_ARCHIVED';
+
+  /**
+   * Filter by variation selection mode
+   */
+  variationSelectionMode?:
+    | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
+    | 'VARIATION_SELECTION_MODE_RANDOM'
+    | 'VARIATION_SELECTION_MODE_WEIGHTED';
 }
 
 Agents.Feedback = Feedback;
