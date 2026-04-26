@@ -118,6 +118,8 @@ describe('resource agents', () => {
           prefix: 'prefix',
           query: 'query',
           sortOrder: 'sortOrder',
+          status: 'AGENT_STATUS_UNSPECIFIED',
+          variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
         },
         { path: '/_stainless_unknown_path' },
       ),
