@@ -430,6 +430,13 @@ export interface ObjectiveError {
 export interface ObjectiveEventData {
   assistantMessage?: AssistantMessage;
 
+  /**
+   * ObjectiveCancelled is the terminal event written when an objective is cancelled.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  cancelled?: ObjectiveEventData.Cancelled;
+
   contextWindowCompacted?: ContextWindowCompacted;
 
   error?: ObjectiveError;
@@ -458,6 +465,22 @@ export interface ObjectiveEventData {
   type?: string;
 
   userMessage?: UserMessage;
+}
+
+export namespace ObjectiveEventData {
+  /**
+   * ObjectiveCancelled is the terminal event written when an objective is cancelled.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  export interface Cancelled {
+    /**
+     * Optional human-readable note recorded at cancel time. Today the workflow sets
+     * "Cancelled" but this field leaves room for richer reasons (e.g. "Cancelled by
+     * user", "Cancelled by schedule sweep", "Credit balance exhausted").
+     */
+    message?: string;
+  }
 }
 
 export interface ObjectiveEventInfo {
@@ -543,10 +566,14 @@ export namespace ObjectiveEventWebhookData {
  */
 export interface ObjectiveInfo {
   /**
-   * List of callable tools assigned to the agent for this objective Includes tools,
-   * agents, and cadenya-provided tools from the agent's configuration
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  callableTools?: Array<CallableTool>;
+  agent?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agentVariation?: Shared.ResourceMetadata;
 
   /**
    * Profile represents a human user at the account level. Profiles are
