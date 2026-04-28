@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.62.0 (2026-04-28)
+
+Full Changelog: [v0.61.0...v0.62.0](https://github.com/cadenya/cadenya-typescript/compare/v0.61.0...v0.62.0)
+
+### Features
+
+* support setting headers via env ([61893a4](https://github.com/cadenya/cadenya-typescript/commit/61893a4ae6165ad51cca5c0119fc77bdc05b651c))
+
+
+### Chores
+
+* **internal:** codegen related update ([e5faf18](https://github.com/cadenya/cadenya-typescript/commit/e5faf18dadc3a9ac79813d5b51555d9bf91eb1de))
+* restructure docs search code ([9b4d3de](https://github.com/cadenya/cadenya-typescript/commit/9b4d3de3178e9f1716196df567c78f116c41d079))
+
 ## 0.61.0 (2026-04-26)
 
 Full Changelog: [v0.60.0...v0.61.0](https://github.com/cadenya/cadenya-typescript/compare/v0.60.0...v0.61.0)
