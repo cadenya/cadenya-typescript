@@ -373,3 +373,47 @@ Methods:
 
 - <code>client.webhooks.<a href="./src/resources/webhooks.ts">unsafeUnwrap</a>(body) -> void</code>
 - <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
+
+# BulkWorkspaceResources
+
+Types:
+
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">AgentEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">AgentScheduleEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">AgentVariationEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">BulkWorkspaceApply</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">BulkWorkspaceApplyData</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">BulkWorkspaceApplyInfo</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">BulkWorkspaceApplyStatus</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">MemoryEntryItem</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">MemoryLayerEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">ToolEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">ToolSetEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">VariationAssignmentEntry</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">VariationMemoryLayerEntry</a></code>
+
+Methods:
+
+- <code title="get /v1/bulk_workspace_applies/{id}">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">retrieve</a>(id) -> BulkWorkspaceApply</code>
+- <code title="get /v1/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">list</a>({ ...params }) -> BulkWorkspaceAppliesCursorPagination</code>
+- <code title="post /v1/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">apply</a>({ ...params }) -> BulkWorkspaceApply</code>
+
+## Results
+
+Types:
+
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResult</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultData</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataAgentOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataAgentScheduleOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataAgentVariationOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataMemoryEntryOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataMemoryLayerOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataToolOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataToolSetOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataVariationAssignmentOutcome</a></code>
+- <code><a href="./src/resources/bulk-workspace-resources/results.ts">BulkWorkspaceApplyResultDataVariationMemoryLayerOutcome</a></code>
+
+Methods:
+
+- <code title="get /v1/bulk_workspace_applies/{bulkWorkspaceApplyId}/results">client.bulkWorkspaceResources.results.<a href="./src/resources/bulk-workspace-resources/results.ts">list</a>(bulkWorkspaceApplyID, { ...params }) -> BulkWorkspaceApplyResultsCursorPagination</code>

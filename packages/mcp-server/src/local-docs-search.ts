@@ -3077,6 +3077,160 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'apply',
+    endpoint: '/v1/bulk_workspace_applies',
+    httpMethod: 'post',
+    summary: 'Apply a workspace resource bundle',
+    description:
+      'Asynchronously applies a declarative bundle of workspace resources. Returns the operation immediately in PENDING; clients poll Get to track progress.',
+    stainlessPath: '(resource) bulk_workspace_resources > (method) apply',
+    qualified: 'client.bulkWorkspaceResources.apply',
+    params: [
+      'data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; };',
+    ],
+    response:
+      '{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }',
+    markdown:
+      "## apply\n\n`client.bulkWorkspaceResources.apply(data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }): { data: bulk_workspace_apply_data; metadata: operation_metadata; status: bulk_workspace_apply_status; info?: bulk_workspace_apply_info; }`\n\n**post** `/v1/bulk_workspace_applies`\n\nAsynchronously applies a declarative bundle of workspace resources. Returns the operation immediately in PENDING; clients poll Get to track progress.\n\n### Parameters\n\n- `data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }`\n  - `managedByKey: string`\n    Required. Bundle ownership key. Resources created or updated by an\n Apply with this key are tagged with the reserved label\n `bulk.cadenya.com/managed-by=<managed_by_key>`; on subsequent applies\n with the same key, resources currently bearing the label but absent\n from the spec are soft-deleted.\n  - `agents?: object`\n    Agents to upsert, keyed by external_id.\n  - `memoryLayers?: object`\n    Memory layers to upsert, keyed by external_id.\n  - `sourceUrl?: string`\n    Optional URL pointing to the source of this apply (GitHub PR,\n Jenkins build, GitLab pipeline, etc.). Surfaced in the dashboard so\n users can jump from an apply back to the change that produced it.\n Free-form HTTPS URI; not interpreted by the server.\n  - `toolSets?: object`\n    Tool sets to upsert, keyed by external_id.\n\n### Returns\n\n- `{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }`\n  BulkWorkspaceApply is the operation resource produced by a call to\n BulkWorkspaceResources.Apply. It is operation-typed (uses\n OperationMetadata, like Objective and ObjectiveEvent) and carries the\n input bundle in `data`, the lifecycle state in `status`, and aggregate\n counts in `info`.\n\n  - `data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `status: { state: string; message?: string; preflightError?: { code?: number; details?: { @type?: string; }[]; message?: string; }; }`\n  - `info?: { completedAt?: string; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst bulkWorkspaceApply = await client.bulkWorkspaceResources.apply({ data: { managedByKey: 'managedByKey' } });\n\nconsole.log(bulkWorkspaceApply);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bulkWorkspaceResources.apply',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst bulkWorkspaceApply = await client.bulkWorkspaceResources.apply({\n  data: { managedByKey: 'managedByKey' },\n});\n\nconsole.log(bulkWorkspaceApply.data);",
+      },
+      go: {
+        method: 'client.BulkWorkspaceResources.Apply',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tbulkWorkspaceApply, err := client.BulkWorkspaceResources.Apply(context.TODO(), cadenya.BulkWorkspaceResourceApplyParams{\n\t\tData: cadenya.F(cadenya.BulkWorkspaceApplyDataParam{\n\t\t\tManagedByKey: cadenya.F("managedByKey"),\n\t\t}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bulkWorkspaceApply.Data)\n}\n',
+      },
+      cli: {
+        method: 'bulk_workspace_resources apply',
+        example:
+          "cadenya bulk-workspace-resources apply \\\n  --api-key 'My API Key' \\\n  --data '{managedByKey: managedByKey}'",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/bulk_workspace_applies \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "data": {\n            "managedByKey": "managedByKey"\n          }\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/bulk_workspace_applies/{id}',
+    httpMethod: 'get',
+    summary: 'Get a bulk workspace apply operation',
+    description: 'Retrieves a bulk workspace apply operation by ID.',
+    stainlessPath: '(resource) bulk_workspace_resources > (method) retrieve',
+    qualified: 'client.bulkWorkspaceResources.retrieve',
+    params: ['id: string;'],
+    response:
+      '{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }',
+    markdown:
+      "## retrieve\n\n`client.bulkWorkspaceResources.retrieve(id: string): { data: bulk_workspace_apply_data; metadata: operation_metadata; status: bulk_workspace_apply_status; info?: bulk_workspace_apply_info; }`\n\n**get** `/v1/bulk_workspace_applies/{id}`\n\nRetrieves a bulk workspace apply operation by ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }`\n  BulkWorkspaceApply is the operation resource produced by a call to\n BulkWorkspaceResources.Apply. It is operation-typed (uses\n OperationMetadata, like Objective and ObjectiveEvent) and carries the\n input bundle in `data`, the lifecycle state in `status`, and aggregate\n counts in `info`.\n\n  - `data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `status: { state: string; message?: string; preflightError?: { code?: number; details?: { @type?: string; }[]; message?: string; }; }`\n  - `info?: { completedAt?: string; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst bulkWorkspaceApply = await client.bulkWorkspaceResources.retrieve('id');\n\nconsole.log(bulkWorkspaceApply);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bulkWorkspaceResources.retrieve',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst bulkWorkspaceApply = await client.bulkWorkspaceResources.retrieve('id');\n\nconsole.log(bulkWorkspaceApply.data);",
+      },
+      go: {
+        method: 'client.BulkWorkspaceResources.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tbulkWorkspaceApply, err := client.BulkWorkspaceResources.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bulkWorkspaceApply.Data)\n}\n',
+      },
+      cli: {
+        method: 'bulk_workspace_resources retrieve',
+        example: "cadenya bulk-workspace-resources retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/bulk_workspace_applies/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/bulk_workspace_applies',
+    httpMethod: 'get',
+    summary: 'List bulk workspace apply operations',
+    description: 'Lists past and in-flight bulk workspace apply operations in the workspace.',
+    stainlessPath: '(resource) bulk_workspace_resources > (method) list',
+    qualified: 'client.bulkWorkspaceResources.list',
+    params: [
+      'cursor?: string;',
+      'limit?: number;',
+      'managedByKey?: string;',
+      'sortOrder?: string;',
+      'state?: string;',
+    ],
+    response:
+      '{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }',
+    markdown:
+      "## list\n\n`client.bulkWorkspaceResources.list(cursor?: string, limit?: number, managedByKey?: string, sortOrder?: string, state?: string): { data: bulk_workspace_apply_data; metadata: operation_metadata; status: bulk_workspace_apply_status; info?: bulk_workspace_apply_info; }`\n\n**get** `/v1/bulk_workspace_applies`\n\nLists past and in-flight bulk workspace apply operations in the workspace.\n\n### Parameters\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `managedByKey?: string`\n  Filter by managed_by_key — list every apply for a given bundle.\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n- `state?: string`\n  Filter by lifecycle state.\n\n### Returns\n\n- `{ data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; status: { state: string; message?: string; preflightError?: object; }; info?: { completedAt?: string; createdBy?: profile; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }; }`\n  BulkWorkspaceApply is the operation resource produced by a call to\n BulkWorkspaceResources.Apply. It is operation-typed (uses\n OperationMetadata, like Objective and ObjectiveEvent) and carries the\n input bundle in `data`, the lifecycle state in `status`, and aggregate\n counts in `info`.\n\n  - `data: { managedByKey: string; agents?: object; memoryLayers?: object; sourceUrl?: string; toolSets?: object; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n  - `status: { state: string; message?: string; preflightError?: { code?: number; details?: { @type?: string; }[]; message?: string; }; }`\n  - `info?: { completedAt?: string; createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; createdCount?: number; deletedCount?: number; failedCount?: number; startedAt?: string; totalCount?: number; unchangedCount?: number; updatedCount?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const bulkWorkspaceApply of client.bulkWorkspaceResources.list()) {\n  console.log(bulkWorkspaceApply);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bulkWorkspaceResources.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const bulkWorkspaceApply of client.bulkWorkspaceResources.list()) {\n  console.log(bulkWorkspaceApply.data);\n}",
+      },
+      go: {
+        method: 'client.BulkWorkspaceResources.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.BulkWorkspaceResources.List(context.TODO(), cadenya.BulkWorkspaceResourceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'bulk_workspace_resources list',
+        example: "cadenya bulk-workspace-resources list \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/bulk_workspace_applies \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/bulk_workspace_applies/{bulkWorkspaceApplyId}/results',
+    httpMethod: 'get',
+    summary: 'List per-resource results for a bulk workspace apply',
+    description: 'Lists each resource action recorded by a bulk workspace apply operation.',
+    stainlessPath: '(resource) bulk_workspace_resources.results > (method) list',
+    qualified: 'client.bulkWorkspaceResources.results.list',
+    params: [
+      'bulkWorkspaceApplyId: string;',
+      'action?: string;',
+      'cursor?: string;',
+      'limit?: number;',
+      'sortOrder?: string;',
+      'type?: string;',
+    ],
+    response:
+      '{ data: { agent?: bulk_workspace_apply_result_data_agent_outcome; agentSchedule?: bulk_workspace_apply_result_data_agent_schedule_outcome; agentVariation?: bulk_workspace_apply_result_data_agent_variation_outcome; memoryEntry?: bulk_workspace_apply_result_data_memory_entry_outcome; memoryLayer?: bulk_workspace_apply_result_data_memory_layer_outcome; tool?: bulk_workspace_apply_result_data_tool_outcome; toolSet?: bulk_workspace_apply_result_data_tool_set_outcome; type?: string; variationAssignment?: bulk_workspace_apply_result_data_variation_assignment_outcome; variationMemoryLayer?: bulk_workspace_apply_result_data_variation_memory_layer_outcome; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }',
+    markdown:
+      '## list\n\n`client.bulkWorkspaceResources.results.list(bulkWorkspaceApplyId: string, action?: string, cursor?: string, limit?: number, sortOrder?: string, type?: string): { data: bulk_workspace_apply_result_data; metadata: operation_metadata; }`\n\n**get** `/v1/bulk_workspace_applies/{bulkWorkspaceApplyId}/results`\n\nLists each resource action recorded by a bulk workspace apply operation.\n\n### Parameters\n\n- `bulkWorkspaceApplyId: string`\n\n- `action?: string`\n  Filter by action.\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n- `type?: string`\n  Filter by data.type discriminator (e.g., "toolSet", "memoryEntry").\n\n### Returns\n\n- `{ data: { agent?: bulk_workspace_apply_result_data_agent_outcome; agentSchedule?: bulk_workspace_apply_result_data_agent_schedule_outcome; agentVariation?: bulk_workspace_apply_result_data_agent_variation_outcome; memoryEntry?: bulk_workspace_apply_result_data_memory_entry_outcome; memoryLayer?: bulk_workspace_apply_result_data_memory_layer_outcome; tool?: bulk_workspace_apply_result_data_tool_outcome; toolSet?: bulk_workspace_apply_result_data_tool_set_outcome; type?: string; variationAssignment?: bulk_workspace_apply_result_data_variation_assignment_outcome; variationMemoryLayer?: bulk_workspace_apply_result_data_variation_memory_layer_outcome; }; metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }; }`\n  BulkWorkspaceApplyResult is one row of the per-resource result list\n for a BulkWorkspaceApply. Each row is itself an operation\n (OperationMetadata-typed) so it can be paginated, sorted by\n created_at, and individually addressed. Mirrors the Objective →\n ObjectiveEvent relationship.\n\n  - `data: { agent?: { action?: string; error?: object; externalId?: string; resource?: agent; }; agentSchedule?: { action?: string; error?: object; externalId?: string; resource?: agent_schedule; }; agentVariation?: { action?: string; error?: object; externalId?: string; resource?: agent_variation; }; memoryEntry?: { action?: string; error?: object; externalId?: string; resource?: memory_entry; }; memoryLayer?: { action?: string; error?: object; externalId?: string; resource?: memory_layer; }; tool?: { action?: string; error?: object; externalId?: string; resource?: tool; }; toolSet?: { action?: string; error?: object; externalId?: string; resource?: tool_set; }; type?: string; variationAssignment?: { action?: string; error?: object; resource?: variation_assignment; }; variationMemoryLayer?: { action?: string; error?: object; resource?: variation_memory_layer_assignment; }; }`\n  - `metadata: { id: string; accountId: string; createdAt: string; profileId: string; workspaceId: string; externalId?: string; labels?: object; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const bulkWorkspaceApplyResult of client.bulkWorkspaceResources.results.list(\'bulkWorkspaceApplyId\')) {\n  console.log(bulkWorkspaceApplyResult);\n}\n```',
+    perLanguage: {
+      typescript: {
+        method: 'client.bulkWorkspaceResources.results.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const bulkWorkspaceApplyResult of client.bulkWorkspaceResources.results.list(\n  'bulkWorkspaceApplyId',\n)) {\n  console.log(bulkWorkspaceApplyResult.data);\n}",
+      },
+      go: {
+        method: 'client.BulkWorkspaceResources.Results.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.BulkWorkspaceResources.Results.List(\n\t\tcontext.TODO(),\n\t\t"bulkWorkspaceApplyId",\n\t\tcadenya.BulkWorkspaceResourceResultListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'results list',
+        example:
+          "cadenya bulk-workspace-resources:results list \\\n  --api-key 'My API Key' \\\n  --bulk-workspace-apply-id bulkWorkspaceApplyId",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/bulk_workspace_applies/$BULK_WORKSPACE_APPLY_ID/results \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
