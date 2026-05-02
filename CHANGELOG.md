@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.63.0 (2026-05-02)
+
+Full Changelog: [v0.62.0...v0.63.0](https://github.com/cadenya/cadenya-typescript/compare/v0.62.0...v0.63.0)
+
+### Features
+
+* **api:** BulkWorkspaceResources service for declarative workspace configuration ([fa8cd06](https://github.com/cadenya/cadenya-typescript/commit/fa8cd0646b409e3be603558f9ad6c3f0e50ad66d))
+
+
+### Chores
+
+* avoid formatting file that gets changed during releases ([ef5df3b](https://github.com/cadenya/cadenya-typescript/commit/ef5df3b6f29a7966b73893441bf4f06cdb2218ce))
+* **format:** run eslint and prettier separately ([4a14bad](https://github.com/cadenya/cadenya-typescript/commit/4a14badad5ada7515e400df63d64ea6c04c07443))
+
 ## 0.62.0 (2026-04-28)
 
 Full Changelog: [v0.61.0...v0.62.0](https://github.com/cadenya/cadenya-typescript/compare/v0.61.0...v0.62.0)
