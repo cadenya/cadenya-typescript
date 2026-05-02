@@ -492,6 +492,30 @@ export const sdkMethods: SdkMethod[] = [
   },
   { clientCallName: 'client.webhooks.unsafeUnwrap', fullyQualifiedName: 'webhooks.unsafeUnwrap' },
   { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
+  {
+    clientCallName: 'client.bulkWorkspaceResources.retrieve',
+    fullyQualifiedName: 'bulkWorkspaceResources.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/bulk_workspace_applies/{id}',
+  },
+  {
+    clientCallName: 'client.bulkWorkspaceResources.list',
+    fullyQualifiedName: 'bulkWorkspaceResources.list',
+    httpMethod: 'get',
+    httpPath: '/v1/bulk_workspace_applies',
+  },
+  {
+    clientCallName: 'client.bulkWorkspaceResources.apply',
+    fullyQualifiedName: 'bulkWorkspaceResources.apply',
+    httpMethod: 'post',
+    httpPath: '/v1/bulk_workspace_applies',
+  },
+  {
+    clientCallName: 'client.bulkWorkspaceResources.results.list',
+    fullyQualifiedName: 'bulkWorkspaceResources.results.list',
+    httpMethod: 'get',
+    httpPath: '/v1/bulk_workspace_applies/{bulkWorkspaceApplyId}/results',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

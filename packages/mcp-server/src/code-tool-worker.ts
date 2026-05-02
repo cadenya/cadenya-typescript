@@ -190,6 +190,10 @@ const fuse = new Fuse(
     'client.workspaces.list',
     'client.webhooks.unsafeUnwrap',
     'client.webhooks.unwrap',
+    'client.bulkWorkspaceResources.apply',
+    'client.bulkWorkspaceResources.list',
+    'client.bulkWorkspaceResources.retrieve',
+    'client.bulkWorkspaceResources.results.list',
   ],
   { threshold: 1, shouldSort: true },
 );

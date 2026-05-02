@@ -31,6 +31,25 @@ export {
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
+  BulkWorkspaceResources,
+  type AgentEntry,
+  type AgentScheduleEntry,
+  type AgentVariationEntry,
+  type BulkWorkspaceApply,
+  type BulkWorkspaceApplyData,
+  type BulkWorkspaceApplyInfo,
+  type BulkWorkspaceApplyStatus,
+  type MemoryEntryItem,
+  type MemoryLayerEntry,
+  type ToolEntry,
+  type ToolSetEntry,
+  type VariationAssignmentEntry,
+  type VariationMemoryLayerEntry,
+  type BulkWorkspaceResourceListParams,
+  type BulkWorkspaceResourceApplyParams,
+  type BulkWorkspaceAppliesCursorPagination,
+} from './bulk-workspace-resources/bulk-workspace-resources';
+export {
   MemoryLayers,
   type MemoryLayer,
   type MemoryLayerInfo,
