@@ -33,6 +33,7 @@ describe('resource tools', () => {
     const response = await client.toolSets.tools.create('toolSetId', {
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -96,6 +97,7 @@ describe('resource tools', () => {
       toolSetId: 'toolSetId',
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -144,6 +146,7 @@ describe('resource tools', () => {
       client.toolSets.tools.list(
         'toolSetId',
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

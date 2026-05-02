@@ -31,6 +31,7 @@ describe('resource agents', () => {
     const response = await client.agents.create({
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -44,6 +45,7 @@ describe('resource agents', () => {
       defaultVariation: {
         metadata: {
           name: 'name',
+          bundleKey: 'bundleKey',
           externalId: 'externalId',
           labels: { foo: 'string' },
         },
@@ -112,6 +114,7 @@ describe('resource agents', () => {
     await expect(
       client.agents.list(
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

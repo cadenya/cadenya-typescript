@@ -152,13 +152,12 @@ export interface BulkWorkspaceApply {
 
 export interface BulkWorkspaceApplyData {
   /**
-   * Required. Bundle ownership key. Resources created or updated by an Apply with
-   * this key are tagged with the reserved label
-   * `bulk.cadenya.com/managed-by=<managed_by_key>`; on subsequent applies with the
-   * same key, resources currently bearing the label but absent from the spec are
-   * soft-deleted.
+   * Required. Bundle ownership key. Resources created or updated by an Apply have
+   * their `metadata.bundle_key` set to this value. On subsequent applies with the
+   * same bundle_key, resources currently bearing this bundle_key but absent from the
+   * spec are soft-deleted.
    */
-  managedByKey: string;
+  bundleKey: string;
 
   /**
    * Agents to upsert, keyed by external_id.
@@ -342,9 +341,9 @@ export interface VariationMemoryLayerEntry {
 
 export interface BulkWorkspaceResourceListParams extends CursorPaginationParams {
   /**
-   * Filter by managed_by_key — list every apply for a given bundle.
+   * Filter by bundle_key — list every apply for a given bundle.
    */
-  managedByKey?: string;
+  bundleKey?: string;
 
   /**
    * Sort order for results (asc or desc by creation time)
