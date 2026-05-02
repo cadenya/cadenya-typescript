@@ -38,6 +38,7 @@ describe('resource models', () => {
     await expect(
       client.models.list(
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           limit: 0,
           prefix: 'prefix',

@@ -38,9 +38,9 @@ describe('resource bulkWorkspaceResources', () => {
     await expect(
       client.bulkWorkspaceResources.list(
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           limit: 0,
-          managedByKey: 'managedByKey',
           sortOrder: 'sortOrder',
           state: 'STATE_UNSPECIFIED',
         },
@@ -51,7 +51,7 @@ describe('resource bulkWorkspaceResources', () => {
 
   // Mock server tests are disabled
   test.skip('apply: only required params', async () => {
-    const responsePromise = client.bulkWorkspaceResources.apply({ data: { managedByKey: 'managedByKey' } });
+    const responsePromise = client.bulkWorkspaceResources.apply({ data: { bundleKey: 'bundleKey' } });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +65,7 @@ describe('resource bulkWorkspaceResources', () => {
   test.skip('apply: required and optional params', async () => {
     const response = await client.bulkWorkspaceResources.apply({
       data: {
-        managedByKey: 'managedByKey',
+        bundleKey: 'bundleKey',
         agents: {
           foo: {
             name: 'name',

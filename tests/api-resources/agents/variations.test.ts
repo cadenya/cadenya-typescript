@@ -28,6 +28,7 @@ describe('resource variations', () => {
     const response = await client.agents.variations.create('agentId', {
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -88,6 +89,7 @@ describe('resource variations', () => {
       agentId: 'agentId',
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -133,6 +135,7 @@ describe('resource variations', () => {
       client.agents.variations.list(
         'agentId',
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

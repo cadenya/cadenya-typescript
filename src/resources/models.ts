@@ -95,6 +95,11 @@ export interface ModelSpec {
 
 export interface ModelListParams extends CursorPaginationParams {
   /**
+   * Filter by bundle_key — return only resources owned by this bundle.
+   */
+  bundleKey?: string;
+
+  /**
    * Filter by name prefix
    */
   prefix?: string;

@@ -28,6 +28,7 @@ describe('resource apiKeys', () => {
     const response = await client.apiKeys.create({
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -77,6 +78,7 @@ describe('resource apiKeys', () => {
     await expect(
       client.apiKeys.list(
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

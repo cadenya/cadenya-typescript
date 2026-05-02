@@ -31,6 +31,7 @@ describe('resource schedules', () => {
     const response = await client.agents.schedules.create('agentId', {
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -130,6 +131,7 @@ describe('resource schedules', () => {
       agentId: 'agentId',
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -214,6 +216,7 @@ describe('resource schedules', () => {
       client.agents.schedules.list(
         'agentId',
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
