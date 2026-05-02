@@ -85,6 +85,11 @@ export interface CreateResourceMetadata {
   name: string;
 
   /**
+   * Optional bundle ownership key. See ResourceMetadata.bundle_key.
+   */
+  bundleKey?: string;
+
+  /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
   externalId?: string;
@@ -175,6 +180,14 @@ export interface ResourceMetadata {
   workspaceId: string;
 
   /**
+   * Optional bundle ownership key. When set, indicates the resource is managed by a
+   * configuration bundle identified by this key. Used by
+   * BulkWorkspaceResources.Apply to track which resources belong to which bundle for
+   * reconciliation / soft-delete on re-apply.
+   */
+  bundleKey?: string;
+
+  /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
   externalId?: string;
@@ -197,6 +210,11 @@ export interface UpdateResourceMetadata {
    * Tool")
    */
   name: string;
+
+  /**
+   * Optional bundle ownership key. See ResourceMetadata.bundle_key.
+   */
+  bundleKey?: string;
 
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)

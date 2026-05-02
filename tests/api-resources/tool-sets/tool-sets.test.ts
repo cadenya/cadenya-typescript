@@ -28,6 +28,7 @@ describe('resource toolSets', () => {
     const response = await client.toolSets.create({
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -140,6 +141,7 @@ describe('resource toolSets', () => {
     await expect(
       client.toolSets.list(
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

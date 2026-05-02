@@ -28,6 +28,7 @@ describe('resource entries', () => {
     const response = await client.memoryLayers.entries.create('memoryLayerId', {
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -75,6 +76,7 @@ describe('resource entries', () => {
       memoryLayerId: 'memoryLayerId',
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -107,6 +109,7 @@ describe('resource entries', () => {
       client.memoryLayers.entries.list(
         'memoryLayerId',
         {
+          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

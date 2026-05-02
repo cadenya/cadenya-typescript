@@ -519,6 +519,11 @@ export interface VariationUpdateParams {
 
 export interface VariationListParams extends CursorPaginationParams {
   /**
+   * Filter by bundle_key — return only resources owned by this bundle.
+   */
+  bundleKey?: string;
+
+  /**
    * When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
