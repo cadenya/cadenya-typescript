@@ -12,8 +12,11 @@ export class Tasks extends APIResource {
    * Retrieves a task by ID from an objective
    */
   retrieve(id: string, params: TaskRetrieveParams, options?: RequestOptions): APIPromise<ObjectiveTask> {
-    const { objectiveId } = params;
-    return this._client.get(path`/v1/objectives/${objectiveId}/tasks/${id}`, options);
+    const { workspaceId, objectiveId } = params;
+    return this._client.get(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tasks/${id}`,
+      options,
+    );
   }
 
   /**
@@ -21,11 +24,12 @@ export class Tasks extends APIResource {
    */
   list(
     objectiveID: string,
-    query: TaskListParams | null | undefined = {},
+    params: TaskListParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveTasksCursorPagination, ObjectiveTask> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/tasks`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tasks`,
       CursorPagination<ObjectiveTask>,
       { query, ...options },
     );
@@ -76,6 +80,11 @@ export interface ObjectiveTaskData {
 
 export interface TaskRetrieveParams {
   /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
    * The ID of the objective. Supports "external_id:" prefix for external IDs.
    */
   objectiveId: string;
@@ -83,7 +92,12 @@ export interface TaskRetrieveParams {
 
 export interface TaskListParams extends CursorPaginationParams {
   /**
-   * Sort order for results
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Sort order for results
    */
   sortOrder?: string;
 }

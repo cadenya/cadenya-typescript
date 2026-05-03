@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource workspaceSecrets', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.workspaceSecrets.create({
+    const responsePromise = client.workspaceSecrets.create('workspaceId', {
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,7 +25,7 @@ describe('resource workspaceSecrets', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.workspaceSecrets.create({
+    const response = await client.workspaceSecrets.create('workspaceId', {
       metadata: {
         name: 'name',
         bundleKey: 'bundleKey',
@@ -37,8 +37,8 @@ describe('resource workspaceSecrets', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.workspaceSecrets.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.workspaceSecrets.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,8 +49,13 @@ describe('resource workspaceSecrets', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.workspaceSecrets.update('id', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.workspaceSecrets.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.workspaceSecrets.update('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,11 +63,26 @@ describe('resource workspaceSecrets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.workspaceSecrets.update('id', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { value: 'value' },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.workspaceSecrets.list();
+    const responsePromise = client.workspaceSecrets.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,6 +97,7 @@ describe('resource workspaceSecrets', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.workspaceSecrets.list(
+        'workspaceId',
         {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
@@ -92,8 +113,8 @@ describe('resource workspaceSecrets', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.workspaceSecrets.delete('id');
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.workspaceSecrets.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,5 +122,10 @@ describe('resource workspaceSecrets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.workspaceSecrets.delete('id', { workspaceId: 'workspaceId' });
   });
 });

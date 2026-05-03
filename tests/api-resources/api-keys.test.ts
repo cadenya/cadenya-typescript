@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource apiKeys', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.apiKeys.create({
+    const responsePromise = client.apiKeys.create('workspaceId', {
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,7 +25,7 @@ describe('resource apiKeys', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.apiKeys.create({
+    const response = await client.apiKeys.create('workspaceId', {
       metadata: {
         name: 'name',
         bundleKey: 'bundleKey',
@@ -37,8 +37,8 @@ describe('resource apiKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.apiKeys.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.apiKeys.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,8 +49,13 @@ describe('resource apiKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.apiKeys.update('id', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.apiKeys.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.apiKeys.update('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,11 +63,26 @@ describe('resource apiKeys', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.apiKeys.update('id', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { description: 'description' },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.apiKeys.list();
+    const responsePromise = client.apiKeys.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,6 +97,7 @@ describe('resource apiKeys', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.apiKeys.list(
+        'workspaceId',
         {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
@@ -92,8 +113,8 @@ describe('resource apiKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.apiKeys.delete('id');
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.apiKeys.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -104,8 +125,13 @@ describe('resource apiKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('rotate', async () => {
-    const responsePromise = client.apiKeys.rotate('id');
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.apiKeys.delete('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('rotate: only required params', async () => {
+    const responsePromise = client.apiKeys.rotate('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -113,5 +139,10 @@ describe('resource apiKeys', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('rotate: required and optional params', async () => {
+    const response = await client.apiKeys.rotate('id', { workspaceId: 'workspaceId' });
   });
 });

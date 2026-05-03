@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource objectives', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.objectives.create({
+    const responsePromise = client.objectives.create('workspaceId', {
       agentId: 'agentId',
       data: {},
       metadata: {},
@@ -26,7 +26,7 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.objectives.create({
+    const response = await client.objectives.create('workspaceId', {
       agentId: 'agentId',
       data: {
         data: {},
@@ -43,8 +43,8 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.objectives.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.objectives.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,8 +55,13 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.objectives.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.objectives.list();
+    const responsePromise = client.objectives.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -71,6 +76,7 @@ describe('resource objectives', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.objectives.list(
+        'workspaceId',
         {
           agentId: 'agentId',
           agentScheduleId: 'agentScheduleId',
@@ -88,8 +94,8 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('cancel', async () => {
-    const responsePromise = client.objectives.cancel('objectiveId', {});
+  test.skip('cancel: only required params', async () => {
+    const responsePromise = client.objectives.cancel('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -100,8 +106,16 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('compact', async () => {
-    const responsePromise = client.objectives.compact('objectiveId', {});
+  test.skip('cancel: required and optional params', async () => {
+    const response = await client.objectives.cancel('objectiveId', {
+      workspaceId: 'workspaceId',
+      reason: 'reason',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('compact: only required params', async () => {
+    const responsePromise = client.objectives.compact('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -112,8 +126,20 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('continue', async () => {
-    const responsePromise = client.objectives.continue('objectiveId', {});
+  test.skip('compact: required and optional params', async () => {
+    const response = await client.objectives.compact('objectiveId', {
+      workspaceId: 'workspaceId',
+      compactionConfig: {
+        summarization: { instructions: 'instructions' },
+        toolResultClearing: { preserveRecentResults: 0 },
+        triggerThreshold: 0,
+      },
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('continue: only required params', async () => {
+    const responsePromise = client.objectives.continue('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -124,8 +150,20 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listContextWindows', async () => {
-    const responsePromise = client.objectives.listContextWindows('objectiveId');
+  test.skip('continue: required and optional params', async () => {
+    const response = await client.objectives.continue('objectiveId', {
+      workspaceId: 'workspaceId',
+      enqueue: true,
+      message: 'message',
+      secrets: [{ name: 'name', value: 'value' }],
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listContextWindows: only required params', async () => {
+    const responsePromise = client.objectives.listContextWindows('objectiveId', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -136,24 +174,18 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listContextWindows: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.listContextWindows(
-        'objectiveId',
-        {
-          cursor: 'cursor',
-          includeInfo: true,
-          limit: 0,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('listContextWindows: required and optional params', async () => {
+    const response = await client.objectives.listContextWindows('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('listEvents', async () => {
-    const responsePromise = client.objectives.listEvents('objectiveId');
+  test.skip('listEvents: only required params', async () => {
+    const responsePromise = client.objectives.listEvents('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -164,20 +196,14 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listEvents: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.listEvents(
-        'objectiveId',
-        {
-          cursor: 'cursor',
-          includeInfo: true,
-          limit: 0,
-          sortOrder: 'sortOrder',
-          windowId: 'windowId',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('listEvents: required and optional params', async () => {
+    const response = await client.objectives.listEvents('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+      sortOrder: 'sortOrder',
+      windowId: 'windowId',
+    });
   });
 });

@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource tools', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.objectives.tools.list('objectiveId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.objectives.tools.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,14 +21,11 @@ describe('resource tools', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.tools.list(
-        'objectiveId',
-        { cursor: 'cursor', limit: 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.objectives.tools.list('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      limit: 0,
+    });
   });
 });

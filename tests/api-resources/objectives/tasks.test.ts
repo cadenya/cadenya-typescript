@@ -10,7 +10,10 @@ const client = new Cadenya({
 describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.objectives.tasks.retrieve('id', { objectiveId: 'objectiveId' });
+    const responsePromise = client.objectives.tasks.retrieve('id', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,12 +25,15 @@ describe('resource tasks', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.objectives.tasks.retrieve('id', { objectiveId: 'objectiveId' });
+    const response = await client.objectives.tasks.retrieve('id', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.objectives.tasks.list('objectiveId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.objectives.tasks.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -38,18 +44,12 @@ describe('resource tasks', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.tasks.list(
-        'objectiveId',
-        {
-          cursor: 'cursor',
-          limit: 0,
-          sortOrder: 'sortOrder',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.objectives.tasks.list('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      limit: 0,
+      sortOrder: 'sortOrder',
+    });
   });
 });

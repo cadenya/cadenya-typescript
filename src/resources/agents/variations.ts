@@ -13,8 +13,16 @@ export class Variations extends APIResource {
   /**
    * Creates a new variation for an agent
    */
-  create(agentID: string, body: VariationCreateParams, options?: RequestOptions): APIPromise<AgentVariation> {
-    return this._client.post(path`/v1/agents/${agentID}/variations`, { body, ...options });
+  create(
+    agentID: string,
+    params: VariationCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentVariation> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -25,16 +33,19 @@ export class Variations extends APIResource {
     params: VariationRetrieveParams,
     options?: RequestOptions,
   ): APIPromise<AgentVariation> {
-    const { agentId } = params;
-    return this._client.get(path`/v1/agents/${agentId}/variations/${id}`, options);
+    const { workspaceId, agentId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, options);
   }
 
   /**
    * Updates a variation for an agent
    */
   update(id: string, params: VariationUpdateParams, options?: RequestOptions): APIPromise<AgentVariation> {
-    const { agentId, ...body } = params;
-    return this._client.patch(path`/v1/agents/${agentId}/variations/${id}`, { body, ...options });
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -42,21 +53,23 @@ export class Variations extends APIResource {
    */
   list(
     agentID: string,
-    query: VariationListParams | null | undefined = {},
+    params: VariationListParams,
     options?: RequestOptions,
   ): PagePromise<AgentVariationsCursorPagination, AgentVariation> {
-    return this._client.getAPIList(path`/v1/agents/${agentID}/variations`, CursorPagination<AgentVariation>, {
-      query,
-      ...options,
-    });
+    const { workspaceId, ...query } = params;
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations`,
+      CursorPagination<AgentVariation>,
+      { query, ...options },
+    );
   }
 
   /**
    * Deletes a variation from an agent
    */
   delete(id: string, params: VariationDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { agentId } = params;
-    return this._client.delete(path`/v1/agents/${agentId}/variations/${id}`, {
+    const { workspaceId, agentId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -71,11 +84,11 @@ export class Variations extends APIResource {
     params: VariationAddAssignmentParams,
     options?: RequestOptions,
   ): APIPromise<VariationAssignment> {
-    const { agentId, ...body } = params;
-    return this._client.post(path`/v1/agents/${agentId}/variations/${variationID}/assignments`, {
-      body,
-      ...options,
-    });
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.post(
+      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationID}/assignments`,
+      { body, ...options },
+    );
   }
 
   /**
@@ -87,11 +100,11 @@ export class Variations extends APIResource {
     params: VariationAddMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    const { agentId, ...body } = params;
-    return this._client.post(path`/v1/agents/${agentId}/variations/${variationID}/memory_layer_assignments`, {
-      body,
-      ...options,
-    });
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.post(
+      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationID}/memory_layer_assignments`,
+      { body, ...options },
+    );
   }
 
   /**
@@ -103,11 +116,11 @@ export class Variations extends APIResource {
     params: VariationRemoveAssignmentParams,
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { agentId, variationId } = params;
-    return this._client.delete(path`/v1/agents/${agentId}/variations/${variationId}/assignments/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { workspaceId, agentId, variationId } = params;
+    return this._client.delete(
+      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/assignments/${id}`,
+      { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
+    );
   }
 
   /**
@@ -119,9 +132,9 @@ export class Variations extends APIResource {
     params: VariationRemoveMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { agentId, variationId } = params;
+    const { workspaceId, agentId, variationId } = params;
     return this._client.delete(
-      path`/v1/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
       { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
     );
   }
@@ -134,9 +147,9 @@ export class Variations extends APIResource {
     params: VariationUpdateMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    const { agentId, variationId, ...body } = params;
+    const { workspaceId, agentId, variationId, ...body } = params;
     return this._client.patch(
-      path`/v1/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
       { body, ...options },
     );
   }
@@ -470,19 +483,31 @@ export interface VariationMemoryLayerAssignment {
 
 export interface VariationCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
   /**
-   * AgentVariationSpec defines the operational configuration for a variation
+   * Body param: AgentVariationSpec defines the operational configuration for a
+   * variation
    */
   spec: AgentVariationSpec;
 }
 
 export interface VariationRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
@@ -491,6 +516,11 @@ export interface VariationRetrieveParams {
 }
 
 export interface VariationUpdateParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Agent ID (from path). Accepts canonical agent\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -519,22 +549,32 @@ export interface VariationUpdateParams {
 
 export interface VariationListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 }
 
 export interface VariationDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
@@ -543,6 +583,11 @@ export interface VariationDeleteParams {
 }
 
 export interface VariationAddAssignmentParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Agent ID (from path). Accepts canonical agent\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -567,6 +612,11 @@ export interface VariationAddAssignmentParams {
 
 export interface VariationAddMemoryLayerParams {
   /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
    * Path param: Agent ID (from path). Accepts canonical agent\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
    */
@@ -587,6 +637,11 @@ export interface VariationAddMemoryLayerParams {
 
 export interface VariationRemoveAssignmentParams {
   /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
    */
@@ -601,6 +656,11 @@ export interface VariationRemoveAssignmentParams {
 
 export interface VariationRemoveMemoryLayerParams {
   /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
    */
@@ -614,6 +674,11 @@ export interface VariationRemoveMemoryLayerParams {
 }
 
 export interface VariationUpdateMemoryLayerParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Agent ID (from path). Accepts canonical agent\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").

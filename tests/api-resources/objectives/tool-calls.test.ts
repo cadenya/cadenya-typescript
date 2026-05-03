@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource toolCalls', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.objectives.toolCalls.list('objectiveId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.objectives.toolCalls.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,25 +21,22 @@ describe('resource toolCalls', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.toolCalls.list(
-        'objectiveId',
-        {
-          cursor: 'cursor',
-          includeInfo: true,
-          limit: 0,
-          status: 'TOOL_CALL_STATUS_UNSPECIFIED',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.objectives.toolCalls.list('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+      status: 'TOOL_CALL_STATUS_UNSPECIFIED',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('approve: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.approve('toolCallId', { objectiveId: 'objectiveId' });
+    const responsePromise = client.objectives.toolCalls.approve('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,12 +48,18 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('approve: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.approve('toolCallId', { objectiveId: 'objectiveId' });
+    const response = await client.objectives.toolCalls.approve('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('deny: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.deny('toolCallId', { objectiveId: 'objectiveId' });
+    const responsePromise = client.objectives.toolCalls.deny('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -69,6 +72,7 @@ describe('resource toolCalls', () => {
   // Mock server tests are disabled
   test.skip('deny: required and optional params', async () => {
     const response = await client.objectives.toolCalls.deny('toolCallId', {
+      workspaceId: 'workspaceId',
       objectiveId: 'objectiveId',
       memo: 'memo',
     });

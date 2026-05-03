@@ -11,6 +11,7 @@ describe('resource feedback', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.objectives.feedback.create('objectiveId', {
+      workspaceId: 'workspaceId',
       data: {},
       metadata: {},
     });
@@ -26,6 +27,7 @@ describe('resource feedback', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.objectives.feedback.create('objectiveId', {
+      workspaceId: 'workspaceId',
       data: { comment: 'comment', score: 0 },
       metadata: {
         externalId: 'externalId',
@@ -35,8 +37,8 @@ describe('resource feedback', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.objectives.feedback.list('objectiveId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.objectives.feedback.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -47,14 +49,11 @@ describe('resource feedback', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.feedback.list(
-        'objectiveId',
-        { cursor: 'cursor', limit: 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.objectives.feedback.list('objectiveId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      limit: 0,
+    });
   });
 });

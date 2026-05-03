@@ -7,8 +7,10 @@ export {
   type AgentSpec,
   type Page,
   type AgentCreateParams,
+  type AgentRetrieveParams,
   type AgentUpdateParams,
   type AgentListParams,
+  type AgentDeleteParams,
   type AgentsCursorPagination,
 } from './agents';
 export { Feedback, type FeedbackListParams } from './feedback';

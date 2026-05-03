@@ -24,24 +24,31 @@ export class Tools extends APIResource {
   /**
    * Creates a new tool in the tool set
    */
-  create(toolSetID: string, body: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
-    return this._client.post(path`/v1/tool_sets/${toolSetID}/tools`, { body, ...options });
+  create(toolSetID: string, params: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Retrieves a tool by ID from the workspace
    */
   retrieve(id: string, params: ToolRetrieveParams, options?: RequestOptions): APIPromise<Tool> {
-    const { toolSetId } = params;
-    return this._client.get(path`/v1/tool_sets/${toolSetId}/tools/${id}`, options);
+    const { workspaceId, toolSetId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, options);
   }
 
   /**
    * Updates a tool in the tool set
    */
   update(id: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { toolSetId, ...body } = params;
-    return this._client.put(path`/v1/tool_sets/${toolSetId}/tools/${id}`, { body, ...options });
+    const { workspaceId, toolSetId, ...body } = params;
+    return this._client.put(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -49,21 +56,23 @@ export class Tools extends APIResource {
    */
   list(
     toolSetID: string,
-    query: ToolListParams | null | undefined = {},
+    params: ToolListParams,
     options?: RequestOptions,
   ): PagePromise<ToolsCursorPagination, Tool> {
-    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/tools`, CursorPagination<Tool>, {
-      query,
-      ...options,
-    });
+    const { workspaceId, ...query } = params;
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools`,
+      CursorPagination<Tool>,
+      { query, ...options },
+    );
   }
 
   /**
    * Deletes a tool in the tool set
    */
   delete(id: string, params: ToolDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { toolSetId } = params;
-    return this._client.delete(path`/v1/tool_sets/${toolSetId}/tools/${id}`, {
+    const { workspaceId, toolSetId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -163,16 +172,30 @@ export interface ToolSpecConfig {
 
 export interface ToolCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: ToolSpec;
 }
 
 export interface ToolRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
@@ -181,6 +204,11 @@ export interface ToolRetrieveParams {
 }
 
 export interface ToolUpdateParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Tool set ID (from path). Accepts canonical ts\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -208,43 +236,49 @@ export interface ToolUpdateParams {
 
 export interface ToolListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filter by tool name (exact match). Multiple values are OR'd together.
+   * Query param: Filter by tool name (exact match). Multiple values are OR'd
+   * together.
    */
   names?: Array<string>;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Filter by approval requirement. Omitted = no filter; true = only tools requiring
-   * approval; false = only tools not requiring approval.
+   * Query param: Filter by approval requirement. Omitted = no filter; true = only
+   * tools requiring approval; false = only tools not requiring approval.
    */
   requiresApproval?: boolean;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by tool status. Multiple values are OR'd together.
+   * Query param: Filter by tool status. Multiple values are OR'd together.
    */
   statuses?: Array<
     'TOOL_STATUS_UNSPECIFIED' | 'TOOL_STATUS_AVAILABLE' | 'TOOL_STATUS_OMITTED' | 'TOOL_STATUS_ARCHIVED'
@@ -252,6 +286,11 @@ export interface ToolListParams extends CursorPaginationParams {
 }
 
 export interface ToolDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").

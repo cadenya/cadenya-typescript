@@ -23,11 +23,12 @@ export class Feedback extends APIResource {
    */
   list(
     agentID: string,
-    query: FeedbackListParams | null | undefined = {},
+    params: FeedbackListParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveFeedbacksCursorPagination, ObjectivesFeedbackAPI.ObjectiveFeedback> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/agents/${agentID}/feedback`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/feedback`,
       CursorPagination<ObjectivesFeedbackAPI.ObjectiveFeedback>,
       { query, ...options },
     );
@@ -36,34 +37,40 @@ export class Feedback extends APIResource {
 
 export interface FeedbackListParams extends CursorPaginationParams {
   /**
-   * Optional filter to limit results to feedback on objectives run by a single agent
-   * variation. Supports "external_id:" prefix for external IDs.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Optional filter to limit results to feedback on objectives run by a
+   * single agent variation. Supports "external_id:" prefix for external IDs.
    */
   agentVariationId?: string;
 
   /**
-   * Inclusive lower bound on feedback creation time.
+   * Query param: Inclusive lower bound on feedback creation time.
    */
   createdAfter?: string;
 
   /**
-   * Exclusive upper bound on feedback creation time.
+   * Query param: Exclusive upper bound on feedback creation time.
    */
   createdBefore?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Free-text search applied to the feedback comment. Case-insensitive substring
-   * match.
+   * Query param: Free-text search applied to the feedback comment. Case-insensitive
+   * substring match.
    */
   query?: string;
 
   /**
-   * Filter by sentiment. UNSPECIFIED returns feedback regardless of score.
+   * Query param: Filter by sentiment. UNSPECIFIED returns feedback regardless of
+   * score.
    */
   sentiment?:
     | 'FEEDBACK_SENTIMENT_UNSPECIFIED'
