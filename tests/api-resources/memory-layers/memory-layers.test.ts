@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource memoryLayers', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.memoryLayers.create({
+    const responsePromise = client.memoryLayers.create('workspaceId', {
       metadata: { name: 'name' },
       spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' },
     });
@@ -25,7 +25,7 @@ describe('resource memoryLayers', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.memoryLayers.create({
+    const response = await client.memoryLayers.create('workspaceId', {
       metadata: {
         name: 'name',
         bundleKey: 'bundleKey',
@@ -37,8 +37,8 @@ describe('resource memoryLayers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.memoryLayers.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.memoryLayers.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,8 +49,13 @@ describe('resource memoryLayers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.memoryLayers.update('id', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.memoryLayers.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.memoryLayers.update('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,11 +63,26 @@ describe('resource memoryLayers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.memoryLayers.update('id', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED', description: 'description' },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.memoryLayers.list();
+    const responsePromise = client.memoryLayers.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,6 +97,7 @@ describe('resource memoryLayers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.memoryLayers.list(
+        'workspaceId',
         {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
@@ -93,8 +114,8 @@ describe('resource memoryLayers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.memoryLayers.delete('id');
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.memoryLayers.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -102,5 +123,10 @@ describe('resource memoryLayers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.memoryLayers.delete('id', { workspaceId: 'workspaceId' });
   });
 });

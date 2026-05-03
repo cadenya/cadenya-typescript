@@ -40,6 +40,7 @@ export {
   type ObjectiveContinueResponse,
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
+  type ObjectiveRetrieveParams,
   type ObjectiveListParams,
   type ObjectiveCancelParams,
   type ObjectiveCompactParams,

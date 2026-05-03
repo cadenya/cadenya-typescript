@@ -29,11 +29,12 @@ export class Results extends APIResource {
    */
   list(
     bulkWorkspaceApplyID: string,
-    query: ResultListParams | null | undefined = {},
+    params: ResultListParams,
     options?: RequestOptions,
   ): PagePromise<BulkWorkspaceApplyResultsCursorPagination, BulkWorkspaceApplyResult> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/bulk_workspace_applies/${bulkWorkspaceApplyID}/results`,
+      path`/v1/workspaces/${workspaceId}/bulk_workspace_applies/${bulkWorkspaceApplyID}/results`,
       CursorPagination<BulkWorkspaceApplyResult>,
       { query, ...options },
     );
@@ -781,7 +782,12 @@ export namespace BulkWorkspaceApplyResultDataVariationMemoryLayerOutcome {
 
 export interface ResultListParams extends CursorPaginationParams {
   /**
-   * Filter by action.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Filter by action.
    */
   action?:
     | 'ACTION_UNSPECIFIED'
@@ -792,12 +798,12 @@ export interface ResultListParams extends CursorPaginationParams {
     | 'ACTION_FAILED';
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by data.type discriminator (e.g., "toolSet", "memoryEntry").
+   * Query param: Filter by data.type discriminator (e.g., "toolSet", "memoryEntry").
    */
   type?: string;
 }

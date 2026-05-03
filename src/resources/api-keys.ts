@@ -20,39 +20,46 @@ export class APIKeys extends APIResource {
   /**
    * Creates a new API key in the workspace.
    */
-  create(body: APIKeyCreateParams, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.post('/v1/api_keys', { body, ...options });
+  create(workspaceID: string, body: APIKeyCreateParams, options?: RequestOptions): APIPromise<APIKey> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/api_keys`, { body, ...options });
   }
 
   /**
    * Retrieves an API key by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.get(path`/v1/api_keys/${id}`, options);
+  retrieve(id: string, params: APIKeyRetrieveParams, options?: RequestOptions): APIPromise<APIKey> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, options);
   }
 
   /**
    * Updates an API key in the workspace
    */
-  update(id: string, body: APIKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.patch(path`/v1/api_keys/${id}`, { body, ...options });
+  update(id: string, params: APIKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey> {
+    const { workspaceId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, { body, ...options });
   }
 
   /**
    * Lists all API keys in the workspace
    */
   list(
+    workspaceID: string,
     query: APIKeyListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<APIKeysCursorPagination, APIKey> {
-    return this._client.getAPIList('/v1/api_keys', CursorPagination<APIKey>, { query, ...options });
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/api_keys`, CursorPagination<APIKey>, {
+      query,
+      ...options,
+    });
   }
 
   /**
    * Deletes an API key from the workspace
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/api_keys/${id}`, {
+  delete(id: string, params: APIKeyDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { workspaceId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -62,8 +69,9 @@ export class APIKeys extends APIResource {
    * Rotates an API Key and returns a new token. All previous API Key tokens in use
    * will be invalidated.
    */
-  rotate(id: string, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.put(path`/v1/api_keys/${id}/rotate`, options);
+  rotate(id: string, params: APIKeyRotateParams, options?: RequestOptions): APIPromise<APIKey> {
+    const { workspaceId } = params;
+    return this._client.put(path`/v1/workspaces/${workspaceId}/api_keys/${id}/rotate`, options);
   }
 }
 
@@ -126,21 +134,34 @@ export interface APIKeyCreateParams {
   spec: APIKeySpec;
 }
 
+export interface APIKeyRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface APIKeyUpdateParams {
   /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: Shared.UpdateResourceMetadata;
 
   /**
-   * APIKeySpec contains the API Key-specific fields
+   * Body param: APIKeySpec contains the API Key-specific fields
    */
   spec?: APIKeySpec;
 
   /**
-   * Fields to update
+   * Body param: Fields to update
    */
   updateMask?: string;
 }
@@ -172,6 +193,20 @@ export interface APIKeyListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface APIKeyDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
+export interface APIKeyRotateParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export declare namespace APIKeys {
   export {
     type APIKey as APIKey,
@@ -179,7 +214,10 @@ export declare namespace APIKeys {
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyDeleteParams as APIKeyDeleteParams,
+    type APIKeyRotateParams as APIKeyRotateParams,
   };
 }

@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource bulkWorkspaceResources', () => {
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.bulkWorkspaceResources.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.bulkWorkspaceResources.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,13 @@ describe('resource bulkWorkspaceResources', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.bulkWorkspaceResources.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.bulkWorkspaceResources.list();
+    const responsePromise = client.bulkWorkspaceResources.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -37,6 +42,7 @@ describe('resource bulkWorkspaceResources', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.bulkWorkspaceResources.list(
+        'workspaceId',
         {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
@@ -51,7 +57,9 @@ describe('resource bulkWorkspaceResources', () => {
 
   // Mock server tests are disabled
   test.skip('apply: only required params', async () => {
-    const responsePromise = client.bulkWorkspaceResources.apply({ data: { bundleKey: 'bundleKey' } });
+    const responsePromise = client.bulkWorkspaceResources.apply('workspaceId', {
+      data: { bundleKey: 'bundleKey' },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -63,7 +71,7 @@ describe('resource bulkWorkspaceResources', () => {
 
   // Mock server tests are disabled
   test.skip('apply: required and optional params', async () => {
-    const response = await client.bulkWorkspaceResources.apply({
+    const response = await client.bulkWorkspaceResources.apply('workspaceId', {
       data: {
         bundleKey: 'bundleKey',
         agents: {

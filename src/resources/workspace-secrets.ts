@@ -13,15 +13,24 @@ export class WorkspaceSecrets extends APIResource {
   /**
    * Creates a new workspace secret in the workspace
    */
-  create(body: WorkspaceSecretCreateParams, options?: RequestOptions): APIPromise<WorkspaceSecret> {
-    return this._client.post('/v1/workspace_secrets', { body, ...options });
+  create(
+    workspaceID: string,
+    body: WorkspaceSecretCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<WorkspaceSecret> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/workspace_secrets`, { body, ...options });
   }
 
   /**
    * Retrieves a workspace secret by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<WorkspaceSecret> {
-    return this._client.get(path`/v1/workspace_secrets/${id}`, options);
+  retrieve(
+    id: string,
+    params: WorkspaceSecretRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<WorkspaceSecret> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, options);
   }
 
   /**
@@ -29,30 +38,37 @@ export class WorkspaceSecrets extends APIResource {
    */
   update(
     id: string,
-    body: WorkspaceSecretUpdateParams,
+    params: WorkspaceSecretUpdateParams,
     options?: RequestOptions,
   ): APIPromise<WorkspaceSecret> {
-    return this._client.patch(path`/v1/workspace_secrets/${id}`, { body, ...options });
+    const { workspaceId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Lists all workspace secrets in the workspace
    */
   list(
+    workspaceID: string,
     query: WorkspaceSecretListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<WorkspaceSecretsCursorPagination, WorkspaceSecret> {
-    return this._client.getAPIList('/v1/workspace_secrets', CursorPagination<WorkspaceSecret>, {
-      query,
-      ...options,
-    });
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceID}/workspace_secrets`,
+      CursorPagination<WorkspaceSecret>,
+      { query, ...options },
+    );
   }
 
   /**
    * Deletes a workspace secret from the workspace
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/workspace_secrets/${id}`, {
+  delete(id: string, params: WorkspaceSecretDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { workspaceId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -101,18 +117,34 @@ export interface WorkspaceSecretCreateParams {
   spec: WorkspaceSecretSpec;
 }
 
+export interface WorkspaceSecretRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface WorkspaceSecretUpdateParams {
   /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: Shared.UpdateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec?: WorkspaceSecretSpec;
 
   /**
-   * Fields to update
+   * Body param: Fields to update
    */
   updateMask?: string;
 }
@@ -144,6 +176,13 @@ export interface WorkspaceSecretListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface WorkspaceSecretDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export declare namespace WorkspaceSecrets {
   export {
     type WorkspaceSecret as WorkspaceSecret,
@@ -151,7 +190,9 @@ export declare namespace WorkspaceSecrets {
     type WorkspaceSecretSpec as WorkspaceSecretSpec,
     type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
     type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
+    type WorkspaceSecretRetrieveParams as WorkspaceSecretRetrieveParams,
     type WorkspaceSecretUpdateParams as WorkspaceSecretUpdateParams,
     type WorkspaceSecretListParams as WorkspaceSecretListParams,
+    type WorkspaceSecretDeleteParams as WorkspaceSecretDeleteParams,
   };
 }

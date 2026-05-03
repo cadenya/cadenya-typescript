@@ -6,16 +6,21 @@ import * as ToolSetsAPI from './tool-sets/tool-sets';
 import * as ToolsAPI from './tool-sets/tools';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
 export class Search extends APIResource {
   /**
    * Searches for tools or tool sets in the workspace
    */
   searchToolsOrToolSets(
+    workspaceID: string,
     query: SearchSearchToolsOrToolSetsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<SearchSearchToolsOrToolSetsResponse> {
-    return this._client.get('/v1/search/tools_or_tool_sets', { query, ...options });
+    return this._client.get(path`/v1/workspaces/${workspaceID}/search/tools_or_tool_sets`, {
+      query,
+      ...options,
+    });
   }
 }
 

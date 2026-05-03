@@ -13,11 +13,12 @@ export class Tools extends APIResource {
    */
   list(
     objectiveID: string,
-    query: ToolListParams | null | undefined = {},
+    params: ToolListParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveToolsCursorPagination, ObjectiveTool> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/tools`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tools`,
       CursorPagination<ObjectiveTool>,
       { query, ...options },
     );
@@ -48,7 +49,12 @@ export interface ObjectiveTool {
   snapshot?: ToolSetsToolsAPI.Tool;
 }
 
-export interface ToolListParams extends CursorPaginationParams {}
+export interface ToolListParams extends CursorPaginationParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+}
 
 export declare namespace Tools {
   export {

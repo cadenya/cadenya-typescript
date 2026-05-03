@@ -28,10 +28,14 @@ export class Entries extends APIResource {
    */
   create(
     memoryLayerID: string,
-    body: EntryCreateParams,
+    params: EntryCreateParams,
     options?: RequestOptions,
   ): APIPromise<MemoryEntryDetail> {
-    return this._client.post(path`/v1/memory_layers/${memoryLayerID}/entries`, { body, ...options });
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -39,8 +43,11 @@ export class Entries extends APIResource {
    * including the content body.
    */
   retrieve(id: string, params: EntryRetrieveParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
-    const { memoryLayerId } = params;
-    return this._client.get(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, options);
+    const { workspaceId, memoryLayerId } = params;
+    return this._client.get(
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      options,
+    );
   }
 
   /**
@@ -48,8 +55,11 @@ export class Entries extends APIResource {
    * resolved content body.
    */
   update(id: string, params: EntryUpdateParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
-    const { memoryLayerId, ...body } = params;
-    return this._client.patch(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, { body, ...options });
+    const { workspaceId, memoryLayerId, ...body } = params;
+    return this._client.patch(
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      { body, ...options },
+    );
   }
 
   /**
@@ -57,11 +67,12 @@ export class Entries extends APIResource {
    */
   list(
     memoryLayerID: string,
-    query: EntryListParams | null | undefined = {},
+    params: EntryListParams,
     options?: RequestOptions,
   ): PagePromise<MemoryEntriesCursorPagination, MemoryEntry> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/memory_layers/${memoryLayerID}/entries`,
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries`,
       CursorPagination<MemoryEntry>,
       { query, ...options },
     );
@@ -71,11 +82,11 @@ export class Entries extends APIResource {
    * Deletes a memory entry from a memory layer
    */
   delete(id: string, params: EntryDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { memoryLayerId } = params;
-    return this._client.delete(path`/v1/memory_layers/${memoryLayerId}/entries/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { workspaceId, memoryLayerId } = params;
+    return this._client.delete(
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
+    );
   }
 }
 
@@ -229,21 +240,32 @@ export interface MemoryEntryUpdateSpec {
 
 export interface EntryCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
   /**
-   * MemoryEntryCreateSpec is the input shape for CreateMemoryEntry. It accepts
-   * either inline content or a reference to a completed Upload; exactly one of the
-   * two must be set.
+   * Body param: MemoryEntryCreateSpec is the input shape for CreateMemoryEntry. It
+   * accepts either inline content or a reference to a completed Upload; exactly one
+   * of the two must be set.
    */
   spec: MemoryEntryCreateSpec;
 }
 
 export interface EntryRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Memory layer ID (from path). Accepts canonical memlyr\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -252,6 +274,11 @@ export interface EntryRetrieveParams {
 }
 
 export interface EntryUpdateParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Memory layer ID (from path). Accepts canonical memlyr\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -282,33 +309,43 @@ export interface EntryUpdateParams {
 
 export interface EntryListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filter by key prefix (e.g., "skills/postmortem/" to list all entries under that
-   * hierarchy). Matches against the entry's key, not its name.
+   * Query param: Filter by key prefix (e.g., "skills/postmortem/" to list all
+   * entries under that hierarchy). Matches against the entry's key, not its name.
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 }
 
 export interface EntryDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Memory layer ID (from path). Accepts canonical memlyr\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").

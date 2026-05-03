@@ -36,17 +36,17 @@ Types:
 
 Methods:
 
-- <code title="post /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">create</a>({ ...params }) -> Agent</code>
-- <code title="get /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">retrieve</a>(id) -> Agent</code>
-- <code title="patch /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(id, { ...params }) -> Agent</code>
-- <code title="get /v1/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsCursorPagination</code>
-- <code title="delete /v1/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents">client.agents.<a href="./src/resources/agents/agents.ts">create</a>(workspaceID, { ...params }) -> Agent</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">retrieve</a>(id, { ...params }) -> Agent</code>
+- <code title="patch /v1/workspaces/{workspaceId}/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(id, { ...params }) -> Agent</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>(workspaceID, { ...params }) -> AgentsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id, { ...params }) -> void</code>
 
 ## Feedback
 
 Methods:
 
-- <code title="get /v1/agents/{agentId}/feedback">client.agents.feedback.<a href="./src/resources/agents/feedback.ts">list</a>(agentID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/feedback">client.agents.feedback.<a href="./src/resources/agents/feedback.ts">list</a>(agentID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
 
 ## WebhookDeliveries
 
@@ -57,7 +57,7 @@ Types:
 
 Methods:
 
-- <code title="get /v1/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/webhook_deliveries">client.agents.webhookDeliveries.<a href="./src/resources/agents/webhook-deliveries.ts">list</a>(agentID, { ...params }) -> WebhookDeliveriesCursorPagination</code>
 
 ## Variations
 
@@ -77,16 +77,16 @@ Types:
 
 Methods:
 
-- <code title="post /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="patch /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
-- <code title="get /v1/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
-- <code title="post /v1/agents/{agentId}/variations/{variationId}/assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addAssignment</a>(variationID, { ...params }) -> VariationAssignment</code>
-- <code title="post /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addMemoryLayer</a>(variationID, { ...params }) -> VariationMemoryLayerAssignment</code>
-- <code title="delete /v1/agents/{agentId}/variations/{variationId}/assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
-- <code title="delete /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
-- <code title="patch /v1/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">create</a>(agentID, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">retrieve</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="patch /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">update</a>(id, { ...params }) -> AgentVariation</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/variations">client.agents.variations.<a href="./src/resources/agents/variations.ts">list</a>(agentID, { ...params }) -> AgentVariationsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{variationId}/assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addAssignment</a>(variationID, { ...params }) -> VariationAssignment</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{variationId}/memory_layer_assignments">client.agents.variations.<a href="./src/resources/agents/variations.ts">addMemoryLayer</a>(variationID, { ...params }) -> VariationMemoryLayerAssignment</code>
+- <code title="delete /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{variationId}/assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeAssignment</a>(id, { ...params }) -> void</code>
+- <code title="delete /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">removeMemoryLayer</a>(id, { ...params }) -> void</code>
+- <code title="patch /v1/workspaces/{workspaceId}/agents/{agentId}/variations/{variationId}/memory_layer_assignments/{id}">client.agents.variations.<a href="./src/resources/agents/variations.ts">updateMemoryLayer</a>(id, { ...params }) -> VariationMemoryLayerAssignment</code>
 
 ## Schedules
 
@@ -102,11 +102,11 @@ Types:
 
 Methods:
 
-- <code title="post /v1/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">create</a>(agentID, { ...params }) -> AgentSchedule</code>
-- <code title="get /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">retrieve</a>(id, { ...params }) -> AgentSchedule</code>
-- <code title="patch /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">update</a>(id, { ...params }) -> AgentSchedule</code>
-- <code title="get /v1/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">list</a>(agentID, { ...params }) -> AgentSchedulesCursorPagination</code>
-- <code title="delete /v1/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">create</a>(agentID, { ...params }) -> AgentSchedule</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">retrieve</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="patch /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">update</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">list</a>(agentID, { ...params }) -> AgentSchedulesCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">delete</a>(id, { ...params }) -> void</code>
 
 # Objectives
 
@@ -143,14 +143,14 @@ Types:
 
 Methods:
 
-- <code title="post /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">create</a>({ ...params }) -> Objective</code>
-- <code title="get /v1/objectives/{id}">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieve</a>(id) -> Objective</code>
-- <code title="get /v1/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>({ ...params }) -> ObjectivesCursorPagination</code>
-- <code title="post /v1/objectives/{objectiveId}/cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
-- <code title="post /v1/objectives/{objectiveId}/compact">client.objectives.<a href="./src/resources/objectives/objectives.ts">compact</a>(objectiveID, { ...params }) -> ObjectiveCompactResponse</code>
-- <code title="post /v1/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
-- <code title="get /v1/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
-- <code title="get /v1/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">create</a>(workspaceID, { ...params }) -> Objective</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{id}">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieve</a>(id, { ...params }) -> Objective</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>(workspaceID, { ...params }) -> ObjectivesCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/compact">client.objectives.<a href="./src/resources/objectives/objectives.ts">compact</a>(objectiveID, { ...params }) -> ObjectiveCompactResponse</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
 
 ## Tools
 
@@ -160,7 +160,7 @@ Types:
 
 Methods:
 
-- <code title="get /v1/objectives/{objectiveId}/tools">client.objectives.tools.<a href="./src/resources/objectives/tools.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tools">client.objectives.tools.<a href="./src/resources/objectives/tools.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolsCursorPagination</code>
 
 ## ToolCalls
 
@@ -172,9 +172,9 @@ Types:
 
 Methods:
 
-- <code title="get /v1/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
-- <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
-- <code title="put /v1/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
+- <code title="put /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}/approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+- <code title="put /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}/deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 
 ## Tasks
 
@@ -185,8 +185,8 @@ Types:
 
 Methods:
 
-- <code title="get /v1/objectives/{objectiveId}/tasks/{id}">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">retrieve</a>(id, { ...params }) -> ObjectiveTask</code>
-- <code title="get /v1/objectives/{objectiveId}/tasks">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">list</a>(objectiveID, { ...params }) -> ObjectiveTasksCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tasks/{id}">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">retrieve</a>(id, { ...params }) -> ObjectiveTask</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tasks">client.objectives.tasks.<a href="./src/resources/objectives/tasks.ts">list</a>(objectiveID, { ...params }) -> ObjectiveTasksCursorPagination</code>
 
 ## Feedback
 
@@ -198,8 +198,8 @@ Types:
 
 Methods:
 
-- <code title="post /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">create</a>(objectiveID, { ...params }) -> ObjectiveFeedback</code>
-- <code title="get /v1/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">list</a>(objectiveID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">create</a>(objectiveID, { ...params }) -> ObjectiveFeedback</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/feedback">client.objectives.feedback.<a href="./src/resources/objectives/feedback.ts">list</a>(objectiveID, { ...params }) -> ObjectiveFeedbacksCursorPagination</code>
 
 # MemoryLayers
 
@@ -211,11 +211,11 @@ Types:
 
 Methods:
 
-- <code title="post /v1/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">create</a>({ ...params }) -> MemoryLayer</code>
-- <code title="get /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">retrieve</a>(id) -> MemoryLayer</code>
-- <code title="patch /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">update</a>(id, { ...params }) -> MemoryLayer</code>
-- <code title="get /v1/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">list</a>({ ...params }) -> MemoryLayersCursorPagination</code>
-- <code title="delete /v1/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">delete</a>(id) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">create</a>(workspaceID, { ...params }) -> MemoryLayer</code>
+- <code title="get /v1/workspaces/{workspaceId}/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">retrieve</a>(id, { ...params }) -> MemoryLayer</code>
+- <code title="patch /v1/workspaces/{workspaceId}/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">update</a>(id, { ...params }) -> MemoryLayer</code>
+- <code title="get /v1/workspaces/{workspaceId}/memory_layers">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">list</a>(workspaceID, { ...params }) -> MemoryLayersCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/memory_layers/{id}">client.memoryLayers.<a href="./src/resources/memory-layers/memory-layers.ts">delete</a>(id, { ...params }) -> void</code>
 
 ## Entries
 
@@ -230,11 +230,11 @@ Types:
 
 Methods:
 
-- <code title="post /v1/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">create</a>(memoryLayerID, { ...params }) -> MemoryEntryDetail</code>
-- <code title="get /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">retrieve</a>(id, { ...params }) -> MemoryEntryDetail</code>
-- <code title="patch /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">update</a>(id, { ...params }) -> MemoryEntryDetail</code>
-- <code title="get /v1/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">list</a>(memoryLayerID, { ...params }) -> MemoryEntriesCursorPagination</code>
-- <code title="delete /v1/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">create</a>(memoryLayerID, { ...params }) -> MemoryEntryDetail</code>
+- <code title="get /v1/workspaces/{workspaceId}/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">retrieve</a>(id, { ...params }) -> MemoryEntryDetail</code>
+- <code title="patch /v1/workspaces/{workspaceId}/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">update</a>(id, { ...params }) -> MemoryEntryDetail</code>
+- <code title="get /v1/workspaces/{workspaceId}/memory_layers/{memoryLayerId}/entries">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">list</a>(memoryLayerID, { ...params }) -> MemoryEntriesCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/memory_layers/{memoryLayerId}/entries/{id}">client.memoryLayers.entries.<a href="./src/resources/memory-layers/entries.ts">delete</a>(id, { ...params }) -> void</code>
 
 # Uploads
 
@@ -246,8 +246,8 @@ Types:
 
 Methods:
 
-- <code title="post /v1/uploads">client.uploads.<a href="./src/resources/uploads.ts">create</a>({ ...params }) -> Upload</code>
-- <code title="get /v1/uploads/{id}">client.uploads.<a href="./src/resources/uploads.ts">retrieve</a>(id) -> Upload</code>
+- <code title="post /v1/workspaces/{workspaceId}/uploads">client.uploads.<a href="./src/resources/uploads.ts">create</a>(workspaceID, { ...params }) -> Upload</code>
+- <code title="get /v1/workspaces/{workspaceId}/uploads/{id}">client.uploads.<a href="./src/resources/uploads.ts">retrieve</a>(id, { ...params }) -> Upload</code>
 
 # Models
 
@@ -258,9 +258,9 @@ Types:
 
 Methods:
 
-- <code title="get /v1/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id) -> Model</code>
-- <code title="get /v1/models">client.models.<a href="./src/resources/models.ts">list</a>({ ...params }) -> ModelsCursorPagination</code>
-- <code title="put /v1/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
+- <code title="get /v1/workspaces/{workspaceId}/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id, { ...params }) -> Model</code>
+- <code title="get /v1/workspaces/{workspaceId}/models">client.models.<a href="./src/resources/models.ts">list</a>(workspaceID, { ...params }) -> ModelsCursorPagination</code>
+- <code title="put /v1/workspaces/{workspaceId}/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
 
 # Search
 
@@ -270,7 +270,7 @@ Types:
 
 Methods:
 
-- <code title="get /v1/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchToolsOrToolSets</a>({ ...params }) -> SearchSearchToolsOrToolSetsResponse</code>
+- <code title="get /v1/workspaces/{workspaceId}/search/tools_or_tool_sets">client.search.<a href="./src/resources/search.ts">searchToolsOrToolSets</a>(workspaceID, { ...params }) -> SearchSearchToolsOrToolSetsResponse</code>
 
 # ToolSets
 
@@ -291,12 +291,12 @@ Types:
 
 Methods:
 
-- <code title="post /v1/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">create</a>({ ...params }) -> ToolSet</code>
-- <code title="get /v1/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">retrieve</a>(id) -> ToolSet</code>
-- <code title="put /v1/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
-- <code title="get /v1/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">list</a>({ ...params }) -> ToolSetsCursorPagination</code>
-- <code title="delete /v1/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">delete</a>(id) -> void</code>
-- <code title="get /v1/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">create</a>(workspaceID, { ...params }) -> ToolSet</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">retrieve</a>(id, { ...params }) -> ToolSet</code>
+- <code title="put /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">list</a>(workspaceID, { ...params }) -> ToolSetsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
 
 ## Tools
 
@@ -311,11 +311,11 @@ Types:
 
 Methods:
 
-- <code title="post /v1/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">create</a>(toolSetID, { ...params }) -> Tool</code>
-- <code title="get /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">retrieve</a>(id, { ...params }) -> Tool</code>
-- <code title="put /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">update</a>(id, { ...params }) -> Tool</code>
-- <code title="get /v1/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">list</a>(toolSetID, { ...params }) -> ToolsCursorPagination</code>
-- <code title="delete /v1/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">create</a>(toolSetID, { ...params }) -> Tool</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">retrieve</a>(id, { ...params }) -> Tool</code>
+- <code title="put /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">update</a>(id, { ...params }) -> Tool</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">list</a>(toolSetID, { ...params }) -> ToolsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">delete</a>(id, { ...params }) -> void</code>
 
 # APIKeys
 
@@ -327,12 +327,12 @@ Types:
 
 Methods:
 
-- <code title="post /v1/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">create</a>({ ...params }) -> APIKey</code>
-- <code title="get /v1/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">retrieve</a>(id) -> APIKey</code>
-- <code title="patch /v1/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
-- <code title="get /v1/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">list</a>({ ...params }) -> APIKeysCursorPagination</code>
-- <code title="delete /v1/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">delete</a>(id) -> void</code>
-- <code title="put /v1/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys.ts">rotate</a>(id) -> APIKey</code>
+- <code title="post /v1/workspaces/{workspaceId}/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">create</a>(workspaceID, { ...params }) -> APIKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">retrieve</a>(id, { ...params }) -> APIKey</code>
+- <code title="patch /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">list</a>(workspaceID, { ...params }) -> APIKeysCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="put /v1/workspaces/{workspaceId}/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys.ts">rotate</a>(id, { ...params }) -> APIKey</code>
 
 # WorkspaceSecrets
 
@@ -344,11 +344,11 @@ Types:
 
 Methods:
 
-- <code title="post /v1/workspace_secrets">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">create</a>({ ...params }) -> WorkspaceSecret</code>
-- <code title="get /v1/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">retrieve</a>(id) -> WorkspaceSecret</code>
-- <code title="patch /v1/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">update</a>(id, { ...params }) -> WorkspaceSecret</code>
-- <code title="get /v1/workspace_secrets">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">list</a>({ ...params }) -> WorkspaceSecretsCursorPagination</code>
-- <code title="delete /v1/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">delete</a>(id) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/workspace_secrets">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">create</a>(workspaceID, { ...params }) -> WorkspaceSecret</code>
+- <code title="get /v1/workspaces/{workspaceId}/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">retrieve</a>(id, { ...params }) -> WorkspaceSecret</code>
+- <code title="patch /v1/workspaces/{workspaceId}/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">update</a>(id, { ...params }) -> WorkspaceSecret</code>
+- <code title="get /v1/workspaces/{workspaceId}/workspace_secrets">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">list</a>(workspaceID, { ...params }) -> WorkspaceSecretsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/workspace_secrets/{id}">client.workspaceSecrets.<a href="./src/resources/workspace-secrets.ts">delete</a>(id, { ...params }) -> void</code>
 
 # Workspaces
 
@@ -394,9 +394,9 @@ Types:
 
 Methods:
 
-- <code title="get /v1/bulk_workspace_applies/{id}">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">retrieve</a>(id) -> BulkWorkspaceApply</code>
-- <code title="get /v1/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">list</a>({ ...params }) -> BulkWorkspaceAppliesCursorPagination</code>
-- <code title="post /v1/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">apply</a>({ ...params }) -> BulkWorkspaceApply</code>
+- <code title="get /v1/workspaces/{workspaceId}/bulk_workspace_applies/{id}">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">retrieve</a>(id, { ...params }) -> BulkWorkspaceApply</code>
+- <code title="get /v1/workspaces/{workspaceId}/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">list</a>(workspaceID, { ...params }) -> BulkWorkspaceAppliesCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/bulk_workspace_applies">client.bulkWorkspaceResources.<a href="./src/resources/bulk-workspace-resources/bulk-workspace-resources.ts">apply</a>(workspaceID, { ...params }) -> BulkWorkspaceApply</code>
 
 ## Results
 
@@ -416,4 +416,4 @@ Types:
 
 Methods:
 
-- <code title="get /v1/bulk_workspace_applies/{bulkWorkspaceApplyId}/results">client.bulkWorkspaceResources.results.<a href="./src/resources/bulk-workspace-resources/results.ts">list</a>(bulkWorkspaceApplyID, { ...params }) -> BulkWorkspaceApplyResultsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/bulk_workspace_applies/{bulkWorkspaceApplyId}/results">client.bulkWorkspaceResources.results.<a href="./src/resources/bulk-workspace-resources/results.ts">list</a>(bulkWorkspaceApplyID, { ...params }) -> BulkWorkspaceApplyResultsCursorPagination</code>

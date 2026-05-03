@@ -7,8 +7,11 @@ export {
   type APIKeyInfo,
   type APIKeySpec,
   type APIKeyCreateParams,
+  type APIKeyRetrieveParams,
   type APIKeyUpdateParams,
   type APIKeyListParams,
+  type APIKeyDeleteParams,
+  type APIKeyRotateParams,
   type APIKeysCursorPagination,
 } from './api-keys';
 export {
@@ -26,8 +29,10 @@ export {
   type AgentSpec,
   type Page,
   type AgentCreateParams,
+  type AgentRetrieveParams,
   type AgentUpdateParams,
   type AgentListParams,
+  type AgentDeleteParams,
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
@@ -45,6 +50,7 @@ export {
   type ToolSetEntry,
   type VariationAssignmentEntry,
   type VariationMemoryLayerEntry,
+  type BulkWorkspaceResourceRetrieveParams,
   type BulkWorkspaceResourceListParams,
   type BulkWorkspaceResourceApplyParams,
   type BulkWorkspaceAppliesCursorPagination,
@@ -55,14 +61,17 @@ export {
   type MemoryLayerInfo,
   type MemoryLayerSpec,
   type MemoryLayerCreateParams,
+  type MemoryLayerRetrieveParams,
   type MemoryLayerUpdateParams,
   type MemoryLayerListParams,
+  type MemoryLayerDeleteParams,
   type MemoryLayersCursorPagination,
 } from './memory-layers/memory-layers';
 export {
   Models,
   type Model,
   type ModelSpec,
+  type ModelRetrieveParams,
   type ModelListParams,
   type ModelSetStatusParams,
   type ModelsCursorPagination,
@@ -98,6 +107,7 @@ export {
   type ObjectiveContinueResponse,
   type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
+  type ObjectiveRetrieveParams,
   type ObjectiveListParams,
   type ObjectiveCancelParams,
   type ObjectiveCompactParams,
@@ -128,13 +138,22 @@ export {
   type ToolSetInfo,
   type ToolSetSpec,
   type ToolSetCreateParams,
+  type ToolSetRetrieveParams,
   type ToolSetUpdateParams,
   type ToolSetListParams,
+  type ToolSetDeleteParams,
   type ToolSetListEventsParams,
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
 } from './tool-sets/tool-sets';
-export { Uploads, type Upload, type UploadInfo, type UploadSpec, type UploadCreateParams } from './uploads';
+export {
+  Uploads,
+  type Upload,
+  type UploadInfo,
+  type UploadSpec,
+  type UploadCreateParams,
+  type UploadRetrieveParams,
+} from './uploads';
 export { Webhooks, type UnsafeUnwrapWebhookEvent, type UnwrapWebhookEvent } from './webhooks';
 export {
   WorkspaceSecrets,
@@ -142,8 +161,10 @@ export {
   type WorkspaceSecretInfo,
   type WorkspaceSecretSpec,
   type WorkspaceSecretCreateParams,
+  type WorkspaceSecretRetrieveParams,
   type WorkspaceSecretUpdateParams,
   type WorkspaceSecretListParams,
+  type WorkspaceSecretDeleteParams,
   type WorkspaceSecretsCursorPagination,
 } from './workspace-secrets';
 export {

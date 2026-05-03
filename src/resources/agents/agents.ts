@@ -81,39 +81,46 @@ export class Agents extends APIResource {
   /**
    * Creates a new agent in the workspace
    */
-  create(body: AgentCreateParams, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.post('/v1/agents', { body, ...options });
+  create(workspaceID: string, body: AgentCreateParams, options?: RequestOptions): APIPromise<Agent> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/agents`, { body, ...options });
   }
 
   /**
    * Retrieves an agent by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.get(path`/v1/agents/${id}`, options);
+  retrieve(id: string, params: AgentRetrieveParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${id}`, options);
   }
 
   /**
    * Updates an agent in the workspace
    */
-  update(id: string, body: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.patch(path`/v1/agents/${id}`, { body, ...options });
+  update(id: string, params: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${id}`, { body, ...options });
   }
 
   /**
    * Lists all agents in the workspace
    */
   list(
+    workspaceID: string,
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentsCursorPagination, Agent> {
-    return this._client.getAPIList('/v1/agents', CursorPagination<Agent>, { query, ...options });
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/agents`, CursorPagination<Agent>, {
+      query,
+      ...options,
+    });
   }
 
   /**
    * Deletes an agent from the workspace
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/agents/${id}`, {
+  delete(id: string, params: AgentDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { workspaceId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -244,21 +251,34 @@ export namespace AgentCreateParams {
   }
 }
 
+export interface AgentRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface AgentUpdateParams {
   /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: Shared.UpdateResourceMetadata;
 
   /**
-   * Agent specification (user-provided configuration)
+   * Body param: Agent specification (user-provided configuration)
    */
   spec?: AgentSpec;
 
   /**
-   * Fields to update
+   * Body param: Fields to update
    */
   updateMask?: string;
 }
@@ -307,6 +327,13 @@ export interface AgentListParams extends CursorPaginationParams {
     | 'VARIATION_SELECTION_MODE_WEIGHTED';
 }
 
+export interface AgentDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 Agents.Feedback = Feedback;
 Agents.WebhookDeliveries = WebhookDeliveries;
 Agents.Variations = Variations;
@@ -320,8 +347,10 @@ export declare namespace Agents {
     type Page as Page,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
+    type AgentRetrieveParams as AgentRetrieveParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
+    type AgentDeleteParams as AgentDeleteParams,
   };
 
   export { Feedback as Feedback, type FeedbackListParams as FeedbackListParams };

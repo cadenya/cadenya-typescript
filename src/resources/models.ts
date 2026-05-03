@@ -20,25 +20,31 @@ export class Models extends APIResource {
   /**
    * Retrieves a model by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<Model> {
-    return this._client.get(path`/v1/models/${id}`, options);
+  retrieve(id: string, params: ModelRetrieveParams, options?: RequestOptions): APIPromise<Model> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/models/${id}`, options);
   }
 
   /**
    * Lists all models in the workspace
    */
   list(
+    workspaceID: string,
     query: ModelListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ModelsCursorPagination, Model> {
-    return this._client.getAPIList('/v1/models', CursorPagination<Model>, { query, ...options });
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/models`, CursorPagination<Model>, {
+      query,
+      ...options,
+    });
   }
 
   /**
    * Enables or disables a model in the workspace
    */
-  setStatus(id: string, body: ModelSetStatusParams, options?: RequestOptions): APIPromise<Model> {
-    return this._client.put(path`/v1/models/${id}/status`, { body, ...options });
+  setStatus(id: string, params: ModelSetStatusParams, options?: RequestOptions): APIPromise<Model> {
+    const { workspaceId, ...body } = params;
+    return this._client.put(path`/v1/workspaces/${workspaceId}/models/${id}/status`, { body, ...options });
   }
 }
 
@@ -93,6 +99,13 @@ export interface ModelSpec {
   status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
 }
 
+export interface ModelRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface ModelListParams extends CursorPaginationParams {
   /**
    * Filter by bundle_key — return only resources owned by this bundle.
@@ -122,7 +135,12 @@ export interface ModelListParams extends CursorPaginationParams {
 
 export interface ModelSetStatusParams {
   /**
-   * The new status for the model
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: The new status for the model
    */
   status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
 }
@@ -132,6 +150,7 @@ export declare namespace Models {
     type Model as Model,
     type ModelSpec as ModelSpec,
     type ModelsCursorPagination as ModelsCursorPagination,
+    type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
     type ModelSetStatusParams as ModelSetStatusParams,
   };
