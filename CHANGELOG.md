@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.66.0 (2026-05-03)
+
+Full Changelog: [v0.65.0...v0.66.0](https://github.com/cadenya/cadenya-typescript/compare/v0.65.0...v0.66.0)
+
+### Features
+
+* **api:** api update ([e699174](https://github.com/cadenya/cadenya-typescript/commit/e6991748100a96a403c6b1236f8313a879b672e0))
+
 ## 0.65.0 (2026-05-03)
 
 Full Changelog: [v0.64.0...v0.65.0](https://github.com/cadenya/cadenya-typescript/compare/v0.64.0...v0.65.0)
