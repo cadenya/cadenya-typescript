@@ -216,7 +216,8 @@ export interface BulkWorkspaceApplyStatus {
     | 'STATE_RUNNING'
     | 'STATE_SUCCEEDED'
     | 'STATE_PARTIALLY_APPLIED'
-    | 'STATE_FAILED';
+    | 'STATE_FAILED'
+    | 'STATE_CANCELLED';
 
   message?: string;
 
@@ -360,7 +361,8 @@ export interface BulkWorkspaceResourceListParams extends CursorPaginationParams 
     | 'STATE_RUNNING'
     | 'STATE_SUCCEEDED'
     | 'STATE_PARTIALLY_APPLIED'
-    | 'STATE_FAILED';
+    | 'STATE_FAILED'
+    | 'STATE_CANCELLED';
 }
 
 export interface BulkWorkspaceResourceApplyParams {
