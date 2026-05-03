@@ -176,6 +176,7 @@ describe('resource bulkWorkspaceResources', () => {
             },
           },
         },
+        automaticallyPublishAgents: true,
         memoryLayers: {
           foo: {
             name: 'name',
