@@ -165,6 +165,18 @@ export interface BulkWorkspaceApplyData {
   agents?: { [key: string]: AgentEntry };
 
   /**
+   * When true, every agent created or updated by this Apply has its status forced to
+   * AGENT_STATUS_PUBLISHED, regardless of the status declared in the agent's
+   * AgentSpec. Useful when the bundle represents a production configuration and you
+   * want all of its agents live without setting status: AGENT_STATUS_PUBLISHED on
+   * each entry.
+   *
+   * Default false: each agent's AgentSpec.status controls (which is
+   * AGENT_STATUS_DRAFT on create when unspecified).
+   */
+  automaticallyPublishAgents?: boolean;
+
+  /**
    * Memory layers to upsert, keyed by external_id.
    */
   memoryLayers?: { [key: string]: MemoryLayerEntry };
