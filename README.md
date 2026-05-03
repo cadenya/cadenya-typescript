@@ -140,7 +140,7 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllAgents(params) {
   const allAgents = [];
   // Automatically fetches more pages as needed.
-  for await (const agent of client.agents.list()) {
+  for await (const agent of client.agents.list('workspaceId')) {
     allAgents.push(agent);
   }
   return allAgents;
@@ -150,7 +150,7 @@ async function fetchAllAgents(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.agents.list();
+let page = await client.agents.list('workspaceId');
 for (const agent of page.items) {
   console.log(agent);
 }

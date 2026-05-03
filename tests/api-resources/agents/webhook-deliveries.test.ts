@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource webhookDeliveries', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.agents.webhookDeliveries.list('agentId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.agents.webhookDeliveries.list('agentId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,19 +21,13 @@ describe('resource webhookDeliveries', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.agents.webhookDeliveries.list(
-        'agentId',
-        {
-          cursor: 'cursor',
-          eventType: 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED',
-          limit: 0,
-          objectiveId: 'objectiveId',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.agents.webhookDeliveries.list('agentId', {
+      workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      eventType: 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED',
+      limit: 0,
+      objectiveId: 'objectiveId',
+    });
   });
 });

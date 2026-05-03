@@ -9,8 +9,10 @@ const client = new Cadenya({
 
 describe('resource results', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.bulkWorkspaceResources.results.list('bulkWorkspaceApplyId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.bulkWorkspaceResources.results.list('bulkWorkspaceApplyId', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,20 +23,14 @@ describe('resource results', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.bulkWorkspaceResources.results.list(
-        'bulkWorkspaceApplyId',
-        {
-          action: 'ACTION_UNSPECIFIED',
-          cursor: 'cursor',
-          limit: 0,
-          sortOrder: 'sortOrder',
-          type: 'type',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.bulkWorkspaceResources.results.list('bulkWorkspaceApplyId', {
+      workspaceId: 'workspaceId',
+      action: 'ACTION_UNSPECIFIED',
+      cursor: 'cursor',
+      limit: 0,
+      sortOrder: 'sortOrder',
+      type: 'type',
+    });
   });
 });

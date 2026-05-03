@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource models', () => {
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.models.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.models.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,13 @@ describe('resource models', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.models.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.models.list();
+    const responsePromise = client.models.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -37,6 +42,7 @@ describe('resource models', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.models.list(
+        'workspaceId',
         {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
@@ -52,8 +58,8 @@ describe('resource models', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setStatus', async () => {
-    const responsePromise = client.models.setStatus('id', {});
+  test.skip('setStatus: only required params', async () => {
+    const responsePromise = client.models.setStatus('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -61,5 +67,13 @@ describe('resource models', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('setStatus: required and optional params', async () => {
+    const response = await client.models.setStatus('id', {
+      workspaceId: 'workspaceId',
+      status: 'MODEL_STATUS_UNSPECIFIED',
+    });
   });
 });

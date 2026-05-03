@@ -15,11 +15,12 @@ export class ToolCalls extends APIResource {
    */
   list(
     objectiveID: string,
-    query: ToolCallListParams | null | undefined = {},
+    params: ToolCallListParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveToolCallsCursorPagination, ObjectiveToolCall> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/tool_calls`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls`,
       CursorPagination<ObjectiveToolCall>,
       { query, ...options },
     );
@@ -34,11 +35,11 @@ export class ToolCalls extends APIResource {
     params: ToolCallApproveParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { objectiveId, ...body } = params;
-    return this._client.put(path`/v1/objectives/${objectiveId}/tool_calls/${toolCallID}/approve`, {
-      body,
-      ...options,
-    });
+    const { workspaceId, objectiveId, ...body } = params;
+    return this._client.put(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}/approve`,
+      { body, ...options },
+    );
   }
 
   /**
@@ -51,11 +52,11 @@ export class ToolCalls extends APIResource {
     params: ToolCallDenyParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { objectiveId, ...body } = params;
-    return this._client.put(path`/v1/objectives/${objectiveId}/tool_calls/${toolCallID}/deny`, {
-      body,
-      ...options,
-    });
+    const { workspaceId, objectiveId, ...body } = params;
+    return this._client.put(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}/deny`,
+      { body, ...options },
+    );
   }
 }
 
@@ -144,12 +145,17 @@ export interface ObjectiveToolCallInfo {
 
 export interface ToolCallListParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filter by tool call status
+   * Query param: Filter by tool call status
    */
   status?:
     | 'TOOL_CALL_STATUS_UNSPECIFIED'
@@ -161,12 +167,22 @@ export interface ToolCallListParams extends CursorPaginationParams {
 
 export interface ToolCallApproveParams {
   /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
    * The ID of the objective. Supports "external_id:" prefix for external IDs.
    */
   objectiveId: string;
 }
 
 export interface ToolCallDenyParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: The ID of the objective. Supports "external_id:" prefix for external
    * IDs.

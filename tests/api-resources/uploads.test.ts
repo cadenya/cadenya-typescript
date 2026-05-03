@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource uploads', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.uploads.create({
+    const responsePromise = client.uploads.create('workspaceId', {
       metadata: { name: 'name' },
       spec: {
         contentType: 'contentType',
@@ -29,7 +29,7 @@ describe('resource uploads', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.uploads.create({
+    const response = await client.uploads.create('workspaceId', {
       metadata: {
         name: 'name',
         bundleKey: 'bundleKey',
@@ -45,8 +45,8 @@ describe('resource uploads', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.uploads.retrieve('id');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.uploads.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,5 +54,10 @@ describe('resource uploads', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.uploads.retrieve('id', { workspaceId: 'workspaceId' });
   });
 });

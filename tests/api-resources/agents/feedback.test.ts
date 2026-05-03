@@ -9,8 +9,8 @@ const client = new Cadenya({
 
 describe('resource feedback', () => {
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.agents.feedback.list('agentId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.agents.feedback.list('agentId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,23 +21,17 @@ describe('resource feedback', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.agents.feedback.list(
-        'agentId',
-        {
-          agentVariationId: 'agentVariationId',
-          createdAfter: '2019-12-27T18:11:19.117Z',
-          createdBefore: '2019-12-27T18:11:19.117Z',
-          cursor: 'cursor',
-          includeInfo: true,
-          limit: 0,
-          query: 'query',
-          sentiment: 'FEEDBACK_SENTIMENT_UNSPECIFIED',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.agents.feedback.list('agentId', {
+      workspaceId: 'workspaceId',
+      agentVariationId: 'agentVariationId',
+      createdAfter: '2019-12-27T18:11:19.117Z',
+      createdBefore: '2019-12-27T18:11:19.117Z',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+      query: 'query',
+      sentiment: 'FEEDBACK_SENTIMENT_UNSPECIFIED',
+    });
   });
 });

@@ -21,24 +21,31 @@ export class Schedules extends APIResource {
   /**
    * Creates a new schedule for an agent
    */
-  create(agentID: string, body: ScheduleCreateParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    return this._client.post(path`/v1/agents/${agentID}/schedules`, { body, ...options });
+  create(agentID: string, params: ScheduleCreateParams, options?: RequestOptions): APIPromise<AgentSchedule> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Retrieves a schedule by ID from an agent
    */
   retrieve(id: string, params: ScheduleRetrieveParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { agentId } = params;
-    return this._client.get(path`/v1/agents/${agentId}/schedules/${id}`, options);
+    const { workspaceId, agentId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, options);
   }
 
   /**
    * Updates a schedule for an agent
    */
   update(id: string, params: ScheduleUpdateParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { agentId, ...body } = params;
-    return this._client.patch(path`/v1/agents/${agentId}/schedules/${id}`, { body, ...options });
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -46,21 +53,23 @@ export class Schedules extends APIResource {
    */
   list(
     agentID: string,
-    query: ScheduleListParams | null | undefined = {},
+    params: ScheduleListParams,
     options?: RequestOptions,
   ): PagePromise<AgentSchedulesCursorPagination, AgentSchedule> {
-    return this._client.getAPIList(path`/v1/agents/${agentID}/schedules`, CursorPagination<AgentSchedule>, {
-      query,
-      ...options,
-    });
+    const { workspaceId, ...query } = params;
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules`,
+      CursorPagination<AgentSchedule>,
+      { query, ...options },
+    );
   }
 
   /**
    * Deletes a schedule from an agent
    */
   delete(id: string, params: ScheduleDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { agentId } = params;
-    return this._client.delete(path`/v1/agents/${agentId}/schedules/${id}`, {
+    const { workspaceId, agentId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -251,19 +260,30 @@ export interface ScheduleRange {
 
 export interface ScheduleCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
   /**
-   * AgentScheduleSpec is the user-provided configuration for a schedule.
+   * Body param: AgentScheduleSpec is the user-provided configuration for a schedule.
    */
   spec: AgentScheduleSpec;
 }
 
 export interface ScheduleRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").
@@ -272,6 +292,11 @@ export interface ScheduleRetrieveParams {
 }
 
 export interface ScheduleUpdateParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Path param: Agent ID (from path). Accepts canonical agent\_… form or
    * external_id:<value> form (see common.proto "Path-parameter ID resolution").
@@ -299,32 +324,42 @@ export interface ScheduleUpdateParams {
 
 export interface ScheduleListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit.
+   * Query param: When set to true you may use more of your alloted API rate-limit.
    */
   includeInfo?: boolean;
 
   /**
-   * Filter expression (query param: prefix).
+   * Query param: Filter expression (query param: prefix).
    */
   prefix?: string;
 
   /**
-   * Free-form search query.
+   * Query param: Free-form search query.
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time).
+   * Query param: Sort order for results (asc or desc by creation time).
    */
   sortOrder?: string;
 }
 
 export interface ScheduleDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+
   /**
    * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
    * form (see common.proto "Path-parameter ID resolution").

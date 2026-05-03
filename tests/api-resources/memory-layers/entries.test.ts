@@ -11,6 +11,7 @@ describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.memoryLayers.entries.create('memoryLayerId', {
+      workspaceId: 'workspaceId',
       metadata: { name: 'name' },
       spec: { key: 'key' },
     });
@@ -26,6 +27,7 @@ describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.memoryLayers.entries.create('memoryLayerId', {
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         bundleKey: 'bundleKey',
@@ -43,7 +45,10 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.retrieve('id', { memoryLayerId: 'memoryLayerId' });
+    const responsePromise = client.memoryLayers.entries.retrieve('id', {
+      workspaceId: 'workspaceId',
+      memoryLayerId: 'memoryLayerId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,12 +60,18 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.retrieve('id', { memoryLayerId: 'memoryLayerId' });
+    const response = await client.memoryLayers.entries.retrieve('id', {
+      workspaceId: 'workspaceId',
+      memoryLayerId: 'memoryLayerId',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.update('id', { memoryLayerId: 'memoryLayerId' });
+    const responsePromise = client.memoryLayers.entries.update('id', {
+      workspaceId: 'workspaceId',
+      memoryLayerId: 'memoryLayerId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -73,6 +84,7 @@ describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.memoryLayers.entries.update('id', {
+      workspaceId: 'workspaceId',
       memoryLayerId: 'memoryLayerId',
       metadata: {
         name: 'name',
@@ -91,8 +103,8 @@ describe('resource entries', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.memoryLayers.entries.list('memoryLayerId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.memoryLayers.entries.list('memoryLayerId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,28 +115,25 @@ describe('resource entries', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.memoryLayers.entries.list(
-        'memoryLayerId',
-        {
-          bundleKey: 'bundleKey',
-          cursor: 'cursor',
-          includeInfo: true,
-          limit: 0,
-          prefix: 'prefix',
-          query: 'query',
-          sortOrder: 'sortOrder',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.memoryLayers.entries.list('memoryLayerId', {
+      workspaceId: 'workspaceId',
+      bundleKey: 'bundleKey',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+      prefix: 'prefix',
+      query: 'query',
+      sortOrder: 'sortOrder',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.delete('id', { memoryLayerId: 'memoryLayerId' });
+    const responsePromise = client.memoryLayers.entries.delete('id', {
+      workspaceId: 'workspaceId',
+      memoryLayerId: 'memoryLayerId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -136,6 +145,9 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.delete('id', { memoryLayerId: 'memoryLayerId' });
+    const response = await client.memoryLayers.entries.delete('id', {
+      workspaceId: 'workspaceId',
+      memoryLayerId: 'memoryLayerId',
+    });
   });
 });

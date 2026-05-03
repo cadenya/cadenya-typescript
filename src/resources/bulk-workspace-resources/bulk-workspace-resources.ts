@@ -47,29 +47,43 @@ export class BulkWorkspaceResources extends APIResource {
   /**
    * Retrieves a bulk workspace apply operation by ID.
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<BulkWorkspaceApply> {
-    return this._client.get(path`/v1/bulk_workspace_applies/${id}`, options);
+  retrieve(
+    id: string,
+    params: BulkWorkspaceResourceRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<BulkWorkspaceApply> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/bulk_workspace_applies/${id}`, options);
   }
 
   /**
    * Lists past and in-flight bulk workspace apply operations in the workspace.
    */
   list(
+    workspaceID: string,
     query: BulkWorkspaceResourceListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<BulkWorkspaceAppliesCursorPagination, BulkWorkspaceApply> {
-    return this._client.getAPIList('/v1/bulk_workspace_applies', CursorPagination<BulkWorkspaceApply>, {
-      query,
-      ...options,
-    });
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceID}/bulk_workspace_applies`,
+      CursorPagination<BulkWorkspaceApply>,
+      { query, ...options },
+    );
   }
 
   /**
    * Asynchronously applies a declarative bundle of workspace resources. Returns the
    * operation immediately in PENDING; clients poll Get to track progress.
    */
-  apply(body: BulkWorkspaceResourceApplyParams, options?: RequestOptions): APIPromise<BulkWorkspaceApply> {
-    return this._client.post('/v1/bulk_workspace_applies', { body, ...options });
+  apply(
+    workspaceID: string,
+    body: BulkWorkspaceResourceApplyParams,
+    options?: RequestOptions,
+  ): APIPromise<BulkWorkspaceApply> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/bulk_workspace_applies`, {
+      body,
+      ...options,
+    });
   }
 }
 
@@ -352,6 +366,13 @@ export interface VariationMemoryLayerEntry {
   position?: number;
 }
 
+export interface BulkWorkspaceResourceRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface BulkWorkspaceResourceListParams extends CursorPaginationParams {
   /**
    * Filter by bundle_key — list every apply for a given bundle.
@@ -399,6 +420,7 @@ export declare namespace BulkWorkspaceResources {
     type VariationAssignmentEntry as VariationAssignmentEntry,
     type VariationMemoryLayerEntry as VariationMemoryLayerEntry,
     type BulkWorkspaceAppliesCursorPagination as BulkWorkspaceAppliesCursorPagination,
+    type BulkWorkspaceResourceRetrieveParams as BulkWorkspaceResourceRetrieveParams,
     type BulkWorkspaceResourceListParams as BulkWorkspaceResourceListParams,
     type BulkWorkspaceResourceApplyParams as BulkWorkspaceResourceApplyParams,
   };

@@ -22,15 +22,16 @@ export class Uploads extends APIResource {
    * returned id is used to reference the upload from resources that accept binary
    * content.
    */
-  create(body: UploadCreateParams, options?: RequestOptions): APIPromise<Upload> {
-    return this._client.post('/v1/uploads', { body, ...options });
+  create(workspaceID: string, body: UploadCreateParams, options?: RequestOptions): APIPromise<Upload> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/uploads`, { body, ...options });
   }
 
   /**
    * Retrieves the current state of an upload, including its lifecycle status
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<Upload> {
-    return this._client.get(path`/v1/uploads/${id}`, options);
+  retrieve(id: string, params: UploadRetrieveParams, options?: RequestOptions): APIPromise<Upload> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/uploads/${id}`, options);
   }
 }
 
@@ -118,11 +119,19 @@ export interface UploadCreateParams {
   spec: UploadSpec;
 }
 
+export interface UploadRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export declare namespace Uploads {
   export {
     type Upload as Upload,
     type UploadInfo as UploadInfo,
     type UploadSpec as UploadSpec,
     type UploadCreateParams as UploadCreateParams,
+    type UploadRetrieveParams as UploadRetrieveParams,
   };
 }

@@ -52,33 +52,47 @@ export class Objectives extends APIResource {
   /**
    * Creates a new objective in the workspace
    */
-  create(body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
-    return this._client.post('/v1/objectives', { body, ...options });
+  create(workspaceID: string, body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/objectives`, { body, ...options });
   }
 
   /**
    * Retrieves an objective by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<Objective> {
-    return this._client.get(path`/v1/objectives/${id}`, options);
+  retrieve(id: string, params: ObjectiveRetrieveParams, options?: RequestOptions): APIPromise<Objective> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/objectives/${id}`, options);
   }
 
   /**
    * Lists all objectives in the workspace
    */
   list(
+    workspaceID: string,
     query: ObjectiveListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectivesCursorPagination, Objective> {
-    return this._client.getAPIList('/v1/objectives', CursorPagination<Objective>, { query, ...options });
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceID}/objectives`,
+      CursorPagination<Objective>,
+      { query, ...options },
+    );
   }
 
   /**
    * Cancels a running or pending objective. The objective's state will be set to
    * STATE_CANCELLED.
    */
-  cancel(objectiveID: string, body: ObjectiveCancelParams, options?: RequestOptions): APIPromise<Objective> {
-    return this._client.post(path`/v1/objectives/${objectiveID}/cancel`, { body, ...options });
+  cancel(
+    objectiveID: string,
+    params: ObjectiveCancelParams,
+    options?: RequestOptions,
+  ): APIPromise<Objective> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/cancel`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -87,10 +101,14 @@ export class Objectives extends APIResource {
    */
   compact(
     objectiveID: string,
-    body: ObjectiveCompactParams,
+    params: ObjectiveCompactParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveCompactResponse> {
-    return this._client.post(path`/v1/objectives/${objectiveID}/compact`, { body, ...options });
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/compact`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -98,10 +116,14 @@ export class Objectives extends APIResource {
    */
   continue(
     objectiveID: string,
-    body: ObjectiveContinueParams,
+    params: ObjectiveContinueParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveContinueResponse> {
-    return this._client.post(path`/v1/objectives/${objectiveID}/continue`, { body, ...options });
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/continue`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -110,11 +132,12 @@ export class Objectives extends APIResource {
    */
   listContextWindows(
     objectiveID: string,
-    query: ObjectiveListContextWindowsParams | null | undefined = {},
+    params: ObjectiveListContextWindowsParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveContextWindowsCursorPagination, ObjectiveContextWindow> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/context_windows`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/context_windows`,
       CursorPagination<ObjectiveContextWindow>,
       { query, ...options },
     );
@@ -125,11 +148,12 @@ export class Objectives extends APIResource {
    */
   listEvents(
     objectiveID: string,
-    query: ObjectiveListEventsParams | null | undefined = {},
+    params: ObjectiveListEventsParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveListEventsResponsesCursorPagination, ObjectiveListEventsResponse> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/events`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events`,
       CursorPagination<ObjectiveListEventsResponse>,
       { query, ...options },
     );
@@ -752,6 +776,13 @@ export interface ObjectiveCreateParams {
   variationId?: string;
 }
 
+export interface ObjectiveRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface ObjectiveListParams extends CursorPaginationParams {
   /**
    * Agent ID for filtering
@@ -796,34 +827,51 @@ export interface ObjectiveListParams extends CursorPaginationParams {
 
 export interface ObjectiveCancelParams {
   /**
-   * Optional reason for cancellation
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: Optional reason for cancellation
    */
   reason?: string;
 }
 
 export interface ObjectiveCompactParams {
   /**
-   * CompactionConfig defines how context window compaction behaves for objectives
-   * using this variation.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: CompactionConfig defines how context window compaction behaves for
+   * objectives using this variation.
    */
   compactionConfig?: VariationsAPI.AgentVariationSpecCompactionConfig;
 }
 
 export interface ObjectiveContinueParams {
   /**
-   * When set to true, the message will be enqueued for when the agent loop is
-   * available to process it.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: When set to true, the message will be enqueued for when the agent
+   * loop is available to process it.
    */
   enqueue?: boolean;
 
   /**
-   * The message to continue an objective that has completed (or you are enqueing)
+   * Body param: The message to continue an objective that has completed (or you are
+   * enqueing)
    */
   message?: string;
 
   /**
-   * Secrets that should be included with the message. Helpful for when you need to
-   * update secrets on the objective (IE: A secret expires and needs to be refreshed)
+   * Body param: Secrets that should be included with the message. Helpful for when
+   * you need to update secrets on the objective (IE: A secret expires and needs to
+   * be refreshed)
    */
   secrets?: Array<ObjectiveContinueParams.Secret>;
 }
@@ -838,24 +886,34 @@ export namespace ObjectiveContinueParams {
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 }
 
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Optional context window ID to filter events by
+   * Query param: Optional context window ID to filter events by
    */
   windowId?: string;
 }
@@ -899,6 +957,7 @@ export declare namespace Objectives {
     type ObjectiveContextWindowsCursorPagination as ObjectiveContextWindowsCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
     type ObjectiveListParams as ObjectiveListParams,
     type ObjectiveCancelParams as ObjectiveCancelParams,
     type ObjectiveCompactParams as ObjectiveCompactParams,

@@ -15,10 +15,14 @@ export class Feedback extends APIResource {
    */
   create(
     objectiveID: string,
-    body: FeedbackCreateParams,
+    params: FeedbackCreateParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveFeedback> {
-    return this._client.post(path`/v1/objectives/${objectiveID}/feedback`, { body, ...options });
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/feedback`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -26,11 +30,12 @@ export class Feedback extends APIResource {
    */
   list(
     objectiveID: string,
-    query: FeedbackListParams | null | undefined = {},
+    params: FeedbackListParams,
     options?: RequestOptions,
   ): PagePromise<ObjectiveFeedbacksCursorPagination, ObjectiveFeedback> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/objectives/${objectiveID}/feedback`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/feedback`,
       CursorPagination<ObjectiveFeedback>,
       { query, ...options },
     );
@@ -100,17 +105,30 @@ export interface ObjectiveFeedbackInfo {
 }
 
 export interface FeedbackCreateParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param
+   */
   data: ObjectiveFeedbackData;
 
   /**
-   * CreateOperationMetadata contains the user-provided fields for creating an
-   * operation. Read-only fields (id, account_id, workspace_id, created_at,
-   * profile_id) are excluded since they are set by the server.
+   * Body param: CreateOperationMetadata contains the user-provided fields for
+   * creating an operation. Read-only fields (id, account_id, workspace_id,
+   * created_at, profile_id) are excluded since they are set by the server.
    */
   metadata: Shared.CreateOperationMetadata;
 }
 
-export interface FeedbackListParams extends CursorPaginationParams {}
+export interface FeedbackListParams extends CursorPaginationParams {
+  /**
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+}
 
 export declare namespace Feedback {
   export {

@@ -10,7 +10,7 @@ const client = new Cadenya({
 describe('resource search', () => {
   // Mock server tests are disabled
   test.skip('searchToolsOrToolSets', async () => {
-    const responsePromise = client.search.searchToolsOrToolSets();
+    const responsePromise = client.search.searchToolsOrToolSets('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,7 +24,11 @@ describe('resource search', () => {
   test.skip('searchToolsOrToolSets: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.search.searchToolsOrToolSets({ query: 'query' }, { path: '/_stainless_unknown_path' }),
+      client.search.searchToolsOrToolSets(
+        'workspaceId',
+        { query: 'query' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Cadenya.NotFoundError);
   });
 });

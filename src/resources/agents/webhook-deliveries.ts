@@ -20,11 +20,12 @@ export class WebhookDeliveries extends APIResource {
    */
   list(
     agentID: string,
-    query: WebhookDeliveryListParams | null | undefined = {},
+    params: WebhookDeliveryListParams,
     options?: RequestOptions,
   ): PagePromise<WebhookDeliveriesCursorPagination, WebhookDelivery> {
+    const { workspaceId, ...query } = params;
     return this._client.getAPIList(
-      path`/v1/agents/${agentID}/webhook_deliveries`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/webhook_deliveries`,
       CursorPagination<WebhookDelivery>,
       { query, ...options },
     );
@@ -115,7 +116,12 @@ export interface WebhookDeliveryData {
 
 export interface WebhookDeliveryListParams extends CursorPaginationParams {
   /**
-   * Optional filter by event type
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: Optional filter by event type
    */
   eventType?:
     | 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED'
@@ -134,7 +140,7 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_CANCELLED';
 
   /**
-   * Optional filter by objective ID
+   * Query param: Optional filter by objective ID
    */
   objectiveId?: string;
 }

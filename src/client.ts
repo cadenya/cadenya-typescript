@@ -30,8 +30,11 @@ import {
 import {
   APIKey,
   APIKeyCreateParams,
+  APIKeyDeleteParams,
   APIKeyInfo,
   APIKeyListParams,
+  APIKeyRetrieveParams,
+  APIKeyRotateParams,
   APIKeySpec,
   APIKeyUpdateParams,
   APIKeys,
@@ -40,6 +43,7 @@ import {
 import {
   Model,
   ModelListParams,
+  ModelRetrieveParams,
   ModelSetStatusParams,
   ModelSpec,
   Models,
@@ -54,6 +58,7 @@ import {
   Upload,
   UploadCreateParams,
   UploadInfo,
+  UploadRetrieveParams,
   UploadSpec,
   Uploads as UploadsAPIUploads,
 } from './resources/uploads';
@@ -61,8 +66,10 @@ import { UnsafeUnwrapWebhookEvent, UnwrapWebhookEvent, Webhooks } from './resour
 import {
   WorkspaceSecret,
   WorkspaceSecretCreateParams,
+  WorkspaceSecretDeleteParams,
   WorkspaceSecretInfo,
   WorkspaceSecretListParams,
+  WorkspaceSecretRetrieveParams,
   WorkspaceSecretSpec,
   WorkspaceSecretUpdateParams,
   WorkspaceSecrets,
@@ -78,8 +85,10 @@ import {
 import {
   Agent,
   AgentCreateParams,
+  AgentDeleteParams,
   AgentInfo,
   AgentListParams,
+  AgentRetrieveParams,
   AgentSpec,
   AgentUpdateParams,
   Agents,
@@ -97,6 +106,7 @@ import {
   BulkWorkspaceApplyStatus,
   BulkWorkspaceResourceApplyParams,
   BulkWorkspaceResourceListParams,
+  BulkWorkspaceResourceRetrieveParams,
   BulkWorkspaceResources,
   MemoryEntryItem,
   MemoryLayerEntry,
@@ -108,8 +118,10 @@ import {
 import {
   MemoryLayer,
   MemoryLayerCreateParams,
+  MemoryLayerDeleteParams,
   MemoryLayerInfo,
   MemoryLayerListParams,
+  MemoryLayerRetrieveParams,
   MemoryLayerSpec,
   MemoryLayerUpdateParams,
   MemoryLayers,
@@ -144,6 +156,7 @@ import {
   ObjectiveListEventsResponse,
   ObjectiveListEventsResponsesCursorPagination,
   ObjectiveListParams,
+  ObjectiveRetrieveParams,
   ObjectiveStatus,
   Objectives,
   ObjectivesCursorPagination,
@@ -166,12 +179,14 @@ import {
   ToolSetAdapterHTTP,
   ToolSetAdapterMcp,
   ToolSetCreateParams,
+  ToolSetDeleteParams,
   ToolSetEvent,
   ToolSetEventData,
   ToolSetEventsCursorPagination,
   ToolSetInfo,
   ToolSetListEventsParams,
   ToolSetListParams,
+  ToolSetRetrieveParams,
   ToolSetSpec,
   ToolSetUpdateParams,
   ToolSets,
@@ -1058,8 +1073,10 @@ export declare namespace Cadenya {
     type Page as Page,
     type AgentsCursorPagination as AgentsCursorPagination,
     type AgentCreateParams as AgentCreateParams,
+    type AgentRetrieveParams as AgentRetrieveParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
+    type AgentDeleteParams as AgentDeleteParams,
   };
 
   export {
@@ -1096,6 +1113,7 @@ export declare namespace Cadenya {
     type ObjectiveContextWindowsCursorPagination as ObjectiveContextWindowsCursorPagination,
     type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
+    type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
     type ObjectiveListParams as ObjectiveListParams,
     type ObjectiveCancelParams as ObjectiveCancelParams,
     type ObjectiveCompactParams as ObjectiveCompactParams,
@@ -1111,8 +1129,10 @@ export declare namespace Cadenya {
     type MemoryLayerSpec as MemoryLayerSpec,
     type MemoryLayersCursorPagination as MemoryLayersCursorPagination,
     type MemoryLayerCreateParams as MemoryLayerCreateParams,
+    type MemoryLayerRetrieveParams as MemoryLayerRetrieveParams,
     type MemoryLayerUpdateParams as MemoryLayerUpdateParams,
     type MemoryLayerListParams as MemoryLayerListParams,
+    type MemoryLayerDeleteParams as MemoryLayerDeleteParams,
   };
 
   export {
@@ -1121,6 +1141,7 @@ export declare namespace Cadenya {
     type UploadInfo as UploadInfo,
     type UploadSpec as UploadSpec,
     type UploadCreateParams as UploadCreateParams,
+    type UploadRetrieveParams as UploadRetrieveParams,
   };
 
   export {
@@ -1128,6 +1149,7 @@ export declare namespace Cadenya {
     type Model as Model,
     type ModelSpec as ModelSpec,
     type ModelsCursorPagination as ModelsCursorPagination,
+    type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
     type ModelSetStatusParams as ModelSetStatusParams,
   };
@@ -1155,8 +1177,10 @@ export declare namespace Cadenya {
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
+    type ToolSetRetrieveParams as ToolSetRetrieveParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+    type ToolSetDeleteParams as ToolSetDeleteParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
   };
 
@@ -1167,8 +1191,11 @@ export declare namespace Cadenya {
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyDeleteParams as APIKeyDeleteParams,
+    type APIKeyRotateParams as APIKeyRotateParams,
   };
 
   export {
@@ -1178,8 +1205,10 @@ export declare namespace Cadenya {
     type WorkspaceSecretSpec as WorkspaceSecretSpec,
     type WorkspaceSecretsCursorPagination as WorkspaceSecretsCursorPagination,
     type WorkspaceSecretCreateParams as WorkspaceSecretCreateParams,
+    type WorkspaceSecretRetrieveParams as WorkspaceSecretRetrieveParams,
     type WorkspaceSecretUpdateParams as WorkspaceSecretUpdateParams,
     type WorkspaceSecretListParams as WorkspaceSecretListParams,
+    type WorkspaceSecretDeleteParams as WorkspaceSecretDeleteParams,
   };
 
   export {
@@ -1212,6 +1241,7 @@ export declare namespace Cadenya {
     type VariationAssignmentEntry as VariationAssignmentEntry,
     type VariationMemoryLayerEntry as VariationMemoryLayerEntry,
     type BulkWorkspaceAppliesCursorPagination as BulkWorkspaceAppliesCursorPagination,
+    type BulkWorkspaceResourceRetrieveParams as BulkWorkspaceResourceRetrieveParams,
     type BulkWorkspaceResourceListParams as BulkWorkspaceResourceListParams,
     type BulkWorkspaceResourceApplyParams as BulkWorkspaceResourceApplyParams,
   };

@@ -43,39 +43,46 @@ export class ToolSets extends APIResource {
   /**
    * Creates a new tool set in the workspace
    */
-  create(body: ToolSetCreateParams, options?: RequestOptions): APIPromise<ToolSet> {
-    return this._client.post('/v1/tool_sets', { body, ...options });
+  create(workspaceID: string, body: ToolSetCreateParams, options?: RequestOptions): APIPromise<ToolSet> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/tool_sets`, { body, ...options });
   }
 
   /**
    * Retrieves a tool set by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<ToolSet> {
-    return this._client.get(path`/v1/tool_sets/${id}`, options);
+  retrieve(id: string, params: ToolSetRetrieveParams, options?: RequestOptions): APIPromise<ToolSet> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, options);
   }
 
   /**
    * Updates a tool set in the workspace
    */
-  update(id: string, body: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
-    return this._client.put(path`/v1/tool_sets/${id}`, { body, ...options });
+  update(id: string, params: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
+    const { workspaceId, ...body } = params;
+    return this._client.put(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, { body, ...options });
   }
 
   /**
    * Lists all tool sets in the workspace
    */
   list(
+    workspaceID: string,
     query: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ToolSetsCursorPagination, ToolSet> {
-    return this._client.getAPIList('/v1/tool_sets', CursorPagination<ToolSet>, { query, ...options });
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/tool_sets`, CursorPagination<ToolSet>, {
+      query,
+      ...options,
+    });
   }
 
   /**
    * Deletes a tool set in the workspace
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/tool_sets/${id}`, {
+  delete(id: string, params: ToolSetDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { workspaceId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -86,13 +93,15 @@ export class ToolSets extends APIResource {
    */
   listEvents(
     toolSetID: string,
-    query: ToolSetListEventsParams | null | undefined = {},
+    params: ToolSetListEventsParams,
     options?: RequestOptions,
   ): PagePromise<ToolSetEventsCursorPagination, ToolSetEvent> {
-    return this._client.getAPIList(path`/v1/tool_sets/${toolSetID}/events`, CursorPagination<ToolSetEvent>, {
-      query,
-      ...options,
-    });
+    const { workspaceId, ...query } = params;
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/events`,
+      CursorPagination<ToolSetEvent>,
+      { query, ...options },
+    );
   }
 }
 
@@ -346,16 +355,35 @@ export interface ToolSetCreateParams {
   spec: ToolSetSpec;
 }
 
+export interface ToolSetRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface ToolSetUpdateParams {
   /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: Shared.UpdateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec?: ToolSetSpec;
 
+  /**
+   * Body param
+   */
   updateMask?: string;
 }
 
@@ -386,14 +414,26 @@ export interface ToolSetListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface ToolSetDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface ToolSetListEventsParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 }
@@ -417,8 +457,10 @@ export declare namespace ToolSets {
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
+    type ToolSetRetrieveParams as ToolSetRetrieveParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
+    type ToolSetDeleteParams as ToolSetDeleteParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
   };
 

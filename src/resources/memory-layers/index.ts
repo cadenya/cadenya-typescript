@@ -21,7 +21,9 @@ export {
   type MemoryLayerInfo,
   type MemoryLayerSpec,
   type MemoryLayerCreateParams,
+  type MemoryLayerRetrieveParams,
   type MemoryLayerUpdateParams,
   type MemoryLayerListParams,
+  type MemoryLayerDeleteParams,
   type MemoryLayersCursorPagination,
 } from './memory-layers';

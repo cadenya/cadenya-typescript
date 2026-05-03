@@ -15,6 +15,7 @@ export {
   type ToolSetEntry,
   type VariationAssignmentEntry,
   type VariationMemoryLayerEntry,
+  type BulkWorkspaceResourceRetrieveParams,
   type BulkWorkspaceResourceListParams,
   type BulkWorkspaceResourceApplyParams,
   type BulkWorkspaceAppliesCursorPagination,

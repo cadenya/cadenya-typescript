@@ -43,39 +43,51 @@ export class MemoryLayers extends APIResource {
   /**
    * Creates a new memory layer in the workspace
    */
-  create(body: MemoryLayerCreateParams, options?: RequestOptions): APIPromise<MemoryLayer> {
-    return this._client.post('/v1/memory_layers', { body, ...options });
+  create(
+    workspaceID: string,
+    body: MemoryLayerCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<MemoryLayer> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/memory_layers`, { body, ...options });
   }
 
   /**
    * Retrieves a memory layer by ID from the workspace
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<MemoryLayer> {
-    return this._client.get(path`/v1/memory_layers/${id}`, options);
+  retrieve(id: string, params: MemoryLayerRetrieveParams, options?: RequestOptions): APIPromise<MemoryLayer> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, options);
   }
 
   /**
    * Updates a memory layer in the workspace
    */
-  update(id: string, body: MemoryLayerUpdateParams, options?: RequestOptions): APIPromise<MemoryLayer> {
-    return this._client.patch(path`/v1/memory_layers/${id}`, { body, ...options });
+  update(id: string, params: MemoryLayerUpdateParams, options?: RequestOptions): APIPromise<MemoryLayer> {
+    const { workspaceId, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, { body, ...options });
   }
 
   /**
    * Lists all memory layers in the workspace
    */
   list(
+    workspaceID: string,
     query: MemoryLayerListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<MemoryLayersCursorPagination, MemoryLayer> {
-    return this._client.getAPIList('/v1/memory_layers', CursorPagination<MemoryLayer>, { query, ...options });
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceID}/memory_layers`,
+      CursorPagination<MemoryLayer>,
+      { query, ...options },
+    );
   }
 
   /**
    * Deletes a memory layer from the workspace
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/memory_layers/${id}`, {
+  delete(id: string, params: MemoryLayerDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { workspaceId } = params;
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -158,16 +170,35 @@ export interface MemoryLayerCreateParams {
   spec: MemoryLayerSpec;
 }
 
+export interface MemoryLayerRetrieveParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 export interface MemoryLayerUpdateParams {
   /**
-   * UpdateResourceMetadata contains the user-provided fields for updating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID (from path).
+   */
+  workspaceId: string;
+
+  /**
+   * Body param: UpdateResourceMetadata contains the user-provided fields for
+   * updating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata?: Shared.UpdateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec?: MemoryLayerSpec;
 
+  /**
+   * Body param
+   */
   updateMask?: string;
 }
 
@@ -203,6 +234,13 @@ export interface MemoryLayerListParams extends CursorPaginationParams {
   type?: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 }
 
+export interface MemoryLayerDeleteParams {
+  /**
+   * Workspace ID (from path).
+   */
+  workspaceId: string;
+}
+
 MemoryLayers.Entries = Entries;
 
 export declare namespace MemoryLayers {
@@ -212,8 +250,10 @@ export declare namespace MemoryLayers {
     type MemoryLayerSpec as MemoryLayerSpec,
     type MemoryLayersCursorPagination as MemoryLayersCursorPagination,
     type MemoryLayerCreateParams as MemoryLayerCreateParams,
+    type MemoryLayerRetrieveParams as MemoryLayerRetrieveParams,
     type MemoryLayerUpdateParams as MemoryLayerUpdateParams,
     type MemoryLayerListParams as MemoryLayerListParams,
+    type MemoryLayerDeleteParams as MemoryLayerDeleteParams,
   };
 
   export {
