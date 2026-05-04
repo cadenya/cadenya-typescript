@@ -263,7 +263,7 @@ export interface MemoryRead {
  * permitted).
  *
  * memory*layer_id accepts both the canonical form (memlyr*…) and the external-id
- * form (external_id:my-custom-id). The same applies to memory_entry_id.
+ * form (external_id:my-custom-id). The same applies to memory_entry_id when set.
  */
 export interface MemoryReference {
   /**
@@ -321,9 +321,9 @@ export interface ObjectiveContextWindow {
 export namespace ObjectiveContextWindow {
   export interface Info {
     /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     * A profile identifies a user or non-human principal (such as an API key) at the
+     * account level. Profiles are account-scoped and can be granted access to multiple
+     * workspaces.
      */
     createdBy?: AccountAPI.Profile;
 
@@ -389,22 +389,18 @@ export interface ObjectiveData {
    * Memory layers/entries to push onto this objective's memory stack on top of the
    * baseline stack inherited from the selected variation.
    *
-   * See "Memory stack composition" in memory.proto for lookup semantics.
-   *
    * Array order is push order: the first element sits lower in the objective's
    * contribution to the stack; the LAST element ends up on top of the effective
    * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
    * position.
    *
    * System-managed layers (e.g., episodic) cannot be referenced here; they attach
-   * themselves automatically via the runtime based on episodic_key.
+   * themselves automatically based on episodic_key.
    *
    * Stack size cap: the TOTAL effective stack (variation's memory layers
    *
    * - this field) must not exceed 10 entries. A request that would produce an
-   *   effective stack larger than 10 is rejected with InvalidArgument. Variations
-   *   themselves are capped at 10 memory layer assignments, so a variation that is
-   *   already "full" leaves no room for objective-level references.
+   *   effective stack larger than 10 is rejected with InvalidArgument.
    */
   memoryStack?: Array<MemoryReference>;
 
@@ -421,10 +417,9 @@ export interface ObjectiveData {
   secrets?: Array<ObjectiveDataSecret>;
 
   /**
-   * ID of the AgentSchedule that produced this objective, when applicable.
-   * Read-only; populated by the runtime when the objective is created from a
-   * schedule fire. Empty when the objective was created via CreateObjective
-   * directly.
+   * ID of the AgentSchedule that produced this objective, when applicable. Populated
+   * when the objective is created from a schedule fire; empty when the objective was
+   * created via CreateObjective directly.
    */
   sourceScheduleId?: string;
 
@@ -509,9 +504,9 @@ export namespace ObjectiveEventData {
 
 export interface ObjectiveEventInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -600,9 +595,9 @@ export interface ObjectiveInfo {
   agentVariation?: Shared.ResourceMetadata;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -777,9 +772,6 @@ export interface ObjectiveCreateParams {
 }
 
 export interface ObjectiveRetrieveParams {
-  /**
-   * Workspace ID (from path).
-   */
   workspaceId: string;
 }
 
@@ -790,9 +782,8 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   agentId?: string;
 
   /**
-   * Filter to objectives produced by a specific AgentSchedule. Matches
-   * ObjectiveData.source*schedule_id. Accepts canonical as*… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Filter to objectives produced by a specific AgentSchedule. Accepts canonical
+   * as\_… form or external_id:<value> form.
    */
   agentScheduleId?: string;
 
@@ -827,7 +818,7 @@ export interface ObjectiveListParams extends CursorPaginationParams {
 
 export interface ObjectiveCancelParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -839,7 +830,7 @@ export interface ObjectiveCancelParams {
 
 export interface ObjectiveCompactParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -852,7 +843,7 @@ export interface ObjectiveCompactParams {
 
 export interface ObjectiveContinueParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -886,7 +877,7 @@ export namespace ObjectiveContinueParams {
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -898,7 +889,7 @@ export interface ObjectiveListContextWindowsParams extends CursorPaginationParam
 
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 

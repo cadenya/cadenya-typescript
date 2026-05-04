@@ -9,6 +9,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Manage variations of an agent and their tool, sub-agent, and memory layer assignments.
+ */
 export class Variations extends APIResource {
   /**
    * Creates a new variation for an agent
@@ -189,9 +192,9 @@ export interface AgentVariationInfo {
   assignments?: Array<VariationAssignment>;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -402,15 +405,14 @@ export interface CompactionConfigToolResultClearingStrategy {
 }
 
 /**
- * VariationAssignment is a read-only reference to a single tool, tool set, or
- * sub-agent attached to a variation. Clients read the full set of assignments via
+ * A read-only reference to a single tool, tool set, or sub-agent attached to a
+ * variation. Read the full set of assignments via
  * `AgentVariationInfo.assignments`; mutations go through the dedicated add/remove
- * assignment endpoints under
- * /v1/agents/{agent_id}/variations/{variation_id}/assignments.
+ * assignment endpoints.
  *
- * The `id` identifies the assignment row itself (not the referenced resource) and
- * is the handle used to remove the assignment. It is returned by the add endpoint
- * and present on every entry in AgentVariationInfo.assignments.
+ * The `id` identifies the assignment itself (not the referenced resource) and is
+ * the handle used to remove the assignment. It is returned by the add endpoint and
+ * present on every entry in `AgentVariationInfo.assignments`.
  */
 export interface VariationAssignment {
   id?: string;
@@ -483,7 +485,7 @@ export interface VariationMemoryLayerAssignment {
 
 export interface VariationCreateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -504,26 +506,26 @@ export interface VariationCreateParams {
 
 export interface VariationRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 }
 
 export interface VariationUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
+   * `external_id:<value>` form.
    */
   agentId: string;
 
@@ -549,7 +551,7 @@ export interface VariationUpdateParams {
 
 export interface VariationListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -559,7 +561,8 @@ export interface VariationListParams extends CursorPaginationParams {
   bundleKey?: string;
 
   /**
-   * Query param: When set to true you may use more of your alloted API rate-limit
+   * Query param: When true, the `info` field on each returned variation is
+   * populated. Requests with this flag count more against your rate limit.
    */
   includeInfo?: boolean;
 
@@ -571,26 +574,26 @@ export interface VariationListParams extends CursorPaginationParams {
 
 export interface VariationDeleteParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 }
 
 export interface VariationAddAssignmentParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
+   * `external_id:<value>` form.
    */
   agentId: string;
 
@@ -612,19 +615,19 @@ export interface VariationAddAssignmentParams {
 
 export interface VariationAddMemoryLayerParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
+   * `external_id:<value>` form.
    */
   agentId: string;
 
   /**
-   * Body param: Layer to attach. Accepts canonical memlyr\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Body param: Layer to attach. Accepts the canonical `memlyr_…` form or the
+   * `external_id:<value>` form.
    */
   memoryLayerId?: string;
 
@@ -637,57 +640,57 @@ export interface VariationAddMemoryLayerParams {
 
 export interface VariationRemoveAssignmentParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 
   /**
-   * Variation ID (from path). Accepts canonical av\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Variation ID. Accepts the canonical `av_…` form or the `external_id:<value>`
+   * form.
    */
   variationId: string;
 }
 
 export interface VariationRemoveMemoryLayerParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 
   /**
-   * Variation ID (from path). Accepts canonical av\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Variation ID. Accepts the canonical `av_…` form or the `external_id:<value>`
+   * form.
    */
   variationId: string;
 }
 
 export interface VariationUpdateMemoryLayerParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
+   * `external_id:<value>` form.
    */
   agentId: string;
 
   /**
-   * Path param: Variation ID (from path). Accepts canonical av\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Variation ID. Accepts the canonical `av_…` form or the
+   * `external_id:<value>` form.
    */
   variationId: string;
 

@@ -121,18 +121,18 @@ export interface ObjectiveToolCallData {
   result?: string;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   statusChangedBy?: AccountAPI.Profile;
 }
 
 export interface ObjectiveToolCallInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -145,7 +145,7 @@ export interface ObjectiveToolCallInfo {
 
 export interface ToolCallListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -166,9 +166,6 @@ export interface ToolCallListParams extends CursorPaginationParams {
 }
 
 export interface ToolCallApproveParams {
-  /**
-   * Workspace ID (from path).
-   */
   workspaceId: string;
 
   /**
@@ -179,7 +176,7 @@ export interface ToolCallApproveParams {
 
 export interface ToolCallDenyParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 

@@ -10,12 +10,8 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * AgentScheduleService manages recurring schedules attached to agents.
- *  Schedules trigger objectives on a cadence defined by AgentScheduleSpec.Schedule.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Manage recurring schedules attached to agents. Schedules trigger objectives
+ *  on a cadence defined by AgentScheduleSpec.Schedule.
  */
 export class Schedules extends APIResource {
   /**
@@ -104,9 +100,9 @@ export interface AgentSchedule {
  */
 export interface AgentScheduleInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -260,7 +256,7 @@ export interface ScheduleRange {
 
 export interface ScheduleCreateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -280,26 +276,26 @@ export interface ScheduleCreateParams {
 
 export interface ScheduleRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 }
 
 export interface ScheduleUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Agent ID (from path). Accepts canonical agent\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
+   * `external_id:<value>` form.
    */
   agentId: string;
 
@@ -324,7 +320,7 @@ export interface ScheduleUpdateParams {
 
 export interface ScheduleListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -334,7 +330,8 @@ export interface ScheduleListParams extends CursorPaginationParams {
   bundleKey?: string;
 
   /**
-   * Query param: When set to true you may use more of your alloted API rate-limit.
+   * Query param: When true, the `info` field on each returned schedule is populated.
+   * Requests with this flag count more against your rate limit.
    */
   includeInfo?: boolean;
 
@@ -356,13 +353,13 @@ export interface ScheduleListParams extends CursorPaginationParams {
 
 export interface ScheduleDeleteParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Agent ID (from path). Accepts canonical agent\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
    */
   agentId: string;
 }

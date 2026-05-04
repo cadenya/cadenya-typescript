@@ -63,12 +63,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * AgentService manages AI agents at the WORKSPACE level.
- *  Agents are workspace-scoped resources that define AI behavior and tool access.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Manage AI agents within a workspace. Agents define AI behavior and tool access.
  */
 export class Agents extends APIResource {
   feedback: FeedbackAPI.Feedback = new FeedbackAPI.Feedback(this._client);
@@ -156,9 +151,9 @@ export interface Agent {
  */
 export interface AgentInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -253,14 +248,14 @@ export namespace AgentCreateParams {
 
 export interface AgentRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }
 
 export interface AgentUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -290,7 +285,8 @@ export interface AgentListParams extends CursorPaginationParams {
   bundleKey?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * When true, the `info` field on each returned agent is populated. Requests with
+   * this flag count more against your rate limit.
    */
   includeInfo?: boolean;
 
@@ -329,7 +325,7 @@ export interface AgentListParams extends CursorPaginationParams {
 
 export interface AgentDeleteParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }
