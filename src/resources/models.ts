@@ -8,13 +8,9 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * ModelService manages LLM models at the WORKSPACE level.
- *  Models represent available LLM providers and families (e.g., "anthropic/claude-sonnet-4.6").
- *  Models are seeded into workspaces and can be enabled or disabled.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Manage LLM models available to a workspace. Models represent provider and
+ *  family pairs (e.g., "anthropic/claude-sonnet-4.6"). Workspaces are seeded
+ *  with the supported models and you can enable or disable each one.
  */
 export class Models extends APIResource {
   /**
@@ -101,7 +97,7 @@ export interface ModelSpec {
 
 export interface ModelRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }
@@ -135,7 +131,7 @@ export interface ModelListParams extends CursorPaginationParams {
 
 export interface ModelSetStatusParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 

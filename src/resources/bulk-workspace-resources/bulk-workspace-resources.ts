@@ -32,14 +32,9 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * BulkWorkspaceResources is the workspace-scoped service that applies
- *  a declarative bundle of workspace resources (tool sets, memory
- *  layers, agents, variations, assignments, schedules) in one async
- *  operation. See docs/superpowers/specs/2026-05-02-bulk-workspace-resources-design.md
- *  for the full design.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Apply a declarative bundle of workspace resources — tool sets, memory
+ *  layers, agents, variations, assignments, and schedules — in a single
+ *  asynchronous operation.
  */
 export class BulkWorkspaceResources extends APIResource {
   results: ResultsAPI.Results = new ResultsAPI.Results(this._client);
@@ -138,17 +133,15 @@ export interface AgentVariationEntry {
   labels?: { [key: string]: string };
 
   /**
-   * Reconciled list — capped at 10 to match the existing variation
-   * memory-layer-assignment cap.
+   * Reconciled list of memory layer assignments. Up to 10 entries.
    */
   memoryLayers?: Array<VariationMemoryLayerEntry>;
 }
 
 /**
- * BulkWorkspaceApply is the operation resource produced by a call to
- * BulkWorkspaceResources.Apply. It is operation-typed (uses OperationMetadata,
- * like Objective and ObjectiveEvent) and carries the input bundle in `data`, the
- * lifecycle state in `status`, and aggregate counts in `info`.
+ * The operation resource produced by a call to BulkWorkspaceResources.Apply. It
+ * carries the input bundle in `data`, the lifecycle state in `status`, and
+ * aggregate counts in `info`.
  */
 export interface BulkWorkspaceApply {
   data: BulkWorkspaceApplyData;
@@ -213,9 +206,9 @@ export interface BulkWorkspaceApplyInfo {
   completedAt?: string;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -368,7 +361,7 @@ export interface VariationMemoryLayerEntry {
 
 export interface BulkWorkspaceResourceRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }

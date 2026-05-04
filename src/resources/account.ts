@@ -7,12 +7,8 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * AccountService manages account-level operations.
- *  Accounts are the top-level organizational unit in the system.
- *  All operations are scoped to the authenticated account determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Account-level operations
+ * Manage the authenticated account. Accounts are the top-level organizational
+ *  unit and contain one or more workspaces.
  */
 export class AccountResource extends APIResource {
   /**
@@ -32,11 +28,12 @@ export class AccountResource extends APIResource {
 }
 
 /**
- * Account is an account resource.
+ * An account, the top-level organizational unit. Contains workspaces and
+ * account-wide settings such as the webhook signing secret.
  */
 export interface Account {
   /**
-   * AccountInfo contains information about the account.
+   * Server-populated information about the account.
    */
   info: Account.Info;
 
@@ -47,14 +44,14 @@ export interface Account {
   metadata: Shared.AccountResourceMetadata;
 
   /**
-   * AccountSpec contains the specification for an account.
+   * Configuration for an account.
    */
   spec: AccountSpec;
 }
 
 export namespace Account {
   /**
-   * AccountInfo contains information about the account.
+   * Server-populated information about the account.
    */
   export interface Info {
     /**
@@ -67,7 +64,7 @@ export namespace Account {
 }
 
 /**
- * AccountSpec contains the specification for an account.
+ * Configuration for an account.
  */
 export interface AccountSpec {
   billingEmail?: string;
@@ -80,9 +77,9 @@ export interface AccountSpec {
 }
 
 /**
- * Profile represents a human user at the account level. Profiles are
- * account-scoped resources that can be associated with multiple workspaces through
- * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+ * A profile identifies a user or non-human principal (such as an API key) at the
+ * account level. Profiles are account-scoped and can be granted access to multiple
+ * workspaces.
  */
 export interface Profile {
   /**
@@ -92,35 +89,34 @@ export interface Profile {
   metadata: Shared.AccountResourceMetadata;
 
   /**
-   * ProfileSpec contains the profile-specific fields
+   * Configuration for a profile.
    */
   spec: ProfileSpec;
 }
 
 /**
- * ProfileSpec contains the profile-specific fields
+ * Configuration for a profile.
  */
 export interface ProfileSpec {
   /**
-   * Type is the type of profile. User's are humans, API keys are computers. You know
-   * the deal.
+   * Whether this profile represents a human user, an API key, or a system principal.
    */
   type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
 
   /**
-   * Email address of the user (required, unique per account)
+   * Email address of the profile. Required and unique within an account for user
+   * profiles.
    */
   email?: string;
 
   /**
-   * Display name for the user (e.g., "Bobby Tables")
+   * Display name (e.g., "Bobby Tables").
    */
   name?: string;
 }
 
 /**
- * RotateWebhookEventsHmacSecretResponse is a response to a
- * RotateWebhookEventsHmacSecretRequest.
+ * Response containing the newly generated webhook signing secret.
  */
 export interface RotateWebhookSigningKeyResponse {
   webhookEventsHmacSecret?: string;

@@ -8,13 +8,9 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * UploadService issues short-lived presigned URLs for direct client-to-object-
- *  storage uploads at the WORKSPACE level. Created uploads can be referenced by
- *  id when creating or updating resources that accept binary content (e.g.,
- *  MemoryEntry).
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Issue short-lived presigned URLs for direct client-to-object-storage
+ *  uploads. Created uploads can be referenced by id when creating or updating
+ *  resources that accept binary content (e.g., MemoryEntry).
  */
 export class Uploads extends APIResource {
   /**
@@ -36,14 +32,14 @@ export class Uploads extends APIResource {
 }
 
 /**
- * Upload is a workspace-scoped handle representing a single file upload flow.
- * Clients call CreateUpload to receive a short-lived presigned URL, PUT the file
- * directly to object storage, then reference the upload by id when creating or
- * updating resources that accept binary content.
+ * A handle representing a single file upload flow. Clients call CreateUpload to
+ * receive a short-lived presigned URL, PUT the file directly to object storage,
+ * then reference the upload by id when creating or updating resources that accept
+ * binary content.
  *
- * Uploads are one-shot: once consumed by a creating or updating resource, the
+ * Uploads are one-shot: once consumed by a creating or updating resource the
  * upload transitions to UPLOAD_STATUS_CONSUMED and cannot be reused. Unused
- * uploads expire and are garbage-collected by the runtime.
+ * uploads expire and are garbage-collected.
  */
 export interface Upload {
   info: UploadInfo;
@@ -58,9 +54,9 @@ export interface Upload {
 
 export interface UploadInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -121,7 +117,7 @@ export interface UploadCreateParams {
 
 export interface UploadRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }

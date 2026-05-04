@@ -97,16 +97,16 @@ export interface ObjectiveFeedbackInfo {
   objective?: Shared.BareMetadata;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   submittedBy?: AccountAPI.Profile;
 }
 
 export interface FeedbackCreateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 
@@ -125,7 +125,7 @@ export interface FeedbackCreateParams {
 
 export interface FeedbackListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 }

@@ -79,9 +79,6 @@ export interface ObjectiveTaskData {
 }
 
 export interface TaskRetrieveParams {
-  /**
-   * Workspace ID (from path).
-   */
   workspaceId: string;
 
   /**
@@ -92,7 +89,7 @@ export interface TaskRetrieveParams {
 
 export interface TaskListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 

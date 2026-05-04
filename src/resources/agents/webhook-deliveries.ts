@@ -7,12 +7,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * AgentService manages AI agents at the WORKSPACE level.
- *  Agents are workspace-scoped resources that define AI behavior and tool access.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Manage AI agents within a workspace. Agents define AI behavior and tool access.
  */
 export class WebhookDeliveries extends APIResource {
   /**
@@ -36,7 +31,7 @@ export type WebhookDeliveriesCursorPagination = CursorPagination<WebhookDelivery
 
 export interface WebhookDelivery {
   /**
-   * Webhook delivery data
+   * Webhook delivery details.
    */
   data: WebhookDeliveryData;
 
@@ -75,7 +70,7 @@ export interface WebhookDeliveryData {
     | 'OBJECTIVE_EVENT_TYPE_CANCELLED';
 
   /**
-   * Response details (no response_body to avoid storing large payloads)
+   * Response details. The response body is not retained.
    */
   httpStatusCode: number;
 
@@ -116,7 +111,7 @@ export interface WebhookDeliveryData {
 
 export interface WebhookDeliveryListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 

@@ -10,11 +10,8 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * APIKeyService manages workspace-scoped API Keys.
- *  Each API key belongs to a single workspace, ensuring isolation between environments.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Issue, rotate, and revoke API keys for a workspace. Each API key belongs to
+ *  exactly one workspace, ensuring isolation between environments.
  */
 export class APIKeys extends APIResource {
   /**
@@ -78,9 +75,8 @@ export class APIKeys extends APIResource {
 export type APIKeysCursorPagination = CursorPagination<APIKey>;
 
 /**
- * APIKey represents a workspace-scoped API key. Each API key belongs to exactly
- * one workspace, ensuring workspace isolation. Authentication is handled via
- * Cadenya-issued JWTs signed with the key's own signing secret.
+ * An API key scoped to a single workspace. The key's token is used to authenticate
+ * requests against that workspace's resources.
  */
 export interface APIKey {
   /**
@@ -89,7 +85,7 @@ export interface APIKey {
   metadata: Shared.ResourceMetadata;
 
   /**
-   * APIKeySpec contains the API Key-specific fields
+   * Configuration for an API key.
    */
   spec: APIKeySpec;
 
@@ -98,24 +94,25 @@ export interface APIKey {
 
 export interface APIKeyInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 }
 
 /**
- * APIKeySpec contains the API Key-specific fields
+ * Configuration for an API key.
  */
 export interface APIKeySpec {
   /**
-   * The actual token value (only returned on creation and rotation, read-only)
+   * The bearer token used to authenticate as this API key. Returned only on creation
+   * and rotation; subsequent reads omit this field.
    */
   token?: string;
 
   /**
-   * Description of what this API Key is used for
+   * Free-form description of what this API key is used for.
    */
   description?: string;
 }
@@ -129,21 +126,21 @@ export interface APIKeyCreateParams {
   metadata: Shared.CreateResourceMetadata;
 
   /**
-   * APIKeySpec contains the API Key-specific fields
+   * Configuration for an API key.
    */
   spec: APIKeySpec;
 }
 
 export interface APIKeyRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * The workspace the API key belongs to.
    */
   workspaceId: string;
 }
 
 export interface APIKeyUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: The workspace the API key belongs to.
    */
   workspaceId: string;
 
@@ -156,12 +153,12 @@ export interface APIKeyUpdateParams {
   metadata?: Shared.UpdateResourceMetadata;
 
   /**
-   * Body param: APIKeySpec contains the API Key-specific fields
+   * Body param: Configuration for an API key.
    */
   spec?: APIKeySpec;
 
   /**
-   * Body param: Fields to update
+   * Body param: Fields to update.
    */
   updateMask?: string;
 }
@@ -195,14 +192,14 @@ export interface APIKeyListParams extends CursorPaginationParams {
 
 export interface APIKeyDeleteParams {
   /**
-   * Workspace ID (from path).
+   * The workspace the API key belongs to.
    */
   workspaceId: string;
 }
 
 export interface APIKeyRotateParams {
   /**
-   * Workspace ID (from path).
+   * The workspace the API key belongs to.
    */
   workspaceId: string;
 }

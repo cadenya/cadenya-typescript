@@ -8,12 +8,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * AgentService manages AI agents at the WORKSPACE level.
- *  Agents are workspace-scoped resources that define AI behavior and tool access.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ * Manage AI agents within a workspace. Agents define AI behavior and tool access.
  */
 export class Feedback extends APIResource {
   /**
@@ -37,7 +32,7 @@ export class Feedback extends APIResource {
 
 export interface FeedbackListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 

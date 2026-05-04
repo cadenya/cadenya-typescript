@@ -10,15 +10,11 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * ToolService manages tool sets and tools at the WORKSPACE level.
- *  Tool sets group related tools, and tools define specific capabilities for agents.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ * Manage tool sets and the tools they contain. Tool sets group related tools,
+ *  and tools define specific capabilities available to agents.
  *
- *  Note: When a ToolSet has managed=true, only API Key actors can modify its tools.
- *  Profile actors (humans) are restricted from modifying managed tool sets.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ *  When a tool set is managed, only API key actors can modify its tools; human
+ *  (profile) actors cannot.
  */
 export class Tools extends APIResource {
   /**
@@ -126,9 +122,9 @@ export interface Tool {
 
 export interface ToolInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -172,7 +168,7 @@ export interface ToolSpecConfig {
 
 export interface ToolCreateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -192,26 +188,25 @@ export interface ToolCreateParams {
 
 export interface ToolRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
    */
   toolSetId: string;
 }
 
 export interface ToolUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Path param: Tool set ID (from path). Accepts canonical ts\_… form or
-   * external_id:<value> form (see common.proto "Path-parameter ID resolution").
+   * Path param: Tool set ID. Accepts the canonical ts\_… form or the
+   * external_id:<value> form.
    */
   toolSetId: string;
 
@@ -236,7 +231,7 @@ export interface ToolUpdateParams {
 
 export interface ToolListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -287,13 +282,12 @@ export interface ToolListParams extends CursorPaginationParams {
 
 export interface ToolDeleteParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 
   /**
-   * Tool set ID (from path). Accepts canonical ts\_… form or external_id:<value>
-   * form (see common.proto "Path-parameter ID resolution").
+   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
    */
   toolSetId: string;
 }
