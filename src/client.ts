@@ -21,25 +21,13 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   Account,
+  AccountInfo,
   AccountResource,
   AccountSpec,
   Profile,
   ProfileSpec,
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
-import {
-  APIKey,
-  APIKeyCreateParams,
-  APIKeyDeleteParams,
-  APIKeyInfo,
-  APIKeyListParams,
-  APIKeyRetrieveParams,
-  APIKeyRotateParams,
-  APIKeySpec,
-  APIKeyUpdateParams,
-  APIKeys,
-  APIKeysCursorPagination,
-} from './resources/api-keys';
 import {
   Model,
   ModelListParams,
@@ -95,6 +83,16 @@ import {
   AgentsCursorPagination,
   Page,
 } from './resources/agents/agents';
+import {
+  APIKey,
+  APIKeyCreateParams,
+  APIKeyInfo,
+  APIKeyListParams,
+  APIKeySpec,
+  APIKeyUpdateParams,
+  APIKeys,
+  APIKeysCursorPagination,
+} from './resources/api-keys/api-keys';
 import {
   AgentEntry,
   AgentScheduleEntry,
@@ -975,8 +973,8 @@ export class Cadenya {
    */
   toolSets: API.ToolSets = new API.ToolSets(this);
   /**
-   * Issue, rotate, and revoke API keys for a workspace. Each API key belongs to
-   *  exactly one workspace, ensuring isolation between environments.
+   * Issue, rotate, and revoke API keys for the account, and grant or revoke
+   *  each key's access to individual workspaces.
    */
   apiKeys: API.APIKeys = new API.APIKeys(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
@@ -1020,6 +1018,7 @@ export declare namespace Cadenya {
   export {
     AccountResource as AccountResource,
     type Account as Account,
+    type AccountInfo as AccountInfo,
     type AccountSpec as AccountSpec,
     type Profile as Profile,
     type ProfileSpec as ProfileSpec,
@@ -1152,11 +1151,8 @@ export declare namespace Cadenya {
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,
-    type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
-    type APIKeyDeleteParams as APIKeyDeleteParams,
-    type APIKeyRotateParams as APIKeyRotateParams,
   };
 
   export {

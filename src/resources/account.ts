@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
 import * as WorkspacesAPI from './workspaces';
+import * as APIKeysAPI from './api-keys/api-keys';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -35,7 +36,7 @@ export interface Account {
   /**
    * Server-populated information about the account.
    */
-  info: Account.Info;
+  info: AccountInfo;
 
   /**
    * AccountResourceMetadata is used to represent a resource that is associated to an
@@ -49,18 +50,23 @@ export interface Account {
   spec: AccountSpec;
 }
 
-export namespace Account {
+/**
+ * Server-populated information about the account.
+ */
+export interface AccountInfo {
   /**
-   * Server-populated information about the account.
+   * An API key for the account. Use workspace-association RPCs to grant the key
+   * access to specific workspaces; a key with zero workspaces is valid but cannot
+   * access workspace-scoped resources.
    */
-  export interface Info {
-    /**
-     * The generated secret that will sign all webhooks that are sent to your
-     * configured Webhook URL. Formatted as "wh_asdf1234" per the
-     * https://www.standardwebhooks.com/ format.
-     */
-    webhookEventsHmacSecret?: string;
-  }
+  globalApiKey?: APIKeysAPI.APIKey;
+
+  /**
+   * The generated secret that will sign all webhooks that are sent to your
+   * configured Webhook URL. Formatted as "wh_asdf1234" per the
+   * https://www.standardwebhooks.com/ format.
+   */
+  webhookEventsHmacSecret?: string;
 }
 
 /**
@@ -125,6 +131,7 @@ export interface RotateWebhookSigningKeyResponse {
 export declare namespace AccountResource {
   export {
     type Account as Account,
+    type AccountInfo as AccountInfo,
     type AccountSpec as AccountSpec,
     type Profile as Profile,
     type ProfileSpec as ProfileSpec,
