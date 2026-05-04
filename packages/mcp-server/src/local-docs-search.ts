@@ -60,9 +60,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) account > (method) retrieve',
     qualified: 'client.account.retrieve',
     response:
-      '{ info: { webhookEventsHmacSecret?: string; }; metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: workspace[]; }; }',
+      '{ info: { globalApiKey?: api_key; webhookEventsHmacSecret?: string; }; metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: workspace[]; }; }',
     markdown:
-      "## retrieve\n\n`client.account.retrieve(): { info: object; metadata: account_resource_metadata; spec: account_spec; }`\n\n**get** `/v1/account`\n\nRetrieves the current account for the token accessing the API. Useful to check if the credentials are valid.\n\n### Returns\n\n- `{ info: { webhookEventsHmacSecret?: string; }; metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: workspace[]; }; }`\n  An account, the top-level organizational unit. Contains workspaces and\n account-wide settings such as the webhook signing secret.\n\n  - `info: { webhookEventsHmacSecret?: string; }`\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: { metadata: account_resource_metadata; spec: workspace_spec; }[]; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst account = await client.account.retrieve();\n\nconsole.log(account);\n```",
+      "## retrieve\n\n`client.account.retrieve(): { info: account_info; metadata: account_resource_metadata; spec: account_spec; }`\n\n**get** `/v1/account`\n\nRetrieves the current account for the token accessing the API. Useful to check if the credentials are valid.\n\n### Returns\n\n- `{ info: { globalApiKey?: api_key; webhookEventsHmacSecret?: string; }; metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: workspace[]; }; }`\n  An account, the top-level organizational unit. Contains workspaces and\n account-wide settings such as the webhook signing secret.\n\n  - `info: { globalApiKey?: { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }; webhookEventsHmacSecret?: string; }`\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { billingEmail?: string; description?: string; domain?: string; workspaces?: { metadata: account_resource_metadata; spec: workspace_spec; }[]; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst account = await client.account.retrieve();\n\nconsole.log(account);\n```",
     perLanguage: {
       typescript: {
         method: 'client.account.retrieve',
@@ -2654,14 +2654,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'list',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys',
+    endpoint: '/v1/account/api_keys',
     httpMethod: 'get',
     summary: 'List API keys',
-    description: 'Lists all API keys in the workspace',
+    description: 'Lists all API keys on the account.',
     stainlessPath: '(resource) api_keys > (method) list',
     qualified: 'client.apiKeys.list',
     params: [
-      'workspaceId: string;',
       'bundleKey?: string;',
       'cursor?: string;',
       'includeInfo?: boolean;',
@@ -2671,211 +2670,310 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'sortOrder?: string;',
     ],
     response:
-      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }',
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
     markdown:
-      "## list\n\n`client.apiKeys.list(workspaceId: string, bundleKey?: string, cursor?: string, includeInfo?: boolean, limit?: number, prefix?: string, query?: string, sortOrder?: string): { metadata: resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**get** `/v1/workspaces/{workspaceId}/api_keys`\n\nLists all API keys in the workspace\n\n### Parameters\n\n- `workspaceId: string`\n\n- `bundleKey?: string`\n  Filter by bundle_key — return only resources owned by this bundle.\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `includeInfo?: boolean`\n  When set to true you may use more of your alloted API rate-limit\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `prefix?: string`\n  Filter expression (query param: prefix)\n\n- `query?: string`\n  Free-form search query\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time)\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }`\n  An API key scoped to a single workspace. The key's token is used to\n authenticate requests against that workspace's resources.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const apiKey of client.apiKeys.list('workspaceId')) {\n  console.log(apiKey);\n}\n```",
+      "## list\n\n`client.apiKeys.list(bundleKey?: string, cursor?: string, includeInfo?: boolean, limit?: number, prefix?: string, query?: string, sortOrder?: string): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**get** `/v1/account/api_keys`\n\nLists all API keys on the account.\n\n### Parameters\n\n- `bundleKey?: string`\n  Filter by bundle_key — return only resources owned by this bundle.\n\n- `cursor?: string`\n  Pagination cursor from previous response.\n\n- `includeInfo?: boolean`\n  When true, included info fields are populated. Requests with this\n flag count more against your rate limit.\n\n- `limit?: number`\n  Maximum number of results to return.\n\n- `prefix?: string`\n  Filter by ID prefix.\n\n- `query?: string`\n  Free-form search query.\n\n- `sortOrder?: string`\n  Sort order for results (asc or desc by creation time).\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const apiKey of client.apiKeys.list()) {\n  console.log(apiKey);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.list',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const apiKey of client.apiKeys.list('workspaceId')) {\n  console.log(apiKey.metadata);\n}",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const apiKey of client.apiKeys.list()) {\n  console.log(apiKey.metadata);\n}",
       },
       go: {
         method: 'client.APIKeys.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.APIKeyListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.List(context.TODO(), cadenya.APIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       cli: {
         method: 'api_keys list',
-        example: "cadenya api-keys list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
+        example: "cadenya api-keys list \\\n  --api-key 'My API Key'",
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/account/api_keys \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
     },
   },
   {
     name: 'create',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys',
+    endpoint: '/v1/account/api_keys',
     httpMethod: 'post',
     summary: 'Create a new API key',
-    description: 'Creates a new API key in the workspace.',
+    description:
+      'Creates a new API key on the account. Optionally grants the key access to one or more workspaces via initial_workspace_ids.',
     stainlessPath: '(resource) api_keys > (method) create',
     qualified: 'client.apiKeys.create',
     params: [
-      'workspaceId: string;',
-      'metadata: { name: string; bundleKey?: string; externalId?: string; labels?: object; };',
-      'spec: { token?: string; description?: string; };',
+      'metadata: { name: string; externalId?: string; labels?: object; };',
+      'spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; };',
+      'initialWorkspaceIds?: string[];',
     ],
     response:
-      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }',
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
     markdown:
-      '## create\n\n`client.apiKeys.create(workspaceId: string, metadata: { name: string; bundleKey?: string; externalId?: string; labels?: object; }, spec: { token?: string; description?: string; }): { metadata: resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**post** `/v1/workspaces/{workspaceId}/api_keys`\n\nCreates a new API key in the workspace.\n\n### Parameters\n\n- `workspaceId: string`\n\n- `metadata: { name: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  CreateResourceMetadata contains the user-provided fields for creating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `bundleKey?: string`\n    Optional bundle ownership key. See ResourceMetadata.bundle_key.\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { token?: string; description?: string; }`\n  Configuration for an API key.\n  - `token?: string`\n    The bearer token used to authenticate as this API key. Returned only on\n creation and rotation; subsequent reads omit this field.\n  - `description?: string`\n    Free-form description of what this API key is used for.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }`\n  An API key scoped to a single workspace. The key\'s token is used to\n authenticate requests against that workspace\'s resources.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.create(\'workspaceId\', {\n  metadata: { name: \'name\' },\n  spec: {},\n});\n\nconsole.log(apiKey);\n```',
+      '## create\n\n`client.apiKeys.create(metadata: { name: string; externalId?: string; labels?: object; }, spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }, initialWorkspaceIds?: string[]): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**post** `/v1/account/api_keys`\n\nCreates a new API key on the account. Optionally grants the key access to one or more workspaces via initial_workspace_ids.\n\n### Parameters\n\n- `metadata: { name: string; externalId?: string; labels?: object; }`\n  CreateAccountResourceMetadata contains the user-provided fields for creating\n an account-scoped resource. Read-only fields (id, account_id, profile_id) are excluded\n since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Production API Key", "Staging Workspace")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  Configuration for an API key.\n  - `token?: string`\n    The bearer token used to authenticate as this API key. Returned only on\n creation and rotation; subsequent reads omit this field.\n  - `description?: string`\n    Free-form description of what this API key is used for.\n  - `permissions?: string[]`\n    Permissions granted to this key. Each entry is a colon-separated\n verb:resource string (e.g. "manage:agents"). Currently has no\n enforced effect; reserved for future fine-grained authorization.\n  - `system?: boolean`\n    True when this key is managed by the system (e.g. the auto-provisioned\n global account key). System keys cannot be deleted but can be rotated.\n\n- `initialWorkspaceIds?: string[]`\n  Workspaces this API key will have access to on creation. Optional —\n a key can be created with no workspace access and granted later via\n AddAPIKeyWorkspace.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.create({\n  metadata: { name: \'name\' },\n  spec: {},\n});\n\nconsole.log(apiKey);\n```',
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.create',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.create('workspaceId', {\n  metadata: { name: 'name' },\n  spec: {},\n});\n\nconsole.log(apiKey.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.create({\n  metadata: { name: 'name' },\n  spec: {},\n});\n\nconsole.log(apiKey.metadata);",
       },
       go: {
         method: 'client.APIKeys.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.APIKeyNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.APIKeySpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.New(context.TODO(), cadenya.APIKeyNewParams{\n\t\tMetadata: cadenya.F(cadenya.APIKeyNewParamsMetadata{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.APIKeySpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       cli: {
         method: 'api_keys create',
         example:
-          "cadenya api-keys create \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId \\\n  --metadata '{name: name}' \\\n  --spec '{}'",
+          "cadenya api-keys create \\\n  --api-key 'My API Key' \\\n  --metadata '{name: name}' \\\n  --spec '{}'",
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {}\n        }\'',
+          'curl https://api.cadenya.com/v1/account/api_keys \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $CADENYA_API_KEY" \\\n    -d \'{\n          "metadata": {\n            "name": "name"\n          },\n          "spec": {}\n        }\'',
       },
     },
   },
   {
     name: 'retrieve',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys/{id}',
+    endpoint: '/v1/account/api_keys/{id}',
     httpMethod: 'get',
     summary: 'Get an API key by ID',
-    description: 'Retrieves an API key by ID from the workspace',
+    description: 'Retrieves an API key by ID.',
     stainlessPath: '(resource) api_keys > (method) retrieve',
     qualified: 'client.apiKeys.retrieve',
-    params: ['workspaceId: string;', 'id: string;'],
+    params: ['id: string;'],
     response:
-      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }',
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
     markdown:
-      "## retrieve\n\n`client.apiKeys.retrieve(workspaceId: string, id: string): { metadata: resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**get** `/v1/workspaces/{workspaceId}/api_keys/{id}`\n\nRetrieves an API key by ID from the workspace\n\n### Parameters\n\n- `workspaceId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }`\n  An API key scoped to a single workspace. The key's token is used to\n authenticate requests against that workspace's resources.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.retrieve('id', { workspaceId: 'workspaceId' });\n\nconsole.log(apiKey);\n```",
+      "## retrieve\n\n`client.apiKeys.retrieve(id: string): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**get** `/v1/account/api_keys/{id}`\n\nRetrieves an API key by ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.retrieve('id');\n\nconsole.log(apiKey);\n```",
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.retrieve',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.retrieve('id', { workspaceId: 'workspaceId' });\n\nconsole.log(apiKey.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.retrieve('id');\n\nconsole.log(apiKey.metadata);",
       },
       go: {
         method: 'client.APIKeys.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       cli: {
         method: 'api_keys retrieve',
-        example:
-          "cadenya api-keys retrieve \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId \\\n  --id id",
+        example: "cadenya api-keys retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/account/api_keys/$ID \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
     },
   },
   {
     name: 'delete',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys/{id}',
+    endpoint: '/v1/account/api_keys/{id}',
     httpMethod: 'delete',
     summary: 'Delete an API key',
-    description: 'Deletes an API key from the workspace',
+    description: 'Deletes an API key.',
     stainlessPath: '(resource) api_keys > (method) delete',
     qualified: 'client.apiKeys.delete',
-    params: ['workspaceId: string;', 'id: string;'],
+    params: ['id: string;'],
     markdown:
-      "## delete\n\n`client.apiKeys.delete(workspaceId: string, id: string): void`\n\n**delete** `/v1/workspaces/{workspaceId}/api_keys/{id}`\n\nDeletes an API key from the workspace\n\n### Parameters\n\n- `workspaceId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.apiKeys.delete('id', { workspaceId: 'workspaceId' })\n```",
+      "## delete\n\n`client.apiKeys.delete(id: string): void`\n\n**delete** `/v1/account/api_keys/{id}`\n\nDeletes an API key.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.apiKeys.delete('id')\n```",
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.delete',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.apiKeys.delete('id', { workspaceId: 'workspaceId' });",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.apiKeys.delete('id');",
       },
       go: {
         method: 'client.APIKeys.Delete',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       cli: {
         method: 'api_keys delete',
-        example:
-          "cadenya api-keys delete \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId \\\n  --id id",
+        example: "cadenya api-keys delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/account/api_keys/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
     },
   },
   {
     name: 'update',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys/{id}',
+    endpoint: '/v1/account/api_keys/{id}',
     httpMethod: 'patch',
     summary: 'Update an API key',
-    description: 'Updates an API key in the workspace',
+    description: 'Updates an API key.',
     stainlessPath: '(resource) api_keys > (method) update',
     qualified: 'client.apiKeys.update',
     params: [
-      'workspaceId: string;',
       'id: string;',
-      'metadata?: { name: string; bundleKey?: string; externalId?: string; labels?: object; };',
-      'spec?: { token?: string; description?: string; };',
+      'metadata?: { name: string; externalId?: string; labels?: object; };',
+      'spec?: { token?: string; description?: string; permissions?: string[]; system?: boolean; };',
       'updateMask?: string;',
     ],
     response:
-      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }',
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
     markdown:
-      '## update\n\n`client.apiKeys.update(workspaceId: string, id: string, metadata?: { name: string; bundleKey?: string; externalId?: string; labels?: object; }, spec?: { token?: string; description?: string; }, updateMask?: string): { metadata: resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**patch** `/v1/workspaces/{workspaceId}/api_keys/{id}`\n\nUpdates an API key in the workspace\n\n### Parameters\n\n- `workspaceId: string`\n\n- `id: string`\n\n- `metadata?: { name: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  UpdateResourceMetadata contains the user-provided fields for updating\n a workspace-scoped resource. Read-only fields (id, account_id, workspace_id, profile_id,\n created_at) are excluded since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Customer Support Agent", "Email Tool")\n  - `bundleKey?: string`\n    Optional bundle ownership key. See ResourceMetadata.bundle_key.\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec?: { token?: string; description?: string; }`\n  Configuration for an API key.\n  - `token?: string`\n    The bearer token used to authenticate as this API key. Returned only on\n creation and rotation; subsequent reads omit this field.\n  - `description?: string`\n    Free-form description of what this API key is used for.\n\n- `updateMask?: string`\n  Fields to update.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }`\n  An API key scoped to a single workspace. The key\'s token is used to\n authenticate requests against that workspace\'s resources.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.update(\'id\', { workspaceId: \'workspaceId\' });\n\nconsole.log(apiKey);\n```',
+      '## update\n\n`client.apiKeys.update(id: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { token?: string; description?: string; permissions?: string[]; system?: boolean; }, updateMask?: string): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**patch** `/v1/account/api_keys/{id}`\n\nUpdates an API key.\n\n### Parameters\n\n- `id: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateAccountResourceMetadata contains the user-provided fields for updating\n an account-scoped resource. Read-only fields (id, account_id, profile_id) are excluded\n since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., "Production API Key", "Staging Workspace")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {"environment": "production", "team": "platform", "version": "v2"}\n\n- `spec?: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  Configuration for an API key.\n  - `token?: string`\n    The bearer token used to authenticate as this API key. Returned only on\n creation and rotation; subsequent reads omit this field.\n  - `description?: string`\n    Free-form description of what this API key is used for.\n  - `permissions?: string[]`\n    Permissions granted to this key. Each entry is a colon-separated\n verb:resource string (e.g. "manage:agents"). Currently has no\n enforced effect; reserved for future fine-grained authorization.\n  - `system?: boolean`\n    True when this key is managed by the system (e.g. the auto-provisioned\n global account key). System keys cannot be deleted but can be rotated.\n\n- `updateMask?: string`\n  Fields to update.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from \'@cadenya/cadenya\';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.update(\'id\');\n\nconsole.log(apiKey);\n```',
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.update',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.update('id', { workspaceId: 'workspaceId' });\n\nconsole.log(apiKey.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.update('id');\n\nconsole.log(apiKey.metadata);",
       },
       go: {
         method: 'client.APIKeys.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.APIKeyUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       cli: {
         method: 'api_keys update',
-        example:
-          "cadenya api-keys update \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId \\\n  --id id",
+        example: "cadenya api-keys update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       http: {
         example:
-          "curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+          "curl https://api.cadenya.com/v1/account/api_keys/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
       },
     },
   },
   {
     name: 'rotate',
-    endpoint: '/v1/workspaces/{workspaceId}/api_keys/{id}/rotate',
+    endpoint: '/v1/account/api_keys/{id}/rotate',
     httpMethod: 'put',
     summary: 'Rotate an API key',
     description:
-      'Rotates an API Key and returns a new token. All previous API Key tokens in use will be invalidated.',
+      'Rotates an API key and returns a new token. All previous tokens for this key are invalidated.',
     stainlessPath: '(resource) api_keys > (method) rotate',
     qualified: 'client.apiKeys.rotate',
-    params: ['workspaceId: string;', 'id: string;'],
+    params: ['id: string;'],
     response:
-      '{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }',
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
     markdown:
-      "## rotate\n\n`client.apiKeys.rotate(workspaceId: string, id: string): { metadata: resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**put** `/v1/workspaces/{workspaceId}/api_keys/{id}/rotate`\n\nRotates an API Key and returns a new token. All previous API Key tokens in use will be invalidated.\n\n### Parameters\n\n- `workspaceId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; }; info?: { createdBy?: profile; }; }`\n  An API key scoped to a single workspace. The key's token is used to\n authenticate requests against that workspace's resources.\n\n  - `metadata: { id: string; accountId: string; createdAt: string; name: string; profileId: string; workspaceId: string; bundleKey?: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.rotate('id', { workspaceId: 'workspaceId' });\n\nconsole.log(apiKey);\n```",
+      "## rotate\n\n`client.apiKeys.rotate(id: string): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**put** `/v1/account/api_keys/{id}/rotate`\n\nRotates an API key and returns a new token. All previous tokens for this key are invalidated.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.rotate('id');\n\nconsole.log(apiKey);\n```",
     perLanguage: {
       typescript: {
         method: 'client.apiKeys.rotate',
         example:
-          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.rotate('id', { workspaceId: 'workspaceId' });\n\nconsole.log(apiKey.metadata);",
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.rotate('id');\n\nconsole.log(apiKey.metadata);",
       },
       go: {
         method: 'client.APIKeys.Rotate',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Rotate(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Rotate(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
       cli: {
         method: 'api_keys rotate',
-        example:
-          "cadenya api-keys rotate \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId \\\n  --id id",
+        example: "cadenya api-keys rotate \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       http: {
         example:
-          'curl https://api.cadenya.com/v1/workspaces/$WORKSPACE_ID/api_keys/$ID/rotate \\\n    -X PUT \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+          'curl https://api.cadenya.com/v1/account/api_keys/$ID/rotate \\\n    -X PUT \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'add',
+    endpoint: '/v1/account/api_keys/{id}/workspaces',
+    httpMethod: 'post',
+    summary: 'Grant an API key access to a workspace',
+    description:
+      'Grants this API key access to the specified workspace. Idempotent — adding an already-associated workspace is a no-op. Returns the updated API key with refreshed workspace preview and total.',
+    stainlessPath: '(resource) api_keys.access > (method) add',
+    qualified: 'client.apiKeys.access.add',
+    params: ['id: string;', 'workspaceId?: string;'],
+    response:
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }',
+    markdown:
+      "## add\n\n`client.apiKeys.access.add(id: string, workspaceId?: string): { metadata: account_resource_metadata; spec: api_key_spec; info?: api_key_info; }`\n\n**post** `/v1/account/api_keys/{id}/workspaces`\n\nGrants this API key access to the specified workspace. Idempotent — adding an already-associated workspace is a no-op. Returns the updated API key with refreshed workspace preview and total.\n\n### Parameters\n\n- `id: string`\n\n- `workspaceId?: string`\n  The workspace to grant access to.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }; info?: { createdBy?: profile; workspacesPreview?: bare_metadata[]; workspacesTotal?: number; }; }`\n  An API key for the account. Use workspace-association RPCs to grant the\n key access to specific workspaces; a key with zero workspaces is valid\n but cannot access workspace-scoped resources.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { token?: string; description?: string; permissions?: string[]; system?: boolean; }`\n  - `info?: { createdBy?: { metadata: account_resource_metadata; spec: profile_spec; }; workspacesPreview?: { id?: string; name?: string; }[]; workspacesTotal?: number; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst apiKey = await client.apiKeys.access.add('id');\n\nconsole.log(apiKey);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apiKeys.access.add',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.apiKeys.access.add('id');\n\nconsole.log(apiKey.metadata);",
+      },
+      go: {
+        method: 'client.APIKeys.Access.Add',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Access.Add(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyAccessAddParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+      },
+      cli: {
+        method: 'access add',
+        example: "cadenya api-keys:access add \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      http: {
+        example:
+          "curl https://api.cadenya.com/v1/account/api_keys/$ID/workspaces \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+      },
+    },
+  },
+  {
+    name: 'remove',
+    endpoint: '/v1/account/api_keys/{id}/workspaces/{workspaceId}',
+    httpMethod: 'delete',
+    summary: "Revoke an API key's access to a workspace",
+    description:
+      "Revokes this API key's access to the specified workspace. Idempotent. A key may have zero workspaces and remains valid.",
+    stainlessPath: '(resource) api_keys.access > (method) remove',
+    qualified: 'client.apiKeys.access.remove',
+    params: ['id: string;', 'workspaceId: string;'],
+    markdown:
+      "## remove\n\n`client.apiKeys.access.remove(id: string, workspaceId: string): void`\n\n**delete** `/v1/account/api_keys/{id}/workspaces/{workspaceId}`\n\nRevokes this API key's access to the specified workspace. Idempotent. A key may have zero workspaces and remains valid.\n\n### Parameters\n\n- `id: string`\n\n- `workspaceId: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.apiKeys.access.remove('workspaceId', { id: 'id' })\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apiKeys.access.remove',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.apiKeys.access.remove('workspaceId', { id: 'id' });",
+      },
+      go: {
+        method: 'client.APIKeys.Access.Remove',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Access.Remove(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\t"workspaceId",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'access remove',
+        example:
+          "cadenya api-keys:access remove \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --workspace-id workspaceId",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/account/api_keys/$ID/workspaces/$WORKSPACE_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/account/api_keys/{id}/workspaces',
+    httpMethod: 'get',
+    summary: 'List the workspaces an API key has access to',
+    description: 'Lists the workspaces this API key has access to. Cursor-paginated.',
+    stainlessPath: '(resource) api_keys.access > (method) list',
+    qualified: 'client.apiKeys.access.list',
+    params: ['id: string;', 'cursor?: string;', 'limit?: number;'],
+    response:
+      '{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { description?: string; }; }',
+    markdown:
+      "## list\n\n`client.apiKeys.access.list(id: string, cursor?: string, limit?: number): { metadata: account_resource_metadata; spec: workspace_spec; }`\n\n**get** `/v1/account/api_keys/{id}/workspaces`\n\nLists the workspaces this API key has access to. Cursor-paginated.\n\n### Parameters\n\n- `id: string`\n\n- `cursor?: string`\n  Pagination cursor from previous response.\n\n- `limit?: number`\n  Maximum number of results to return.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { description?: string; }; }`\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { description?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const workspace of client.apiKeys.access.list('id')) {\n  console.log(workspace);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apiKeys.access.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const workspace of client.apiKeys.access.list('id')) {\n  console.log(workspace.metadata);\n}",
+      },
+      go: {
+        method: 'client.APIKeys.Access.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.Access.List(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyAccessListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'access list',
+        example: "cadenya api-keys:access list \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/account/api_keys/$ID/workspaces \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
       },
     },
   },

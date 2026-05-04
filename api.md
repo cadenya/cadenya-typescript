@@ -15,6 +15,7 @@ Types:
 Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
+- <code><a href="./src/resources/account.ts">AccountInfo</a></code>
 - <code><a href="./src/resources/account.ts">AccountSpec</a></code>
 - <code><a href="./src/resources/account.ts">Profile</a></code>
 - <code><a href="./src/resources/account.ts">ProfileSpec</a></code>
@@ -321,18 +322,26 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/api-keys.ts">APIKey</a></code>
-- <code><a href="./src/resources/api-keys.ts">APIKeyInfo</a></code>
-- <code><a href="./src/resources/api-keys.ts">APIKeySpec</a></code>
+- <code><a href="./src/resources/api-keys/api-keys.ts">APIKey</a></code>
+- <code><a href="./src/resources/api-keys/api-keys.ts">APIKeyInfo</a></code>
+- <code><a href="./src/resources/api-keys/api-keys.ts">APIKeySpec</a></code>
 
 Methods:
 
-- <code title="post /v1/workspaces/{workspaceId}/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">create</a>(workspaceID, { ...params }) -> APIKey</code>
-- <code title="get /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">retrieve</a>(id, { ...params }) -> APIKey</code>
-- <code title="patch /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
-- <code title="get /v1/workspaces/{workspaceId}/api_keys">client.apiKeys.<a href="./src/resources/api-keys.ts">list</a>(workspaceID, { ...params }) -> APIKeysCursorPagination</code>
-- <code title="delete /v1/workspaces/{workspaceId}/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys.ts">delete</a>(id, { ...params }) -> void</code>
-- <code title="put /v1/workspaces/{workspaceId}/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys.ts">rotate</a>(id, { ...params }) -> APIKey</code>
+- <code title="post /v1/account/api_keys">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">create</a>({ ...params }) -> APIKey</code>
+- <code title="get /v1/account/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">retrieve</a>(id) -> APIKey</code>
+- <code title="patch /v1/account/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
+- <code title="get /v1/account/api_keys">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">list</a>({ ...params }) -> APIKeysCursorPagination</code>
+- <code title="delete /v1/account/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">delete</a>(id) -> void</code>
+- <code title="put /v1/account/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">rotate</a>(id) -> APIKey</code>
+
+## Access
+
+Methods:
+
+- <code title="get /v1/account/api_keys/{id}/workspaces">client.apiKeys.access.<a href="./src/resources/api-keys/access.ts">list</a>(id, { ...params }) -> WorkspacesCursorPagination</code>
+- <code title="post /v1/account/api_keys/{id}/workspaces">client.apiKeys.access.<a href="./src/resources/api-keys/access.ts">add</a>(id, { ...params }) -> APIKey</code>
+- <code title="delete /v1/account/api_keys/{id}/workspaces/{workspaceId}">client.apiKeys.access.<a href="./src/resources/api-keys/access.ts">remove</a>(workspaceID, { ...params }) -> void</code>
 
 # WorkspaceSecrets
 

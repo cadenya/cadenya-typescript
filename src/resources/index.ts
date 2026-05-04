@@ -7,16 +7,14 @@ export {
   type APIKeyInfo,
   type APIKeySpec,
   type APIKeyCreateParams,
-  type APIKeyRetrieveParams,
   type APIKeyUpdateParams,
   type APIKeyListParams,
-  type APIKeyDeleteParams,
-  type APIKeyRotateParams,
   type APIKeysCursorPagination,
-} from './api-keys';
+} from './api-keys/api-keys';
 export {
   AccountResource,
   type Account,
+  type AccountInfo,
   type AccountSpec,
   type Profile,
   type ProfileSpec,
