@@ -27,15 +27,11 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * ToolService manages tool sets and tools at the WORKSPACE level.
- *  Tool sets group related tools, and tools define specific capabilities for agents.
- *  All operations are implicitly scoped to the workspace determined by the JWT token.
+ * Manage tool sets and the tools they contain. Tool sets group related tools,
+ *  and tools define specific capabilities available to agents.
  *
- *  Note: When a ToolSet has managed=true, only API Key actors can modify its tools.
- *  Profile actors (humans) are restricted from modifying managed tool sets.
- *
- *  Authentication: Bearer token (JWT)
- *  Scope: Workspace-level operations
+ *  When a tool set is managed, only API key actors can modify its tools; human
+ *  (profile) actors cannot.
  */
 export class ToolSets extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
@@ -152,46 +148,46 @@ export namespace McpToolFilter {
 }
 
 /**
- * SyncCompleted is emitted when a tool set sync operation completes successfully
+ * Emitted when a tool set sync operation completes successfully.
  */
 export interface SyncCompleted {
   /**
-   * Optional message with additional details
+   * Optional message with additional details.
    */
   message?: string;
 
   /**
-   * Number of tools synced
+   * Number of tools synced.
    */
   toolsSynced?: number;
 }
 
 /**
- * SyncFailed is emitted when a tool set sync operation fails
+ * Emitted when a tool set sync operation fails.
  */
 export interface SyncFailed {
   /**
-   * Indicates this is an error event
+   * Indicates this is an error event.
    */
   error?: boolean;
 
   /**
-   * Optional error type/code for programmatic handling
+   * Optional error type/code for programmatic handling.
    */
   errorType?: string;
 
   /**
-   * Error message describing what went wrong
+   * Error message describing what went wrong.
    */
   message?: string;
 }
 
 /**
- * SyncStarted is emitted when a tool set sync operation begins
+ * Emitted when a tool set sync operation begins.
  */
 export interface SyncStarted {
   /**
-   * Timestamp when the sync was initiated
+   * Human-readable message describing the start of the sync.
    */
   message?: string;
 }
@@ -260,7 +256,7 @@ export namespace ToolSetAdapterMcp {
 }
 
 /**
- * ToolSetEvent represents a single event in the tool set's operation timeline
+ * A single event in the tool set's operation timeline.
  */
 export interface ToolSetEvent {
   /**
@@ -270,14 +266,14 @@ export interface ToolSetEvent {
   metadata: Shared.OperationMetadata;
 
   /**
-   * ToolSetEventData represents the actual event payload for tool set operations
+   * Event payload for a tool set operation.
    */
   event?: ToolSetEventData;
 
   info?: ToolSetEvent.Info;
 
   /**
-   * The tool set this event is associated with
+   * The tool set this event is associated with.
    */
   toolSetId?: string;
 }
@@ -285,9 +281,9 @@ export interface ToolSetEvent {
 export namespace ToolSetEvent {
   export interface Info {
     /**
-     * Profile represents a human user at the account level. Profiles are
-     * account-scoped resources that can be associated with multiple workspaces through
-     * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+     * A profile identifies a user or non-human principal (such as an API key) at the
+     * account level. Profiles are account-scoped and can be granted access to multiple
+     * workspaces.
      */
     createdBy?: AccountAPI.Profile;
 
@@ -299,26 +295,26 @@ export namespace ToolSetEvent {
 }
 
 /**
- * ToolSetEventData represents the actual event payload for tool set operations
+ * Event payload for a tool set operation.
  */
 export interface ToolSetEventData {
   /**
-   * SyncCompleted is emitted when a tool set sync operation completes successfully
+   * Emitted when a tool set sync operation completes successfully.
    */
   syncCompleted?: SyncCompleted;
 
   /**
-   * SyncFailed is emitted when a tool set sync operation fails
+   * Emitted when a tool set sync operation fails.
    */
   syncFailed?: SyncFailed;
 
   /**
-   * SyncStarted is emitted when a tool set sync operation begins
+   * Emitted when a tool set sync operation begins.
    */
   syncStarted?: SyncStarted;
 
   /**
-   * Type of the event (e.g., "sync_started", "sync_completed", "sync_failed")
+   * Type of the event (e.g., "sync_started", "sync_completed", "sync_failed").
    */
   type?: string;
 }
@@ -327,9 +323,9 @@ export interface ToolSetInfo {
   agentCount?: number;
 
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -357,14 +353,14 @@ export interface ToolSetCreateParams {
 
 export interface ToolSetRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }
 
 export interface ToolSetUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 
@@ -416,14 +412,14 @@ export interface ToolSetListParams extends CursorPaginationParams {
 
 export interface ToolSetDeleteParams {
   /**
-   * Workspace ID (from path).
+   * Workspace ID.
    */
   workspaceId: string;
 }
 
 export interface ToolSetListEventsParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: Workspace ID.
    */
   workspaceId: string;
 

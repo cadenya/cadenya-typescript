@@ -93,9 +93,9 @@ export interface WorkspaceSecret {
 
 export interface WorkspaceSecretInfo {
   /**
-   * Profile represents a human user at the account level. Profiles are
-   * account-scoped resources that can be associated with multiple workspaces through
-   * the Actor model. Authentication for profiles is handled via SSO/OAuth (WorkOS).
+   * A profile identifies a user or non-human principal (such as an API key) at the
+   * account level. Profiles are account-scoped and can be granted access to multiple
+   * workspaces.
    */
   createdBy?: AccountAPI.Profile;
 
@@ -119,14 +119,14 @@ export interface WorkspaceSecretCreateParams {
 
 export interface WorkspaceSecretRetrieveParams {
   /**
-   * Workspace ID (from path).
+   * The workspace the secret belongs to.
    */
   workspaceId: string;
 }
 
 export interface WorkspaceSecretUpdateParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param: The workspace the secret belongs to.
    */
   workspaceId: string;
 
@@ -144,7 +144,7 @@ export interface WorkspaceSecretUpdateParams {
   spec?: WorkspaceSecretSpec;
 
   /**
-   * Body param: Fields to update
+   * Body param: Fields to update.
    */
   updateMask?: string;
 }
@@ -178,7 +178,7 @@ export interface WorkspaceSecretListParams extends CursorPaginationParams {
 
 export interface WorkspaceSecretDeleteParams {
   /**
-   * Workspace ID (from path).
+   * The workspace the secret belongs to.
    */
   workspaceId: string;
 }

@@ -51,7 +51,7 @@ export interface ObjectiveTool {
 
 export interface ToolListParams extends CursorPaginationParams {
   /**
-   * Path param: Workspace ID (from path).
+   * Path param
    */
   workspaceId: string;
 }
