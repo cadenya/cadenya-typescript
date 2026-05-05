@@ -1,5 +1,5 @@
 {
-  "name": "cadenya-mcp",
+  "name": "@cadenya/cadenya-mcp",
   "version": "0.69.0",
   "description": "The official MCP Server for the Cadenya API",
   "author": "Cadenya <support@cadenya.com>",
@@ -78,8 +78,8 @@
     "tsconfig-paths": "^4.0.0"
   },
   "imports": {
-    "cadenya-mcp": ".",
-    "cadenya-mcp/*": "./src/*"
+    "@cadenya/cadenya-mcp": ".",
+    "@cadenya/cadenya-mcp/*": "./src/*"
   },
   "exports": {
     ".": {
