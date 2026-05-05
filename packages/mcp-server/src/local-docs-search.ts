@@ -74,6 +74,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Info)\n}\n',
       },
+      ruby: {
+        method: 'account.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\naccount = cadenya.account.retrieve\n\nputs(account)',
+      },
       cli: {
         method: 'account retrieve',
         example: "cadenya account retrieve \\\n  --api-key 'My API Key'",
@@ -105,6 +110,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Account.RotateWebhookSigningKey',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\trotateWebhookSigningKeyResponse, err := client.Account.RotateWebhookSigningKey(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", rotateWebhookSigningKeyResponse.WebhookEventsHmacSecret)\n}\n',
+      },
+      ruby: {
+        method: 'account.rotate_webhook_signing_key',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nrotate_webhook_signing_key_response = cadenya.account.rotate_webhook_signing_key\n\nputs(rotate_webhook_signing_key_response)',
       },
       cli: {
         method: 'account rotate_webhook_signing_key',
@@ -151,6 +161,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.AgentListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'agents.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.agents.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'agents list',
         example: "cadenya agents list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
@@ -190,6 +205,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.AgentNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentSpecParam{\n\t\t\t\tStatus:                 cadenya.F(cadenya.AgentSpecStatusAgentStatusUnspecified),\n\t\t\t\tVariationSelectionMode: cadenya.F(cadenya.AgentSpecVariationSelectionModeVariationSelectionModeUnspecified),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent = cadenya.agents.create(\n  "workspaceId",\n  metadata: {name: "name"},\n  spec: {status: :AGENT_STATUS_UNSPECIFIED, variationSelectionMode: :VARIATION_SELECTION_MODE_UNSPECIFIED}\n)\n\nputs(agent)',
+      },
       cli: {
         method: 'agents create',
         example:
@@ -225,6 +245,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent = cadenya.agents.retrieve("id", workspace_id: "workspaceId")\n\nputs(agent)',
+      },
       cli: {
         method: 'agents retrieve',
         example:
@@ -257,6 +282,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'agents.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.agents.delete("id", workspace_id: "workspaceId")\n\nputs(result)',
       },
       cli: {
         method: 'agents delete',
@@ -298,6 +328,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.AgentUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'agents.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent = cadenya.agents.update("id", workspace_id: "workspaceId")\n\nputs(agent)',
       },
       cli: {
         method: 'agents update',
@@ -346,6 +381,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Feedback.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentFeedbackListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'agents.feedback.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.agents.feedback.list("agentId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'feedback list',
         example:
@@ -387,6 +427,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.WebhookDeliveries.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.WebhookDeliveries.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentWebhookDeliveryListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'agents.webhook_deliveries.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.agents.webhook_deliveries.list("agentId", workspace_id: "workspaceId")\n\nputs(page)',
       },
       cli: {
         method: 'webhook_deliveries list',
@@ -431,6 +476,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Variations.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentVariationListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.agents.variations.list("agentId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'variations list',
         example:
@@ -471,6 +521,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentVariationNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentVariationSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_variation = cadenya.agents.variations.create(\n  "agentId",\n  workspace_id: "workspaceId",\n  metadata: {name: "name"},\n  spec: {}\n)\n\nputs(agent_variation)',
+      },
       cli: {
         method: 'variations create',
         example:
@@ -506,6 +561,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_variation = cadenya.agents.variations.retrieve("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(agent_variation)',
+      },
       cli: {
         method: 'variations retrieve',
         example:
@@ -538,6 +598,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Variations.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'agents.variations.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.agents.variations.delete("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(result)',
       },
       cli: {
         method: 'variations delete',
@@ -581,6 +646,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentVariation, err := client.Agents.Variations.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentVariation.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_variation = cadenya.agents.variations.update("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(agent_variation)',
+      },
       cli: {
         method: 'variations update',
         example:
@@ -623,6 +693,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationAssignment, err := client.Agents.Variations.AddAssignment(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"variationId",\n\t\tcadenya.AgentVariationAddAssignmentParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationAssignment.ID)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.add_assignment',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nvariation_assignment = cadenya.agents.variations.add_assignment("variationId", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(variation_assignment)',
+      },
       cli: {
         method: 'variations add_assignment',
         example:
@@ -656,6 +731,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Variations.RemoveAssignment',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.RemoveAssignment(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'agents.variations.remove_assignment',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.agents.variations.remove_assignment(\n  "id",\n  workspace_id: "workspaceId",\n  agent_id: "agentId",\n  variation_id: "variationId"\n)\n\nputs(result)',
       },
       cli: {
         method: 'variations remove_assignment',
@@ -699,6 +779,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.Agents.Variations.AddMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"variationId",\n\t\tcadenya.AgentVariationAddMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.add_memory_layer',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nvariation_memory_layer_assignment = cadenya.agents.variations.add_memory_layer(\n  "variationId",\n  workspace_id: "workspaceId",\n  agent_id: "agentId"\n)\n\nputs(variation_memory_layer_assignment)',
+      },
       cli: {
         method: 'variations add_memory_layer',
         example:
@@ -740,6 +825,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tvariationMemoryLayerAssignment, err := client.Agents.Variations.UpdateMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t\tcadenya.AgentVariationUpdateMemoryLayerParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", variationMemoryLayerAssignment.ID)\n}\n',
       },
+      ruby: {
+        method: 'agents.variations.update_memory_layer',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nvariation_memory_layer_assignment = cadenya.agents.variations.update_memory_layer(\n  "id",\n  workspace_id: "workspaceId",\n  agent_id: "agentId",\n  variation_id: "variationId"\n)\n\nputs(variation_memory_layer_assignment)',
+      },
       cli: {
         method: 'variations update_memory_layer',
         example:
@@ -773,6 +863,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Variations.RemoveMemoryLayer',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Variations.RemoveMemoryLayer(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"variationId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'agents.variations.remove_memory_layer',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.agents.variations.remove_memory_layer(\n  "id",\n  workspace_id: "workspaceId",\n  agent_id: "agentId",\n  variation_id: "variationId"\n)\n\nputs(result)',
       },
       cli: {
         method: 'variations remove_memory_layer',
@@ -819,6 +914,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Agents.Schedules.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentScheduleListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'agents.schedules.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.agents.schedules.list("agentId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'schedules list',
         example:
@@ -859,6 +959,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentSchedule, err := client.Agents.Schedules.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\tcadenya.AgentScheduleNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.AgentScheduleSpecParam{\n\t\t\t\tInitialMessage: cadenya.F("initialMessage"),\n\t\t\t\tSchedule:       cadenya.F(cadenya.AgentScheduleSpecScheduleParam{}),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentSchedule.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.schedules.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_schedule = cadenya.agents.schedules.create(\n  "agentId",\n  workspace_id: "workspaceId",\n  metadata: {name: "name"},\n  spec: {initialMessage: "initialMessage", schedule: {}}\n)\n\nputs(agent_schedule)',
+      },
       cli: {
         method: 'schedules create',
         example:
@@ -894,6 +999,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentSchedule, err := client.Agents.Schedules.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentSchedule.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'agents.schedules.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_schedule = cadenya.agents.schedules.retrieve("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(agent_schedule)',
+      },
       cli: {
         method: 'schedules retrieve',
         example:
@@ -926,6 +1036,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Schedules.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Schedules.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'agents.schedules.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.agents.schedules.delete("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(result)',
       },
       cli: {
         method: 'schedules delete',
@@ -968,6 +1083,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Agents.Schedules.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentSchedule, err := client.Agents.Schedules.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"agentId",\n\t\t"id",\n\t\tcadenya.AgentScheduleUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentSchedule.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'agents.schedules.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nagent_schedule = cadenya.agents.schedules.update("id", workspace_id: "workspaceId", agent_id: "agentId")\n\nputs(agent_schedule)',
       },
       cli: {
         method: 'schedules update',
@@ -1015,6 +1135,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.ObjectiveListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'objectives.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'objectives list',
         example: "cadenya objectives list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
@@ -1055,6 +1180,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.ObjectiveNewParams{\n\t\t\tAgentID:  cadenya.F("agentId"),\n\t\t\tData:     cadenya.F(cadenya.ObjectiveDataParam{}),\n\t\t\tMetadata: cadenya.F(shared.CreateOperationMetadataParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
       },
+      ruby: {
+        method: 'objectives.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective = cadenya.objectives.create("workspaceId", agent_id: "agentId", data: {}, metadata: {})\n\nputs(objective)',
+      },
       cli: {
         method: 'objectives create',
         example:
@@ -1089,6 +1219,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective = cadenya.objectives.retrieve("id", workspace_id: "workspaceId")\n\nputs(objective)',
       },
       cli: {
         method: 'objectives retrieve',
@@ -1133,6 +1268,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListEvents(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'objectives.list_events',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.list_events("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'objectives list_events',
         example:
@@ -1174,6 +1314,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Objectives.Continue(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveContinueParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
       },
+      ruby: {
+        method: 'objectives.continue',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresponse = cadenya.objectives.continue("objectiveId", workspace_id: "workspaceId")\n\nputs(response)',
+      },
       cli: {
         method: 'objectives continue',
         example:
@@ -1209,6 +1354,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Cancel',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjective, err := client.Objectives.Cancel(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objective.Data)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.cancel',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective = cadenya.objectives.cancel("objectiveId", workspace_id: "workspaceId")\n\nputs(objective)',
       },
       cli: {
         method: 'objectives cancel',
@@ -1249,6 +1399,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Compact',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Objectives.Compact(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveCompactParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ContextWindow)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.compact',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresponse = cadenya.objectives.compact("objectiveId", workspace_id: "workspaceId")\n\nputs(response)',
       },
       cli: {
         method: 'objectives compact',
@@ -1292,6 +1447,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ListContextWindows(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveListContextWindowsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'objectives.list_context_windows',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.list_context_windows("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'objectives list_context_windows',
         example:
@@ -1326,6 +1486,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Tools.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tools.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.tools.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.tools.list("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
       },
       cli: {
         method: 'tools list',
@@ -1369,6 +1534,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.ToolCalls.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveToolCallListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'objectives.tool_calls.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.tool_calls.list("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'tool_calls list',
         example:
@@ -1405,6 +1575,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Approve(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tcadenya.ObjectiveToolCallApproveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
       },
+      ruby: {
+        method: 'objectives.tool_calls.approve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective_tool_call = cadenya.objectives.tool_calls.approve(\n  "toolCallId",\n  workspace_id: "workspaceId",\n  objective_id: "objectiveId"\n)\n\nputs(objective_tool_call)',
+      },
       cli: {
         method: 'tool_calls approve',
         example:
@@ -1440,6 +1615,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.ToolCalls.Deny',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveToolCall, err := client.Objectives.ToolCalls.Deny(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\t"toolCallId",\n\t\tcadenya.ObjectiveToolCallDenyParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveToolCall.Data)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.tool_calls.deny',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective_tool_call = cadenya.objectives.tool_calls.deny("toolCallId", workspace_id: "workspaceId", objective_id: "objectiveId")\n\nputs(objective_tool_call)',
       },
       cli: {
         method: 'tool_calls deny',
@@ -1482,6 +1662,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Tasks.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveTaskListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'objectives.tasks.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.tasks.list("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'tasks list',
         example:
@@ -1516,6 +1701,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Tasks.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveTask, err := client.Objectives.Tasks.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveTask.Data)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.tasks.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective_task = cadenya.objectives.tasks.retrieve("id", workspace_id: "workspaceId", objective_id: "objectiveId")\n\nputs(objective_task)',
       },
       cli: {
         method: 'tasks retrieve',
@@ -1558,6 +1748,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tobjectiveFeedback, err := client.Objectives.Feedback.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackNewParams{\n\t\t\tData:     cadenya.F(cadenya.ObjectiveFeedbackDataParam{}),\n\t\t\tMetadata: cadenya.F(shared.CreateOperationMetadataParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", objectiveFeedback.Data)\n}\n',
       },
+      ruby: {
+        method: 'objectives.feedback.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nobjective_feedback = cadenya.objectives.feedback.create("objectiveId", workspace_id: "workspaceId", data: {}, metadata: {})\n\nputs(objective_feedback)',
+      },
       cli: {
         method: 'feedback create',
         example:
@@ -1592,6 +1787,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Objectives.Feedback.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Objectives.Feedback.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"objectiveId",\n\t\tcadenya.ObjectiveFeedbackListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'objectives.feedback.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.objectives.feedback.list("objectiveId", workspace_id: "workspaceId")\n\nputs(page)',
       },
       cli: {
         method: 'feedback list',
@@ -1638,6 +1838,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.MemoryLayers.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.MemoryLayerListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.memory_layers.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'memory_layers list',
         example: "cadenya memory-layers list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
@@ -1676,6 +1881,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.MemoryLayerNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.MemoryLayerSpecParam{\n\t\t\t\tType: cadenya.F(cadenya.MemoryLayerSpecTypeMemoryLayerTypeUnspecified),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_layer = cadenya.memory_layers.create(\n  "workspaceId",\n  metadata: {name: "name"},\n  spec: {type: :MEMORY_LAYER_TYPE_UNSPECIFIED}\n)\n\nputs(memory_layer)',
+      },
       cli: {
         method: 'memory_layers create',
         example:
@@ -1710,6 +1920,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.MemoryLayers.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'memory_layers.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_layer = cadenya.memory_layers.retrieve("id", workspace_id: "workspaceId")\n\nputs(memory_layer)',
       },
       cli: {
         method: 'memory_layers retrieve',
@@ -1752,6 +1967,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryLayer, err := client.MemoryLayers.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.MemoryLayerUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryLayer.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_layer = cadenya.memory_layers.update("id", workspace_id: "workspaceId")\n\nputs(memory_layer)',
+      },
       cli: {
         method: 'memory_layers update',
         example:
@@ -1784,6 +2004,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.MemoryLayers.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.MemoryLayers.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'memory_layers.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.memory_layers.delete("id", workspace_id: "workspaceId")\n\nputs(result)',
       },
       cli: {
         method: 'memory_layers delete',
@@ -1830,6 +2055,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.MemoryLayers.Entries.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"memoryLayerId",\n\t\tcadenya.MemoryLayerEntryListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.entries.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.memory_layers.entries.list("memoryLayerId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'entries list',
         example:
@@ -1871,6 +2101,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"memoryLayerId",\n\t\tcadenya.MemoryLayerEntryNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.MemoryEntryCreateSpecParam{\n\t\t\t\tKey: cadenya.F("key"),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.entries.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_entry_detail = cadenya.memory_layers.entries.create(\n  "memoryLayerId",\n  workspace_id: "workspaceId",\n  metadata: {name: "name"},\n  spec: {key: "key"}\n)\n\nputs(memory_entry_detail)',
+      },
       cli: {
         method: 'entries create',
         example:
@@ -1906,6 +2141,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.MemoryLayers.Entries.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"memoryLayerId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
+      },
+      ruby: {
+        method: 'memory_layers.entries.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_entry_detail = cadenya.memory_layers.entries.retrieve(\n  "id",\n  workspace_id: "workspaceId",\n  memory_layer_id: "memoryLayerId"\n)\n\nputs(memory_entry_detail)',
       },
       cli: {
         method: 'entries retrieve',
@@ -1950,6 +2190,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemoryEntryDetail, err := client.MemoryLayers.Entries.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"memoryLayerId",\n\t\t"id",\n\t\tcadenya.MemoryLayerEntryUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memoryEntryDetail.Content)\n}\n',
       },
+      ruby: {
+        method: 'memory_layers.entries.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmemory_entry_detail = cadenya.memory_layers.entries.update("id", workspace_id: "workspaceId", memory_layer_id: "memoryLayerId")\n\nputs(memory_entry_detail)',
+      },
       cli: {
         method: 'entries update',
         example:
@@ -1982,6 +2227,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.MemoryLayers.Entries.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.MemoryLayers.Entries.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"memoryLayerId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'memory_layers.entries.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.memory_layers.entries.delete("id", workspace_id: "workspaceId", memory_layer_id: "memoryLayerId")\n\nputs(result)',
       },
       cli: {
         method: 'entries delete',
@@ -2023,6 +2273,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tupload, err := client.Uploads.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.UploadNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.UploadSpecParam{\n\t\t\t\tContentType: cadenya.F("contentType"),\n\t\t\t\tFilename:    cadenya.F("filename"),\n\t\t\t\tSizeBytes:   cadenya.F("sizeBytes"),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", upload.Info)\n}\n',
       },
+      ruby: {
+        method: 'uploads.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nupload = cadenya.uploads.create(\n  "workspaceId",\n  metadata: {name: "name"},\n  spec: {contentType: "contentType", filename: "filename", sizeBytes: "sizeBytes"}\n)\n\nputs(upload)',
+      },
       cli: {
         method: 'uploads create',
         example:
@@ -2057,6 +2312,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Uploads.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tupload, err := client.Uploads.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", upload.Info)\n}\n',
+      },
+      ruby: {
+        method: 'uploads.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nupload = cadenya.uploads.retrieve("id", workspace_id: "workspaceId")\n\nputs(upload)',
       },
       cli: {
         method: 'uploads retrieve',
@@ -2102,6 +2362,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Models.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.ModelListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'models.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.models.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'models list',
         example: "cadenya models list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
@@ -2135,6 +2400,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Models.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'models.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmodel = cadenya.models.retrieve("id", workspace_id: "workspaceId")\n\nputs(model)',
       },
       cli: {
         method: 'models retrieve',
@@ -2175,6 +2445,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmodel, err := client.Models.SetStatus(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.ModelSetStatusParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", model.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'models.set_status',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nmodel = cadenya.models.set_status("id", workspace_id: "workspaceId")\n\nputs(model)',
+      },
       cli: {
         method: 'models set_status',
         example:
@@ -2209,6 +2484,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Search.SearchToolsOrToolSets',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Search.SearchToolsOrToolSets(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.SearchSearchToolsOrToolSetsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Agents)\n}\n',
+      },
+      ruby: {
+        method: 'search.search_tools_or_tool_sets',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresponse = cadenya.search.search_tools_or_tool_sets("workspaceId")\n\nputs(response)',
       },
       cli: {
         method: 'search search_tools_or_tool_sets',
@@ -2254,6 +2534,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.ToolSetListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.tool_sets.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'tool_sets list',
         example: "cadenya tool-sets list \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
@@ -2292,6 +2577,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.ToolSetNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.ToolSetSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool_set = cadenya.tool_sets.create("workspaceId", metadata: {name: "name"}, spec: {})\n\nputs(tool_set)',
+      },
       cli: {
         method: 'tool_sets create',
         example:
@@ -2326,6 +2616,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ToolSets.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'tool_sets.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool_set = cadenya.tool_sets.retrieve("id", workspace_id: "workspaceId")\n\nputs(tool_set)',
       },
       cli: {
         method: 'tool_sets retrieve',
@@ -2368,6 +2663,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttoolSet, err := client.ToolSets.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.ToolSetUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", toolSet.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool_set = cadenya.tool_sets.update("id", workspace_id: "workspaceId")\n\nputs(tool_set)',
+      },
       cli: {
         method: 'tool_sets update',
         example:
@@ -2400,6 +2700,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ToolSets.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'tool_sets.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.tool_sets.delete("id", workspace_id: "workspaceId")\n\nputs(result)',
       },
       cli: {
         method: 'tool_sets delete',
@@ -2442,6 +2747,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ToolSets.ListEvents',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.ListEvents(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\tcadenya.ToolSetListEventsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'tool_sets.list_events',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.tool_sets.list_events("toolSetId", workspace_id: "workspaceId")\n\nputs(page)',
       },
       cli: {
         method: 'tool_sets list_events',
@@ -2491,6 +2801,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.ToolSets.Tools.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\tcadenya.ToolSetToolListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.tools.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.tool_sets.tools.list("toolSetId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'tools list',
         example:
@@ -2531,6 +2846,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\tcadenya.ToolSetToolNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.ToolSpecParam{\n\t\t\t\tConfig:      cadenya.F(cadenya.ToolSpecConfigParam{}),\n\t\t\t\tDescription: cadenya.F("description"),\n\t\t\t\tParameters: cadenya.F(map[string]interface{}{\n\t\t\t\t\t"foo": "bar",\n\t\t\t\t}),\n\t\t\t\tStatus: cadenya.F(cadenya.ToolSpecStatusToolStatusUnspecified),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.tools.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool = cadenya.tool_sets.tools.create(\n  "toolSetId",\n  workspace_id: "workspaceId",\n  metadata: {name: "name"},\n  spec: {config: {}, description: "description", parameters: {foo: "bar"}, status: :TOOL_STATUS_UNSPECIFIED}\n)\n\nputs(tool)',
+      },
       cli: {
         method: 'tools create',
         example:
@@ -2565,6 +2885,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ToolSets.Tools.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'tool_sets.tools.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool = cadenya.tool_sets.tools.retrieve("id", workspace_id: "workspaceId", tool_set_id: "toolSetId")\n\nputs(tool)',
       },
       cli: {
         method: 'tools retrieve',
@@ -2608,6 +2933,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttool, err := client.ToolSets.Tools.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\t"id",\n\t\tcadenya.ToolSetToolUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", tool.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'tool_sets.tools.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\ntool = cadenya.tool_sets.tools.update("id", workspace_id: "workspaceId", tool_set_id: "toolSetId")\n\nputs(tool)',
+      },
       cli: {
         method: 'tools update',
         example:
@@ -2640,6 +2970,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ToolSets.Tools.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.ToolSets.Tools.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"toolSetId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'tool_sets.tools.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.tool_sets.tools.delete("id", workspace_id: "workspaceId", tool_set_id: "toolSetId")\n\nputs(result)',
       },
       cli: {
         method: 'tools delete',
@@ -2684,6 +3019,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.List(context.TODO(), cadenya.APIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'api_keys.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.api_keys.list\n\nputs(page)',
+      },
       cli: {
         method: 'api_keys list',
         example: "cadenya api-keys list \\\n  --api-key 'My API Key'",
@@ -2723,6 +3063,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.New(context.TODO(), cadenya.APIKeyNewParams{\n\t\tMetadata: cadenya.F(cadenya.APIKeyNewParamsMetadata{\n\t\t\tName: cadenya.F("name"),\n\t\t}),\n\t\tSpec: cadenya.F(cadenya.APIKeySpecParam{}),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'api_keys.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\napi_key = cadenya.api_keys.create(metadata: {name: "name"}, spec: {})\n\nputs(api_key)',
+      },
       cli: {
         method: 'api_keys create',
         example:
@@ -2758,6 +3103,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'api_keys.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\napi_key = cadenya.api_keys.retrieve("id")\n\nputs(api_key)',
+      },
       cli: {
         method: 'api_keys retrieve',
         example: "cadenya api-keys retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
@@ -2789,6 +3139,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.APIKeys.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'api_keys.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.api_keys.delete("id")\n\nputs(result)',
       },
       cli: {
         method: 'api_keys delete',
@@ -2829,6 +3184,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'api_keys.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\napi_key = cadenya.api_keys.update("id")\n\nputs(api_key)',
+      },
       cli: {
         method: 'api_keys update',
         example: "cadenya api-keys update \\\n  --api-key 'My API Key' \\\n  --id id",
@@ -2863,6 +3223,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.APIKeys.Rotate',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Rotate(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'api_keys.rotate',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\napi_key = cadenya.api_keys.rotate("id")\n\nputs(api_key)',
       },
       cli: {
         method: 'api_keys rotate',
@@ -2899,6 +3264,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.APIKeys.Access.Add(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyAccessAddParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'api_keys.access.add',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\napi_key = cadenya.api_keys.access.add("id")\n\nputs(api_key)',
+      },
       cli: {
         method: 'access add',
         example: "cadenya api-keys:access add \\\n  --api-key 'My API Key' \\\n  --id id",
@@ -2931,6 +3301,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.APIKeys.Access.Remove',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.APIKeys.Access.Remove(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\t"workspaceId",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'api_keys.access.remove',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.api_keys.access.remove("workspaceId", id: "id")\n\nputs(result)',
       },
       cli: {
         method: 'access remove',
@@ -2966,6 +3341,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.APIKeys.Access.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.APIKeys.Access.List(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tcadenya.APIKeyAccessListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'api_keys.access.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.api_keys.access.list("id")\n\nputs(page)',
       },
       cli: {
         method: 'access list',
@@ -3010,6 +3390,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.WorkspaceSecrets.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.WorkspaceSecretListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'workspace_secrets.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.workspace_secrets.list("workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'workspace_secrets list',
         example:
@@ -3049,6 +3434,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n\t"github.com/cadenya/cadenya-go/shared"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.New(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.WorkspaceSecretNewParams{\n\t\t\tMetadata: cadenya.F(shared.CreateResourceMetadataParam{\n\t\t\t\tName: cadenya.F("name"),\n\t\t\t}),\n\t\t\tSpec: cadenya.F(cadenya.WorkspaceSecretSpecParam{}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'workspace_secrets.create',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nworkspace_secret = cadenya.workspace_secrets.create("workspaceId", metadata: {name: "name"}, spec: {})\n\nputs(workspace_secret)',
+      },
       cli: {
         method: 'workspace_secrets create',
         example:
@@ -3084,6 +3474,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'workspace_secrets.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nworkspace_secret = cadenya.workspace_secrets.retrieve("id", workspace_id: "workspaceId")\n\nputs(workspace_secret)',
+      },
       cli: {
         method: 'workspace_secrets retrieve',
         example:
@@ -3116,6 +3511,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.WorkspaceSecrets.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.WorkspaceSecrets.Delete(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'workspace_secrets.delete',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.workspace_secrets.delete("id", workspace_id: "workspaceId")\n\nputs(result)',
       },
       cli: {
         method: 'workspace_secrets delete',
@@ -3158,6 +3558,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspaceSecret, err := client.WorkspaceSecrets.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t\tcadenya.WorkspaceSecretUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspaceSecret.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'workspace_secrets.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nworkspace_secret = cadenya.workspace_secrets.update("id", workspace_id: "workspaceId")\n\nputs(workspace_secret)',
+      },
       cli: {
         method: 'workspace_secrets update',
         example:
@@ -3193,6 +3598,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Workspaces.List(context.TODO(), cadenya.WorkspaceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'workspaces.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.workspaces.list\n\nputs(page)',
+      },
       cli: {
         method: 'workspaces list',
         example: "cadenya workspaces list \\\n  --api-key 'My API Key'",
@@ -3227,6 +3637,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspace, err := client.Workspaces.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspace.Metadata)\n}\n',
       },
+      ruby: {
+        method: 'workspaces.get',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nworkspace = cadenya.workspaces.get\n\nputs(workspace)',
+      },
       cli: {
         method: 'workspaces get',
         example: "cadenya workspaces get \\\n  --api-key 'My API Key'",
@@ -3256,6 +3671,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Webhooks.Unwrap(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
+      ruby: {
+        method: 'webhooks.unwrap',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.webhooks.unwrap\n\nputs(result)',
+      },
       cli: {
         example: "cadenya webhooks unwrap \\\n  --api-key 'My API Key'",
       },
@@ -3279,6 +3699,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Webhooks.UnsafeUnwrap',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Webhooks.UnsafeUnwrap(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      ruby: {
+        method: 'webhooks.unsafe_unwrap',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nresult = cadenya.webhooks.unsafe_unwrap\n\nputs(result)',
       },
       cli: {
         example: "cadenya webhooks unsafe-unwrap \\\n  --api-key 'My API Key'",
@@ -3312,6 +3737,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.BulkWorkspaceResources.Apply',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tbulkWorkspaceApply, err := client.BulkWorkspaceResources.Apply(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.BulkWorkspaceResourceApplyParams{\n\t\t\tData: cadenya.F(cadenya.BulkWorkspaceApplyDataParam{\n\t\t\t\tBundleKey: cadenya.F("bundleKey"),\n\t\t\t}),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bulkWorkspaceApply.Data)\n}\n',
+      },
+      ruby: {
+        method: 'bulk_workspace_resources.apply',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nbulk_workspace_apply = cadenya.bulk_workspace_resources.apply("workspaceId", data: {bundleKey: "bundleKey"})\n\nputs(bulk_workspace_apply)',
       },
       cli: {
         method: 'bulk_workspace_resources apply',
@@ -3347,6 +3777,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.BulkWorkspaceResources.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tbulkWorkspaceApply, err := client.BulkWorkspaceResources.Get(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"id",\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bulkWorkspaceApply.Data)\n}\n',
+      },
+      ruby: {
+        method: 'bulk_workspace_resources.retrieve',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nbulk_workspace_apply = cadenya.bulk_workspace_resources.retrieve("id", workspace_id: "workspaceId")\n\nputs(bulk_workspace_apply)',
       },
       cli: {
         method: 'bulk_workspace_resources retrieve',
@@ -3389,6 +3824,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.BulkWorkspaceResources.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.BulkWorkspaceResources.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.BulkWorkspaceResourceListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'bulk_workspace_resources.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.bulk_workspace_resources.list("workspaceId")\n\nputs(page)',
       },
       cli: {
         method: 'bulk_workspace_resources list',
@@ -3433,6 +3873,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.BulkWorkspaceResources.Results.List(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\t"bulkWorkspaceApplyId",\n\t\tcadenya.BulkWorkspaceResourceResultListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'bulk_workspace_resources.results.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.bulk_workspace_resources.results.list("bulkWorkspaceApplyId", workspace_id: "workspaceId")\n\nputs(page)',
+      },
       cli: {
         method: 'results list',
         example:
@@ -3455,12 +3900,17 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
   {
     language: 'go',
     content:
-      '# Cadenya Go API Library\n\n<a href="https://pkg.go.dev/github.com/cadenya/cadenya-go"><img src="https://pkg.go.dev/badge/github.com/cadenya/cadenya-go.svg" alt="Go Reference"></a>\n\nThe Cadenya Go library provides convenient access to the [Cadenya REST API](https://docs.cadenya.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n<!-- x-release-please-start-version -->\n\n```go\nimport (\n\t"github.com/cadenya/cadenya-go" // imported as SDK_PackageName\n)\n```\n\n<!-- x-release-please-end -->\n\nOr to pin the version:\n\n<!-- x-release-please-start-version -->\n\n```sh\ngo get -u \'github.com/cadenya/cadenya-go@v0.0.1\'\n```\n\n<!-- x-release-please-end -->\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CADENYA_API_KEY")\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Info)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Account.Get(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/cadenya/cadenya-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.Agents.ListAutoPaging(\n\tcontext.TODO(),\n\t"workspaceId",\n\tcadenya.AgentListParams{},\n)\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\tagent := iter.Current()\n\tfmt.Printf("%+v\\n", agent)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.Agents.List(\n\tcontext.TODO(),\n\t"workspaceId",\n\tcadenya.AgentListParams{},\n)\nfor page != nil {\n\tfor _, agent := range page.Items {\n\t\tfmt.Printf("%+v\\n", agent)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Account.Get(context.TODO())\nif err != nil {\n\tvar apierr *cadenya.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/account": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Account.Get(\n\tctx,\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := cadenya.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Account.Get(context.TODO(), option.WithMaxRetries(5))\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\naccount, err := client.Account.Get(context.TODO(), option.WithResponseInto(&response))\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", account)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+      '# Cadenya Go API Library\n\n<a href="https://pkg.go.dev/github.com/cadenya/cadenya-go"><img src="https://pkg.go.dev/badge/github.com/cadenya/cadenya-go.svg" alt="Go Reference"></a>\n\nThe Cadenya Go library provides convenient access to the [Cadenya REST API](https://docs.cadenya.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40cadenya%2Fcadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBjYWRlbnlhL2NhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40cadenya%2Fcadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40cadenya%2Fcadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n<!-- x-release-please-start-version -->\n\n```go\nimport (\n\t"github.com/cadenya/cadenya-go" // imported as SDK_PackageName\n)\n```\n\n<!-- x-release-please-end -->\n\nOr to pin the version:\n\n<!-- x-release-please-start-version -->\n\n```sh\ngo get -u \'github.com/cadenya/cadenya-go@v0.0.1\'\n```\n\n<!-- x-release-please-end -->\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CADENYA_API_KEY")\n\t)\n\taccount, err := client.Account.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Info)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Account.Get(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/cadenya/cadenya-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.Agents.ListAutoPaging(\n\tcontext.TODO(),\n\t"workspaceId",\n\tcadenya.AgentListParams{},\n)\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\tagent := iter.Current()\n\tfmt.Printf("%+v\\n", agent)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.Agents.List(\n\tcontext.TODO(),\n\t"workspaceId",\n\tcadenya.AgentListParams{},\n)\nfor page != nil {\n\tfor _, agent := range page.Items {\n\t\tfmt.Printf("%+v\\n", agent)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Account.Get(context.TODO())\nif err != nil {\n\tvar apierr *cadenya.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/account": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Account.Get(\n\tctx,\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := cadenya.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Account.Get(context.TODO(), option.WithMaxRetries(5))\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\naccount, err := client.Account.Get(context.TODO(), option.WithResponseInto(&response))\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", account)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'ruby',
+    content:
+      '# Cadenya Ruby API library\n\nThe Cadenya Ruby library provides convenient access to the Cadenya REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/stainless-sdks/cadenya-ruby#Sorbet) for usage with Sorbet. The standard library\'s `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40cadenya%2Fcadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBjYWRlbnlhL2NhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40cadenya%2Fcadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40cadenya%2Fcadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nDocumentation for releases of this gem can be found [on RubyDoc](https://gemdocs.org/gems/cadenya).\n\nThe REST API documentation can be found on [docs.cadenya.com](https://docs.cadenya.com).\n\n## Installation\n\nTo use this gem, install via Bundler by adding the following to your application\'s `Gemfile`:\n\n```ruby\ngem "cadenya", "~> 0.0.1"\n```\n\n## Usage\n\n```ruby\nrequire "bundler/setup"\nrequire "cadenya"\n\ncadenya = Cadenya::Client.new(\n  api_key: ENV["CADENYA_API_KEY"] # This is the default and can be omitted\n)\n\naccount = cadenya.account.retrieve\n\nputs(account.info)\n```\n\n\n\n### Pagination\n\nList methods in the Cadenya API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```ruby\npage = cadenya.agents.list\n\n# Fetch single item from page.\nagent = page.items[0]\nputs(agent.metadata)\n\n# Automatically fetches more pages as needed.\npage.auto_paging_each do |agent|\n  puts(agent.metadata)\nend\n```\n\nAlternatively, you can use the `#next_page?` and `#next_page` methods for more granular control working with pages.\n\n```ruby\nif page.next_page?\n  new_page = page.next_page\n  puts(new_page.items[0].metadata)\nend\n```\n\n\n\n### Handling errors\n\nWhen the library is unable to connect to the API, or if the API returns a non-success status code (i.e., 4xx or 5xx response), a subclass of `Cadenya::Errors::APIError` will be thrown:\n\n```ruby\nbegin\n  account = cadenya.account.retrieve\nrescue Cadenya::Errors::APIConnectionError => e\n  puts("The server could not be reached")\n  puts(e.cause)  # an underlying Exception, likely raised within `net/http`\nrescue Cadenya::Errors::RateLimitError => e\n  puts("A 429 status code was received; we should back off a bit.")\nrescue Cadenya::Errors::APIStatusError => e\n  puts("Another non-200-range status code was received")\n  puts(e.status)\nend\n```\n\nError codes are as follows:\n\n| Cause            | Error Type                 |\n| ---------------- | -------------------------- |\n| HTTP 400         | `BadRequestError`          |\n| HTTP 401         | `AuthenticationError`      |\n| HTTP 403         | `PermissionDeniedError`    |\n| HTTP 404         | `NotFoundError`            |\n| HTTP 409         | `ConflictError`            |\n| HTTP 422         | `UnprocessableEntityError` |\n| HTTP 429         | `RateLimitError`           |\n| HTTP >= 500      | `InternalServerError`      |\n| Other HTTP error | `APIStatusError`           |\n| Timeout          | `APITimeoutError`          |\n| Network error    | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\n\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, >=500 Internal errors, and timeouts will all be retried by default.\n\nYou can use the `max_retries` option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\ncadenya = Cadenya::Client.new(\n  max_retries: 0 # default is 2\n)\n\n# Or, configure per-request:\ncadenya.account.retrieve(request_options: {max_retries: 5})\n```\n\n### Timeouts\n\nBy default, requests will time out after 60 seconds. You can use the timeout option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\ncadenya = Cadenya::Client.new(\n  timeout: nil # default is 60\n)\n\n# Or, configure per-request:\ncadenya.account.retrieve(request_options: {timeout: 5})\n```\n\nOn timeout, `Cadenya::Errors::APITimeoutError` is raised.\n\nNote that requests that time out are retried by default.\n\n## Advanced concepts\n\n### BaseModel\n\nAll parameter and response objects inherit from `Cadenya::Internal::Type::BaseModel`, which provides several conveniences, including:\n\n1. All fields, including unknown ones, are accessible with `obj[:prop]` syntax, and can be destructured with `obj => {prop: prop}` or pattern-matching syntax.\n\n2. Structural equivalence for equality; if two API calls return the same values, comparing the responses with == will return true.\n\n3. Both instances and the classes themselves can be pretty-printed.\n\n4. Helpers such as `#to_h`, `#deep_to_h`, `#to_json`, and `#to_yaml`.\n\n### Making custom or undocumented requests\n\n#### Undocumented properties\n\nYou can send undocumented parameters to any endpoint, and read undocumented response properties, like so:\n\nNote: the `extra_` parameters of the same name overrides the documented parameters.\n\n```ruby\naccount =\n  cadenya.account.retrieve(\n    request_options: {\n      extra_query: {my_query_parameter: value},\n      extra_body: {my_body_parameter: value},\n      extra_headers: {"my-header": value}\n    }\n  )\n\nputs(account[:my_undocumented_property])\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` under the `request_options:` parameter when making a request, as seen in the examples above.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints while retaining the benefit of auth, retries, and so on, you can make requests using `client.request`, like so:\n\n```ruby\nresponse = client.request(\n  method: :post,\n  path: \'/undocumented/endpoint\',\n  query: {"dog": "woof"},\n  headers: {"useful-header": "interesting-value"},\n  body: {"hello": "world"}\n)\n```\n\n### Concurrency & connection pooling\n\nThe `Cadenya::Client` instances are threadsafe, but are only are fork-safe when there are no in-flight HTTP requests.\n\nEach instance of `Cadenya::Client` has its own HTTP connection pool with a default size of 99. As such, we recommend instantiating the client once per application in most settings.\n\nWhen all available connections from the pool are checked out, requests wait for a new connection to become available, with queue time counting towards the request timeout.\n\nUnless otherwise specified, other classes in the SDK do not have locks protecting their underlying data structure.\n\n## Sorbet\n\nThis library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitions, and has no dependency on sorbet-runtime.\n\nYou can provide typesafe request parameters like so:\n\n```ruby\ncadenya.account.retrieve \n```\n\nOr, equivalently:\n\n```ruby\n# Hashes work, but are not typesafe:\ncadenya.account.retrieve\n\n# You can also splat a full Params class:\nparams = Cadenya::AccountRetrieveParams.new\ncadenya.account.retrieve(**params)\n```\n\n### Enums\n\nSince this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:\n\n```ruby\n# :AGENT_STATUS_UNSPECIFIED\nputs(Cadenya::AgentListParams::Status::AGENT_STATUS_UNSPECIFIED)\n\n# Revealed type: `T.all(Cadenya::AgentListParams::Status, Symbol)`\nT.reveal_type(Cadenya::AgentListParams::Status::AGENT_STATUS_UNSPECIFIED)\n```\n\nEnum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:\n\n```ruby\n# Using the enum constants preserves the tagged type information:\ncadenya.agents.list(\n  status: Cadenya::AgentListParams::Status::AGENT_STATUS_UNSPECIFIED,\n  # …\n)\n\n# Literal values are also permissible:\ncadenya.agents.list(\n  status: :AGENT_STATUS_UNSPECIFIED,\n  # …\n)\n```\n\n## Versioning\n\nThis package follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions. As the library is in initial development and has a major version of `0`, APIs may change at any time.\n\nThis package considers improvements to the (non-runtime) `*.rbi` and `*.rbs` type definitions to be non-breaking changes.\n\n## Requirements\n\nRuby 3.2.0 or higher.\n\n## Contributing\n\nSee [the contributing documentation](https://github.com/stainless-sdks/cadenya-ruby/tree/main/CONTRIBUTING.md).\n',
   },
   {
     language: 'typescript',
     content:
-      "# Cadenya TypeScript API Library\n\n[![NPM version](https://img.shields.io/npm/v/@cadenya/cadenya.svg?label=npm%20(stable))](https://npmjs.org/package/@cadenya/cadenya) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@cadenya/cadenya)\n\nThis library provides convenient access to the Cadenya REST API from server-side TypeScript or JavaScript.\n\n\n\nThe REST API documentation can be found on [docs.cadenya.com](https://docs.cadenya.com). The full API of this library can be found in [api.md](api.md).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n```sh\nnpm install @cadenya/cadenya\n```\n\n\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n<!-- prettier-ignore -->\n```js\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.account.retrieve();\n\nconsole.log(account.info);\n```\n\n\n\n### Request & Response types\n\nThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n\n<!-- prettier-ignore -->\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst account: Cadenya.Account = await client.account.retrieve();\n```\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API,\nor if the API returns a non-success status code (i.e., 4xx or 5xx response),\na subclass of `APIError` will be thrown:\n\n<!-- prettier-ignore -->\n```ts\nconst account = await client.account.retrieve().catch(async (err) => {\n  if (err instanceof Cadenya.APIError) {\n    console.log(err.status); // 400\n    console.log(err.name); // BadRequestError\n    console.log(err.headers); // {server: 'nginx', ...}\n  } else {\n    throw err;\n  }\n});\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors will all be retried by default.\n\nYou can use the `maxRetries` option to configure or disable this:\n\n<!-- prettier-ignore -->\n```js\n// Configure the default for all requests:\nconst client = new Cadenya({\n  maxRetries: 0, // default is 2\n});\n\n// Or, configure per-request:\nawait client.account.retrieve({\n  maxRetries: 5,\n});\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default. You can configure this with a `timeout` option:\n\n<!-- prettier-ignore -->\n```ts\n// Configure the default for all requests:\nconst client = new Cadenya({\n  timeout: 20 * 1000, // 20 seconds (default is 1 minute)\n});\n\n// Override per-request:\nawait client.account.retrieve({\n  timeout: 5 * 1000,\n});\n```\n\nOn timeout, an `APIConnectionTimeoutError` is thrown.\n\nNote that requests which time out will be [retried twice by default](#retries).\n\n## Auto-pagination\n\nList methods in the Cadenya API are paginated.\nYou can use the `for await … of` syntax to iterate through items across all pages:\n\n```ts\nasync function fetchAllAgents(params) {\n  const allAgents = [];\n  // Automatically fetches more pages as needed.\n  for await (const agent of client.agents.list('workspaceId')) {\n    allAgents.push(agent);\n  }\n  return allAgents;\n}\n```\n\nAlternatively, you can request a single page at a time:\n\n```ts\nlet page = await client.agents.list('workspaceId');\nfor (const agent of page.items) {\n  console.log(agent);\n}\n\n// Convenience methods are provided for manually paginating:\nwhile (page.hasNextPage()) {\n  page = await page.getNextPage();\n  // ...\n}\n```\n\n\n\n## Advanced Usage\n\n### Accessing raw Response data (e.g., headers)\n\nThe \"raw\" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.\nThis method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.\n\nYou can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.\nUnlike `.asResponse()` this method consumes the body, returning once it is parsed.\n\n<!-- prettier-ignore -->\n```ts\nconst client = new Cadenya();\n\nconst response = await client.account.retrieve().asResponse();\nconsole.log(response.headers.get('X-My-Header'));\nconsole.log(response.statusText); // access the underlying Response object\n\nconst { data: account, response: raw } = await client.account.retrieve().withResponse();\nconsole.log(raw.headers.get('X-My-Header'));\nconsole.log(account.info);\n```\n\n### Logging\n\n> [!IMPORTANT]\n> All log messages are intended for debugging only. The format and content of log messages\n> may change between releases.\n\n#### Log levels\n\nThe log level can be configured in two ways:\n\n1. Via the `CADENYA_LOG` environment variable\n2. Using the `logLevel` client option (overrides the environment variable if set)\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  logLevel: 'debug', // Show all log messages\n});\n```\n\nAvailable log levels, from most to least verbose:\n\n- `'debug'` - Show debug messages, info, warnings, and errors\n- `'info'` - Show info messages, warnings, and errors\n- `'warn'` - Show warnings and errors (default)\n- `'error'` - Show only errors\n- `'off'` - Disable all logging\n\nAt the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.\nSome authentication-related headers are redacted, but sensitive data in request and response bodies\nmay still be visible.\n\n#### Custom logger\n\nBy default, this library logs to `globalThis.console`. You can also provide a custom logger.\nMost logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.\n\nWhen providing a custom logger, the `logLevel` option still controls which messages are emitted, messages\nbelow the configured level will not be sent to your logger.\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport pino from 'pino';\n\nconst logger = pino();\n\nconst client = new Cadenya({\n  logger: logger.child({ name: 'Cadenya' }),\n  logLevel: 'debug', // Send all messages to pino, allowing it to filter\n});\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.\nOptions on the client, such as retries, will be respected when making these requests.\n\n```ts\nawait client.post('/some/path', {\n  body: { some_prop: 'foo' },\n  query: { some_query_arg: 'bar' },\n});\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented\nparameter. This library doesn't validate at runtime that the request matches the type, so any extra values you\nsend will be sent as-is.\n\n```ts\nclient.account.retrieve({\n  // ...\n  // @ts-expect-error baz is not yet public\n  baz: 'undocumented option',\n});\n```\n\nFor requests with the `GET` verb, any extra params will be in the query, all other requests will send the\nextra param in the body.\n\nIf you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may access the response object with `// @ts-expect-error` on\nthe response object, or cast the response object to the requisite type. Like the request params, we do not\nvalidate or strip extra properties from the response from the API.\n\n### Customizing the fetch client\n\nBy default, this library expects a global `fetch` function is defined.\n\nIf you want to use a different `fetch` function, you can either polyfill the global:\n\n```ts\nimport fetch from 'my-fetch';\n\nglobalThis.fetch = fetch;\n```\n\nOr pass it to the client:\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport fetch from 'my-fetch';\n\nconst client = new Cadenya({ fetch });\n```\n\n### Fetch options\n\nIf you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  fetchOptions: {\n    // `RequestInit` options\n  },\n});\n```\n\n#### Configuring proxies\n\nTo modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy\noptions to requests:\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg\" align=\"top\" width=\"18\" height=\"21\"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport * as undici from 'undici';\n\nconst proxyAgent = new undici.ProxyAgent('http://localhost:8888');\nconst client = new Cadenya({\n  fetchOptions: {\n    dispatcher: proxyAgent,\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg\" align=\"top\" width=\"18\" height=\"21\"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  fetchOptions: {\n    proxy: 'http://localhost:8888',\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg\" align=\"top\" width=\"18\" height=\"21\"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>\n\n```ts\nimport Cadenya from 'npm:@cadenya/cadenya';\n\nconst httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });\nconst client = new Cadenya({\n  fetchOptions: {\n    client: httpClient,\n  },\n});\n```\n\n## Frequently Asked Questions\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-typescript/issues) with questions, bugs, or suggestions.\n\n## Requirements\n\nTypeScript >= 4.9 is supported.\n\nThe following runtimes are supported:\n\n- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)\n- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.\n- Deno v1.28.0 or higher.\n- Bun 1.0 or later.\n- Cloudflare Workers.\n- Vercel Edge Runtime.\n- Jest 28 or greater with the `\"node\"` environment (`\"jsdom\"` is not supported at this time).\n- Nitro v2.6 or greater.\n\nNote that React Native is not supported at this time.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n",
+      "# Cadenya TypeScript API Library\n\n[![NPM version](https://img.shields.io/npm/v/@cadenya/cadenya.svg?label=npm%20(stable))](https://npmjs.org/package/@cadenya/cadenya) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@cadenya/cadenya)\n\nThis library provides convenient access to the Cadenya REST API from server-side TypeScript or JavaScript.\n\n\n\nThe REST API documentation can be found on [docs.cadenya.com](https://docs.cadenya.com). The full API of this library can be found in [api.md](api.md).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Cadenya MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40cadenya%2Fcadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBjYWRlbnlhL2NhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40cadenya%2Fcadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40cadenya%2Fcadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n```sh\nnpm install @cadenya/cadenya\n```\n\n\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n<!-- prettier-ignore -->\n```js\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.account.retrieve();\n\nconsole.log(account.info);\n```\n\n\n\n### Request & Response types\n\nThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n\n<!-- prettier-ignore -->\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst account: Cadenya.Account = await client.account.retrieve();\n```\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API,\nor if the API returns a non-success status code (i.e., 4xx or 5xx response),\na subclass of `APIError` will be thrown:\n\n<!-- prettier-ignore -->\n```ts\nconst account = await client.account.retrieve().catch(async (err) => {\n  if (err instanceof Cadenya.APIError) {\n    console.log(err.status); // 400\n    console.log(err.name); // BadRequestError\n    console.log(err.headers); // {server: 'nginx', ...}\n  } else {\n    throw err;\n  }\n});\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors will all be retried by default.\n\nYou can use the `maxRetries` option to configure or disable this:\n\n<!-- prettier-ignore -->\n```js\n// Configure the default for all requests:\nconst client = new Cadenya({\n  maxRetries: 0, // default is 2\n});\n\n// Or, configure per-request:\nawait client.account.retrieve({\n  maxRetries: 5,\n});\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default. You can configure this with a `timeout` option:\n\n<!-- prettier-ignore -->\n```ts\n// Configure the default for all requests:\nconst client = new Cadenya({\n  timeout: 20 * 1000, // 20 seconds (default is 1 minute)\n});\n\n// Override per-request:\nawait client.account.retrieve({\n  timeout: 5 * 1000,\n});\n```\n\nOn timeout, an `APIConnectionTimeoutError` is thrown.\n\nNote that requests which time out will be [retried twice by default](#retries).\n\n## Auto-pagination\n\nList methods in the Cadenya API are paginated.\nYou can use the `for await … of` syntax to iterate through items across all pages:\n\n```ts\nasync function fetchAllAgents(params) {\n  const allAgents = [];\n  // Automatically fetches more pages as needed.\n  for await (const agent of client.agents.list('workspaceId')) {\n    allAgents.push(agent);\n  }\n  return allAgents;\n}\n```\n\nAlternatively, you can request a single page at a time:\n\n```ts\nlet page = await client.agents.list('workspaceId');\nfor (const agent of page.items) {\n  console.log(agent);\n}\n\n// Convenience methods are provided for manually paginating:\nwhile (page.hasNextPage()) {\n  page = await page.getNextPage();\n  // ...\n}\n```\n\n\n\n## Advanced Usage\n\n### Accessing raw Response data (e.g., headers)\n\nThe \"raw\" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.\nThis method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.\n\nYou can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.\nUnlike `.asResponse()` this method consumes the body, returning once it is parsed.\n\n<!-- prettier-ignore -->\n```ts\nconst client = new Cadenya();\n\nconst response = await client.account.retrieve().asResponse();\nconsole.log(response.headers.get('X-My-Header'));\nconsole.log(response.statusText); // access the underlying Response object\n\nconst { data: account, response: raw } = await client.account.retrieve().withResponse();\nconsole.log(raw.headers.get('X-My-Header'));\nconsole.log(account.info);\n```\n\n### Logging\n\n> [!IMPORTANT]\n> All log messages are intended for debugging only. The format and content of log messages\n> may change between releases.\n\n#### Log levels\n\nThe log level can be configured in two ways:\n\n1. Via the `CADENYA_LOG` environment variable\n2. Using the `logLevel` client option (overrides the environment variable if set)\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  logLevel: 'debug', // Show all log messages\n});\n```\n\nAvailable log levels, from most to least verbose:\n\n- `'debug'` - Show debug messages, info, warnings, and errors\n- `'info'` - Show info messages, warnings, and errors\n- `'warn'` - Show warnings and errors (default)\n- `'error'` - Show only errors\n- `'off'` - Disable all logging\n\nAt the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.\nSome authentication-related headers are redacted, but sensitive data in request and response bodies\nmay still be visible.\n\n#### Custom logger\n\nBy default, this library logs to `globalThis.console`. You can also provide a custom logger.\nMost logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.\n\nWhen providing a custom logger, the `logLevel` option still controls which messages are emitted, messages\nbelow the configured level will not be sent to your logger.\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport pino from 'pino';\n\nconst logger = pino();\n\nconst client = new Cadenya({\n  logger: logger.child({ name: 'Cadenya' }),\n  logLevel: 'debug', // Send all messages to pino, allowing it to filter\n});\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.\nOptions on the client, such as retries, will be respected when making these requests.\n\n```ts\nawait client.post('/some/path', {\n  body: { some_prop: 'foo' },\n  query: { some_query_arg: 'bar' },\n});\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented\nparameter. This library doesn't validate at runtime that the request matches the type, so any extra values you\nsend will be sent as-is.\n\n```ts\nclient.account.retrieve({\n  // ...\n  // @ts-expect-error baz is not yet public\n  baz: 'undocumented option',\n});\n```\n\nFor requests with the `GET` verb, any extra params will be in the query, all other requests will send the\nextra param in the body.\n\nIf you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may access the response object with `// @ts-expect-error` on\nthe response object, or cast the response object to the requisite type. Like the request params, we do not\nvalidate or strip extra properties from the response from the API.\n\n### Customizing the fetch client\n\nBy default, this library expects a global `fetch` function is defined.\n\nIf you want to use a different `fetch` function, you can either polyfill the global:\n\n```ts\nimport fetch from 'my-fetch';\n\nglobalThis.fetch = fetch;\n```\n\nOr pass it to the client:\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport fetch from 'my-fetch';\n\nconst client = new Cadenya({ fetch });\n```\n\n### Fetch options\n\nIf you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  fetchOptions: {\n    // `RequestInit` options\n  },\n});\n```\n\n#### Configuring proxies\n\nTo modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy\noptions to requests:\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg\" align=\"top\" width=\"18\" height=\"21\"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\nimport * as undici from 'undici';\n\nconst proxyAgent = new undici.ProxyAgent('http://localhost:8888');\nconst client = new Cadenya({\n  fetchOptions: {\n    dispatcher: proxyAgent,\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg\" align=\"top\" width=\"18\" height=\"21\"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>\n\n```ts\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  fetchOptions: {\n    proxy: 'http://localhost:8888',\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg\" align=\"top\" width=\"18\" height=\"21\"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>\n\n```ts\nimport Cadenya from 'npm:@cadenya/cadenya';\n\nconst httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });\nconst client = new Cadenya({\n  fetchOptions: {\n    client: httpClient,\n  },\n});\n```\n\n## Frequently Asked Questions\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/cadenya/cadenya-typescript/issues) with questions, bugs, or suggestions.\n\n## Requirements\n\nTypeScript >= 4.9 is supported.\n\nThe following runtimes are supported:\n\n- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)\n- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.\n- Deno v1.28.0 or higher.\n- Bun 1.0 or later.\n- Cloudflare Workers.\n- Vercel Edge Runtime.\n- Jest 28 or greater with the `\"node\"` environment (`\"jsdom\"` is not supported at this time).\n- Nitro v2.6 or greater.\n\nNote that React Native is not supported at this time.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n",
   },
 ];
 
