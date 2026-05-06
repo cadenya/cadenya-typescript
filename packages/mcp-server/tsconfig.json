@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "@cadenya/cadenya-mcp/*": ["./src/*"],
-      "@cadenya/cadenya-mcp": ["./src/index.ts"]
+      "cadenya-mcp/*": ["./src/*"],
+      "cadenya-mcp": ["./src/index.ts"]
     },
     "noEmit": true,
 
