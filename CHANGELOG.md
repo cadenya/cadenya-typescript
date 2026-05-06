@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.70.0 (2026-05-06)
+
+Full Changelog: [v0.69.0...v0.70.0](https://github.com/cadenya/cadenya-typescript/compare/v0.69.0...v0.70.0)
+
+### Features
+
+* **api:** api update ([8a0fe86](https://github.com/cadenya/cadenya-typescript/commit/8a0fe86b9d5cde476715280ac953381b2b566ad1))
+
+
+### Chores
+
+* configure new SDK language ([7bd3e12](https://github.com/cadenya/cadenya-typescript/commit/7bd3e1200308a4ce5fef839145f742f7fb095965))
+
 ## 0.69.0 (2026-05-04)
 
 Full Changelog: [v0.68.0...v0.69.0](https://github.com/cadenya/cadenya-typescript/compare/v0.68.0...v0.69.0)
