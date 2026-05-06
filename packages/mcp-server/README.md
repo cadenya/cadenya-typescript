@@ -11,7 +11,7 @@ You can run the MCP Server directly via `npx`:
 ```sh
 export CADENYA_API_KEY="My API Key"
 export CADENYA_WEBHOOK_KEY="My Webhook Key"
-npx -y @cadenya/cadenya-mcp@latest
+npx -y cadenya-mcp@latest
 ```
 
 ### Via MCP Client
@@ -26,7 +26,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "cadenya_cadenya_api": {
       "command": "npx",
-      "args": ["-y", "@cadenya/cadenya-mcp"],
+      "args": ["-y", "cadenya-mcp"],
       "env": {
         "CADENYA_API_KEY": "My API Key",
         "CADENYA_WEBHOOK_KEY": "My Webhook Key"
@@ -41,14 +41,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40cadenya%2Fcadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBjYWRlbnlhL2NhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cadenya-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhZGVueWEtbWNwIl0sImVudiI6eyJDQURFTllBX0FQSV9LRVkiOiJNeSBBUEkgS2V5IiwiQ0FERU5ZQV9XRUJIT09LX0tFWSI6Ik15IFdlYmhvb2sgS2V5In19)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40cadenya%2Fcadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40cadenya%2Fcadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cadenya-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cadenya-mcp%22%5D%2C%22env%22%3A%7B%22CADENYA_API_KEY%22%3A%22My%20API%20Key%22%2C%22CADENYA_WEBHOOK_KEY%22%3A%22My%20Webhook%20Key%22%7D%7D)
 
 ### Claude Code
 
@@ -56,7 +56,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add cadenya_cadenya_mcp_api --env CADENYA_API_KEY="My API Key" CADENYA_WEBHOOK_KEY="My Webhook Key" -- npx -y @cadenya/cadenya-mcp
+claude mcp add cadenya_mcp_api --env CADENYA_API_KEY="My API Key" CADENYA_WEBHOOK_KEY="My Webhook Key" -- npx -y cadenya-mcp
 ```
 
 ## Code Mode
