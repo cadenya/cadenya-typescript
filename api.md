@@ -130,7 +130,8 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveStatus</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">SubObjectiveCreated</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">SubAgentSpawned</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">SubAgentUpdated</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolApprovalRequested</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolApproved</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolCalled</a></code>
