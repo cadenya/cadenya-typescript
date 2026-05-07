@@ -467,7 +467,9 @@ export interface ObjectiveEventData {
    */
   memoryRead?: MemoryRead;
 
-  subObjectiveCreated?: SubObjectiveCreated;
+  subAgentSpawned?: SubAgentSpawned;
+
+  subAgentUpdated?: SubAgentUpdated;
 
   toolApprovalRequested?: ToolApprovalRequested;
 
@@ -649,12 +651,51 @@ export interface ObjectiveStatus {
   message?: string;
 }
 
-export interface SubObjectiveCreated {
+export interface SubAgentSpawned {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agent?: Shared.ResourceMetadata;
+
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  metadata?: Shared.OperationMetadata;
+  objective?: Shared.OperationMetadata;
+
+  task?: string;
+}
+
+export interface SubAgentUpdated {
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  agent?: Shared.BareMetadata;
+
+  message?: string;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  objective?: Shared.BareMetadata;
+
+  status?:
+    | 'STATUS_UNSPECIFIED'
+    | 'STATUS_PENDING'
+    | 'STATUS_RUNNING'
+    | 'STATUS_COMPLETED'
+    | 'STATUS_FAILED'
+    | 'STATUS_CANCELLED';
 }
 
 export interface ToolApprovalRequested {
@@ -933,7 +974,8 @@ export declare namespace Objectives {
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveStatus as ObjectiveStatus,
-    type SubObjectiveCreated as SubObjectiveCreated,
+    type SubAgentSpawned as SubAgentSpawned,
+    type SubAgentUpdated as SubAgentUpdated,
     type ToolApprovalRequested as ToolApprovalRequested,
     type ToolApproved as ToolApproved,
     type ToolCalled as ToolCalled,
