@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.72.0 (2026-05-08)
+
+Full Changelog: [v0.71.0...v0.72.0](https://github.com/cadenya/cadenya-typescript/compare/v0.71.0...v0.72.0)
+
+### Features
+
+* **api:** api update ([05be638](https://github.com/cadenya/cadenya-typescript/commit/05be6389e80a79ddf6a8f51d38491948d2f3b1b1))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([6679f87](https://github.com/cadenya/cadenya-typescript/commit/6679f87bfa3d614c6517ce9209a1044a1fe87568))
+
 ## 0.71.0 (2026-05-07)
 
 Full Changelog: [v0.70.0...v0.71.0](https://github.com/cadenya/cadenya-typescript/compare/v0.70.0...v0.71.0)
