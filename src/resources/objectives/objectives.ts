@@ -803,7 +803,7 @@ export interface ObjectiveCreateParams {
    * operation. Read-only fields (id, account_id, workspace_id, created_at,
    * profile_id) are excluded since they are set by the server.
    */
-  metadata: Shared.CreateOperationMetadata;
+  metadata?: Shared.CreateOperationMetadata;
 
   /**
    * Optional explicit variation selection. Overrides the agent's

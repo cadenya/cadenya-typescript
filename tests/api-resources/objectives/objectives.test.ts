@@ -13,7 +13,6 @@ describe('resource objectives', () => {
     const responsePromise = client.objectives.create('workspaceId', {
       agentId: 'agentId',
       data: {},
-      metadata: {},
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
