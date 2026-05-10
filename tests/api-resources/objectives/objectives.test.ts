@@ -201,6 +201,7 @@ describe('resource objectives', () => {
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,
+      sinceEventId: 'sinceEventId',
       sortOrder: 'sortOrder',
       windowId: 'windowId',
     });
