@@ -115,7 +115,7 @@ export interface CursorPaginationResponse<Item> {
 
 export namespace CursorPaginationResponse {
   export interface Pagination {
-    next_cursor?: string;
+    nextCursor?: string;
   }
 }
 
@@ -147,7 +147,7 @@ export class CursorPagination<Item> extends AbstractPage<Item> implements Cursor
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.pagination?.next_cursor;
+    const cursor = this.pagination?.nextCursor;
     if (!cursor) {
       return null;
     }
