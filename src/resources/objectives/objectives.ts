@@ -940,6 +940,11 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Query param: Optional string to fetch events since an ID
+   */
+  sinceEventId?: string;
+
+  /**
    * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
