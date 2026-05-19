@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.75.1 (2026-05-19)
+
+Full Changelog: [v0.75.0...v0.75.1](https://github.com/cadenya/cadenya-typescript/compare/v0.75.0...v0.75.1)
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([e54dd4d](https://github.com/cadenya/cadenya-typescript/commit/e54dd4ddcb721a98270ce6a5fce4d28c6d1be641))
+
+
+### Chores
+
+* **tests:** remove redundant File import ([ff04204](https://github.com/cadenya/cadenya-typescript/commit/ff04204f427561724947faeecbf3cf4e64413f77))
+
 ## 0.75.0 (2026-05-10)
 
 Full Changelog: [v0.74.0...v0.75.0](https://github.com/cadenya/cadenya-typescript/compare/v0.74.0...v0.75.0)
