@@ -40,6 +40,7 @@ describe('resource agents', () => {
         variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
         description: 'description',
         inputDataSchema: {},
+        outputDefinition: {},
         webhookEventsUrl: 'webhookEventsUrl',
       },
       defaultVariation: {
@@ -116,6 +117,7 @@ describe('resource agents', () => {
         variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
         description: 'description',
         inputDataSchema: {},
+        outputDefinition: {},
         webhookEventsUrl: 'webhookEventsUrl',
       },
       updateMask: 'updateMask',

@@ -197,6 +197,14 @@ export interface AgentSpec {
   inputDataSchema?: unknown;
 
   /**
+   * Optional output definition for objectives created for this agent. When provided,
+   * Cadenya will append a tool to that will be called by the LLM in use by the
+   * variant to extract information in the format provided here. Use this option when
+   * you want structured data to be created by your objectives.
+   */
+  outputDefinition?: unknown;
+
+  /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
    */
   webhookEventsUrl?: string;
