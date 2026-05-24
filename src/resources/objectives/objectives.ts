@@ -411,6 +411,12 @@ export interface ObjectiveData {
   output?: unknown;
 
   /**
+   * Snapshot of the agent spec's output_definition at objective creation time. When
+   * present, the objective will run an extraction step after the LLM finishes.
+   */
+  outputDefinition?: unknown;
+
+  /**
    * A parent objective means the objective was spawned off using a separate agent to
    * complete an objective
    */
