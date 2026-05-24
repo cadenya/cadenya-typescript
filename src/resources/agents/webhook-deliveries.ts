@@ -68,7 +68,8 @@ export interface WebhookDeliveryData {
     | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ'
     | 'OBJECTIVE_EVENT_TYPE_CANCELLED'
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED'
-    | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED';
+    | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
+    | 'OBJECTIVE_EVENT_TYPE_FINALIZED';
 
   /**
    * Response details. The response body is not retained.
@@ -134,7 +135,8 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ'
     | 'OBJECTIVE_EVENT_TYPE_CANCELLED'
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED'
-    | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED';
+    | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
+    | 'OBJECTIVE_EVENT_TYPE_FINALIZED';
 
   /**
    * Query param: Optional filter by objective ID

@@ -82,6 +82,7 @@ describe('resource bulkWorkspaceResources', () => {
               variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
               description: 'description',
               inputDataSchema: {},
+              outputDefinition: {},
               webhookEventsUrl: 'webhookEventsUrl',
             },
             labels: { foo: 'string' },

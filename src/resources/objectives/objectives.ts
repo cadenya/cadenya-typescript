@@ -405,6 +405,12 @@ export interface ObjectiveData {
   memoryStack?: Array<MemoryReference>;
 
   /**
+   * The output of the objective, populated when the objective completes. Will match
+   * the schema of output_json_schema or output_json_inferred.
+   */
+  output?: unknown;
+
+  /**
    * A parent objective means the objective was spawned off using a separate agent to
    * complete an objective
    */
@@ -461,6 +467,13 @@ export interface ObjectiveEventData {
   error?: ObjectiveError;
 
   /**
+   * ObjectiveFinalized is the terminal event written when an objective is finalized.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  finalized?: ObjectiveEventData.Finalized;
+
+  /**
    * MemoryRead is emitted each time the agent resolves a key against the memory
    * stack and loads an entry. Lookups that miss (key not found in any layer) do not
    * emit this event.
@@ -501,6 +514,20 @@ export namespace ObjectiveEventData {
      * user", "Cancelled by schedule sweep", "Credit balance exhausted").
      */
     message?: string;
+  }
+
+  /**
+   * ObjectiveFinalized is the terminal event written when an objective is finalized.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  export interface Finalized {
+    /**
+     * If the objective was created with an output schema, and the agent successfully
+     * completed the objective, this field will contain the structured output of the
+     * objective.
+     */
+    output?: unknown;
   }
 }
 
@@ -644,9 +671,10 @@ export interface ObjectiveStatus {
     | 'STATE_UNSPECIFIED'
     | 'STATE_PENDING'
     | 'STATE_RUNNING'
-    | 'STATE_COMPLETED'
+    | 'STATE_WAITING'
     | 'STATE_FAILED'
-    | 'STATE_CANCELLED';
+    | 'STATE_CANCELLED'
+    | 'STATE_FINALIZED';
 
   message?: string;
 }
@@ -852,9 +880,10 @@ export interface ObjectiveListParams extends CursorPaginationParams {
     | 'STATE_UNSPECIFIED'
     | 'STATE_PENDING'
     | 'STATE_RUNNING'
-    | 'STATE_COMPLETED'
+    | 'STATE_WAITING'
     | 'STATE_FAILED'
-    | 'STATE_CANCELLED';
+    | 'STATE_CANCELLED'
+    | 'STATE_FINALIZED';
 }
 
 export interface ObjectiveCancelParams {
