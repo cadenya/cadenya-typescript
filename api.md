@@ -278,18 +278,23 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/tool-sets/tool-sets.ts">McpToolFilter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ApprovalRequirementFilter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">AttributeFilter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcher</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncCompleted</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncFailed</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncStarted</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolFilter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSet</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMcp</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPI</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEvent</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventData</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetGetOpenAPISpecResponse</a></code>
 
 Methods:
 
@@ -298,6 +303,7 @@ Methods:
 - <code title="put /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">list</a>(workspaceID, { ...params }) -> ToolSetsCursorPagination</code>
 - <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/openapi_spec">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">getOpenAPISpec</a>(toolSetID, { ...params }) -> ToolSetGetOpenAPISpecResponse</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
 
 ## Tools
@@ -306,6 +312,7 @@ Types:
 
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigMcp</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ConfigOpenAPI</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">Tool</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>

@@ -109,6 +109,14 @@ export interface ConfigMcp {
   toolTitle?: string;
 }
 
+export interface ConfigOpenAPI {
+  method?: string;
+
+  operationId?: string;
+
+  path?: string;
+}
+
 export interface Tool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -164,6 +172,8 @@ export interface ToolSpecConfig {
   http?: ConfigHTTP;
 
   mcp?: ConfigMcp;
+
+  openapi?: ConfigOpenAPI;
 }
 
 export interface ToolCreateParams {
@@ -296,6 +306,7 @@ export declare namespace Tools {
   export {
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
+    type ConfigOpenAPI as ConfigOpenAPI,
     type Tool as Tool,
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,

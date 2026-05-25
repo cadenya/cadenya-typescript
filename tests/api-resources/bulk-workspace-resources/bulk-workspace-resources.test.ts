@@ -266,6 +266,64 @@ describe('resource bulkWorkspaceResources', () => {
                   },
                   url: 'url',
                 },
+                openapi: {
+                  baseUrl: 'baseUrl',
+                  excludeTools: {
+                    operator: 'OPERATOR_UNSPECIFIED',
+                    filters: [
+                      {
+                        attribute: 'ATTRIBUTE_UNSPECIFIED',
+                        matcher: {
+                          caseSensitive: true,
+                          contains: 'contains',
+                          endsWith: 'endsWith',
+                          exact: 'exact',
+                          regex: 'regex',
+                          startsWith: 'startsWith',
+                        },
+                      },
+                    ],
+                  },
+                  headers: { foo: 'string' },
+                  includeTools: {
+                    operator: 'OPERATOR_UNSPECIFIED',
+                    filters: [
+                      {
+                        attribute: 'ATTRIBUTE_UNSPECIFIED',
+                        matcher: {
+                          caseSensitive: true,
+                          contains: 'contains',
+                          endsWith: 'endsWith',
+                          exact: 'exact',
+                          regex: 'regex',
+                          startsWith: 'startsWith',
+                        },
+                      },
+                    ],
+                  },
+                  serverName: 'serverName',
+                  toolApprovals: {
+                    always: true,
+                    only: {
+                      operator: 'OPERATOR_UNSPECIFIED',
+                      filters: [
+                        {
+                          attribute: 'ATTRIBUTE_UNSPECIFIED',
+                          matcher: {
+                            caseSensitive: true,
+                            contains: 'contains',
+                            endsWith: 'endsWith',
+                            exact: 'exact',
+                            regex: 'regex',
+                            startsWith: 'startsWith',
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  uploadId: 'uploadId',
+                  url: 'url',
+                },
               },
               description: 'description',
             },
@@ -288,6 +346,11 @@ describe('resource bulkWorkspaceResources', () => {
                       toolDescription: 'toolDescription',
                       toolName: 'toolName',
                       toolTitle: 'toolTitle',
+                    },
+                    openapi: {
+                      method: 'method',
+                      operationId: 'operationId',
+                      path: 'path',
                     },
                   },
                   description: 'description',

@@ -380,6 +380,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/workspaces/{workspaceId}/tool_sets/{id}',
   },
   {
+    clientCallName: 'client.toolSets.getOpenAPISpec',
+    fullyQualifiedName: 'toolSets.getOpenAPISpec',
+    httpMethod: 'get',
+    httpPath: '/v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/openapi_spec',
+  },
+  {
     clientCallName: 'client.toolSets.listEvents',
     fullyQualifiedName: 'toolSets.listEvents',
     httpMethod: 'get',
