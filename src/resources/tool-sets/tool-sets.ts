@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ToolSetsAPI from './tool-sets';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as ToolsAPI from './tools';
 import {
   ConfigHTTP,
   ConfigMcp,
+  ConfigOpenAPI,
   Tool,
   ToolCreateParams,
   ToolDeleteParams,
@@ -85,6 +85,19 @@ export class ToolSets extends APIResource {
   }
 
   /**
+   * Retrieves the current OpenAPI specification JSON that has been consumed by the
+   * tool set. Only applicable to tool sets using the OpenAPI adapter.
+   */
+  getOpenAPISpec(
+    toolSetID: string,
+    params: ToolSetGetOpenAPISpecParams,
+    options?: RequestOptions,
+  ): APIPromise<ToolSetGetOpenAPISpecResponse> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/openapi_spec`, options);
+  }
+
+  /**
    * Lists all events (including sync status) for a tool set
    */
   listEvents(
@@ -106,45 +119,45 @@ export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 export type ToolSetEventsCursorPagination = CursorPagination<ToolSetEvent>;
 
 /**
- * Top-level filter with simple boolean logic (no nesting)
+ * Approval filters that will automatically set the approval requirement on tools
+ * synced from an external source
  */
-export interface McpToolFilter {
-  operator: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
+export interface ApprovalRequirementFilter {
+  always?: boolean;
 
-  filters?: Array<McpToolFilter.Filter>;
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  only?: ToolFilter;
 }
 
-export namespace McpToolFilter {
+/**
+ * Single attribute filter
+ */
+export interface AttributeFilter {
+  attribute: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+
   /**
-   * Single attribute filter
+   * String matching operations
    */
-  export interface Filter {
-    attribute: 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+  matcher?: StringMatcher;
+}
 
-    /**
-     * String matching operations
-     */
-    matcher?: Filter.Matcher;
-  }
+/**
+ * String matching operations
+ */
+export interface StringMatcher {
+  caseSensitive?: boolean;
 
-  export namespace Filter {
-    /**
-     * String matching operations
-     */
-    export interface Matcher {
-      caseSensitive?: boolean;
+  contains?: string;
 
-      contains?: string;
+  endsWith?: string;
 
-      endsWith?: string;
+  exact?: string;
 
-      exact?: string;
+  regex?: string;
 
-      regex?: string;
-
-      startsWith?: string;
-    }
-  }
+  startsWith?: string;
 }
 
 /**
@@ -192,6 +205,15 @@ export interface SyncStarted {
   message?: string;
 }
 
+/**
+ * Top-level filter with simple boolean logic (no nesting)
+ */
+export interface ToolFilter {
+  operator: 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
+
+  filters?: Array<AttributeFilter>;
+}
+
 export interface ToolSet {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -210,6 +232,8 @@ export interface ToolSetAdapter {
   http?: ToolSetAdapterHTTP;
 
   mcp?: ToolSetAdapterMcp;
+
+  openapi?: ToolSetAdapterOpenAPI;
 }
 
 export interface ToolSetAdapterHTTP {
@@ -222,37 +246,68 @@ export interface ToolSetAdapterMcp {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  excludeTools?: McpToolFilter;
+  excludeTools?: ToolFilter;
 
   headers?: { [key: string]: string };
 
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  includeTools?: McpToolFilter;
+  includeTools?: ToolFilter;
 
   /**
-   * Approval filters that will automatically set the approval requirement on the
-   * tools synced from the MCP server
+   * Approval filters that will automatically set the approval requirement on tools
+   * synced from an external source
    */
-  toolApprovals?: ToolSetAdapterMcp.ToolApprovals;
+  toolApprovals?: ApprovalRequirementFilter;
 
   url?: string;
 }
 
-export namespace ToolSetAdapterMcp {
+export interface ToolSetAdapterOpenAPI {
   /**
-   * Approval filters that will automatically set the approval requirement on the
-   * tools synced from the MCP server
+   * Base URL for dispatching tool calls. If set, overrides the server resolved from
+   * the spec's servers array.
    */
-  export interface ToolApprovals {
-    always?: boolean;
+  baseUrl?: string;
 
-    /**
-     * Top-level filter with simple boolean logic (no nesting)
-     */
-    only?: ToolSetsAPI.McpToolFilter;
-  }
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  excludeTools?: ToolFilter;
+
+  /**
+   * Headers sent when fetching the spec from a URL and when dispatching tool calls.
+   */
+  headers?: { [key: string]: string };
+
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  includeTools?: ToolFilter;
+
+  /**
+   * Name of the server entry in the spec's servers array (OpenAPI 3.2 server.name
+   * field). Used to select which server URL to dispatch to when base_url is not set.
+   * If unset, the first server is used. Ignored when base_url is set.
+   */
+  serverName?: string;
+
+  /**
+   * Approval filters that will automatically set the approval requirement on tools
+   * synced from an external source
+   */
+  toolApprovals?: ApprovalRequirementFilter;
+
+  /**
+   * ID of a COMPLETE Upload containing the OpenAPI spec document.
+   */
+  uploadId?: string;
+
+  /**
+   * URL to fetch the OpenAPI spec from. Synced automatically every hour.
+   */
+  url?: string;
 }
 
 /**
@@ -340,6 +395,13 @@ export interface ToolSetSpec {
   description?: string;
 }
 
+export interface ToolSetGetOpenAPISpecResponse {
+  /**
+   * The consumed OpenAPI specification as a JSON string.
+   */
+  spec?: string;
+}
+
 export interface ToolSetCreateParams {
   /**
    * CreateResourceMetadata contains the user-provided fields for creating a
@@ -417,6 +479,13 @@ export interface ToolSetDeleteParams {
   workspaceId: string;
 }
 
+export interface ToolSetGetOpenAPISpecParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
 export interface ToolSetListEventsParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
@@ -438,18 +507,23 @@ ToolSets.Tools = Tools;
 
 export declare namespace ToolSets {
   export {
-    type McpToolFilter as McpToolFilter,
+    type ApprovalRequirementFilter as ApprovalRequirementFilter,
+    type AttributeFilter as AttributeFilter,
+    type StringMatcher as StringMatcher,
     type SyncCompleted as SyncCompleted,
     type SyncFailed as SyncFailed,
     type SyncStarted as SyncStarted,
+    type ToolFilter as ToolFilter,
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
+    type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
+    type ToolSetGetOpenAPISpecResponse as ToolSetGetOpenAPISpecResponse,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
@@ -457,6 +531,7 @@ export declare namespace ToolSets {
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
     type ToolSetDeleteParams as ToolSetDeleteParams,
+    type ToolSetGetOpenAPISpecParams as ToolSetGetOpenAPISpecParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
   };
 
@@ -464,6 +539,7 @@ export declare namespace ToolSets {
     Tools as Tools,
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
+    type ConfigOpenAPI as ConfigOpenAPI,
     type Tool as Tool,
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,

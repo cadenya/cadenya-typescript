@@ -93,6 +93,64 @@ describe('resource toolSets', () => {
             },
             url: 'url',
           },
+          openapi: {
+            baseUrl: 'baseUrl',
+            excludeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+            },
+            headers: { foo: 'string' },
+            includeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+            },
+            serverName: 'serverName',
+            toolApprovals: {
+              always: true,
+              only: {
+                operator: 'OPERATOR_UNSPECIFIED',
+                filters: [
+                  {
+                    attribute: 'ATTRIBUTE_UNSPECIFIED',
+                    matcher: {
+                      caseSensitive: true,
+                      contains: 'contains',
+                      endsWith: 'endsWith',
+                      exact: 'exact',
+                      regex: 'regex',
+                      startsWith: 'startsWith',
+                    },
+                  },
+                ],
+              },
+            },
+            uploadId: 'uploadId',
+            url: 'url',
+          },
         },
         description: 'description',
       },
@@ -199,6 +257,64 @@ describe('resource toolSets', () => {
             },
             url: 'url',
           },
+          openapi: {
+            baseUrl: 'baseUrl',
+            excludeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+            },
+            headers: { foo: 'string' },
+            includeTools: {
+              operator: 'OPERATOR_UNSPECIFIED',
+              filters: [
+                {
+                  attribute: 'ATTRIBUTE_UNSPECIFIED',
+                  matcher: {
+                    caseSensitive: true,
+                    contains: 'contains',
+                    endsWith: 'endsWith',
+                    exact: 'exact',
+                    regex: 'regex',
+                    startsWith: 'startsWith',
+                  },
+                },
+              ],
+            },
+            serverName: 'serverName',
+            toolApprovals: {
+              always: true,
+              only: {
+                operator: 'OPERATOR_UNSPECIFIED',
+                filters: [
+                  {
+                    attribute: 'ATTRIBUTE_UNSPECIFIED',
+                    matcher: {
+                      caseSensitive: true,
+                      contains: 'contains',
+                      endsWith: 'endsWith',
+                      exact: 'exact',
+                      regex: 'regex',
+                      startsWith: 'startsWith',
+                    },
+                  },
+                ],
+              },
+            },
+            uploadId: 'uploadId',
+            url: 'url',
+          },
         },
         description: 'description',
       },
@@ -253,6 +369,23 @@ describe('resource toolSets', () => {
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.toolSets.delete('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('getOpenAPISpec: only required params', async () => {
+    const responsePromise = client.toolSets.getOpenAPISpec('toolSetId', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('getOpenAPISpec: required and optional params', async () => {
+    const response = await client.toolSets.getOpenAPISpec('toolSetId', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled

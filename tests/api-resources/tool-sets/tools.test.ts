@@ -55,6 +55,11 @@ describe('resource tools', () => {
             toolName: 'toolName',
             toolTitle: 'toolTitle',
           },
+          openapi: {
+            method: 'method',
+            operationId: 'operationId',
+            path: 'path',
+          },
         },
         description: 'description',
         parameters: { foo: 'bar' },
@@ -128,6 +133,11 @@ describe('resource tools', () => {
             toolDescription: 'toolDescription',
             toolName: 'toolName',
             toolTitle: 'toolTitle',
+          },
+          openapi: {
+            method: 'method',
+            operationId: 'operationId',
+            path: 'path',
           },
         },
         description: 'description',
