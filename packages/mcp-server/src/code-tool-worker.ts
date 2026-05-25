@@ -166,6 +166,7 @@ const fuse = new Fuse(
     'client.search.searchToolsOrToolSets',
     'client.toolSets.create',
     'client.toolSets.delete',
+    'client.toolSets.getOpenAPISpec',
     'client.toolSets.list',
     'client.toolSets.listEvents',
     'client.toolSets.retrieve',
