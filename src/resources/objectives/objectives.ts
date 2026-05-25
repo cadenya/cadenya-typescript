@@ -408,13 +408,13 @@ export interface ObjectiveData {
    * The output of the objective, populated when the objective completes. Will match
    * the schema of output_json_schema or output_json_inferred.
    */
-  output?: unknown;
+  output?: { [key: string]: unknown };
 
   /**
    * Snapshot of the agent spec's output_definition at objective creation time. When
    * present, the objective will run an extraction step after the LLM finishes.
    */
-  outputDefinition?: unknown;
+  outputDefinition?: { [key: string]: unknown };
 
   /**
    * A parent objective means the objective was spawned off using a separate agent to

@@ -194,7 +194,7 @@ export interface AgentSpec {
    * is used as the tool's input parameter schema. If omitted, the sub-agent schema
    * will be loaded with a simple "prompt" free text string as its schema.
    */
-  inputDataSchema?: unknown;
+  inputDataSchema?: { [key: string]: unknown };
 
   /**
    * Optional output definition for objectives created for this agent. When provided,
@@ -202,7 +202,7 @@ export interface AgentSpec {
    * variant to extract information in the format provided here. Use this option when
    * you want structured data to be created by your objectives.
    */
-  outputDefinition?: unknown;
+  outputDefinition?: { [key: string]: unknown };
 
   /**
    * The URL that Cadenya will send events for any objective assigned to the agent.
