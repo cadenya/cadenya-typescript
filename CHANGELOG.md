@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.78.1 (2026-05-29)
+
+Full Changelog: [v0.78.0...v0.78.1](https://github.com/cadenya/cadenya-typescript/compare/v0.78.0...v0.78.1)
+
+### Bug Fixes
+
+* **mcp:** use `pure-lockfile` when building mcp server ([02a1980](https://github.com/cadenya/cadenya-typescript/commit/02a19805ff07577c246c9864d36dd8dea5a2c56f))
+
 ## 0.78.0 (2026-05-25)
 
 Full Changelog: [v0.77.0...v0.78.0](https://github.com/cadenya/cadenya-typescript/compare/v0.77.0...v0.78.0)
