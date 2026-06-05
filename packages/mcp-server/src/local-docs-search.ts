@@ -3816,6 +3816,51 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'update',
+    endpoint: '/v1/account/workspaces/{workspaceId}',
+    httpMethod: 'patch',
+    summary: 'Update a workspace',
+    description: "Updates a workspace's metadata (e.g. name) and spec. Admin only.",
+    stainlessPath: '(resource) workspace_admin > (method) update',
+    qualified: 'client.workspaceAdmin.update',
+    params: [
+      'workspaceId: string;',
+      'metadata?: { name: string; externalId?: string; labels?: object; };',
+      'spec?: { description?: string; };',
+      'updateMask?: string;',
+    ],
+    response:
+      "{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { description?: string; }; status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED'; }",
+    markdown:
+      "## update\n\n`client.workspaceAdmin.update(workspaceId: string, metadata?: { name: string; externalId?: string; labels?: object; }, spec?: { description?: string; }, updateMask?: string): { metadata: account_resource_metadata; spec: workspace_spec; status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED'; }`\n\n**patch** `/v1/account/workspaces/{workspaceId}`\n\nUpdates a workspace's metadata (e.g. name) and spec. Admin only.\n\n### Parameters\n\n- `workspaceId: string`\n\n- `metadata?: { name: string; externalId?: string; labels?: object; }`\n  UpdateAccountResourceMetadata contains the user-provided fields for updating\n an account-scoped resource. Read-only fields (id, account_id, profile_id) are excluded\n since they are set by the server.\n  - `name: string`\n    Human-readable name for the resource (e.g., \"Production API Key\", \"Staging Workspace\")\n  - `externalId?: string`\n    External ID for the resource (e.g., a workflow ID from an external system)\n  - `labels?: object`\n    Arbitrary key-value pairs for categorization and filtering\n Examples: {\"environment\": \"production\", \"team\": \"platform\", \"version\": \"v2\"}\n\n- `spec?: { description?: string; }`\n  - `description?: string`\n\n- `updateMask?: string`\n  Fields to update.\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { description?: string; }; status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED'; }`\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { description?: string; }`\n  - `status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED'`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nconst workspace = await client.workspaceAdmin.update('workspaceId');\n\nconsole.log(workspace);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.workspaceAdmin.update',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\nconst workspace = await client.workspaceAdmin.update('workspaceId');\n\nconsole.log(workspace.metadata);",
+      },
+      go: {
+        method: 'client.WorkspaceAdmin.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tworkspace, err := client.WorkspaceAdmin.Update(\n\t\tcontext.TODO(),\n\t\t"workspaceId",\n\t\tcadenya.WorkspaceAdminUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", workspace.Metadata)\n}\n',
+      },
+      ruby: {
+        method: 'workspace_admin.update',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\nworkspace = cadenya.workspace_admin.update("workspaceId")\n\nputs(workspace)',
+      },
+      cli: {
+        method: 'workspace_admin update',
+        example:
+          "cadenya workspace-admin update \\\n  --api-key 'My API Key' \\\n  --workspace-id workspaceId",
+      },
+      http: {
+        example:
+          "curl https://api.cadenya.com/v1/account/workspaces/$WORKSPACE_ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $CADENYA_API_KEY\" \\\n    -d '{}'",
+      },
+    },
+  },
+  {
     name: 'archive',
     endpoint: '/v1/account/workspaces/{workspaceId}',
     httpMethod: 'delete',

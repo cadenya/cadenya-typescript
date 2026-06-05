@@ -201,6 +201,7 @@ import {
   WorkspaceAdmin,
   WorkspaceAdminCreateParams,
   WorkspaceAdminListParams,
+  WorkspaceAdminUpdateParams,
   WorkspaceMember,
 } from './resources/workspace-admin/workspace-admin';
 import { type Fetch } from './internal/builtin-types';
@@ -1214,6 +1215,7 @@ export declare namespace Cadenya {
     WorkspaceAdmin as WorkspaceAdmin,
     type WorkspaceMember as WorkspaceMember,
     type WorkspaceAdminCreateParams as WorkspaceAdminCreateParams,
+    type WorkspaceAdminUpdateParams as WorkspaceAdminUpdateParams,
     type WorkspaceAdminListParams as WorkspaceAdminListParams,
   };
 

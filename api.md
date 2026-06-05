@@ -389,6 +389,7 @@ Methods:
 
 - <code title="post /v1/account/workspaces">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">retrieve</a>(workspaceID) -> Workspace</code>
+- <code title="patch /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">update</a>(workspaceID, { ...params }) -> Workspace</code>
 - <code title="get /v1/account/workspaces">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
 - <code title="delete /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">archive</a>(workspaceID) -> void</code>
 

@@ -196,6 +196,7 @@ const fuse = new Fuse(
     'client.workspaceAdmin.create',
     'client.workspaceAdmin.list',
     'client.workspaceAdmin.retrieve',
+    'client.workspaceAdmin.update',
     'client.workspaceAdmin.members.add',
     'client.workspaceAdmin.members.list',
     'client.workspaceAdmin.members.remove',
