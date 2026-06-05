@@ -559,6 +559,12 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'delete',
     httpPath: '/v1/account/workspaces/{workspaceId}/members/{profileId}',
   },
+  {
+    clientCallName: 'client.workspaceAdmin.profiles.list',
+    fullyQualifiedName: 'workspaceAdmin.profiles.list',
+    httpMethod: 'get',
+    httpPath: '/v1/account/profiles',
+  },
   { clientCallName: 'client.webhooks.unsafeUnwrap', fullyQualifiedName: 'webhooks.unsafeUnwrap' },
   { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
   {
