@@ -33,15 +33,9 @@ export class Profiles extends APIResource {
 export interface ProfileListParams extends CursorPaginationParams {
   /**
    * Free-form search over profile name and email. Case-insensitive substring match;
-   * empty returns all profiles (subject to the type filter).
+   * empty returns all profiles.
    */
   query?: string;
-
-  /**
-   * Filter by profile type. Defaults to all types when unset; pass PROFILE_TYPE_USER
-   * to list only human users (the common case for a member picker).
-   */
-  type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
 }
 
 export declare namespace Profiles {
