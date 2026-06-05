@@ -5,6 +5,8 @@ import * as WorkspacesAPI from '../workspaces';
 import { WorkspacesCursorPagination } from '../workspaces';
 import * as MembersAPI from './members';
 import { MemberAddParams, MemberListParams, MemberRemoveParams, Members } from './members';
+import * as ProfilesAPI from './profiles';
+import { ProfileListParams, Profiles } from './profiles';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -21,6 +23,7 @@ import { path } from '../../internal/utils/path';
  */
 export class WorkspaceAdmin extends APIResource {
   members: MembersAPI.Members = new MembersAPI.Members(this._client);
+  profiles: ProfilesAPI.Profiles = new ProfilesAPI.Profiles(this._client);
 
   /**
    * Creates a new workspace in the account. Admin only.
@@ -143,6 +146,7 @@ export interface WorkspaceAdminListParams extends CursorPaginationParams {
 }
 
 WorkspaceAdmin.Members = Members;
+WorkspaceAdmin.Profiles = Profiles;
 
 export declare namespace WorkspaceAdmin {
   export {
@@ -157,6 +161,8 @@ export declare namespace WorkspaceAdmin {
     type MemberAddParams as MemberAddParams,
     type MemberRemoveParams as MemberRemoveParams,
   };
+
+  export { Profiles as Profiles, type ProfileListParams as ProfileListParams };
 }
 
 export { type WorkspacesCursorPagination };

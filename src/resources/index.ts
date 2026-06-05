@@ -19,6 +19,7 @@ export {
   type Profile,
   type ProfileSpec,
   type RotateWebhookSigningKeyResponse,
+  type ProfilesCursorPagination,
 } from './account';
 export {
   Agents,
