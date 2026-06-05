@@ -199,6 +199,7 @@ const fuse = new Fuse(
     'client.workspaceAdmin.members.add',
     'client.workspaceAdmin.members.list',
     'client.workspaceAdmin.members.remove',
+    'client.workspaceAdmin.profiles.list',
     'client.webhooks.unsafeUnwrap',
     'client.webhooks.unwrap',
     'client.bulkWorkspaceResources.apply',

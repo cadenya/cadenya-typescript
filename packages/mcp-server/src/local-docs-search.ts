@@ -3973,6 +3973,51 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list',
+    endpoint: '/v1/account/profiles',
+    httpMethod: 'get',
+    summary: 'Search account profiles',
+    description:
+      "Searches the account's profiles for a member picker, with free-form name/email search and an optional type filter. Account-scoped; admin only.",
+    stainlessPath: '(resource) workspace_admin.profiles > (method) list',
+    qualified: 'client.workspaceAdmin.profiles.list',
+    params: [
+      'cursor?: string;',
+      'limit?: number;',
+      'query?: string;',
+      "type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';",
+    ],
+    response:
+      "{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM'; email?: string; name?: string; }; }",
+    markdown:
+      "## list\n\n`client.workspaceAdmin.profiles.list(cursor?: string, limit?: number, query?: string, type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM'): { metadata: account_resource_metadata; spec: profile_spec; }`\n\n**get** `/v1/account/profiles`\n\nSearches the account's profiles for a member picker, with free-form name/email search and an optional type filter. Account-scoped; admin only.\n\n### Parameters\n\n- `cursor?: string`\n  Pagination cursor from previous response\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `query?: string`\n  Free-form search over profile name and email. Case-insensitive substring\n match; empty returns all profiles (subject to the type filter).\n\n- `type?: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM'`\n  Filter by profile type. Defaults to all types when unset; pass\n PROFILE_TYPE_USER to list only human users (the common case for a\n member picker).\n\n### Returns\n\n- `{ metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }; spec: { type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM'; email?: string; name?: string; }; }`\n  A profile identifies a user or non-human principal (such as an API key)\n at the account level. Profiles are account-scoped and can be granted access\n to multiple workspaces.\n\n  - `metadata: { id: string; accountId: string; name: string; profileId: string; externalId?: string; labels?: object; }`\n  - `spec: { type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM'; email?: string; name?: string; }`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\n// Automatically fetches more pages as needed.\nfor await (const profile of client.workspaceAdmin.profiles.list()) {\n  console.log(profile);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.workspaceAdmin.profiles.list',
+        example:
+          "import Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya({\n  apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const profile of client.workspaceAdmin.profiles.list()) {\n  console.log(profile.metadata);\n}",
+      },
+      go: {
+        method: 'client.WorkspaceAdmin.Profiles.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/cadenya/cadenya-go"\n\t"github.com/cadenya/cadenya-go/option"\n)\n\nfunc main() {\n\tclient := cadenya.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.WorkspaceAdmin.Profiles.List(context.TODO(), cadenya.WorkspaceAdminProfileListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'workspace_admin.profiles.list',
+        example:
+          'require "cadenya"\n\ncadenya = Cadenya::Client.new(api_key: "My API Key")\n\npage = cadenya.workspace_admin.profiles.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'profiles list',
+        example: "cadenya workspace-admin:profiles list \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.cadenya.com/v1/account/profiles \\\n    -H "Authorization: Bearer $CADENYA_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'unwrap',
     endpoint: '',
     httpMethod: '',

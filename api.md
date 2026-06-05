@@ -400,6 +400,12 @@ Methods:
 - <code title="post /v1/account/workspaces/{workspaceId}/members">client.workspaceAdmin.members.<a href="./src/resources/workspace-admin/members.ts">add</a>(workspaceID, { ...params }) -> WorkspaceMember</code>
 - <code title="delete /v1/account/workspaces/{workspaceId}/members/{profileId}">client.workspaceAdmin.members.<a href="./src/resources/workspace-admin/members.ts">remove</a>(profileID, { ...params }) -> void</code>
 
+## Profiles
+
+Methods:
+
+- <code title="get /v1/account/profiles">client.workspaceAdmin.profiles.<a href="./src/resources/workspace-admin/profiles.ts">list</a>({ ...params }) -> ProfilesCursorPagination</code>
+
 # Webhooks
 
 Types:
