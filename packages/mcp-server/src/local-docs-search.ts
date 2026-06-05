@@ -3821,12 +3821,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'delete',
     summary: 'Archive a workspace',
     description:
-      'Archives a workspace (soft delete). The workspace is retained, but any subsequent request scoped to it returns a permission error. Admin only.',
+      "Archives a workspace (soft delete). The workspace is retained, but any subsequent request scoped to it returns a permission error. Archiving the account's last active (non-archived) workspace is not allowed and returns FailedPrecondition. Admin only.",
     stainlessPath: '(resource) workspace_admin > (method) archive',
     qualified: 'client.workspaceAdmin.archive',
     params: ['workspaceId: string;'],
     markdown:
-      "## archive\n\n`client.workspaceAdmin.archive(workspaceId: string): void`\n\n**delete** `/v1/account/workspaces/{workspaceId}`\n\nArchives a workspace (soft delete). The workspace is retained, but any subsequent request scoped to it returns a permission error. Admin only.\n\n### Parameters\n\n- `workspaceId: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.workspaceAdmin.archive('workspaceId')\n```",
+      "## archive\n\n`client.workspaceAdmin.archive(workspaceId: string): void`\n\n**delete** `/v1/account/workspaces/{workspaceId}`\n\nArchives a workspace (soft delete). The workspace is retained, but any subsequent request scoped to it returns a permission error. Archiving the account's last active (non-archived) workspace is not allowed and returns FailedPrecondition. Admin only.\n\n### Parameters\n\n- `workspaceId: string`\n\n### Example\n\n```typescript\nimport Cadenya from '@cadenya/cadenya';\n\nconst client = new Cadenya();\n\nawait client.workspaceAdmin.archive('workspaceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.workspaceAdmin.archive',
