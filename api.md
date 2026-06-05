@@ -26,6 +26,12 @@ Methods:
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
 - <code title="post /v1/account/rotate_webhook_signing_key">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
 
+# Profiles
+
+Methods:
+
+- <code title="get /v1/profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfilesCursorPagination</code>
+
 # Agents
 
 Types:
@@ -371,13 +377,25 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/workspaces.ts">Workspace</a></code>
-- <code><a href="./src/resources/workspaces.ts">WorkspaceSpec</a></code>
+- <code><a href="./src/resources/workspaces/workspaces.ts">Workspace</a></code>
+- <code><a href="./src/resources/workspaces/workspaces.ts">WorkspaceMember</a></code>
+- <code><a href="./src/resources/workspaces/workspaces.ts">WorkspaceSpec</a></code>
 
 Methods:
 
-- <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
-- <code title="get /v1/workspaces/current">client.workspaces.<a href="./src/resources/workspaces.ts">get</a>() -> Workspace</code>
+- <code title="post /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces/workspaces.ts">create</a>({ ...params }) -> Workspace</code>
+- <code title="get /v1/workspaces/{id}">client.workspaces.<a href="./src/resources/workspaces/workspaces.ts">retrieve</a>(id) -> Workspace</code>
+- <code title="get /v1/workspaces">client.workspaces.<a href="./src/resources/workspaces/workspaces.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
+- <code title="delete /v1/workspaces/{id}">client.workspaces.<a href="./src/resources/workspaces/workspaces.ts">delete</a>(id) -> void</code>
+- <code title="get /v1/workspaces/current">client.workspaces.<a href="./src/resources/workspaces/workspaces.ts">getCurrent</a>() -> Workspace</code>
+
+## Members
+
+Methods:
+
+- <code title="get /v1/workspaces/{workspaceId}/members">client.workspaces.members.<a href="./src/resources/workspaces/members.ts">list</a>(workspaceID, { ...params }) -> WorkspaceMembersCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/members">client.workspaces.members.<a href="./src/resources/workspaces/members.ts">add</a>(workspaceID, { ...params }) -> WorkspaceMember</code>
+- <code title="delete /v1/workspaces/{workspaceId}/members/{id}">client.workspaces.members.<a href="./src/resources/workspaces/members.ts">remove</a>(id, { ...params }) -> void</code>
 
 # Webhooks
 

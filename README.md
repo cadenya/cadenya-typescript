@@ -137,22 +137,22 @@ List methods in the Cadenya API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllAgents(params) {
-  const allAgents = [];
+async function fetchAllProfiles(params) {
+  const allProfiles = [];
   // Automatically fetches more pages as needed.
-  for await (const agent of client.agents.list('workspaceId')) {
-    allAgents.push(agent);
+  for await (const profile of client.profiles.list()) {
+    allProfiles.push(profile);
   }
-  return allAgents;
+  return allProfiles;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.agents.list('workspaceId');
-for (const agent of page.items) {
-  console.log(agent);
+let page = await client.profiles.list();
+for (const profile of page.items) {
+  console.log(profile);
 }
 
 // Convenience methods are provided for manually paginating:

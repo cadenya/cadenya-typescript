@@ -37,6 +37,7 @@ import {
   Models,
   ModelsCursorPagination,
 } from './resources/models';
+import { ProfileListParams, Profiles } from './resources/profiles';
 import {
   Search,
   SearchSearchToolsOrToolSetsParams,
@@ -63,13 +64,6 @@ import {
   WorkspaceSecrets,
   WorkspaceSecretsCursorPagination,
 } from './resources/workspace-secrets';
-import {
-  Workspace,
-  WorkspaceListParams,
-  WorkspaceSpec,
-  Workspaces,
-  WorkspacesCursorPagination,
-} from './resources/workspaces';
 import {
   Agent,
   AgentCreateParams,
@@ -197,6 +191,15 @@ import {
   ToolSets,
   ToolSetsCursorPagination,
 } from './resources/tool-sets/tool-sets';
+import {
+  Workspace,
+  WorkspaceCreateParams,
+  WorkspaceListParams,
+  WorkspaceMember,
+  WorkspaceSpec,
+  Workspaces,
+  WorkspacesCursorPagination,
+} from './resources/workspaces/workspaces';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -947,6 +950,11 @@ export class Cadenya {
    */
   account: API.AccountResource = new API.AccountResource(this);
   /**
+   * Read account profiles. Profiles are the account-level principals (users and
+   *  API keys) that can be granted access to workspaces.
+   */
+  profiles: API.Profiles = new API.Profiles(this);
+  /**
    * Manage AI agents within a workspace. Agents define AI behavior and tool access.
    */
   agents: API.Agents = new API.Agents(this);
@@ -988,6 +996,8 @@ export class Cadenya {
   /**
    * Manage workspaces within an account. Workspaces provide organizational
    *  grouping and isolation for resources such as agents, tools, and API keys.
+   *  Workspace creation, archival, and membership management require an account
+   *  administrator (a token whose profile holds the admin role).
    */
   workspaces: API.Workspaces = new API.Workspaces(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
@@ -1000,6 +1010,7 @@ export class Cadenya {
 }
 
 Cadenya.AccountResource = AccountResource;
+Cadenya.Profiles = Profiles;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.MemoryLayers = MemoryLayers;
@@ -1031,6 +1042,8 @@ export declare namespace Cadenya {
     type ProfileSpec as ProfileSpec,
     type RotateWebhookSigningKeyResponse as RotateWebhookSigningKeyResponse,
   };
+
+  export { Profiles as Profiles, type ProfileListParams as ProfileListParams };
 
   export {
     Agents as Agents,
@@ -1185,8 +1198,10 @@ export declare namespace Cadenya {
   export {
     Workspaces as Workspaces,
     type Workspace as Workspace,
+    type WorkspaceMember as WorkspaceMember,
     type WorkspaceSpec as WorkspaceSpec,
     type WorkspacesCursorPagination as WorkspacesCursorPagination,
+    type WorkspaceCreateParams as WorkspaceCreateParams,
     type WorkspaceListParams as WorkspaceListParams,
   };
 
