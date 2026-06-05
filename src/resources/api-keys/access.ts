@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as WorkspacesAPI from '../workspaces';
+import { WorkspacesCursorPagination } from '../workspaces';
 import * as APIKeysAPI from './api-keys';
-import * as WorkspacesAPI from '../workspaces/workspaces';
-import { WorkspacesCursorPagination } from '../workspaces/workspaces';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';

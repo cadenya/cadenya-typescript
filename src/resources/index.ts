@@ -19,7 +19,6 @@ export {
   type Profile,
   type ProfileSpec,
   type RotateWebhookSigningKeyResponse,
-  type ProfilesCursorPagination,
 } from './account';
 export {
   Agents,
@@ -118,7 +117,6 @@ export {
   type ObjectiveContextWindowsCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
-export { Profiles, type ProfileListParams } from './profiles';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,
@@ -163,6 +161,13 @@ export {
 } from './uploads';
 export { Webhooks, type UnsafeUnwrapWebhookEvent, type UnwrapWebhookEvent } from './webhooks';
 export {
+  WorkspaceAdmin,
+  type WorkspaceMember,
+  type WorkspaceAdminCreateParams,
+  type WorkspaceAdminListParams,
+  type WorkspaceMembersCursorPagination,
+} from './workspace-admin/workspace-admin';
+export {
   WorkspaceSecrets,
   type WorkspaceSecret,
   type WorkspaceSecretInfo,
@@ -177,10 +182,7 @@ export {
 export {
   Workspaces,
   type Workspace,
-  type WorkspaceMember,
   type WorkspaceSpec,
-  type WorkspaceCreateParams,
   type WorkspaceListParams,
   type WorkspacesCursorPagination,
-  type WorkspaceMembersCursorPagination,
-} from './workspaces/workspaces';
+} from './workspaces';
