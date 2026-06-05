@@ -2,12 +2,9 @@
 
 export { Members, type MemberListParams, type MemberAddParams, type MemberRemoveParams } from './members';
 export {
-  Workspaces,
-  type Workspace,
+  WorkspaceAdmin,
   type WorkspaceMember,
-  type WorkspaceSpec,
-  type WorkspaceCreateParams,
-  type WorkspaceListParams,
-  type WorkspacesCursorPagination,
+  type WorkspaceAdminCreateParams,
+  type WorkspaceAdminListParams,
   type WorkspaceMembersCursorPagination,
-} from './workspaces';
+} from './workspace-admin';
