@@ -530,6 +530,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/account/workspaces/{workspaceId}',
   },
   {
+    clientCallName: 'client.workspaceAdmin.update',
+    fullyQualifiedName: 'workspaceAdmin.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/account/workspaces/{workspaceId}',
+  },
+  {
     clientCallName: 'client.workspaceAdmin.list',
     fullyQualifiedName: 'workspaceAdmin.list',
     httpMethod: 'get',
