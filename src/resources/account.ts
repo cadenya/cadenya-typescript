@@ -2,9 +2,10 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import * as WorkspacesAPI from './workspaces';
 import * as APIKeysAPI from './api-keys/api-keys';
+import * as WorkspacesAPI from './workspaces/workspaces';
 import { APIPromise } from '../core/api-promise';
+import { CursorPagination } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -27,6 +28,8 @@ export class AccountResource extends APIResource {
     return this._client.post('/v1/account/rotate_webhook_signing_key', options);
   }
 }
+
+export type ProfilesCursorPagination = CursorPagination<Profile>;
 
 /**
  * An account, the top-level organizational unit. Contains workspaces and
