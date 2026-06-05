@@ -19,6 +19,7 @@ export {
   type Profile,
   type ProfileSpec,
   type RotateWebhookSigningKeyResponse,
+  type ProfilesCursorPagination,
 } from './account';
 export {
   Agents,
@@ -117,6 +118,7 @@ export {
   type ObjectiveContextWindowsCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
+export { Profiles, type ProfileListParams } from './profiles';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,
@@ -175,7 +177,10 @@ export {
 export {
   Workspaces,
   type Workspace,
+  type WorkspaceMember,
   type WorkspaceSpec,
+  type WorkspaceCreateParams,
   type WorkspaceListParams,
   type WorkspacesCursorPagination,
-} from './workspaces';
+  type WorkspaceMembersCursorPagination,
+} from './workspaces/workspaces';
