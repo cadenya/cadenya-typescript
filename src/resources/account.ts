@@ -110,7 +110,7 @@ export interface ProfileSpec {
   /**
    * Whether this profile represents a human user, an API key, or a system principal.
    */
-  type: 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
+  type: 'PROFILE_TYPE_UNSPECIFIED' | 'PROFILE_TYPE_USER' | 'PROFILE_TYPE_API_KEY' | 'PROFILE_TYPE_SYSTEM';
 
   /**
    * Email address of the profile. Required and unique within an account for user
