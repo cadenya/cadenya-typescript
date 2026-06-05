@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.82.0 (2026-06-05)
+
+Full Changelog: [v0.81.0...v0.82.0](https://github.com/cadenya/cadenya-typescript/compare/v0.81.0...v0.82.0)
+
+### Features
+
+* Add admin profile search (workspaceAdmin.profiles.list) — ENG-308 ([6fe0e8f](https://github.com/cadenya/cadenya-typescript/commit/6fe0e8fd12c2321904af749f222b9b7be53e776c))
+
 ## 0.81.0 (2026-06-05)
 
 Full Changelog: [v0.80.0...v0.81.0](https://github.com/cadenya/cadenya-typescript/compare/v0.80.0...v0.81.0)
