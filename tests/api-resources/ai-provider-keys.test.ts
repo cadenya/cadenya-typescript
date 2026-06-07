@@ -34,8 +34,8 @@ describe('resource aiProviderKeys', () => {
       },
       spec: {
         apiKey: 'apiKey',
-        provider: 'provider',
-        region: 'region',
+        openrouter: {},
+        provider: 'AI_PROVIDER_UNSPECIFIED',
       },
     });
   });
@@ -81,8 +81,8 @@ describe('resource aiProviderKeys', () => {
       },
       spec: {
         apiKey: 'apiKey',
-        provider: 'provider',
-        region: 'region',
+        openrouter: {},
+        provider: 'AI_PROVIDER_UNSPECIFIED',
       },
       updateMask: 'updateMask',
     });
@@ -108,6 +108,7 @@ describe('resource aiProviderKeys', () => {
         'workspaceId',
         {
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           query: 'query',

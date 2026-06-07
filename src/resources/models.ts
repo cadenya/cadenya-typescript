@@ -56,6 +56,33 @@ export interface Model {
    * Model specification
    */
   spec: ModelSpec;
+
+  /**
+   * ModelInfo carries server-derived, read-only details about a model.
+   */
+  info?: Model.Info;
+}
+
+export namespace Model {
+  /**
+   * ModelInfo carries server-derived, read-only details about a model.
+   */
+  export interface Info {
+    /**
+     * BareMetadata contains the minimal metadata for a resource: the ID and an
+     * optional human-readable name. These are used for reference fields where the full
+     * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+     * e.g., the tool references inside an agent variation spec or the tools assigned
+     * to an objective. Both fields are server-populated; clients provide IDs through
+     * sibling fields rather than by constructing a BareMetadata themselves.
+     */
+    aiProviderKey?: Shared.BareMetadata;
+
+    /**
+     * The AI provider this model routes through (via its provider key).
+     */
+    provider?: 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER';
+  }
 }
 
 export interface ModelSpec {
@@ -104,9 +131,21 @@ export interface ModelRetrieveParams {
 
 export interface ModelListParams extends CursorPaginationParams {
   /**
+   * Filter to models provisioned on a specific AI provider key. Accepts the key's id
+   * or an "external_id:"-prefixed slug.
+   */
+  aiProviderKeyId?: string;
+
+  /**
    * Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
+
+  /**
+   * When true, populate each item's info (e.g. the AI provider), at the cost of
+   * extra lookups.
+   */
+  includeInfo?: boolean;
 
   /**
    * Filter by name prefix
