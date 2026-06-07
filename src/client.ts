@@ -29,6 +29,17 @@ import {
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
+  AIProviderKey,
+  AIProviderKeyCreateParams,
+  AIProviderKeyDeleteParams,
+  AIProviderKeyListParams,
+  AIProviderKeyRetrieveParams,
+  AIProviderKeySpec,
+  AIProviderKeyUpdateParams,
+  AIProviderKeys,
+  AIProviderKeysCursorPagination,
+} from './resources/ai-provider-keys';
+import {
   Model,
   ModelListParams,
   ModelRetrieveParams,
@@ -948,6 +959,7 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
+  aiProviderKeys: API.AIProviderKeys = new API.AIProviderKeys(this);
   /**
    * Manage the authenticated account. Accounts are the top-level organizational
    *  unit and contain one or more workspaces.
@@ -1019,6 +1031,7 @@ export class Cadenya {
   bulkWorkspaceResources: API.BulkWorkspaceResources = new API.BulkWorkspaceResources(this);
 }
 
+Cadenya.AIProviderKeys = AIProviderKeys;
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
@@ -1041,6 +1054,18 @@ export declare namespace Cadenya {
   export {
     type CursorPaginationParams as CursorPaginationParams,
     type CursorPaginationResponse as CursorPaginationResponse,
+  };
+
+  export {
+    AIProviderKeys as AIProviderKeys,
+    type AIProviderKey as AIProviderKey,
+    type AIProviderKeySpec as AIProviderKeySpec,
+    type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,
+    type AIProviderKeyCreateParams as AIProviderKeyCreateParams,
+    type AIProviderKeyRetrieveParams as AIProviderKeyRetrieveParams,
+    type AIProviderKeyUpdateParams as AIProviderKeyUpdateParams,
+    type AIProviderKeyListParams as AIProviderKeyListParams,
+    type AIProviderKeyDeleteParams as AIProviderKeyDeleteParams,
   };
 
   export {

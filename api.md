@@ -10,6 +10,21 @@ Types:
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
 
+# AIProviderKeys
+
+Types:
+
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKey</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKeySpec</a></code>
+
+Methods:
+
+- <code title="post /v1/workspaces/{workspaceId}/ai_provider_keys">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">create</a>(workspaceID, { ...params }) -> AIProviderKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">retrieve</a>(id, { ...params }) -> AIProviderKey</code>
+- <code title="patch /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">update</a>(id, { ...params }) -> AIProviderKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/ai_provider_keys">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">list</a>(workspaceID, { ...params }) -> AIProviderKeysCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">delete</a>(id, { ...params }) -> void</code>
+
 # Account
 
 Types:

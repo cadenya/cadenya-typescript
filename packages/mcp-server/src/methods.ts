@@ -11,6 +11,36 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
+    clientCallName: 'client.aiProviderKeys.create',
+    fullyQualifiedName: 'aiProviderKeys.create',
+    httpMethod: 'post',
+    httpPath: '/v1/workspaces/{workspaceId}/ai_provider_keys',
+  },
+  {
+    clientCallName: 'client.aiProviderKeys.retrieve',
+    fullyQualifiedName: 'aiProviderKeys.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/workspaces/{workspaceId}/ai_provider_keys/{id}',
+  },
+  {
+    clientCallName: 'client.aiProviderKeys.update',
+    fullyQualifiedName: 'aiProviderKeys.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/workspaces/{workspaceId}/ai_provider_keys/{id}',
+  },
+  {
+    clientCallName: 'client.aiProviderKeys.list',
+    fullyQualifiedName: 'aiProviderKeys.list',
+    httpMethod: 'get',
+    httpPath: '/v1/workspaces/{workspaceId}/ai_provider_keys',
+  },
+  {
+    clientCallName: 'client.aiProviderKeys.delete',
+    fullyQualifiedName: 'aiProviderKeys.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/workspaces/{workspaceId}/ai_provider_keys/{id}',
+  },
+  {
     clientCallName: 'client.account.retrieve',
     fullyQualifiedName: 'account.retrieve',
     httpMethod: 'get',
