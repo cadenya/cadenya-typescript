@@ -272,12 +272,14 @@ Types:
 
 - <code><a href="./src/resources/models.ts">Model</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpec</a></code>
+- <code><a href="./src/resources/models.ts">ModelSwapResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/workspaces/{workspaceId}/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id, { ...params }) -> Model</code>
 - <code title="get /v1/workspaces/{workspaceId}/models">client.models.<a href="./src/resources/models.ts">list</a>(workspaceID, { ...params }) -> ModelsCursorPagination</code>
 - <code title="put /v1/workspaces/{workspaceId}/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
+- <code title="post /v1/workspaces/{workspaceId}/models:swapModelOnVariations">client.models.<a href="./src/resources/models.ts">swap</a>(workspaceID, { ...params }) -> unknown</code>
 
 # Search
 

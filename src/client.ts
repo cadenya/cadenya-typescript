@@ -45,6 +45,8 @@ import {
   ModelRetrieveParams,
   ModelSetStatusParams,
   ModelSpec,
+  ModelSwapParams,
+  ModelSwapResponse,
   Models,
   ModelsCursorPagination,
 } from './resources/models';
@@ -1162,10 +1164,12 @@ export declare namespace Cadenya {
     Models as Models,
     type Model as Model,
     type ModelSpec as ModelSpec,
+    type ModelSwapResponse as ModelSwapResponse,
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
     type ModelSetStatusParams as ModelSetStatusParams,
+    type ModelSwapParams as ModelSwapParams,
   };
 
   export {

@@ -374,6 +374,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/workspaces/{workspaceId}/models/{id}/status',
   },
   {
+    clientCallName: 'client.models.swap',
+    fullyQualifiedName: 'models.swap',
+    httpMethod: 'post',
+    httpPath: '/v1/workspaces/{workspaceId}/models:swapModelOnVariations',
+  },
+  {
     clientCallName: 'client.search.searchToolsOrToolSets',
     fullyQualifiedName: 'search.searchToolsOrToolSets',
     httpMethod: 'get',
