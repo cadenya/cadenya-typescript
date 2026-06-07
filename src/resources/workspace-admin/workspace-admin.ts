@@ -40,6 +40,17 @@ export class WorkspaceAdmin extends APIResource {
   }
 
   /**
+   * Updates a workspace's metadata (e.g. name) and spec. Admin only.
+   */
+  update(
+    workspaceID: string,
+    body: WorkspaceAdminUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<WorkspacesAPI.Workspace> {
+    return this._client.patch(path`/v1/account/workspaces/${workspaceID}`, { body, ...options });
+  }
+
+  /**
    * Lists every workspace in the account, optionally including archived ones. Admin
    * only.
    */
@@ -137,6 +148,48 @@ export namespace WorkspaceAdminCreateParams {
   }
 }
 
+export interface WorkspaceAdminUpdateParams {
+  /**
+   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
+   */
+  metadata?: WorkspaceAdminUpdateParams.Metadata;
+
+  spec?: WorkspacesAPI.WorkspaceSpec;
+
+  /**
+   * Fields to update.
+   */
+  updateMask?: string;
+}
+
+export namespace WorkspaceAdminUpdateParams {
+  /**
+   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
+   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
+   * excluded since they are set by the server.
+   */
+  export interface Metadata {
+    /**
+     * Human-readable name for the resource (e.g., "Production API Key", "Staging
+     * Workspace")
+     */
+    name: string;
+
+    /**
+     * External ID for the resource (e.g., a workflow ID from an external system)
+     */
+    externalId?: string;
+
+    /**
+     * Arbitrary key-value pairs for categorization and filtering Examples:
+     * {"environment": "production", "team": "platform", "version": "v2"}
+     */
+    labels?: { [key: string]: string };
+  }
+}
+
 export interface WorkspaceAdminListParams extends CursorPaginationParams {
   /**
    * When true, archived workspaces are included in the results. Defaults to false
@@ -152,6 +205,7 @@ export declare namespace WorkspaceAdmin {
   export {
     type WorkspaceMember as WorkspaceMember,
     type WorkspaceAdminCreateParams as WorkspaceAdminCreateParams,
+    type WorkspaceAdminUpdateParams as WorkspaceAdminUpdateParams,
     type WorkspaceAdminListParams as WorkspaceAdminListParams,
   };
 

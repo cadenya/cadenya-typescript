@@ -29,7 +29,6 @@ describe('resource profiles', () => {
           cursor: 'cursor',
           limit: 0,
           query: 'query',
-          type: 'PROFILE_TYPE_USER',
         },
         { path: '/_stainless_unknown_path' },
       ),

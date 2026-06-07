@@ -7,10 +7,10 @@ const client = new Cadenya({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource workspaceAdmin', () => {
+describe('resource aiProviderKeys', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.create({
+    const responsePromise = client.aiProviderKeys.create('workspaceId', {
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,19 +25,24 @@ describe('resource workspaceAdmin', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.workspaceAdmin.create({
+    const response = await client.aiProviderKeys.create('workspaceId', {
       metadata: {
         name: 'name',
+        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { description: 'description' },
+      spec: {
+        apiKey: 'apiKey',
+        openrouter: {},
+        provider: 'AI_PROVIDER_UNSPECIFIED',
+      },
     });
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.workspaceAdmin.retrieve('workspaceId');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.aiProviderKeys.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,8 +53,13 @@ describe('resource workspaceAdmin', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.workspaceAdmin.update('workspaceId', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.aiProviderKeys.retrieve('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.aiProviderKeys.update('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,11 +67,30 @@ describe('resource workspaceAdmin', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.aiProviderKeys.update('id', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: {
+        apiKey: 'apiKey',
+        openrouter: {},
+        provider: 'AI_PROVIDER_UNSPECIFIED',
+      },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.workspaceAdmin.list();
+    const responsePromise = client.aiProviderKeys.list('workspaceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -75,11 +104,15 @@ describe('resource workspaceAdmin', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.workspaceAdmin.list(
+      client.aiProviderKeys.list(
+        'workspaceId',
         {
           cursor: 'cursor',
-          includeArchived: true,
+          includeInfo: true,
           limit: 0,
+          prefix: 'prefix',
+          query: 'query',
+          sortOrder: 'sortOrder',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -87,8 +120,8 @@ describe('resource workspaceAdmin', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('archive', async () => {
-    const responsePromise = client.workspaceAdmin.archive('workspaceId');
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.aiProviderKeys.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -96,5 +129,10 @@ describe('resource workspaceAdmin', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.aiProviderKeys.delete('id', { workspaceId: 'workspaceId' });
   });
 });

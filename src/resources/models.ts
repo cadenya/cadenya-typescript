@@ -42,6 +42,17 @@ export class Models extends APIResource {
     const { workspaceId, ...body } = params;
     return this._client.put(path`/v1/workspaces/${workspaceId}/models/${id}/status`, { body, ...options });
   }
+
+  /**
+   * Reassigns agent variations from one model to another in bulk. Runs
+   * asynchronously and returns immediately.
+   */
+  swap(workspaceID: string, body: ModelSwapParams, options?: RequestOptions): APIPromise<unknown> {
+    return this._client.post(path`/v1/workspaces/${workspaceID}/models:swapModelOnVariations`, {
+      body,
+      ...options,
+    });
+  }
 }
 
 export type ModelsCursorPagination = CursorPagination<Model>;
@@ -56,6 +67,39 @@ export interface Model {
    * Model specification
    */
   spec: ModelSpec;
+
+  /**
+   * ModelInfo carries server-derived, read-only details about a model.
+   */
+  info?: Model.Info;
+}
+
+export namespace Model {
+  /**
+   * ModelInfo carries server-derived, read-only details about a model.
+   */
+  export interface Info {
+    /**
+     * Number of agent variations currently provisioned on this model. Useful for
+     * previewing how many variations a swap would affect.
+     */
+    agentVariationCount?: number;
+
+    /**
+     * BareMetadata contains the minimal metadata for a resource: the ID and an
+     * optional human-readable name. These are used for reference fields where the full
+     * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+     * e.g., the tool references inside an agent variation spec or the tools assigned
+     * to an objective. Both fields are server-populated; clients provide IDs through
+     * sibling fields rather than by constructing a BareMetadata themselves.
+     */
+    aiProviderKey?: Shared.BareMetadata;
+
+    /**
+     * The AI provider this model routes through (via its provider key).
+     */
+    provider?: 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER';
+  }
 }
 
 export interface ModelSpec {
@@ -95,6 +139,12 @@ export interface ModelSpec {
   status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
 }
 
+/**
+ * Swap model on variations response. Empty: the work runs asynchronously, so no
+ * counts are returned (a large data set would make the call slow).
+ */
+export type ModelSwapResponse = unknown;
+
 export interface ModelRetrieveParams {
   /**
    * Workspace ID.
@@ -104,9 +154,21 @@ export interface ModelRetrieveParams {
 
 export interface ModelListParams extends CursorPaginationParams {
   /**
+   * Filter to models provisioned on a specific AI provider key. Accepts the key's id
+   * or an "external_id:"-prefixed slug.
+   */
+  aiProviderKeyId?: string;
+
+  /**
    * Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
+
+  /**
+   * When true, populate each item's info (e.g. the AI provider), at the cost of
+   * extra lookups.
+   */
+  includeInfo?: boolean;
 
   /**
    * Filter by name prefix
@@ -141,13 +203,36 @@ export interface ModelSetStatusParams {
   status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
 }
 
+export interface ModelSwapParams {
+  /**
+   * The swaps to perform.
+   */
+  modelSwaps?: Array<ModelSwapParams.ModelSwap>;
+}
+
+export namespace ModelSwapParams {
+  export interface ModelSwap {
+    /**
+     * The model variations are currently on. Accepts an id or "external_id:" slug.
+     */
+    currentModelId?: string;
+
+    /**
+     * The model to move variations to. Accepts an id or "external_id:" slug.
+     */
+    nextModelId?: string;
+  }
+}
+
 export declare namespace Models {
   export {
     type Model as Model,
     type ModelSpec as ModelSpec,
+    type ModelSwapResponse as ModelSwapResponse,
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
     type ModelSetStatusParams as ModelSetStatusParams,
+    type ModelSwapParams as ModelSwapParams,
   };
 }

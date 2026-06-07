@@ -108,6 +108,11 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
+    'client.aiProviderKeys.create',
+    'client.aiProviderKeys.delete',
+    'client.aiProviderKeys.list',
+    'client.aiProviderKeys.retrieve',
+    'client.aiProviderKeys.update',
     'client.account.retrieve',
     'client.account.rotateWebhookSigningKey',
     'client.agents.create',
@@ -163,6 +168,7 @@ const fuse = new Fuse(
     'client.models.list',
     'client.models.retrieve',
     'client.models.setStatus',
+    'client.models.swap',
     'client.search.searchToolsOrToolSets',
     'client.toolSets.create',
     'client.toolSets.delete',
@@ -196,6 +202,7 @@ const fuse = new Fuse(
     'client.workspaceAdmin.create',
     'client.workspaceAdmin.list',
     'client.workspaceAdmin.retrieve',
+    'client.workspaceAdmin.update',
     'client.workspaceAdmin.members.add',
     'client.workspaceAdmin.members.list',
     'client.workspaceAdmin.members.remove',

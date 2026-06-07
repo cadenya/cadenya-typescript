@@ -29,11 +29,24 @@ import {
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
+  AIProviderKey,
+  AIProviderKeyCreateParams,
+  AIProviderKeyDeleteParams,
+  AIProviderKeyListParams,
+  AIProviderKeyRetrieveParams,
+  AIProviderKeySpec,
+  AIProviderKeyUpdateParams,
+  AIProviderKeys,
+  AIProviderKeysCursorPagination,
+} from './resources/ai-provider-keys';
+import {
   Model,
   ModelListParams,
   ModelRetrieveParams,
   ModelSetStatusParams,
   ModelSpec,
+  ModelSwapParams,
+  ModelSwapResponse,
   Models,
   ModelsCursorPagination,
 } from './resources/models';
@@ -201,6 +214,7 @@ import {
   WorkspaceAdmin,
   WorkspaceAdminCreateParams,
   WorkspaceAdminListParams,
+  WorkspaceAdminUpdateParams,
   WorkspaceMember,
 } from './resources/workspace-admin/workspace-admin';
 import { type Fetch } from './internal/builtin-types';
@@ -947,6 +961,7 @@ export class Cadenya {
 
   static toFile = Uploads.toFile;
 
+  aiProviderKeys: API.AIProviderKeys = new API.AIProviderKeys(this);
   /**
    * Manage the authenticated account. Accounts are the top-level organizational
    *  unit and contain one or more workspaces.
@@ -1018,6 +1033,7 @@ export class Cadenya {
   bulkWorkspaceResources: API.BulkWorkspaceResources = new API.BulkWorkspaceResources(this);
 }
 
+Cadenya.AIProviderKeys = AIProviderKeys;
 Cadenya.AccountResource = AccountResource;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
@@ -1040,6 +1056,18 @@ export declare namespace Cadenya {
   export {
     type CursorPaginationParams as CursorPaginationParams,
     type CursorPaginationResponse as CursorPaginationResponse,
+  };
+
+  export {
+    AIProviderKeys as AIProviderKeys,
+    type AIProviderKey as AIProviderKey,
+    type AIProviderKeySpec as AIProviderKeySpec,
+    type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,
+    type AIProviderKeyCreateParams as AIProviderKeyCreateParams,
+    type AIProviderKeyRetrieveParams as AIProviderKeyRetrieveParams,
+    type AIProviderKeyUpdateParams as AIProviderKeyUpdateParams,
+    type AIProviderKeyListParams as AIProviderKeyListParams,
+    type AIProviderKeyDeleteParams as AIProviderKeyDeleteParams,
   };
 
   export {
@@ -1136,10 +1164,12 @@ export declare namespace Cadenya {
     Models as Models,
     type Model as Model,
     type ModelSpec as ModelSpec,
+    type ModelSwapResponse as ModelSwapResponse,
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
     type ModelSetStatusParams as ModelSetStatusParams,
+    type ModelSwapParams as ModelSwapParams,
   };
 
   export {
@@ -1214,6 +1244,7 @@ export declare namespace Cadenya {
     WorkspaceAdmin as WorkspaceAdmin,
     type WorkspaceMember as WorkspaceMember,
     type WorkspaceAdminCreateParams as WorkspaceAdminCreateParams,
+    type WorkspaceAdminUpdateParams as WorkspaceAdminUpdateParams,
     type WorkspaceAdminListParams as WorkspaceAdminListParams,
   };
 

@@ -2,6 +2,17 @@
 
 export * from './shared';
 export {
+  AIProviderKeys,
+  type AIProviderKey,
+  type AIProviderKeySpec,
+  type AIProviderKeyCreateParams,
+  type AIProviderKeyRetrieveParams,
+  type AIProviderKeyUpdateParams,
+  type AIProviderKeyListParams,
+  type AIProviderKeyDeleteParams,
+  type AIProviderKeysCursorPagination,
+} from './ai-provider-keys';
+export {
   APIKeys,
   type APIKey,
   type APIKeyInfo,
@@ -70,9 +81,11 @@ export {
   Models,
   type Model,
   type ModelSpec,
+  type ModelSwapResponse,
   type ModelRetrieveParams,
   type ModelListParams,
   type ModelSetStatusParams,
+  type ModelSwapParams,
   type ModelsCursorPagination,
 } from './models';
 export {
@@ -165,6 +178,7 @@ export {
   WorkspaceAdmin,
   type WorkspaceMember,
   type WorkspaceAdminCreateParams,
+  type WorkspaceAdminUpdateParams,
   type WorkspaceAdminListParams,
   type WorkspaceMembersCursorPagination,
 } from './workspace-admin/workspace-admin';

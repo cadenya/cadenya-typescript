@@ -10,6 +10,21 @@ Types:
 - <code><a href="./src/resources/shared.ts">ResourceMetadata</a></code>
 - <code><a href="./src/resources/shared.ts">UpdateResourceMetadata</a></code>
 
+# AIProviderKeys
+
+Types:
+
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKey</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKeySpec</a></code>
+
+Methods:
+
+- <code title="post /v1/workspaces/{workspaceId}/ai_provider_keys">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">create</a>(workspaceID, { ...params }) -> AIProviderKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">retrieve</a>(id, { ...params }) -> AIProviderKey</code>
+- <code title="patch /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">update</a>(id, { ...params }) -> AIProviderKey</code>
+- <code title="get /v1/workspaces/{workspaceId}/ai_provider_keys">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">list</a>(workspaceID, { ...params }) -> AIProviderKeysCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/ai_provider_keys/{id}">client.aiProviderKeys.<a href="./src/resources/ai-provider-keys.ts">delete</a>(id, { ...params }) -> void</code>
+
 # Account
 
 Types:
@@ -257,12 +272,14 @@ Types:
 
 - <code><a href="./src/resources/models.ts">Model</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpec</a></code>
+- <code><a href="./src/resources/models.ts">ModelSwapResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/workspaces/{workspaceId}/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id, { ...params }) -> Model</code>
 - <code title="get /v1/workspaces/{workspaceId}/models">client.models.<a href="./src/resources/models.ts">list</a>(workspaceID, { ...params }) -> ModelsCursorPagination</code>
 - <code title="put /v1/workspaces/{workspaceId}/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
+- <code title="post /v1/workspaces/{workspaceId}/models:swapModelOnVariations">client.models.<a href="./src/resources/models.ts">swap</a>(workspaceID, { ...params }) -> unknown</code>
 
 # Search
 
@@ -389,6 +406,7 @@ Methods:
 
 - <code title="post /v1/account/workspaces">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">create</a>({ ...params }) -> Workspace</code>
 - <code title="get /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">retrieve</a>(workspaceID) -> Workspace</code>
+- <code title="patch /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">update</a>(workspaceID, { ...params }) -> Workspace</code>
 - <code title="get /v1/account/workspaces">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">list</a>({ ...params }) -> WorkspacesCursorPagination</code>
 - <code title="delete /v1/account/workspaces/{workspaceId}">client.workspaceAdmin.<a href="./src/resources/workspace-admin/workspace-admin.ts">archive</a>(workspaceID) -> void</code>
 
