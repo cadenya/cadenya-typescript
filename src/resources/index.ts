@@ -81,9 +81,11 @@ export {
   Models,
   type Model,
   type ModelSpec,
+  type ModelSwapResponse,
   type ModelRetrieveParams,
   type ModelListParams,
   type ModelSetStatusParams,
+  type ModelSwapParams,
   type ModelsCursorPagination,
 } from './models';
 export {

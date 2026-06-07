@@ -168,6 +168,7 @@ const fuse = new Fuse(
     'client.models.list',
     'client.models.retrieve',
     'client.models.setStatus',
+    'client.models.swap',
     'client.search.searchToolsOrToolSets',
     'client.toolSets.create',
     'client.toolSets.delete',
