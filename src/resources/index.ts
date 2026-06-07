@@ -2,6 +2,17 @@
 
 export * from './shared';
 export {
+  AIProviderKeys,
+  type AIProviderKey,
+  type AIProviderKeySpec,
+  type AIProviderKeyCreateParams,
+  type AIProviderKeyRetrieveParams,
+  type AIProviderKeyUpdateParams,
+  type AIProviderKeyListParams,
+  type AIProviderKeyDeleteParams,
+  type AIProviderKeysCursorPagination,
+} from './ai-provider-keys';
+export {
   APIKeys,
   type APIKey,
   type APIKeyInfo,
