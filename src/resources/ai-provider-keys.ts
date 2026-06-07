@@ -83,6 +83,30 @@ export interface AIProviderKey {
   metadata: Shared.ResourceMetadata;
 
   spec: AIProviderKeySpec;
+
+  /**
+   * AIProviderKeyInfo carries server-derived, read-only details about a key, for AI
+   * provider management UIs.
+   */
+  info?: AIProviderKey.Info;
+}
+
+export namespace AIProviderKey {
+  /**
+   * AIProviderKeyInfo carries server-derived, read-only details about a key, for AI
+   * provider management UIs.
+   */
+  export interface Info {
+    /**
+     * Number of disabled models provisioned on this key.
+     */
+    disabledModelCount?: number;
+
+    /**
+     * Number of enabled models provisioned on this key.
+     */
+    enabledModelCount?: number;
+  }
 }
 
 export interface AIProviderKeySpec {
@@ -93,14 +117,16 @@ export interface AIProviderKeySpec {
   apiKey?: string;
 
   /**
-   * The AI provider this key authenticates against. Currently "openrouter".
+   * OpenRouterConfig holds OpenRouter-specific settings. Empty for now; it exists as
+   * the oneof seam so provider-specific options (region, base URL, etc.) can be
+   * added later without restructuring the spec.
    */
-  provider?: string;
+  openrouter?: unknown;
 
   /**
-   * The provider region. "us" or "eu". Defaults to "us".
+   * The AI provider this key authenticates against.
    */
-  region?: string;
+  provider?: 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER';
 }
 
 export interface AIProviderKeyCreateParams {
@@ -147,6 +173,12 @@ export interface AIProviderKeyUpdateParams {
 }
 
 export interface AIProviderKeyListParams extends CursorPaginationParams {
+  /**
+   * When true, populate each item's info (model counts), at the cost of extra
+   * lookups.
+   */
+  includeInfo?: boolean;
+
   /**
    * Filter expression (query param: prefix)
    */

@@ -44,8 +44,10 @@ describe('resource models', () => {
       client.models.list(
         'workspaceId',
         {
+          aiProviderKeyId: 'aiProviderKeyId',
           bundleKey: 'bundleKey',
           cursor: 'cursor',
+          includeInfo: true,
           limit: 0,
           prefix: 'prefix',
           query: 'query',
