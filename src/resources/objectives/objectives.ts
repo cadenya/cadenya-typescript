@@ -5,6 +5,7 @@ import * as ObjectivesAPI from './objectives';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as AgentsAPI from '../agents/agents';
+import * as SchedulesAPI from '../agents/schedules';
 import * as VariationsAPI from '../agents/variations';
 import * as FeedbackAPI from './feedback';
 import {
@@ -89,7 +90,7 @@ export class Objectives extends APIResource {
     options?: RequestOptions,
   ): APIPromise<Objective> {
     const { workspaceId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/cancel`, {
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:cancel`, {
       body,
       ...options,
     });
@@ -105,7 +106,7 @@ export class Objectives extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ObjectiveCompactResponse> {
     const { workspaceId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/compact`, {
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:compact`, {
       body,
       ...options,
     });
@@ -120,7 +121,7 @@ export class Objectives extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ObjectiveContinueResponse> {
     const { workspaceId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/continue`, {
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:continue`, {
       body,
       ...options,
     });
@@ -276,8 +277,23 @@ export interface MemoryReference {
   memoryLayerId?: string;
 }
 
+/**
+ * Objective is the data for an objective. It contains the snapshotted fields for
+ * the selected agent and variation. Secrets are returned only with their names,
+ * and the output definition is copied from the agent's configuration.
+ */
 export interface Objective {
-  data: ObjectiveData;
+  /**
+   * ObjectiveConfigSnapshot is the point-in-time snapshot of the agent, variation,
+   * and (when applicable) schedule that an objective was started with.
+   */
+  configSnapshot: ObjectiveConfigSnapshot;
+
+  /**
+   * The initial message sent to the agent. This becomes the first user message in
+   * the LLM chat history.
+   */
+  initialMessage: string;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -285,7 +301,27 @@ export interface Objective {
    */
   metadata: Shared.OperationMetadata;
 
-  status: ObjectiveStatus;
+  /**
+   * The current lifecycle state of the objective.
+   */
+  state:
+    | 'STATE_UNSPECIFIED'
+    | 'STATE_PENDING'
+    | 'STATE_RUNNING'
+    | 'STATE_WAITING'
+    | 'STATE_FAILED'
+    | 'STATE_CANCELLED'
+    | 'STATE_FINALIZED';
+
+  /**
+   * system_prompt is read-only, derived from the selected variation's prompt
+   */
+  systemPrompt: string;
+
+  /**
+   * Arbitrary data for the objective
+   */
+  data?: { [key: string]: unknown };
 
   /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
@@ -294,11 +330,69 @@ export interface Objective {
   info?: ObjectiveInfo;
 
   /**
-   * Read-only list of the last five windows of execution for this objective, ordered
-   * by most recent first. Is only included in singular RPC calls (GetObjective, for
-   * example).
+   * Memory layers/entries to push onto this objective's memory stack on top of the
+   * baseline stack inherited from the selected variation.
+   *
+   * Array order is push order: the first element sits lower in the objective's
+   * contribution to the stack; the LAST element ends up on top of the effective
+   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
+   * position.
+   *
+   * System-managed layers (e.g., episodic) cannot be referenced here; they attach
+   * themselves automatically based on episodic_key.
+   *
+   * Stack size cap: the TOTAL effective stack (variation's memory layers
+   *
+   * - this field) must not exceed 10 entries. A request that would produce an
+   *   effective stack larger than 10 is rejected with InvalidArgument.
    */
-  lastFiveWindows?: Array<ObjectiveContextWindow>;
+  memoryStack?: Array<MemoryReference>;
+
+  /**
+   * The output of the objective, populated when the objective completes. Will match
+   * the schema of output_json_schema or output_json_inferred. This will only be set
+   * if the state of the objective is set to STATE_FINALIZED
+   */
+  output?: { [key: string]: unknown };
+
+  /**
+   * A parent objective means the objective was spawned off using a separate agent to
+   * complete an objective
+   */
+  parentObjectiveId?: string;
+
+  /**
+   * Secrets that can be used in the headers for tool calls using the secret
+   * interpolation format.
+   */
+  secrets?: Array<ObjectiveSecret>;
+
+  /**
+   * Optional human-readable detail about the current state (e.g. a failure reason).
+   */
+  stateMessage?: string;
+}
+
+/**
+ * ObjectiveConfigSnapshot is the point-in-time snapshot of the agent, variation,
+ * and (when applicable) schedule that an objective was started with.
+ */
+export interface ObjectiveConfigSnapshot {
+  /**
+   * Agent resource
+   */
+  agent?: AgentsAPI.Agent;
+
+  /**
+   * AgentSchedule resource — a recurring trigger attached to an agent that creates
+   * objectives on its cadence.
+   */
+  agentSchedule?: SchedulesAPI.AgentSchedule;
+
+  /**
+   * AgentVariation resource
+   */
+  agentVariation?: VariationsAPI.AgentVariation;
 }
 
 /**
@@ -365,91 +459,6 @@ export interface ObjectiveContextWindowData {
    * windows an objective has.
    */
   sequence?: number;
-}
-
-export interface ObjectiveData {
-  /**
-   * Agent resource
-   */
-  agent?: AgentsAPI.Agent;
-
-  /**
-   * Represents a dynamically typed value which can be either null, a number, a
-   * string, a boolean, a recursive struct value, or a list of values.
-   */
-  data?: unknown;
-
-  /**
-   * The initial message sent to the agent. This becomes the first user message in
-   * the LLM chat history.
-   */
-  initialMessage?: string;
-
-  /**
-   * Memory layers/entries to push onto this objective's memory stack on top of the
-   * baseline stack inherited from the selected variation.
-   *
-   * Array order is push order: the first element sits lower in the objective's
-   * contribution to the stack; the LAST element ends up on top of the effective
-   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
-   * position.
-   *
-   * System-managed layers (e.g., episodic) cannot be referenced here; they attach
-   * themselves automatically based on episodic_key.
-   *
-   * Stack size cap: the TOTAL effective stack (variation's memory layers
-   *
-   * - this field) must not exceed 10 entries. A request that would produce an
-   *   effective stack larger than 10 is rejected with InvalidArgument.
-   */
-  memoryStack?: Array<MemoryReference>;
-
-  /**
-   * The output of the objective, populated when the objective completes. Will match
-   * the schema of output_json_schema or output_json_inferred.
-   */
-  output?: { [key: string]: unknown };
-
-  /**
-   * Snapshot of the agent spec's output_definition at objective creation time. When
-   * present, the objective will run an extraction step after the LLM finishes.
-   */
-  outputDefinition?: { [key: string]: unknown };
-
-  /**
-   * A parent objective means the objective was spawned off using a separate agent to
-   * complete an objective
-   */
-  parentObjectiveId?: string;
-
-  /**
-   * Secrets that can be used in the headers for tool calls using the secret
-   * interpolation format.
-   */
-  secrets?: Array<ObjectiveDataSecret>;
-
-  /**
-   * ID of the AgentSchedule that produced this objective, when applicable. Populated
-   * when the objective is created from a schedule fire; empty when the objective was
-   * created via CreateObjective directly.
-   */
-  sourceScheduleId?: string;
-
-  /**
-   * system_prompt is read-only, derived from the selected variation's prompt
-   */
-  systemPrompt?: string;
-
-  /**
-   * AgentVariation resource
-   */
-  variation?: VariationsAPI.AgentVariation;
-}
-
-export interface ObjectiveDataSecret {
-  name?: string;
-
-  value?: string;
 }
 
 export interface ObjectiveError {
@@ -622,67 +631,66 @@ export interface ObjectiveInfo {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agent?: Shared.ResourceMetadata;
+  agent: Shared.ResourceMetadata;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agentVariation?: Shared.ResourceMetadata;
+  agentVariation: Shared.ResourceMetadata;
 
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
    * account level. Profiles are account-scoped and can be granted access to multiple
    * workspaces.
    */
-  createdBy?: AccountAPI.Profile;
+  createdBy: AccountAPI.Profile;
+
+  /**
+   * ID of the objective's current (most recent) context window. Hydrated on demand;
+   * empty when the objective has not yet produced a context window.
+   */
+  currentContextWindowId: string;
 
   /**
    * The effective memory stack at objective creation time, flattened from the
-   * variation's baseline plus ObjectiveData.memory_stack. Order is push order (last
-   * = top). Returned on reads so clients can see exactly what stack the objective is
+   * variation's baseline plus Objective.memory_stack. Order is push order (last =
+   * top). Returned on reads so clients can see exactly what stack the objective is
    * using without having to re-join variation state.
    */
-  effectiveMemoryStack?: Array<MemoryReference>;
+  effectiveMemoryStack: Array<MemoryReference>;
 
   /**
    * Total number of context windows that this objective has generated
    */
-  totalContextWindows?: number;
+  totalContextWindows: number;
 
   /**
    * Total number of events generated during this objective's execution
    */
-  totalEvents?: number;
+  totalEvents: number;
 
   /**
    * Total input tokens consumed across all LLM completions across all context
    * windows
    */
-  totalInputTokens?: number;
+  totalInputTokens: number;
+
+  totalIterations: number;
 
   /**
    * Total output tokens generated across all LLM completions across all context
    * windows
    */
-  totalOutputTokens?: number;
+  totalOutputTokens: number;
 
   /**
    * Total number of tool calls made during execution
    */
-  totalToolCalls?: number;
+  totalToolCalls: number;
 }
 
-export interface ObjectiveStatus {
-  state:
-    | 'STATE_UNSPECIFIED'
-    | 'STATE_PENDING'
-    | 'STATE_RUNNING'
-    | 'STATE_WAITING'
-    | 'STATE_FAILED'
-    | 'STATE_CANCELLED'
-    | 'STATE_FINALIZED';
-
-  message?: string;
+export interface ObjectiveSecret {
+  name?: string;
 }
 
 export interface SubAgentSpawned {
@@ -830,7 +838,37 @@ export interface ObjectiveListEventsResponse {
 export interface ObjectiveCreateParams {
   agentId: string;
 
-  data: ObjectiveData;
+  /**
+   * Arbitrary data for the objective. May be used in liquid templates for prompts
+   * configured on the agent variation
+   */
+  data: { [key: string]: unknown };
+
+  /**
+   * Optional override for initial message sent to the agent. This becomes the first
+   * user message in the LLM chat history. The agent variation is used to set this if
+   * not present.
+   */
+  initialMessage?: string;
+
+  /**
+   * Memory layers/entries to push onto this objective's memory stack on top of the
+   * baseline stack inherited from the selected variation.
+   *
+   * Array order is push order: the first element sits lower in the objective's
+   * contribution to the stack; the LAST element ends up on top of the effective
+   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
+   * position.
+   *
+   * System-managed layers (e.g., episodic) cannot be referenced here; they attach
+   * themselves automatically based on episodic_key.
+   *
+   * Stack size cap: the TOTAL effective stack (variation's memory layers
+   *
+   * - this field) must not exceed 10 entries. A request that would produce an
+   *   effective stack larger than 10 is rejected with InvalidArgument.
+   */
+  memoryStack?: Array<MemoryReference>;
 
   /**
    * CreateOperationMetadata contains the user-provided fields for creating an
@@ -840,10 +878,24 @@ export interface ObjectiveCreateParams {
   metadata?: Shared.CreateOperationMetadata;
 
   /**
+   * Secrets that can be used in the headers for tool calls using the secret
+   * interpolation format.
+   */
+  secrets?: Array<ObjectiveCreateParams.Secret>;
+
+  /**
    * Optional explicit variation selection. Overrides the agent's
    * variation_selection_mode.
    */
   variationId?: string;
+}
+
+export namespace ObjectiveCreateParams {
+  export interface Secret {
+    name?: string;
+
+    value?: string;
+  }
 }
 
 export interface ObjectiveRetrieveParams {
@@ -1004,16 +1056,15 @@ export declare namespace Objectives {
     type MemoryRead as MemoryRead,
     type MemoryReference as MemoryReference,
     type Objective as Objective,
+    type ObjectiveConfigSnapshot as ObjectiveConfigSnapshot,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
-    type ObjectiveData as ObjectiveData,
-    type ObjectiveDataSecret as ObjectiveDataSecret,
     type ObjectiveError as ObjectiveError,
     type ObjectiveEventData as ObjectiveEventData,
     type ObjectiveEventInfo as ObjectiveEventInfo,
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
-    type ObjectiveStatus as ObjectiveStatus,
+    type ObjectiveSecret as ObjectiveSecret,
     type SubAgentSpawned as SubAgentSpawned,
     type SubAgentUpdated as SubAgentUpdated,
     type ToolApprovalRequested as ToolApprovalRequested,
