@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Cadenya from '@cadenya/cadenyafake';
+import Cadenya from '@cadenya/cadenya';
 
 const client = new Cadenya({
   apiKey: 'My API Key',

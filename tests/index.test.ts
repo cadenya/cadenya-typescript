@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from '@cadenya/cadenyafake/core/api-promise';
+import { APIPromise } from '@cadenya/cadenya/core/api-promise';
 
 import util from 'node:util';
-import Cadenya from '@cadenya/cadenyafake';
-import { APIUserAbortError } from '@cadenya/cadenyafake';
+import Cadenya from '@cadenya/cadenya';
+import { APIUserAbortError } from '@cadenya/cadenya';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
