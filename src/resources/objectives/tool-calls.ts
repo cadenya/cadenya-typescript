@@ -36,8 +36,8 @@ export class ToolCalls extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
     const { workspaceId, objectiveId, ...body } = params;
-    return this._client.put(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}/approve`,
+    return this._client.post(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:approve`,
       { body, ...options },
     );
   }
@@ -53,8 +53,8 @@ export class ToolCalls extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
     const { workspaceId, objectiveId, ...body } = params;
-    return this._client.put(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}/deny`,
+    return this._client.post(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:deny`,
       { body, ...options },
     );
   }
@@ -69,6 +69,13 @@ export type ObjectiveToolCallsCursorPagination = CursorPagination<ObjectiveToolC
  */
 export interface ObjectiveToolCall {
   data: ObjectiveToolCallData;
+
+  executionStatus:
+    | 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED'
+    | 'TOOL_CALL_EXECUTION_STATUS_PENDING'
+    | 'TOOL_CALL_EXECUTION_STATUS_RUNNING'
+    | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED'
+    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED';
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -85,13 +92,6 @@ export interface ObjectiveToolCall {
     | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL'
     | 'TOOL_CALL_STATUS_APPROVED'
     | 'TOOL_CALL_STATUS_DENIED';
-
-  executionStatus?:
-    | 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED'
-    | 'TOOL_CALL_EXECUTION_STATUS_PENDING'
-    | 'TOOL_CALL_EXECUTION_STATUS_RUNNING'
-    | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED'
-    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED';
 
   info?: ObjectiveToolCallInfo;
 }
