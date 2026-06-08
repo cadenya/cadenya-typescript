@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from '@cadenya/cadenya/internal/qs';
-import { encode } from '@cadenya/cadenya/internal/qs/utils';
-import { StringifyOptions } from '@cadenya/cadenya/internal/qs/types';
+import { stringify } from '@cadenya/cadenyafake/internal/qs';
+import { encode } from '@cadenya/cadenyafake/internal/qs/utils';
+import { StringifyOptions } from '@cadenya/cadenyafake/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

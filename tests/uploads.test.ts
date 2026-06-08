@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from '@cadenya/cadenya/internal/to-file';
-import { toFile } from '@cadenya/cadenya/core/uploads';
+import type { ResponseLike } from '@cadenya/cadenyafake/internal/to-file';
+import { toFile } from '@cadenya/cadenyafake/core/uploads';
 
 class MyClass {
   name: string = 'foo';
@@ -96,7 +96,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('@cadenya/cadenya/core/uploads');
+    const uploads = await import('@cadenya/cadenyafake/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(
