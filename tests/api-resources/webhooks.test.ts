@@ -2,7 +2,7 @@
 
 import { Webhook } from 'standardwebhooks';
 
-import Cadenya from '@cadenya/cadenyafake';
+import Cadenya from '@cadenya/cadenya';
 
 const client = new Cadenya({
   apiKey: 'My API Key',
