@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from '@cadenya/cadenya/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@cadenya/cadenyafake/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 

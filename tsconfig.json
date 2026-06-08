@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "@cadenya/cadenya/*": ["./src/*"],
-      "@cadenya/cadenya": ["./src/index.ts"]
+      "@cadenya/cadenyafake/*": ["./src/*"],
+      "@cadenya/cadenyafake": ["./src/index.ts"]
     },
     "noEmit": true,
 

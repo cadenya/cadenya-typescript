@@ -55,12 +55,12 @@ $ cd cadenya-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link @cadenya/cadenya
+$ yarn link @cadenya/cadenyafake
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link --global @cadenya/cadenya
+$ pnpm link --global @cadenya/cadenyafake
 ```
 
 ## Running tests

@@ -22,7 +22,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^@cadenya/cadenya(/.*)?',
+              regex: '^@cadenya/cadenyafake(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],
