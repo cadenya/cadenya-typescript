@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.83.0 (2026-06-09)
+
+Full Changelog: [v0.82.0...v0.83.0](https://github.com/cadenya/cadenya-typescript/compare/v0.82.0...v0.83.0)
+
+### Features
+
+* Add AI Provider CRUD endpoints ([e574684](https://github.com/cadenya/cadenya-typescript/commit/e574684efea9842250ac7ef8c6d5499ad7242820))
+* **api:** api update ([ad74dd5](https://github.com/cadenya/cadenya-typescript/commit/ad74dd52ae314d05395544a99e8a813190cf2cf5))
+* **api:** api update ([a2c3b9f](https://github.com/cadenya/cadenya-typescript/commit/a2c3b9fd8db36caa719295a65e4c3961bf0fc493))
+* **api:** api update ([75d9636](https://github.com/cadenya/cadenya-typescript/commit/75d9636d681bdcdcc788dd8a124d0fa5577f2757))
+* **api:** api update ([da9d63e](https://github.com/cadenya/cadenya-typescript/commit/da9d63e5907b0e112633805b015244ae9c90bdeb))
+* **api:** api update ([cec485c](https://github.com/cadenya/cadenya-typescript/commit/cec485cbe643bc9b772cc05ec00cd5eef4833def))
+* **api:** api update ([1aa50ce](https://github.com/cadenya/cadenya-typescript/commit/1aa50ced802431c9e2d9392d4a1b201ed5413b51))
+* **api:** api update ([3361848](https://github.com/cadenya/cadenya-typescript/commit/33618489ddf1d1000442a89c149848314559d374))
+
+
+### Chores
+
+* update SDK settings ([a78c0a7](https://github.com/cadenya/cadenya-typescript/commit/a78c0a758acbc02eac4acde081df51f77f8b1cc5))
+* update SDK settings ([c6958ab](https://github.com/cadenya/cadenya-typescript/commit/c6958abd4f4fd9d1e021b300b2a14728ad52f7a9))
+* update SDK settings ([7a7c688](https://github.com/cadenya/cadenya-typescript/commit/7a7c688d6d42288a5f2e0c0925917f1e008b6faa))
+* update SDK settings ([fb2ed22](https://github.com/cadenya/cadenya-typescript/commit/fb2ed228169b8ea011bbfebe0ff63f6e30937791))
+
 ## 0.82.0 (2026-06-05)
 
 Full Changelog: [v0.81.0...v0.82.0](https://github.com/cadenya/cadenya-typescript/compare/v0.81.0...v0.82.0)
