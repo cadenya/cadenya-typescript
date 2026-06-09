@@ -197,6 +197,11 @@ export interface ResourceMetadata {
    * {"environment": "production", "team": "platform", "version": "v2"}
    */
   labels?: { [key: string]: string };
+
+  /**
+   * Timestamp when this resource was last updated
+   */
+  updatedAt?: string;
 }
 
 /**

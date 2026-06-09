@@ -64,8 +64,8 @@ export class APIKeys extends APIResource {
    * Rotates an API key and returns a new token. All previous tokens for this key are
    * invalidated.
    */
-  rotate(id: string, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.put(path`/v1/account/api_keys/${id}/rotate`, options);
+  rotate(id: string, body: APIKeyRotateParams, options?: RequestOptions): APIPromise<APIKey> {
+    return this._client.post(path`/v1/account/api_keys/${id}:rotate`, { body, ...options });
   }
 }
 
@@ -260,6 +260,8 @@ export interface APIKeyListParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface APIKeyRotateParams {}
+
 APIKeys.Access = Access;
 
 export declare namespace APIKeys {
@@ -271,6 +273,7 @@ export declare namespace APIKeys {
     type APIKeyCreateParams as APIKeyCreateParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyRotateParams as APIKeyRotateParams,
   };
 
   export {

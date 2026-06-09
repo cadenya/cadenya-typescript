@@ -100,6 +100,13 @@ export interface AgentEntry {
   schedules?: { [key: string]: AgentScheduleEntry };
 
   /**
+   * Desired lifecycle state for the agent. Defaults to STATE_DRAFT when unspecified.
+   * STATE_PUBLISHED publishes the agent once its variations exist; see also
+   * BulkWorkspaceApplyData.automatically_publish_agents.
+   */
+  state?: 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
+
+  /**
    * Variations under this agent, keyed by external_id.
    */
   variations?: { [key: string]: AgentVariationEntry };
@@ -114,6 +121,13 @@ export interface AgentScheduleEntry {
   spec: SchedulesAPI.AgentScheduleSpec;
 
   labels?: { [key: string]: string };
+
+  /**
+   * Desired lifecycle state for the schedule. Defaults to STATE_ACTIVE when
+   * unspecified. Declare STATE_PAUSED to provision a schedule without it firing.
+   * STATE_ARCHIVED is rejected here.
+   */
+  state?: 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_PAUSED' | 'STATE_ARCHIVED';
 }
 
 export interface AgentVariationEntry {
@@ -172,14 +186,13 @@ export interface BulkWorkspaceApplyData {
   agents?: { [key: string]: AgentEntry };
 
   /**
-   * When true, every agent created or updated by this Apply has its status forced to
-   * AGENT_STATUS_PUBLISHED, regardless of the status declared in the agent's
-   * AgentSpec. Useful when the bundle represents a production configuration and you
-   * want all of its agents live without setting status: AGENT_STATUS_PUBLISHED on
-   * each entry.
+   * When true, every agent created or updated by this Apply has its state forced to
+   * STATE_PUBLISHED, regardless of the state declared on the agent's entry. Useful
+   * when the bundle represents a production configuration and you want all of its
+   * agents live without setting state: STATE_PUBLISHED on each entry.
    *
-   * Default false: each agent's AgentSpec.status controls (which is
-   * AGENT_STATUS_DRAFT on create when unspecified).
+   * Default false: each agent entry's `state` controls (which is STATE_DRAFT on
+   * create when unspecified).
    */
   automaticallyPublishAgents?: boolean;
 
@@ -327,6 +340,12 @@ export interface ToolEntry {
   spec: ToolsAPI.ToolSpec;
 
   labels?: { [key: string]: string };
+
+  /**
+   * Desired lifecycle state for the tool. Defaults to STATE_AVAILABLE when
+   * unspecified. STATE_ARCHIVED is server-managed and is rejected here.
+   */
+  state?: 'STATE_UNSPECIFIED' | 'STATE_AVAILABLE' | 'STATE_OMITTED' | 'STATE_ARCHIVED';
 }
 
 export interface ToolSetEntry {

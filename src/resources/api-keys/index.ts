@@ -8,6 +8,7 @@ export {
   type APIKeyCreateParams,
   type APIKeyUpdateParams,
   type APIKeyListParams,
+  type APIKeyRotateParams,
   type APIKeysCursorPagination,
 } from './api-keys';
 export { Access, type AccessListParams, type AccessAddParams, type AccessRemoveParams } from './access';

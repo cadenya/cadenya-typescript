@@ -36,11 +36,21 @@ export class Models extends APIResource {
   }
 
   /**
-   * Enables or disables a model in the workspace
+   * Transitions a model to STATE_DISABLED. Fails while agent variations are still
+   * provisioned on the model; use :swapModelOnVariations to move them first.
    */
-  setStatus(id: string, params: ModelSetStatusParams, options?: RequestOptions): APIPromise<Model> {
+  disable(id: string, params: ModelDisableParams, options?: RequestOptions): APIPromise<Model> {
     const { workspaceId, ...body } = params;
-    return this._client.put(path`/v1/workspaces/${workspaceId}/models/${id}/status`, { body, ...options });
+    return this._client.post(path`/v1/workspaces/${workspaceId}/models/${id}:disable`, { body, ...options });
+  }
+
+  /**
+   * Transitions a model to STATE_ENABLED, making it available for agent variations
+   * in the workspace
+   */
+  enable(id: string, params: ModelEnableParams, options?: RequestOptions): APIPromise<Model> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/models/${id}:enable`, { body, ...options });
   }
 
   /**
@@ -67,6 +77,12 @@ export interface Model {
    * Model specification
    */
   spec: ModelSpec;
+
+  /**
+   * Whether the model is usable in this workspace. Output only. Use the :enable and
+   * :disable actions to transition.
+   */
+  state: 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 
   /**
    * ModelInfo carries server-derived, read-only details about a model.
@@ -127,11 +143,6 @@ export interface ModelSpec {
    * The model provider (e.g., "anthropic", "openai", "google")
    */
   provider?: string;
-
-  /**
-   * The status of the model in the workspace
-   */
-  status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
 }
 
 /**
@@ -181,21 +192,23 @@ export interface ModelListParams extends CursorPaginationParams {
   sortOrder?: string;
 
   /**
-   * Filter by model status
+   * Filter by model state
    */
-  status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
+  state?: 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 }
 
-export interface ModelSetStatusParams {
+export interface ModelDisableParams {
   /**
-   * Path param: Workspace ID.
+   * Workspace ID.
    */
   workspaceId: string;
+}
 
+export interface ModelEnableParams {
   /**
-   * Body param: The new status for the model
+   * Workspace ID.
    */
-  status?: 'MODEL_STATUS_UNSPECIFIED' | 'MODEL_STATUS_ENABLED' | 'MODEL_STATUS_DISABLED';
+  workspaceId: string;
 }
 
 export interface ModelSwapParams {
@@ -227,7 +240,8 @@ export declare namespace Models {
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
-    type ModelSetStatusParams as ModelSetStatusParams,
+    type ModelDisableParams as ModelDisableParams,
+    type ModelEnableParams as ModelEnableParams,
     type ModelSwapParams as ModelSwapParams,
   };
 }

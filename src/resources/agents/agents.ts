@@ -12,12 +12,15 @@ import {
   AgentScheduleSpec,
   AgentScheduleSpecSchedule,
   AgentSchedulesCursorPagination,
+  ScheduleArchiveParams,
   ScheduleCalendar,
   ScheduleCreateParams,
   ScheduleDeleteParams,
   ScheduleInterval,
   ScheduleListParams,
+  SchedulePauseParams,
   ScheduleRange,
+  ScheduleResumeParams,
   ScheduleRetrieveParams,
   ScheduleUpdateParams,
   Schedules,
@@ -120,6 +123,48 @@ export class Agents extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Transitions an agent to STATE_ARCHIVED. Archived agents are hidden from list
+   * results and cannot be used for objectives; active schedules are paused.
+   */
+  archive(id: string, params: AgentArchiveParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:archive`, { body, ...options });
+  }
+
+  /**
+   * Transitions an agent to STATE_PUBLISHED, making it available for objectives. The
+   * agent must have at least one variation.
+   */
+  publish(id: string, params: AgentPublishParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:publish`, { body, ...options });
+  }
+
+  /**
+   * Transitions an archived agent back to STATE_DRAFT. Publish the agent again to
+   * make it available for objectives.
+   */
+  unarchive(id: string, params: AgentUnarchiveParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:unarchive`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Transitions a published agent back to STATE_DRAFT. Active schedules for the
+   * agent are paused until it is published again.
+   */
+  unpublish(id: string, params: AgentUnpublishParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:unpublish`, {
+      body,
+      ...options,
+    });
+  }
 }
 
 export type AgentsCursorPagination = CursorPagination<Agent>;
@@ -137,6 +182,13 @@ export interface Agent {
    * Agent specification (user-provided configuration)
    */
   spec: AgentSpec;
+
+  /**
+   * The current lifecycle state of the agent. Output only. Agents are created in
+   * STATE_DRAFT; use the :publish, :unpublish, :archive, and :unarchive actions to
+   * transition between states.
+   */
+  state: 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 
   /**
    * AgentInfo contains simple information about an agent for display or quick
@@ -164,15 +216,6 @@ export interface AgentInfo {
  * Agent specification (user-provided configuration)
  */
 export interface AgentSpec {
-  /**
-   * Status of the agent
-   */
-  status:
-    | 'AGENT_STATUS_UNSPECIFIED'
-    | 'AGENT_STATUS_DRAFT'
-    | 'AGENT_STATUS_PUBLISHED'
-    | 'AGENT_STATUS_ARCHIVED';
-
   /**
    * Controls how variations are automatically selected when creating objectives
    * Defaults to RANDOM when unspecified
@@ -314,13 +357,9 @@ export interface AgentListParams extends CursorPaginationParams {
   sortOrder?: string;
 
   /**
-   * Filter by agent publication status
+   * Filter by agent lifecycle state
    */
-  status?:
-    | 'AGENT_STATUS_UNSPECIFIED'
-    | 'AGENT_STATUS_DRAFT'
-    | 'AGENT_STATUS_PUBLISHED'
-    | 'AGENT_STATUS_ARCHIVED';
+  state?: 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 
   /**
    * Filter by variation selection mode
@@ -332,6 +371,34 @@ export interface AgentListParams extends CursorPaginationParams {
 }
 
 export interface AgentDeleteParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
+export interface AgentArchiveParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
+export interface AgentPublishParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
+export interface AgentUnarchiveParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
+export interface AgentUnpublishParams {
   /**
    * Workspace ID.
    */
@@ -355,6 +422,10 @@ export declare namespace Agents {
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
     type AgentDeleteParams as AgentDeleteParams,
+    type AgentArchiveParams as AgentArchiveParams,
+    type AgentPublishParams as AgentPublishParams,
+    type AgentUnarchiveParams as AgentUnarchiveParams,
+    type AgentUnpublishParams as AgentUnpublishParams,
   };
 
   export { Feedback as Feedback, type FeedbackListParams as FeedbackListParams };
@@ -408,5 +479,8 @@ export declare namespace Agents {
     type ScheduleUpdateParams as ScheduleUpdateParams,
     type ScheduleListParams as ScheduleListParams,
     type ScheduleDeleteParams as ScheduleDeleteParams,
+    type ScheduleArchiveParams as ScheduleArchiveParams,
+    type SchedulePauseParams as SchedulePauseParams,
+    type ScheduleResumeParams as ScheduleResumeParams,
   };
 }

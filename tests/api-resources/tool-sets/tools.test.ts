@@ -17,7 +17,7 @@ describe('resource tools', () => {
         config: {},
         description: 'description',
         parameters: { foo: 'bar' },
-        status: 'TOOL_STATUS_UNSPECIFIED',
+        requiresApproval: true,
       },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -63,7 +63,6 @@ describe('resource tools', () => {
         },
         description: 'description',
         parameters: { foo: 'bar' },
-        status: 'TOOL_STATUS_UNSPECIFIED',
         requiresApproval: true,
       },
     });
@@ -142,7 +141,6 @@ describe('resource tools', () => {
         },
         description: 'description',
         parameters: { foo: 'bar' },
-        status: 'TOOL_STATUS_UNSPECIFIED',
         requiresApproval: true,
       },
       updateMask: 'updateMask',
@@ -174,7 +172,7 @@ describe('resource tools', () => {
       query: 'query',
       requiresApproval: true,
       sortOrder: 'sortOrder',
-      statuses: ['TOOL_STATUS_UNSPECIFIED'],
+      states: ['STATE_UNSPECIFIED'],
     });
   });
 
@@ -196,6 +194,52 @@ describe('resource tools', () => {
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.toolSets.tools.delete('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('omit: only required params', async () => {
+    const responsePromise = client.toolSets.tools.omit('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('omit: required and optional params', async () => {
+    const response = await client.toolSets.tools.omit('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('restore: only required params', async () => {
+    const responsePromise = client.toolSets.tools.restore('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('restore: required and optional params', async () => {
+    const response = await client.toolSets.tools.restore('id', {
       workspaceId: 'workspaceId',
       toolSetId: 'toolSetId',
     });
