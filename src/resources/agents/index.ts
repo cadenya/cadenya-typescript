@@ -11,6 +11,10 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
   type AgentDeleteParams,
+  type AgentArchiveParams,
+  type AgentPublishParams,
+  type AgentUnarchiveParams,
+  type AgentUnpublishParams,
   type AgentsCursorPagination,
 } from './agents';
 export { Feedback, type FeedbackListParams } from './feedback';
@@ -28,6 +32,9 @@ export {
   type ScheduleUpdateParams,
   type ScheduleListParams,
   type ScheduleDeleteParams,
+  type ScheduleArchiveParams,
+  type SchedulePauseParams,
+  type ScheduleResumeParams,
   type AgentSchedulesCursorPagination,
 } from './schedules';
 export {

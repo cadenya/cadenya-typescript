@@ -13,6 +13,8 @@ import {
   ToolDeleteParams,
   ToolInfo,
   ToolListParams,
+  ToolOmitParams,
+  ToolRestoreParams,
   ToolRetrieveParams,
   ToolSpec,
   ToolSpecConfig,
@@ -56,7 +58,7 @@ export class ToolSets extends APIResource {
    */
   update(id: string, params: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
     const { workspaceId, ...body } = params;
-    return this._client.put(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, { body, ...options });
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, { body, ...options });
   }
 
   /**
@@ -81,6 +83,21 @@ export class ToolSets extends APIResource {
     return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Transitions a tool set to STATE_ARCHIVED. Syncing stops, the tool set is hidden
+   * from list results, its tools are no longer offered to objectives, and new
+   * variation assignments are rejected. Existing assignments are retained, and
+   * history is preserved — unlike delete, archiving works while the tool set is
+   * still assigned to agent variations.
+   */
+  archive(id: string, params: ToolSetArchiveParams, options?: RequestOptions): APIPromise<ToolSet> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${id}:archive`, {
+      body,
+      ...options,
     });
   }
 
@@ -111,6 +128,19 @@ export class ToolSets extends APIResource {
       CursorPagination<ToolSetEvent>,
       { query, ...options },
     );
+  }
+
+  /**
+   * Transitions an archived tool set back to STATE_ACTIVE. Managed tool sets resume
+   * syncing on their next cycle and their tools become available to objectives
+   * again.
+   */
+  unarchive(id: string, params: ToolSetUnarchiveParams, options?: RequestOptions): APIPromise<ToolSet> {
+    const { workspaceId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${id}:unarchive`, {
+      body,
+      ...options,
+    });
   }
 }
 
@@ -221,6 +251,13 @@ export interface ToolSet {
   metadata: Shared.ResourceMetadata;
 
   spec: ToolSetSpec;
+
+  /**
+   * The current lifecycle state of the tool set. Output only. Tool sets are created
+   * STATE_ACTIVE; use the :archive and :unarchive actions to transition between
+   * states.
+   */
+  state: 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_ARCHIVED';
 
   /**
    * Tool set information
@@ -470,9 +507,22 @@ export interface ToolSetListParams extends CursorPaginationParams {
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
+
+  /**
+   * Filter by tool set lifecycle state. Defaults to STATE_ACTIVE when unspecified;
+   * pass STATE_ARCHIVED to list archived tool sets.
+   */
+  state?: 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_ARCHIVED';
 }
 
 export interface ToolSetDeleteParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
+export interface ToolSetArchiveParams {
   /**
    * Workspace ID.
    */
@@ -503,6 +553,13 @@ export interface ToolSetListEventsParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface ToolSetUnarchiveParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+}
+
 ToolSets.Tools = Tools;
 
 export declare namespace ToolSets {
@@ -531,8 +588,10 @@ export declare namespace ToolSets {
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
     type ToolSetDeleteParams as ToolSetDeleteParams,
+    type ToolSetArchiveParams as ToolSetArchiveParams,
     type ToolSetGetOpenAPISpecParams as ToolSetGetOpenAPISpecParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
+    type ToolSetUnarchiveParams as ToolSetUnarchiveParams,
   };
 
   export {
@@ -550,5 +609,7 @@ export declare namespace ToolSets {
     type ToolUpdateParams as ToolUpdateParams,
     type ToolListParams as ToolListParams,
     type ToolDeleteParams as ToolDeleteParams,
+    type ToolOmitParams as ToolOmitParams,
+    type ToolRestoreParams as ToolRestoreParams,
   };
 }

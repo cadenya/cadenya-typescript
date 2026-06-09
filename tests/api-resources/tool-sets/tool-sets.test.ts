@@ -348,6 +348,7 @@ describe('resource toolSets', () => {
           prefix: 'prefix',
           query: 'query',
           sortOrder: 'sortOrder',
+          state: 'STATE_UNSPECIFIED',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -369,6 +370,23 @@ describe('resource toolSets', () => {
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.toolSets.delete('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.toolSets.archive('id', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.toolSets.archive('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
@@ -409,5 +427,22 @@ describe('resource toolSets', () => {
       limit: 0,
       sortOrder: 'sortOrder',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: only required params', async () => {
+    const responsePromise = client.toolSets.unarchive('id', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: required and optional params', async () => {
+    const response = await client.toolSets.unarchive('id', { workspaceId: 'workspaceId' });
   });
 });

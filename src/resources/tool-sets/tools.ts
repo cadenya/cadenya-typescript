@@ -41,7 +41,7 @@ export class Tools extends APIResource {
    */
   update(id: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
     const { workspaceId, toolSetId, ...body } = params;
-    return this._client.put(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
       body,
       ...options,
     });
@@ -71,6 +71,30 @@ export class Tools extends APIResource {
     return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Transitions a tool to STATE_OMITTED, excluding it from agent use. Fails if the
+   * tool is currently assigned to agent variations.
+   */
+  omit(id: string, params: ToolOmitParams, options?: RequestOptions): APIPromise<Tool> {
+    const { workspaceId, toolSetId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}:omit`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Transitions an omitted tool back to STATE_AVAILABLE. For managed tool sets, the
+   * next sync may omit the tool again if its filters still exclude it.
+   */
+  restore(id: string, params: ToolRestoreParams, options?: RequestOptions): APIPromise<Tool> {
+    const { workspaceId, toolSetId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}:restore`, {
+      body,
+      ...options,
     });
   }
 }
@@ -125,6 +149,12 @@ export interface Tool {
 
   spec: ToolSpec;
 
+  /**
+   * The current lifecycle state of the tool. Output only. Use the :omit and :restore
+   * actions to transition; tool set syncs may also update it.
+   */
+  state: 'STATE_UNSPECIFIED' | 'STATE_AVAILABLE' | 'STATE_OMITTED' | 'STATE_ARCHIVED';
+
   info?: ToolInfo;
 }
 
@@ -154,13 +184,7 @@ export interface ToolSpec {
 
   parameters: { [key: string]: unknown };
 
-  status:
-    | 'TOOL_STATUS_UNSPECIFIED'
-    | 'TOOL_STATUS_AVAILABLE'
-    | 'TOOL_STATUS_OMITTED'
-    | 'TOOL_STATUS_ARCHIVED';
-
-  requiresApproval?: boolean;
+  requiresApproval: boolean;
 }
 
 /**
@@ -283,14 +307,36 @@ export interface ToolListParams extends CursorPaginationParams {
   sortOrder?: string;
 
   /**
-   * Query param: Filter by tool status. Multiple values are OR'd together.
+   * Query param: Filter by tool state. Multiple values are OR'd together.
    */
-  statuses?: Array<
-    'TOOL_STATUS_UNSPECIFIED' | 'TOOL_STATUS_AVAILABLE' | 'TOOL_STATUS_OMITTED' | 'TOOL_STATUS_ARCHIVED'
-  >;
+  states?: Array<'STATE_UNSPECIFIED' | 'STATE_AVAILABLE' | 'STATE_OMITTED' | 'STATE_ARCHIVED'>;
 }
 
 export interface ToolDeleteParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+
+  /**
+   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
+   */
+  toolSetId: string;
+}
+
+export interface ToolOmitParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+
+  /**
+   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
+   */
+  toolSetId: string;
+}
+
+export interface ToolRestoreParams {
   /**
    * Workspace ID.
    */
@@ -317,5 +363,7 @@ export declare namespace Tools {
     type ToolUpdateParams as ToolUpdateParams,
     type ToolListParams as ToolListParams,
     type ToolDeleteParams as ToolDeleteParams,
+    type ToolOmitParams as ToolOmitParams,
+    type ToolRestoreParams as ToolRestoreParams,
   };
 }

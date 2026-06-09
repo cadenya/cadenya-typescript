@@ -70,6 +70,43 @@ export class Schedules extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Transitions a schedule to STATE_ARCHIVED and removes its underlying timer.
+   * Archiving is terminal: archived schedules never fire and cannot be reactivated;
+   * create a new schedule instead.
+   */
+  archive(id: string, params: ScheduleArchiveParams, options?: RequestOptions): APIPromise<AgentSchedule> {
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:archive`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Transitions a schedule to STATE_PAUSED. Paused schedules retain history but do
+   * not fire.
+   */
+  pause(id: string, params: SchedulePauseParams, options?: RequestOptions): APIPromise<AgentSchedule> {
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:pause`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Transitions a paused schedule back to STATE_ACTIVE so it fires on its cadence
+   * again. Archived schedules cannot be resumed.
+   */
+  resume(id: string, params: ScheduleResumeParams, options?: RequestOptions): APIPromise<AgentSchedule> {
+    const { workspaceId, agentId, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:resume`, {
+      body,
+      ...options,
+    });
+  }
 }
 
 export type AgentSchedulesCursorPagination = CursorPagination<AgentSchedule>;
@@ -88,6 +125,13 @@ export interface AgentSchedule {
    * AgentScheduleSpec is the user-provided configuration for a schedule.
    */
   spec: AgentScheduleSpec;
+
+  /**
+   * The current lifecycle state of the schedule. Output only. Schedules are created
+   * STATE_ACTIVE; use the :pause, :resume, and :archive actions to transition
+   * between states.
+   */
+  state: 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_PAUSED' | 'STATE_ARCHIVED';
 
   /**
    * AgentScheduleInfo provides read-only runtime data about a schedule.
@@ -128,7 +172,7 @@ export interface AgentScheduleInfo {
 
   /**
    * When the schedule will next fire. Computed from the spec; absent when the
-   * schedule is PAUSED/ARCHIVED or has no future fire times.
+   * schedule is STATE_PAUSED/STATE_ARCHIVED or has no future fire times.
    */
   nextFireAt?: string;
 
@@ -165,15 +209,6 @@ export interface AgentScheduleSpec {
    * What to do when the previous run is still in flight. Defaults to SKIP.
    */
   overlapPolicy?: 'OVERLAP_POLICY_UNSPECIFIED' | 'OVERLAP_POLICY_ALLOW' | 'OVERLAP_POLICY_SKIP';
-
-  /**
-   * Lifecycle. Defaults to ACTIVE on create when unspecified.
-   */
-  status?:
-    | 'AGENT_SCHEDULE_STATUS_UNSPECIFIED'
-    | 'AGENT_SCHEDULE_STATUS_ACTIVE'
-    | 'AGENT_SCHEDULE_STATUS_PAUSED'
-    | 'AGENT_SCHEDULE_STATUS_ARCHIVED';
 
   /**
    * Optional explicit variation. When unset, the agent's variation_selection_mode
@@ -364,6 +399,45 @@ export interface ScheduleDeleteParams {
   agentId: string;
 }
 
+export interface ScheduleArchiveParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId: string;
+}
+
+export interface SchedulePauseParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId: string;
+}
+
+export interface ScheduleResumeParams {
+  /**
+   * Workspace ID.
+   */
+  workspaceId: string;
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId: string;
+}
+
 export declare namespace Schedules {
   export {
     type AgentSchedule as AgentSchedule,
@@ -379,5 +453,8 @@ export declare namespace Schedules {
     type ScheduleUpdateParams as ScheduleUpdateParams,
     type ScheduleListParams as ScheduleListParams,
     type ScheduleDeleteParams as ScheduleDeleteParams,
+    type ScheduleArchiveParams as ScheduleArchiveParams,
+    type SchedulePauseParams as SchedulePauseParams,
+    type ScheduleResumeParams as ScheduleResumeParams,
   };
 }

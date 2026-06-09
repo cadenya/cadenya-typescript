@@ -25,7 +25,7 @@ export class AccountResource extends APIResource {
    * Rotates the webhook signing key for the account. Returns only the new key.
    */
   rotateWebhookSigningKey(options?: RequestOptions): APIPromise<RotateWebhookSigningKeyResponse> {
-    return this._client.post('/v1/account/rotate_webhook_signing_key', options);
+    return this._client.post('/v1/account:rotateWebhookSigningKey', options);
   }
 }
 
