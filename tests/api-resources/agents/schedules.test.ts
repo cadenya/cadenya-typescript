@@ -92,7 +92,6 @@ describe('resource schedules', () => {
         },
         data: {},
         overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
-        status: 'AGENT_SCHEDULE_STATUS_UNSPECIFIED',
         variationId: 'variationId',
       },
     });
@@ -202,7 +201,6 @@ describe('resource schedules', () => {
         },
         data: {},
         overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
-        status: 'AGENT_SCHEDULE_STATUS_UNSPECIFIED',
         variationId: 'variationId',
       },
       updateMask: 'updateMask',
@@ -253,6 +251,75 @@ describe('resource schedules', () => {
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.agents.schedules.delete('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.agents.schedules.archive('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.agents.schedules.archive('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('pause: only required params', async () => {
+    const responsePromise = client.agents.schedules.pause('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('pause: required and optional params', async () => {
+    const response = await client.agents.schedules.pause('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('resume: only required params', async () => {
+    const responsePromise = client.agents.schedules.resume('id', {
+      workspaceId: 'workspaceId',
+      agentId: 'agentId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('resume: required and optional params', async () => {
+    const response = await client.agents.schedules.resume('id', {
       workspaceId: 'workspaceId',
       agentId: 'agentId',
     });

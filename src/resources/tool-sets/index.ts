@@ -24,8 +24,10 @@ export {
   type ToolSetUpdateParams,
   type ToolSetListParams,
   type ToolSetDeleteParams,
+  type ToolSetArchiveParams,
   type ToolSetGetOpenAPISpecParams,
   type ToolSetListEventsParams,
+  type ToolSetUnarchiveParams,
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
 } from './tool-sets';
@@ -43,5 +45,7 @@ export {
   type ToolUpdateParams,
   type ToolListParams,
   type ToolDeleteParams,
+  type ToolOmitParams,
+  type ToolRestoreParams,
   type ToolsCursorPagination,
 } from './tools';

@@ -105,7 +105,7 @@ describe('resource apiKeys', () => {
 
   // Mock server tests are disabled
   test.skip('rotate', async () => {
-    const responsePromise = client.apiKeys.rotate('id');
+    const responsePromise = client.apiKeys.rotate('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

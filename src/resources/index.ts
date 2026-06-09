@@ -20,6 +20,7 @@ export {
   type APIKeyCreateParams,
   type APIKeyUpdateParams,
   type APIKeyListParams,
+  type APIKeyRotateParams,
   type APIKeysCursorPagination,
 } from './api-keys/api-keys';
 export {
@@ -43,6 +44,10 @@ export {
   type AgentUpdateParams,
   type AgentListParams,
   type AgentDeleteParams,
+  type AgentArchiveParams,
+  type AgentPublishParams,
+  type AgentUnarchiveParams,
+  type AgentUnpublishParams,
   type AgentsCursorPagination,
 } from './agents/agents';
 export {
@@ -84,7 +89,8 @@ export {
   type ModelSwapResponse,
   type ModelRetrieveParams,
   type ModelListParams,
-  type ModelSetStatusParams,
+  type ModelDisableParams,
+  type ModelEnableParams,
   type ModelSwapParams,
   type ModelsCursorPagination,
 } from './models';
@@ -159,8 +165,10 @@ export {
   type ToolSetUpdateParams,
   type ToolSetListParams,
   type ToolSetDeleteParams,
+  type ToolSetArchiveParams,
   type ToolSetGetOpenAPISpecParams,
   type ToolSetListEventsParams,
+  type ToolSetUnarchiveParams,
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
 } from './tool-sets/tool-sets';

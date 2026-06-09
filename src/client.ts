@@ -41,9 +41,10 @@ import {
 } from './resources/ai-provider-keys';
 import {
   Model,
+  ModelDisableParams,
+  ModelEnableParams,
   ModelListParams,
   ModelRetrieveParams,
-  ModelSetStatusParams,
   ModelSpec,
   ModelSwapParams,
   ModelSwapResponse,
@@ -85,12 +86,16 @@ import {
 } from './resources/workspaces';
 import {
   Agent,
+  AgentArchiveParams,
   AgentCreateParams,
   AgentDeleteParams,
   AgentInfo,
   AgentListParams,
+  AgentPublishParams,
   AgentRetrieveParams,
   AgentSpec,
+  AgentUnarchiveParams,
+  AgentUnpublishParams,
   AgentUpdateParams,
   Agents,
   AgentsCursorPagination,
@@ -101,6 +106,7 @@ import {
   APIKeyCreateParams,
   APIKeyInfo,
   APIKeyListParams,
+  APIKeyRotateParams,
   APIKeySpec,
   APIKeyUpdateParams,
   APIKeys,
@@ -193,6 +199,7 @@ import {
   ToolSetAdapterHTTP,
   ToolSetAdapterMcp,
   ToolSetAdapterOpenAPI,
+  ToolSetArchiveParams,
   ToolSetCreateParams,
   ToolSetDeleteParams,
   ToolSetEvent,
@@ -205,6 +212,7 @@ import {
   ToolSetListParams,
   ToolSetRetrieveParams,
   ToolSetSpec,
+  ToolSetUnarchiveParams,
   ToolSetUpdateParams,
   ToolSets,
   ToolSetsCursorPagination,
@@ -1091,6 +1099,10 @@ export declare namespace Cadenya {
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
     type AgentDeleteParams as AgentDeleteParams,
+    type AgentArchiveParams as AgentArchiveParams,
+    type AgentPublishParams as AgentPublishParams,
+    type AgentUnarchiveParams as AgentUnarchiveParams,
+    type AgentUnpublishParams as AgentUnpublishParams,
   };
 
   export {
@@ -1166,7 +1178,8 @@ export declare namespace Cadenya {
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,
     type ModelListParams as ModelListParams,
-    type ModelSetStatusParams as ModelSetStatusParams,
+    type ModelDisableParams as ModelDisableParams,
+    type ModelEnableParams as ModelEnableParams,
     type ModelSwapParams as ModelSwapParams,
   };
 
@@ -1202,8 +1215,10 @@ export declare namespace Cadenya {
     type ToolSetUpdateParams as ToolSetUpdateParams,
     type ToolSetListParams as ToolSetListParams,
     type ToolSetDeleteParams as ToolSetDeleteParams,
+    type ToolSetArchiveParams as ToolSetArchiveParams,
     type ToolSetGetOpenAPISpecParams as ToolSetGetOpenAPISpecParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
+    type ToolSetUnarchiveParams as ToolSetUnarchiveParams,
   };
 
   export {
@@ -1215,6 +1230,7 @@ export declare namespace Cadenya {
     type APIKeyCreateParams as APIKeyCreateParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyRotateParams as APIKeyRotateParams,
   };
 
   export {

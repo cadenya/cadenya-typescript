@@ -52,7 +52,7 @@ describe('resource models', () => {
           prefix: 'prefix',
           query: 'query',
           sortOrder: 'sortOrder',
-          status: 'MODEL_STATUS_UNSPECIFIED',
+          state: 'STATE_UNSPECIFIED',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -60,8 +60,8 @@ describe('resource models', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setStatus: only required params', async () => {
-    const responsePromise = client.models.setStatus('id', { workspaceId: 'workspaceId' });
+  test.skip('disable: only required params', async () => {
+    const responsePromise = client.models.disable('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -72,11 +72,25 @@ describe('resource models', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setStatus: required and optional params', async () => {
-    const response = await client.models.setStatus('id', {
-      workspaceId: 'workspaceId',
-      status: 'MODEL_STATUS_UNSPECIFIED',
-    });
+  test.skip('disable: required and optional params', async () => {
+    const response = await client.models.disable('id', { workspaceId: 'workspaceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('enable: only required params', async () => {
+    const responsePromise = client.models.enable('id', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('enable: required and optional params', async () => {
+    const response = await client.models.enable('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled

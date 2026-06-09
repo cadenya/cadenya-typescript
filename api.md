@@ -39,7 +39,7 @@ Types:
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
-- <code title="post /v1/account/rotate_webhook_signing_key">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
+- <code title="post /v1/account:rotateWebhookSigningKey">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
 
 # Agents
 
@@ -57,6 +57,10 @@ Methods:
 - <code title="patch /v1/workspaces/{workspaceId}/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(id, { ...params }) -> Agent</code>
 - <code title="get /v1/workspaces/{workspaceId}/agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>(workspaceID, { ...params }) -> AgentsCursorPagination</code>
 - <code title="delete /v1/workspaces/{workspaceId}/agents/{id}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{id}:archive">client.agents.<a href="./src/resources/agents/agents.ts">archive</a>(id, { ...params }) -> Agent</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{id}:publish">client.agents.<a href="./src/resources/agents/agents.ts">publish</a>(id, { ...params }) -> Agent</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{id}:unarchive">client.agents.<a href="./src/resources/agents/agents.ts">unarchive</a>(id, { ...params }) -> Agent</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{id}:unpublish">client.agents.<a href="./src/resources/agents/agents.ts">unpublish</a>(id, { ...params }) -> Agent</code>
 
 ## Feedback
 
@@ -123,6 +127,9 @@ Methods:
 - <code title="patch /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">update</a>(id, { ...params }) -> AgentSchedule</code>
 - <code title="get /v1/workspaces/{workspaceId}/agents/{agentId}/schedules">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">list</a>(agentID, { ...params }) -> AgentSchedulesCursorPagination</code>
 - <code title="delete /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}:archive">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">archive</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}:pause">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">pause</a>(id, { ...params }) -> AgentSchedule</code>
+- <code title="post /v1/workspaces/{workspaceId}/agents/{agentId}/schedules/{id}:resume">client.agents.schedules.<a href="./src/resources/agents/schedules.ts">resume</a>(id, { ...params }) -> AgentSchedule</code>
 
 # Objectives
 
@@ -277,7 +284,8 @@ Methods:
 
 - <code title="get /v1/workspaces/{workspaceId}/models/{id}">client.models.<a href="./src/resources/models.ts">retrieve</a>(id, { ...params }) -> Model</code>
 - <code title="get /v1/workspaces/{workspaceId}/models">client.models.<a href="./src/resources/models.ts">list</a>(workspaceID, { ...params }) -> ModelsCursorPagination</code>
-- <code title="put /v1/workspaces/{workspaceId}/models/{id}/status">client.models.<a href="./src/resources/models.ts">setStatus</a>(id, { ...params }) -> Model</code>
+- <code title="post /v1/workspaces/{workspaceId}/models/{id}:disable">client.models.<a href="./src/resources/models.ts">disable</a>(id, { ...params }) -> Model</code>
+- <code title="post /v1/workspaces/{workspaceId}/models/{id}:enable">client.models.<a href="./src/resources/models.ts">enable</a>(id, { ...params }) -> Model</code>
 - <code title="post /v1/workspaces/{workspaceId}/models:swapModelOnVariations">client.models.<a href="./src/resources/models.ts">swap</a>(workspaceID, { ...params }) -> unknown</code>
 
 # Search
@@ -316,11 +324,13 @@ Methods:
 
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">create</a>(workspaceID, { ...params }) -> ToolSet</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">retrieve</a>(id, { ...params }) -> ToolSet</code>
-- <code title="put /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
+- <code title="patch /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">update</a>(id, { ...params }) -> ToolSet</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">list</a>(workspaceID, { ...params }) -> ToolSetsCursorPagination</code>
 - <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{id}">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{id}:archive">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">archive</a>(id, { ...params }) -> ToolSet</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/openapi_spec">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">getOpenAPISpec</a>(toolSetID, { ...params }) -> ToolSetGetOpenAPISpecResponse</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{id}:unarchive">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">unarchive</a>(id, { ...params }) -> ToolSet</code>
 
 ## Tools
 
@@ -338,9 +348,11 @@ Methods:
 
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">create</a>(toolSetID, { ...params }) -> Tool</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">retrieve</a>(id, { ...params }) -> Tool</code>
-- <code title="put /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">update</a>(id, { ...params }) -> Tool</code>
+- <code title="patch /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">update</a>(id, { ...params }) -> Tool</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">list</a>(toolSetID, { ...params }) -> ToolsCursorPagination</code>
 - <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}:omit">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">omit</a>(id, { ...params }) -> Tool</code>
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}:restore">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">restore</a>(id, { ...params }) -> Tool</code>
 
 # APIKeys
 
@@ -357,7 +369,7 @@ Methods:
 - <code title="patch /v1/account/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">update</a>(id, { ...params }) -> APIKey</code>
 - <code title="get /v1/account/api_keys">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">list</a>({ ...params }) -> APIKeysCursorPagination</code>
 - <code title="delete /v1/account/api_keys/{id}">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">delete</a>(id) -> void</code>
-- <code title="put /v1/account/api_keys/{id}/rotate">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">rotate</a>(id) -> APIKey</code>
+- <code title="post /v1/account/api_keys/{id}:rotate">client.apiKeys.<a href="./src/resources/api-keys/api-keys.ts">rotate</a>(id) -> APIKey</code>
 
 ## Access
 

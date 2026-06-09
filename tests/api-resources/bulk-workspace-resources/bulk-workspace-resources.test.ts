@@ -78,7 +78,6 @@ describe('resource bulkWorkspaceResources', () => {
           foo: {
             name: 'name',
             spec: {
-              status: 'AGENT_STATUS_UNSPECIFIED',
               variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
               description: 'description',
               inputDataSchema: { foo: 'bar' },
@@ -144,12 +143,13 @@ describe('resource bulkWorkspaceResources', () => {
                   },
                   data: {},
                   overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
-                  status: 'AGENT_SCHEDULE_STATUS_UNSPECIFIED',
                   variationId: 'variationId',
                 },
                 labels: { foo: 'string' },
+                state: 'STATE_UNSPECIFIED',
               },
             },
+            state: 'STATE_UNSPECIFIED',
             variations: {
               foo: {
                 name: 'name',
@@ -355,10 +355,10 @@ describe('resource bulkWorkspaceResources', () => {
                   },
                   description: 'description',
                   parameters: { foo: 'bar' },
-                  status: 'TOOL_STATUS_UNSPECIFIED',
                   requiresApproval: true,
                 },
                 labels: { foo: 'string' },
+                state: 'STATE_UNSPECIFIED',
               },
             },
           },
