@@ -13,10 +13,7 @@ describe('resource schedules', () => {
     const responsePromise = client.agents.schedules.create('agentId', {
       workspaceId: 'workspaceId',
       metadata: { name: 'name' },
-      spec: {
-        initialMessage: 'initialMessage',
-        schedule: {},
-      },
+      spec: { schedule: {} },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -38,7 +35,6 @@ describe('resource schedules', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        initialMessage: 'initialMessage',
         schedule: {
           calendars: [
             {
@@ -91,7 +87,9 @@ describe('resource schedules', () => {
           timezone: 'timezone',
         },
         data: {},
+        initialMessage: 'initialMessage',
         overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
+        userData: {},
         variationId: 'variationId',
       },
     });
@@ -147,7 +145,6 @@ describe('resource schedules', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        initialMessage: 'initialMessage',
         schedule: {
           calendars: [
             {
@@ -200,7 +197,9 @@ describe('resource schedules', () => {
           timezone: 'timezone',
         },
         data: {},
+        initialMessage: 'initialMessage',
         overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
+        userData: {},
         variationId: 'variationId',
       },
       updateMask: 'updateMask',
