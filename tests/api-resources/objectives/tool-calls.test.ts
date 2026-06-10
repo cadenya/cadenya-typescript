@@ -9,6 +9,29 @@ const client = new Cadenya({
 
 describe('resource toolCalls', () => {
   // Mock server tests are disabled
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.objectives.toolCalls.retrieve('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.objectives.toolCalls.retrieve('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('list: only required params', async () => {
     const responsePromise = client.objectives.toolCalls.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
