@@ -192,9 +192,16 @@ Types:
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCall</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallData</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallInfo</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResult</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultAudioBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultContentBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultImageBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultTextBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallWithResult</a></code>
 
 Methods:
 
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">retrieve</a>(toolCallID, { ...params }) -> ObjectiveToolCallWithResult</code>
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}:approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}:deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
