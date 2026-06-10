@@ -187,12 +187,6 @@ export interface AgentScheduleInfo {
  */
 export interface AgentScheduleSpec {
   /**
-   * The initial message passed to CreateObjective on each fire. Becomes the first
-   * user message in the objective's chat history.
-   */
-  initialMessage: string;
-
-  /**
    * Schedule defines WHEN the schedule fires. Temporal-style structured form: a list
    * of calendar rules (wall-clock) and/or interval rules (duration), OR'd together.
    * At least one rule is required.
@@ -206,9 +200,23 @@ export interface AgentScheduleSpec {
   data?: unknown;
 
   /**
+   * Optional initial message passed to CreateObjective on each fire. Becomes the
+   * first user message in the objective's chat history. When unset, the fired
+   * objective defers to the selected variation's user_message_template.
+   */
+  initialMessage?: string;
+
+  /**
    * What to do when the previous run is still in flight. Defaults to SKIP.
    */
   overlapPolicy?: 'OVERLAP_POLICY_UNSPECIFIED' | 'OVERLAP_POLICY_ALLOW' | 'OVERLAP_POLICY_SKIP';
+
+  /**
+   * Optional data rendered into the variation's user_message_template when each
+   * fired objective is created. Separate from `data`, which renders the system
+   * prompt template.
+   */
+  userData?: unknown;
 
   /**
    * Optional explicit variation. When unset, the agent's variation_selection_mode

@@ -35,6 +35,7 @@ describe('resource objectives', () => {
         labels: { foo: 'string' },
       },
       secrets: [{ name: 'name', value: 'value' }],
+      userData: { foo: 'bar' },
       variationId: 'variationId',
     });
   });

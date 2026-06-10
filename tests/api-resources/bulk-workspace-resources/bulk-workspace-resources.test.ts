@@ -89,7 +89,6 @@ describe('resource bulkWorkspaceResources', () => {
               foo: {
                 name: 'name',
                 spec: {
-                  initialMessage: 'initialMessage',
                   schedule: {
                     calendars: [
                       {
@@ -142,7 +141,9 @@ describe('resource bulkWorkspaceResources', () => {
                     timezone: 'timezone',
                   },
                   data: {},
+                  initialMessage: 'initialMessage',
                   overlapPolicy: 'OVERLAP_POLICY_UNSPECIFIED',
+                  userData: {},
                   variationId: 'variationId',
                 },
                 labels: { foo: 'string' },
@@ -169,7 +170,8 @@ describe('resource bulkWorkspaceResources', () => {
                     maxTools: 0,
                     rerankThreshold: 0,
                   },
-                  prompt: 'prompt',
+                  systemPromptTemplate: 'systemPromptTemplate',
+                  userMessageTemplate: 'userMessageTemplate',
                   weight: 0,
                 },
                 assignments: [

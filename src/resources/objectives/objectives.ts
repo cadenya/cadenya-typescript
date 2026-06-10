@@ -371,6 +371,11 @@ export interface Objective {
    * Optional human-readable detail about the current state (e.g. a failure reason).
    */
   stateMessage?: string;
+
+  /**
+   * Arbitrary data used to render the variation's user_message_template
+   */
+  userData?: { [key: string]: unknown };
 }
 
 /**
@@ -845,9 +850,11 @@ export interface ObjectiveCreateParams {
   data: { [key: string]: unknown };
 
   /**
-   * Optional override for initial message sent to the agent. This becomes the first
-   * user message in the LLM chat history. The agent variation is used to set this if
-   * not present.
+   * Optional override for the initial message sent to the agent. This becomes the
+   * first user message in the LLM chat history. When not set, the selected
+   * variation's user_message_template is rendered with user_data instead. If neither
+   * this field nor a user_message_template is present, the request is rejected with
+   * InvalidArgument.
    */
   initialMessage?: string;
 
@@ -882,6 +889,13 @@ export interface ObjectiveCreateParams {
    * interpolation format.
    */
   secrets?: Array<ObjectiveCreateParams.Secret>;
+
+  /**
+   * Arbitrary data rendered into the selected variation's user_message_template
+   * (liquid) to produce the initial user message. Separate from `data`, which
+   * renders the system prompt template.
+   */
+  userData?: { [key: string]: unknown };
 
   /**
    * Optional explicit variation selection. Overrides the agent's
