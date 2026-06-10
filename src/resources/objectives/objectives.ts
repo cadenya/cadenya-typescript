@@ -31,10 +31,17 @@ import {
   ObjectiveToolCall,
   ObjectiveToolCallData,
   ObjectiveToolCallInfo,
+  ObjectiveToolCallResult,
+  ObjectiveToolCallResultAudioBlock,
+  ObjectiveToolCallResultContentBlock,
+  ObjectiveToolCallResultImageBlock,
+  ObjectiveToolCallResultTextBlock,
+  ObjectiveToolCallWithResult,
   ObjectiveToolCallsCursorPagination,
   ToolCallApproveParams,
   ToolCallDenyParams,
   ToolCallListParams,
+  ToolCallRetrieveParams,
   ToolCalls,
 } from './tool-calls';
 import * as ToolsAPI from './tools';
@@ -793,9 +800,15 @@ export interface ToolError {
 }
 
 export interface ToolResult {
-  content?: string;
+  /**
+   * ObjectiveToolCallResult is the content a tool returned after execution. Tools
+   * can return multiple content blocks, and blocks can be multi-modal (text, image,
+   * audio). Media blocks are stored by Cadenya and served as short-lived signed URLs
+   * rather than inline bytes.
+   */
+  result: ToolCallsAPI.ObjectiveToolCallResult;
 
-  toolCallId?: string;
+  toolCallId: string;
 }
 
 export interface UserMessage {
@@ -1116,7 +1129,14 @@ export declare namespace Objectives {
     type ObjectiveToolCall as ObjectiveToolCall,
     type ObjectiveToolCallData as ObjectiveToolCallData,
     type ObjectiveToolCallInfo as ObjectiveToolCallInfo,
+    type ObjectiveToolCallResult as ObjectiveToolCallResult,
+    type ObjectiveToolCallResultAudioBlock as ObjectiveToolCallResultAudioBlock,
+    type ObjectiveToolCallResultContentBlock as ObjectiveToolCallResultContentBlock,
+    type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
+    type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
+    type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
+    type ToolCallRetrieveParams as ToolCallRetrieveParams,
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
     type ToolCallDenyParams as ToolCallDenyParams,
