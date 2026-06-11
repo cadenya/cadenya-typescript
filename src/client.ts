@@ -981,7 +981,7 @@ export class Cadenya {
   objectives: API.Objectives = new API.Objectives(this);
   /**
    * Manage memory layers and their entries. Layers are named containers that can
-   *  be composed into an objective's memory stack; entries are the keyed values
+   *  be composed into an objective's memory cascade; entries are the keyed values
    *  within a layer. System-managed layers (e.g., episodic layers created by the
    *  runtime) cannot be mutated through this API.
    */
