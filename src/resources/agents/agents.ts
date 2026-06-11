@@ -231,6 +231,22 @@ export interface AgentSpec {
   description?: string;
 
   /**
+   * Enable episodic memory for objectives created for this agent. When true,
+   * objective creation requires an episodic_memory key and the system finds or
+   * creates a memory layer for that (agent, key) pair, letting the agent store and
+   * retrieve memories across objectives that share the key. Memory is agent-level so
+   * all variations of the agent share the same layers.
+   */
+  enableEpisodicMemory?: boolean;
+
+  /**
+   * How long episodic memories should be retained. Each new objective slides the
+   * layer's expiry forward by this duration, and stored entries expire this long
+   * after they are written. If not set, episodic memories are retained indefinitely.
+   */
+  episodicMemoryTtl?: number;
+
+  /**
    * InputDataSchema is used for enforcing a data input when objectives are created.
    * This is valuable when using liquid formatting in agent variation prompts. Input
    * data schema is also valuable when using an agent as a sub-agent, as the schema

@@ -99,8 +99,10 @@ describe('resource memoryLayers', () => {
       client.memoryLayers.list(
         'workspaceId',
         {
+          agentId: 'agentId',
           bundleKey: 'bundleKey',
           cursor: 'cursor',
+          episodicKeyPrefix: 'episodicKeyPrefix',
           includeInfo: true,
           limit: 0,
           prefix: 'prefix',

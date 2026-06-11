@@ -331,6 +331,11 @@ export interface Objective {
   data?: { [key: string]: unknown };
 
   /**
+   * Episodic is used to configure the episodic memory for the objective
+   */
+  episodicMemory?: Objective.EpisodicMemory;
+
+  /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
    * execution
    */
@@ -383,6 +388,25 @@ export interface Objective {
    * Arbitrary data used to render the variation's user_message_template
    */
   userData?: { [key: string]: unknown };
+}
+
+export namespace Objective {
+  /**
+   * Episodic is used to configure the episodic memory for the objective
+   */
+  export interface EpisodicMemory {
+    /**
+     * The caller-supplied episodic key. Objectives created with the same key (for the
+     * same agent) share one episodic memory layer.
+     */
+    key?: string;
+
+    /**
+     * The episodic memory layer resolved (created or reused) for this objective's key.
+     * Populated by the system at objective creation.
+     */
+    memoryLayerId?: string;
+  }
 }
 
 /**
@@ -863,6 +887,11 @@ export interface ObjectiveCreateParams {
   data: { [key: string]: unknown };
 
   /**
+   * Episodic is used to configure the episodic memory for the objective
+   */
+  episodicMemory?: ObjectiveCreateParams.EpisodicMemory;
+
+  /**
    * Optional override for the initial message sent to the agent. This becomes the
    * first user message in the LLM chat history. When not set, the selected
    * variation's user_message_template is rendered with user_data instead. If neither
@@ -918,6 +947,17 @@ export interface ObjectiveCreateParams {
 }
 
 export namespace ObjectiveCreateParams {
+  /**
+   * Episodic is used to configure the episodic memory for the objective
+   */
+  export interface EpisodicMemory {
+    /**
+     * The caller-supplied episodic key. Objectives created with the same key (for the
+     * same agent) share one episodic memory layer.
+     */
+    key?: string;
+  }
+
   export interface Secret {
     name?: string;
 
