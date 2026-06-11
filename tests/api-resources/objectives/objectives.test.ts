@@ -30,7 +30,7 @@ describe('resource objectives', () => {
       data: { foo: 'bar' },
       episodicMemory: { key: 'key' },
       initialMessage: 'initialMessage',
-      memoryStack: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
+      memoryCascade: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
       metadata: {
         externalId: 'externalId',
         labels: { foo: 'string' },

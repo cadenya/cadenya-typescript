@@ -11,7 +11,7 @@ import { path } from '../../internal/utils/path';
 
 /**
  * Manage memory layers and their entries. Layers are named containers that can
- *  be composed into an objective's memory stack; entries are the keyed values
+ *  be composed into an objective's memory cascade; entries are the keyed values
  *  within a layer. System-managed layers (e.g., episodic layers created by the
  *  runtime) cannot be mutated through this API.
  */
@@ -90,8 +90,8 @@ export type MemoryEntriesCursorPagination = CursorPagination<MemoryEntry>;
  * MemoryEntry is a single keyed value within a MemoryLayer. Entries are addressed
  * by their key, which follows the S3 object key safe-character convention (see
  * MemoryEntrySpec.key for the full rule). Keys are unique within a single layer;
- * the same key may appear in multiple layers, in which case the LIFO stack-walk
- * determines which one wins for a given objective.
+ * the same key may appear in multiple layers, in which case the cascade walk
+ * determines which one wins for a given objective (most specific layer first).
  *
  * MemoryEntry is the summary shape, returned by ListMemoryEntries. It does not
  * carry the entry body — callers that need the body must fetch the entry
