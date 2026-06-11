@@ -80,6 +80,8 @@ describe('resource bulkWorkspaceResources', () => {
             spec: {
               variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED',
               description: 'description',
+              enableEpisodicMemory: true,
+              episodicMemoryTtl: 0,
               inputDataSchema: { foo: 'bar' },
               outputDefinition: { foo: 'bar' },
               webhookEventsUrl: 'webhookEventsUrl',
@@ -162,8 +164,6 @@ describe('resource bulkWorkspaceResources', () => {
                   },
                   constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
                   description: 'description',
-                  enableEpisodicMemory: true,
-                  episodicMemoryTtl: 0,
                   modelConfig: { modelId: 'modelId', temperature: 0 },
                   progressiveDiscovery: {
                     hints: ['string'],
