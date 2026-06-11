@@ -111,6 +111,11 @@ export interface MemoryLayer {
 
 export interface MemoryLayerInfo {
   /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agent?: Shared.ResourceMetadata;
+
+  /**
    * A profile identifies a user or non-human principal (such as an API key) at the
    * account level. Profiles are account-scoped and can be granted access to multiple
    * workspaces.
