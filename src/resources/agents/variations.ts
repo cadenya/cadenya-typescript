@@ -96,7 +96,7 @@ export class Variations extends APIResource {
 
   /**
    * Attaches a memory layer to a variation at a given position in the variation's
-   * baseline memory stack.
+   * baseline memory cascade.
    */
   addMemoryLayer(
     variationID: string,
@@ -205,7 +205,8 @@ export interface AgentVariationInfo {
 
   /**
    * Read-only list of memory layer assignments for this variation, returned in
-   * ascending `position` (bottom → top). Capped at 10 entries.
+   * ascending `position` (most specific first — resolution order). Capped at 10
+   * entries.
    */
   memoryLayerAssignments?: Array<VariationMemoryLayerAssignment>;
 
@@ -445,8 +446,8 @@ export interface VariationAssignment {
 
 /**
  * VariationMemoryLayerAssignment attaches a single MemoryLayer to a variation at a
- * given position in the variation's baseline memory stack. A variation has at most
- * one assignment per memory_layer_id.
+ * given position in the variation's baseline memory cascade. A variation has at
+ * most one assignment per memory_layer_id.
  *
  * Variations only support whole-layer attachments — entry pinning is an
  * objective-level capability.
@@ -469,9 +470,10 @@ export interface VariationMemoryLayerAssignment {
   memoryLayer?: Shared.BareMetadata;
 
   /**
-   * Position in the variation's baseline stack. Lower values sit lower; the
-   * highest-position assignment is on top of the variation's baseline. Gaps are fine
-   * — only relative position matters. Positions must be unique within a variation; a
+   * Position in the variation's baseline cascade. Position is specificity,
+   * CSS-style: a LOWER position is more specific and is consulted first; the
+   * highest-position assignment is the most general fallback. Gaps are fine — only
+   * relative position matters. Positions must be unique within a variation; a
    * request that would collide with an existing assignment's position is rejected
    * with InvalidArgument.
    */
@@ -627,8 +629,8 @@ export interface VariationAddMemoryLayerParams {
   memoryLayerId?: string;
 
   /**
-   * Body param: Position in the stack. If omitted, server appends (max existing
-   * position + 1).
+   * Body param: Position in the baseline cascade (lower = more specific). If
+   * omitted, the server appends at the most general end (max existing position + 1).
    */
   position?: number;
 }

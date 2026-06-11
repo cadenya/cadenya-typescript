@@ -241,8 +241,8 @@ export interface ContextWindowCompacted {
 
 /**
  * MemoryRead is emitted each time the agent resolves a key against the memory
- * stack and loads an entry. Lookups that miss (key not found in any layer) do not
- * emit this event.
+ * cascade and loads an entry. Lookups that miss (key not found in any layer) do
+ * not emit this event.
  */
 export interface MemoryRead {
   /**
@@ -267,7 +267,7 @@ export interface MemoryRead {
 
 /**
  * MemoryReference identifies a memory layer or a specific entry within one, for
- * composition into a memory stack. Used on objectives (where entry pinning is
+ * composition into a memory cascade. Used on objectives (where entry pinning is
  * permitted).
  *
  * memory*layer_id accepts both the canonical form (memlyr*…) and the external-id
@@ -275,9 +275,10 @@ export interface MemoryRead {
  */
 export interface MemoryReference {
   /**
-   * When set, pushes only this entry from memory_layer_id onto the stack — behaves
-   * as a single-entry layer (only this key resolves at this position). The entry
-   * must belong to memory_layer_id; mismatches are rejected with InvalidArgument.
+   * When set, inserts only this entry from memory_layer_id into the cascade —
+   * behaves as a single-entry layer (only this key resolves at this position). The
+   * entry must belong to memory_layer_id; mismatches are rejected with
+   * InvalidArgument.
    */
   memoryEntryId?: string;
 
@@ -342,23 +343,21 @@ export interface Objective {
   info?: ObjectiveInfo;
 
   /**
-   * Memory layers/entries to push onto this objective's memory stack on top of the
-   * baseline stack inherited from the selected variation.
+   * Memory layers/entries layered over the baseline cascade inherited from the
+   * selected variation — element-level rules over inherited styles, in CSS terms.
    *
-   * Array order is push order: the first element sits lower in the objective's
-   * contribution to the stack; the LAST element ends up on top of the effective
-   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
-   * position.
+   * Array order is resolution order: EARLIER elements are more specific and are
+   * consulted first. Entries pinned via memory_entry_id behave as single-entry
+   * layers at their position.
    *
    * System-managed layers (e.g., episodic) cannot be referenced here; they attach
-   * themselves automatically based on episodic_key.
+   * themselves automatically based on the episodic key.
    *
-   * Stack size cap: the TOTAL effective stack (variation's memory layers
-   *
-   * - this field) must not exceed 10 entries. A request that would produce an
-   *   effective stack larger than 10 is rejected with InvalidArgument.
+   * Size cap: the TOTAL effective cascade (this field + the variation's memory layer
+   * assignments) must not exceed 10 entries. A request that would produce a larger
+   * cascade is rejected with InvalidArgument.
    */
-  memoryStack?: Array<MemoryReference>;
+  memoryCascade?: Array<MemoryReference>;
 
   /**
    * The output of the objective, populated when the objective completes. Will match
@@ -526,8 +525,8 @@ export interface ObjectiveEventData {
 
   /**
    * MemoryRead is emitted each time the agent resolves a key against the memory
-   * stack and loads an entry. Lookups that miss (key not found in any layer) do not
-   * emit this event.
+   * cascade and loads an entry. Lookups that miss (key not found in any layer) do
+   * not emit this event.
    */
   memoryRead?: MemoryRead;
 
@@ -688,12 +687,14 @@ export interface ObjectiveInfo {
   currentContextWindowId: string;
 
   /**
-   * The effective memory stack at objective creation time, flattened from the
-   * variation's baseline plus Objective.memory_stack. Order is push order (last =
-   * top). Returned on reads so clients can see exactly what stack the objective is
-   * using without having to re-join variation state.
+   * The effective memory cascade at objective creation time: the episodic layer
+   * (when present), then Objective.memory_cascade, then the variation's baseline
+   * layers by ascending position. Order is resolution order — index 0 is the most
+   * specific and is consulted first; the first layer containing a key wins. Returned
+   * on reads so clients can see exactly what the objective resolves against without
+   * re-joining variation state.
    */
-  effectiveMemoryStack: Array<MemoryReference>;
+  effectiveMemoryCascade: Array<MemoryReference>;
 
   /**
    * Total number of context windows that this objective has generated
@@ -901,23 +902,21 @@ export interface ObjectiveCreateParams {
   initialMessage?: string;
 
   /**
-   * Memory layers/entries to push onto this objective's memory stack on top of the
-   * baseline stack inherited from the selected variation.
+   * Memory layers/entries layered over the baseline cascade inherited from the
+   * selected variation — element-level rules over inherited styles, in CSS terms.
    *
-   * Array order is push order: the first element sits lower in the objective's
-   * contribution to the stack; the LAST element ends up on top of the effective
-   * stack. Entries pinned via memory_entry_id behave as single-entry layers at their
-   * position.
+   * Array order is resolution order: EARLIER elements are more specific and are
+   * consulted first. Entries pinned via memory_entry_id behave as single-entry
+   * layers at their position.
    *
    * System-managed layers (e.g., episodic) cannot be referenced here; they attach
-   * themselves automatically based on episodic_key.
+   * themselves automatically based on the episodic key.
    *
-   * Stack size cap: the TOTAL effective stack (variation's memory layers
-   *
-   * - this field) must not exceed 10 entries. A request that would produce an
-   *   effective stack larger than 10 is rejected with InvalidArgument.
+   * Size cap: the TOTAL effective cascade (this field + the variation's memory layer
+   * assignments) must not exceed 10 entries. A request that would produce a larger
+   * cascade is rejected with InvalidArgument.
    */
-  memoryStack?: Array<MemoryReference>;
+  memoryCascade?: Array<MemoryReference>;
 
   /**
    * CreateOperationMetadata contains the user-provided fields for creating an

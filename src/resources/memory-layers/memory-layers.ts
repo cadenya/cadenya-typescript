@@ -27,7 +27,7 @@ import { path } from '../../internal/utils/path';
 
 /**
  * Manage memory layers and their entries. Layers are named containers that can
- *  be composed into an objective's memory stack; entries are the keyed values
+ *  be composed into an objective's memory cascade; entries are the keyed values
  *  within a layer. System-managed layers (e.g., episodic layers created by the
  *  runtime) cannot be mutated through this API.
  */
@@ -92,11 +92,11 @@ export type MemoryLayersCursorPagination = CursorPagination<MemoryLayer>;
 
 /**
  * MemoryLayer is a named container of memory entries that can be composed into an
- * objective's memory stack. Layers are workspace-scoped resources. The layer type
- * controls how its entries participate in the agent loop — see MemoryLayerType for
- * details.
+ * objective's memory cascade. Layers are workspace-scoped resources. The layer
+ * type controls how its entries participate in the agent loop — see
+ * MemoryLayerType for details.
  *
- * See "Memory stack composition" above for how layers compose at lookup time.
+ * See "Memory cascade composition" above for how layers compose at lookup time.
  */
 export interface MemoryLayer {
   /**
@@ -159,7 +159,7 @@ export interface MemoryLayerSpec {
   /**
    * Server-set. True for layers managed by the system (e.g., episodic layers created
    * automatically when an objective uses an episodic_key). System-managed layers
-   * cannot be assigned to objective stacks via the API and cannot be mutated by
+   * cannot be assigned to objective cascades via the API and cannot be mutated by
    * clients — their lifecycle is controlled entirely by the runtime.
    */
   systemManaged?: boolean;
