@@ -28,6 +28,7 @@ describe('resource objectives', () => {
     const response = await client.objectives.create('workspaceId', {
       agentId: 'agentId',
       data: { foo: 'bar' },
+      episodicMemory: { key: 'key' },
       initialMessage: 'initialMessage',
       memoryStack: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
       metadata: {

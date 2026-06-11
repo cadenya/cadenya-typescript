@@ -133,10 +133,22 @@ export interface MemoryLayerSpec {
   type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 
   /**
+   * Server-set on episodic layers: the agent this layer belongs to. Unset for
+   * non-episodic layers.
+   */
+  agentId?: string;
+
+  /**
    * Human-readable description of the layer's purpose. Encouraged for user-created
    * layers; system-managed layers may have a generated description.
    */
   description?: string;
+
+  /**
+   * Server-set on episodic layers: the caller-supplied episodic key the layer was
+   * created for. Unset for non-episodic layers.
+   */
+  episodicKey?: string;
 
   /**
    * For layers with a finite lifetime (e.g., episodic), the time at which the layer
@@ -195,9 +207,21 @@ export interface MemoryLayerUpdateParams {
 
 export interface MemoryLayerListParams extends CursorPaginationParams {
   /**
+   * Filter to episodic layers belonging to this agent.
+   */
+  agentId?: string;
+
+  /**
    * Filter by bundle_key — return only resources owned by this bundle.
    */
   bundleKey?: string;
+
+  /**
+   * Filter to episodic layers whose episodic key starts with this prefix (e.g.
+   * "customer/" matches "customer/42" and "customer/43"). Useful for namespaced
+   * keys, similar to a redis key scan.
+   */
+  episodicKeyPrefix?: string;
 
   /**
    * When set to true you may use more of your alloted API rate-limit
