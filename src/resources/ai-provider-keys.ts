@@ -73,8 +73,10 @@ export class AIProviderKeys extends APIResource {
 export type AIProviderKeysCursorPagination = CursorPagination<AIProviderKey>;
 
 /**
- * AIProviderKey is a customer-provided (BYOK) credential for an AI provider,
- * scoped to a workspace. The secret value is never returned in responses.
+ * AIProviderKey is a credential for an AI provider, scoped to a workspace. Most
+ * keys are customer-provided (BYOK); Cadenya also provisions promotional keys (see
+ * AIProviderKeyInfo.is_promotional), which cannot be modified or deleted by
+ * account administrators. The secret value is never returned in responses.
  */
 export interface AIProviderKey {
   /**
@@ -106,6 +108,12 @@ export namespace AIProviderKey {
      * Number of enabled models provisioned on this key.
      */
     enabledModelCount?: number;
+
+    /**
+     * Cadenya includes promotional keys (one for onboarding, and potentially more in
+     * the future). These are not added or maintained by account administrators.
+     */
+    isPromotional?: boolean;
   }
 }
 
@@ -183,6 +191,13 @@ export interface AIProviderKeyListParams extends CursorPaginationParams {
    * Filter expression (query param: prefix)
    */
   prefix?: string;
+
+  /**
+   * When true, return only promotional keys (provided by Cadenya, e.g. for
+   * onboarding). Defaults to returning all keys, customer-provided and promotional
+   * alike.
+   */
+  promotional?: boolean;
 
   /**
    * Free-form search query

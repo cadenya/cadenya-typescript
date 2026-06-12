@@ -48,6 +48,7 @@ describe('resource models', () => {
           bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
+          isAssigned: true,
           limit: 0,
           prefix: 'prefix',
           query: 'query',
