@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AIProviderKeysAPI from './ai-provider-keys';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
@@ -102,14 +103,17 @@ export namespace Model {
     agentVariationCount?: number;
 
     /**
-     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     * AIProviderKey is a credential for an AI provider, scoped to a workspace. Most
+     * keys are customer-provided (BYOK); Cadenya also provisions promotional keys (see
+     * AIProviderKeyInfo.is_promotional), which cannot be modified or deleted by
+     * account administrators. The secret value is never returned in responses.
      */
-    aiProviderKey?: Shared.ResourceMetadata;
+    aiProviderKey?: AIProviderKeysAPI.AIProviderKey;
 
     /**
-     * The AI provider this model routes through (via its provider key).
+     * Represents the last time this model was used in an agent objective
      */
-    provider?: 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER';
+    lastUsedAt?: string;
   }
 }
 
@@ -177,6 +181,13 @@ export interface ModelListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filter models to only ones assigned to an active agent variation/agent. Draft
+   * agents count as assigned; archived agents do not. Assignment does not imply
+   * recent traffic — see ModelInfo.last_used_at for that.
+   */
+  isAssigned?: boolean;
+
+  /**
    * Filter by name prefix
    */
   prefix?: string;
@@ -224,6 +235,11 @@ export namespace ModelSwapParams {
      * The model variations are currently on. Accepts an id or "external_id:" slug.
      */
     currentModelId?: string;
+
+    /**
+     * Whether to disable the current model after the swap.
+     */
+    disableCurrentAfterSwap?: boolean;
 
     /**
      * The model to move variations to. Accepts an id or "external_id:" slug.
