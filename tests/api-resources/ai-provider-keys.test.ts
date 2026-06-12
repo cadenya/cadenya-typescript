@@ -111,6 +111,7 @@ describe('resource aiProviderKeys', () => {
           includeInfo: true,
           limit: 0,
           prefix: 'prefix',
+          promotional: true,
           query: 'query',
           sortOrder: 'sortOrder',
         },
