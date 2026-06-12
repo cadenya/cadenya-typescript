@@ -41,6 +41,12 @@ Methods:
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
 - <code title="post /v1/account:rotateWebhookSigningKey">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
 
+# Profiles
+
+Methods:
+
+- <code title="get /v1/whoami">client.profiles.<a href="./src/resources/profiles.ts">whoami</a>() -> Profile</code>
+
 # Agents
 
 Types:

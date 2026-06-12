@@ -51,6 +51,7 @@ import {
   Models,
   ModelsCursorPagination,
 } from './resources/models';
+import { Profiles } from './resources/profiles';
 import {
   Search,
   SearchSearchToolsOrToolSetsParams,
@@ -975,6 +976,11 @@ export class Cadenya {
    */
   account: API.AccountResource = new API.AccountResource(this);
   /**
+   * Operations on profiles, the account-level principals (users, API keys,
+   *  system) that authenticate against the API.
+   */
+  profiles: API.Profiles = new API.Profiles(this);
+  /**
    * Manage AI agents within a workspace. Agents define AI behavior and tool access.
    */
   agents: API.Agents = new API.Agents(this);
@@ -1042,6 +1048,7 @@ export class Cadenya {
 
 Cadenya.AIProviderKeys = AIProviderKeys;
 Cadenya.AccountResource = AccountResource;
+Cadenya.Profiles = Profiles;
 Cadenya.Agents = Agents;
 Cadenya.Objectives = Objectives;
 Cadenya.MemoryLayers = MemoryLayers;
@@ -1086,6 +1093,8 @@ export declare namespace Cadenya {
     type ProfileSpec as ProfileSpec,
     type RotateWebhookSigningKeyResponse as RotateWebhookSigningKeyResponse,
   };
+
+  export { Profiles as Profiles };
 
   export {
     Agents as Agents,

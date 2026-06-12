@@ -136,6 +136,7 @@ export {
   type ObjectiveContextWindowsCursorPagination,
   type ObjectiveListEventsResponsesCursorPagination,
 } from './objectives/objectives';
+export { Profiles } from './profiles';
 export {
   Search,
   type SearchSearchToolsOrToolSetsResponse,
