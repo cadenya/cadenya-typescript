@@ -70,6 +70,7 @@ export {
   type ObjectiveToolCallResultImageBlock,
   type ObjectiveToolCallResultTextBlock,
   type ObjectiveToolCallWithResult,
+  type ResolvedSecret,
   type ToolCallRetrieveParams,
   type ToolCallListParams,
   type ToolCallApproveParams,

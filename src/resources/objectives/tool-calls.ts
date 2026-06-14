@@ -132,6 +132,11 @@ export interface ObjectiveToolCallData {
   memo?: string;
 
   /**
+   * List of resolved secrets used by the tool call
+   */
+  resolvedSecrets?: Array<ResolvedSecret>;
+
+  /**
    * A profile identifies a user or non-human principal (such as an API key) at the
    * account level. Profiles are account-scoped and can be granted access to multiple
    * workspaces.
@@ -152,6 +157,26 @@ export interface ObjectiveToolCallInfo {
    * runs)
    */
   objective?: Shared.OperationMetadata;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  tool?: Shared.BareMetadata;
+
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  toolSet?: Shared.BareMetadata;
 }
 
 /**
@@ -257,12 +282,35 @@ export interface ObjectiveToolCallWithResult {
     | 'TOOL_CALL_STATUS_DENIED';
 
   /**
+   * List of resolved secrets used by the tool call
+   */
+  resolvedSecrets?: Array<ResolvedSecret>;
+
+  /**
    * ObjectiveToolCallResult is the content a tool returned after execution. Tools
    * can return multiple content blocks, and blocks can be multi-modal (text, image,
    * audio). Media blocks are stored by Cadenya and served as short-lived signed URLs
    * rather than inline bytes.
    */
   result?: ObjectiveToolCallResult;
+}
+
+/**
+ * ResolvedSecret is a resolved secret value from the workspace, toolset, or
+ * objective. When a tool is called, it will rely on secrets in the order of:
+ *
+ * - Objective
+ * - Toolset
+ * - Workspace
+ */
+export interface ResolvedSecret {
+  key?: string;
+
+  source?:
+    | 'RESOLVED_SECRET_SOURCE_UNSPECIFIED'
+    | 'RESOLVED_SECRET_SOURCE_WORKSPACE'
+    | 'RESOLVED_SECRET_SOURCE_TOOLSET'
+    | 'RESOLVED_SECRET_SOURCE_OBJECTIVE';
 }
 
 export interface ToolCallRetrieveParams {
@@ -335,6 +383,7 @@ export declare namespace ToolCalls {
     type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
+    type ResolvedSecret as ResolvedSecret,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
     type ToolCallRetrieveParams as ToolCallRetrieveParams,
     type ToolCallListParams as ToolCallListParams,
