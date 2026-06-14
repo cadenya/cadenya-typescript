@@ -1,6 +1,18 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Secrets,
+  type ToolSetSecret,
+  type ToolSetSecretInfo,
+  type ToolSetSecretSpec,
+  type SecretCreateParams,
+  type SecretRetrieveParams,
+  type SecretUpdateParams,
+  type SecretListParams,
+  type SecretDeleteParams,
+  type ToolSetSecretsCursorPagination,
+} from './secrets';
+export {
   ToolSets,
   type ApprovalRequirementFilter,
   type AttributeFilter,

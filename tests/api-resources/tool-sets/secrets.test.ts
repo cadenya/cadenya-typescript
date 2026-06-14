@@ -1,0 +1,143 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import Cadenya from '@cadenya/cadenya';
+
+const client = new Cadenya({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
+
+describe('resource secrets', () => {
+  // Mock server tests are disabled
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.toolSets.secrets.create('toolSetId', {
+      workspaceId: 'workspaceId',
+      metadata: { name: 'name' },
+      spec: {},
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.toolSets.secrets.create('toolSetId', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { value: 'value' },
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.toolSets.secrets.retrieve('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.toolSets.secrets.retrieve('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.toolSets.secrets.update('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.toolSets.secrets.update('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+      metadata: {
+        name: 'name',
+        bundleKey: 'bundleKey',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { value: 'value' },
+      updateMask: 'updateMask',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.toolSets.secrets.list('toolSetId', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: required and optional params', async () => {
+    const response = await client.toolSets.secrets.list('toolSetId', {
+      workspaceId: 'workspaceId',
+      bundleKey: 'bundleKey',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
+      prefix: 'prefix',
+      query: 'query',
+      sortOrder: 'sortOrder',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.toolSets.secrets.delete('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.toolSets.secrets.delete('id', {
+      workspaceId: 'workspaceId',
+      toolSetId: 'toolSetId',
+    });
+  });
+});

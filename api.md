@@ -204,6 +204,7 @@ Types:
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultImageBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultTextBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallWithResult</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ResolvedSecret</a></code>
 
 Methods:
 
@@ -366,6 +367,22 @@ Methods:
 - <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">delete</a>(id, { ...params }) -> void</code>
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}:omit">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">omit</a>(id, { ...params }) -> Tool</code>
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/tools/{id}:restore">client.toolSets.tools.<a href="./src/resources/tool-sets/tools.ts">restore</a>(id, { ...params }) -> Tool</code>
+
+## Secrets
+
+Types:
+
+- <code><a href="./src/resources/tool-sets/secrets.ts">ToolSetSecret</a></code>
+- <code><a href="./src/resources/tool-sets/secrets.ts">ToolSetSecretInfo</a></code>
+- <code><a href="./src/resources/tool-sets/secrets.ts">ToolSetSecretSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/secrets">client.toolSets.secrets.<a href="./src/resources/tool-sets/secrets.ts">create</a>(toolSetID, { ...params }) -> ToolSetSecret</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/secrets/{id}">client.toolSets.secrets.<a href="./src/resources/tool-sets/secrets.ts">retrieve</a>(id, { ...params }) -> ToolSetSecret</code>
+- <code title="patch /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/secrets/{id}">client.toolSets.secrets.<a href="./src/resources/tool-sets/secrets.ts">update</a>(id, { ...params }) -> ToolSetSecret</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/secrets">client.toolSets.secrets.<a href="./src/resources/tool-sets/secrets.ts">list</a>(toolSetID, { ...params }) -> ToolSetSecretsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/secrets/{id}">client.toolSets.secrets.<a href="./src/resources/tool-sets/secrets.ts">delete</a>(id, { ...params }) -> void</code>
 
 # APIKeys
 
