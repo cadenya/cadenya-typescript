@@ -3,6 +3,19 @@
 import { APIResource } from '../../core/resource';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
+import * as SecretsAPI from './secrets';
+import {
+  SecretCreateParams,
+  SecretDeleteParams,
+  SecretListParams,
+  SecretRetrieveParams,
+  SecretUpdateParams,
+  Secrets,
+  ToolSetSecret,
+  ToolSetSecretInfo,
+  ToolSetSecretSpec,
+  ToolSetSecretsCursorPagination,
+} from './secrets';
 import * as ToolsAPI from './tools';
 import {
   ConfigHTTP,
@@ -37,6 +50,7 @@ import { path } from '../../internal/utils/path';
  */
 export class ToolSets extends APIResource {
   tools: ToolsAPI.Tools = new ToolsAPI.Tools(this._client);
+  secrets: SecretsAPI.Secrets = new SecretsAPI.Secrets(this._client);
 
   /**
    * Creates a new tool set in the workspace
@@ -561,6 +575,7 @@ export interface ToolSetUnarchiveParams {
 }
 
 ToolSets.Tools = Tools;
+ToolSets.Secrets = Secrets;
 
 export declare namespace ToolSets {
   export {
@@ -611,5 +626,18 @@ export declare namespace ToolSets {
     type ToolDeleteParams as ToolDeleteParams,
     type ToolOmitParams as ToolOmitParams,
     type ToolRestoreParams as ToolRestoreParams,
+  };
+
+  export {
+    Secrets as Secrets,
+    type ToolSetSecret as ToolSetSecret,
+    type ToolSetSecretInfo as ToolSetSecretInfo,
+    type ToolSetSecretSpec as ToolSetSecretSpec,
+    type ToolSetSecretsCursorPagination as ToolSetSecretsCursorPagination,
+    type SecretCreateParams as SecretCreateParams,
+    type SecretRetrieveParams as SecretRetrieveParams,
+    type SecretUpdateParams as SecretUpdateParams,
+    type SecretListParams as SecretListParams,
+    type SecretDeleteParams as SecretDeleteParams,
   };
 }
