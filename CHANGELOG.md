@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.93.1 (2026-06-17)
+
+Full Changelog: [v0.93.0...v0.93.1](https://github.com/cadenya/cadenya-typescript/compare/v0.93.0...v0.93.1)
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([dfaeb28](https://github.com/cadenya/cadenya-typescript/commit/dfaeb284140f3b54521d5eeef3a78440b796969b))
+
 ## 0.93.0 (2026-06-14)
 
 Full Changelog: [v0.92.0...v0.93.0](https://github.com/cadenya/cadenya-typescript/compare/v0.92.0...v0.93.0)
