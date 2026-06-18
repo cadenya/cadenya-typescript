@@ -116,27 +116,12 @@ export interface ConfigHTTP {
    * These are only used when the request method is a POST, PUT, or PATCH
    */
   requestBodyTemplate?: string;
-
-  /**
-   * The tool name (commonly an "operation id" in OpenAPI specs) to call on the HTTP
-   * adapter. This is used to match the tool spec to the correct endpoint on the HTTP
-   * adapter. it will be derived from the name of the tool if not provided.
-   */
-  toolName?: string;
 }
 
-export interface ConfigMcp {
-  toolDescription?: string;
-
-  toolName?: string;
-
-  toolTitle?: string;
-}
+export type ConfigMcp = unknown;
 
 export interface ConfigOpenAPI {
   method?: string;
-
-  operationId?: string;
 
   path?: string;
 }
@@ -185,6 +170,14 @@ export interface ToolSpec {
   parameters: { [key: string]: unknown };
 
   requiresApproval: boolean;
+
+  /**
+   * The name provided to the LLM, which may differ from the metadata.name on the
+   * tool. LLMs have specific length and format requirements, and tool set sources
+   * may not comply with them, so Cadenya does its best to format names into a usable
+   * format.
+   */
+  llmToolName?: string;
 }
 
 /**
