@@ -428,6 +428,8 @@ export interface ToolSetEventData {
 export interface ToolSetInfo {
   agentCount?: number;
 
+  availableTools?: number;
+
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
    * account level. Profiles are account-scoped and can be granted access to multiple
@@ -436,6 +438,8 @@ export interface ToolSetInfo {
   createdBy?: AccountAPI.Profile;
 
   lastSync?: string;
+
+  omittedTools?: number;
 
   toolCount?: number;
 }
