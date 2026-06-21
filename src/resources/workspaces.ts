@@ -46,10 +46,30 @@ export interface Workspace {
   spec: WorkspaceSpec;
 
   /**
+   * WorkspaceInfo returns counts
+   */
+  info?: Workspace.Info;
+
+  /**
    * Lifecycle status of the workspace. Archived workspaces reject all requests
    * scoped to them. Server-populated.
    */
   status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+}
+
+export namespace Workspace {
+  /**
+   * WorkspaceInfo returns counts
+   */
+  export interface Info {
+    totalAgents?: number;
+
+    totalAgentVariations?: number;
+
+    totalAvailableTools?: number;
+
+    totalMemoryEntries?: number;
+  }
 }
 
 export interface WorkspaceSpec {

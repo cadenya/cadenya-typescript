@@ -23,6 +23,8 @@ export interface AccountResourceMetadata {
 
   profileId: string;
 
+  createdAt?: string;
+
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
