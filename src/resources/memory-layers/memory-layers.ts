@@ -217,11 +217,6 @@ export interface MemoryLayerListParams extends CursorPaginationParams {
   agentId?: string;
 
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * Filter to episodic layers whose episodic key starts with this prefix (e.g.
    * "customer/" matches "customer/42" and "customer/43"). Useful for namespaced
    * keys, similar to a redis key scan.

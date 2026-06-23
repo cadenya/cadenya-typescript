@@ -30,7 +30,6 @@ describe('resource entries', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -88,7 +87,6 @@ describe('resource entries', () => {
       memoryLayerId: 'memoryLayerId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -118,7 +116,6 @@ describe('resource entries', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.memoryLayers.entries.list('memoryLayerId', {
       workspaceId: 'workspaceId',
-      bundleKey: 'bundleKey',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,

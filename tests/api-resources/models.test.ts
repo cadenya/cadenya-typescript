@@ -45,7 +45,6 @@ describe('resource models', () => {
         'workspaceId',
         {
           aiProviderKeyId: 'aiProviderKeyId',
-          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           isAssigned: true,

@@ -28,7 +28,6 @@ describe('resource memoryLayers', () => {
     const response = await client.memoryLayers.create('workspaceId', {
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -71,7 +70,6 @@ describe('resource memoryLayers', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -100,7 +98,6 @@ describe('resource memoryLayers', () => {
         'workspaceId',
         {
           agentId: 'agentId',
-          bundleKey: 'bundleKey',
           cursor: 'cursor',
           episodicKeyPrefix: 'episodicKeyPrefix',
           includeInfo: true,

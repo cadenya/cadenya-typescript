@@ -180,11 +180,6 @@ export interface SecretListParams extends CursorPaginationParams {
   workspaceId: string;
 
   /**
-   * Query param: Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
