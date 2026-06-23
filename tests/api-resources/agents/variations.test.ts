@@ -30,7 +30,6 @@ describe('resource variations', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -100,7 +99,6 @@ describe('resource variations', () => {
       agentId: 'agentId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -142,7 +140,6 @@ describe('resource variations', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.agents.variations.list('agentId', {
       workspaceId: 'workspaceId',
-      bundleKey: 'bundleKey',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,

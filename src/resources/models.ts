@@ -170,11 +170,6 @@ export interface ModelListParams extends CursorPaginationParams {
   aiProviderKeyId?: string;
 
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * When true, populate each item's info (e.g. the AI provider), at the cost of
    * extra lookups.
    */

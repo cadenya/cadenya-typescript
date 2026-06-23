@@ -35,7 +35,6 @@ describe('resource tools', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -105,7 +104,6 @@ describe('resource tools', () => {
       toolSetId: 'toolSetId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -147,7 +145,6 @@ describe('resource tools', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.toolSets.tools.list('toolSetId', {
       workspaceId: 'workspaceId',
-      bundleKey: 'bundleKey',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,

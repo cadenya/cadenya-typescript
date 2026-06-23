@@ -28,7 +28,6 @@ describe('resource aiProviderKeys', () => {
     const response = await client.aiProviderKeys.create('workspaceId', {
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -75,7 +74,6 @@ describe('resource aiProviderKeys', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },

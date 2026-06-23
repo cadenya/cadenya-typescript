@@ -28,7 +28,6 @@ describe('resource agents', () => {
     const response = await client.agents.create('workspaceId', {
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -44,7 +43,6 @@ describe('resource agents', () => {
       defaultVariation: {
         metadata: {
           name: 'name',
-          bundleKey: 'bundleKey',
           externalId: 'externalId',
           labels: { foo: 'string' },
         },
@@ -105,7 +103,6 @@ describe('resource agents', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -141,7 +138,6 @@ describe('resource agents', () => {
       client.agents.list(
         'workspaceId',
         {
-          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,

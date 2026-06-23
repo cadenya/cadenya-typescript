@@ -30,7 +30,6 @@ describe('resource secrets', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -83,7 +82,6 @@ describe('resource secrets', () => {
       toolSetId: 'toolSetId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -108,7 +106,6 @@ describe('resource secrets', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.toolSets.secrets.list('toolSetId', {
       workspaceId: 'workspaceId',
-      bundleKey: 'bundleKey',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,

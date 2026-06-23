@@ -32,7 +32,6 @@ describe('resource uploads', () => {
     const response = await client.uploads.create('workspaceId', {
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },

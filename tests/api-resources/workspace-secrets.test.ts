@@ -28,7 +28,6 @@ describe('resource workspaceSecrets', () => {
     const response = await client.workspaceSecrets.create('workspaceId', {
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -71,7 +70,6 @@ describe('resource workspaceSecrets', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -99,7 +97,6 @@ describe('resource workspaceSecrets', () => {
       client.workspaceSecrets.list(
         'workspaceId',
         {
-          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
