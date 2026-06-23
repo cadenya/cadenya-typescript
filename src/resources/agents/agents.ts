@@ -347,11 +347,6 @@ export interface AgentUpdateParams {
 
 export interface AgentListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * When true, the `info` field on each returned agent is populated. Requests with
    * this flag count more against your rate limit.
    */

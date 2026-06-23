@@ -114,26 +114,6 @@ import {
   APIKeysCursorPagination,
 } from './resources/api-keys/api-keys';
 import {
-  AgentEntry,
-  AgentScheduleEntry,
-  AgentVariationEntry,
-  BulkWorkspaceAppliesCursorPagination,
-  BulkWorkspaceApply,
-  BulkWorkspaceApplyData,
-  BulkWorkspaceApplyInfo,
-  BulkWorkspaceApplyStatus,
-  BulkWorkspaceResourceApplyParams,
-  BulkWorkspaceResourceListParams,
-  BulkWorkspaceResourceRetrieveParams,
-  BulkWorkspaceResources,
-  MemoryEntryItem,
-  MemoryLayerEntry,
-  ToolEntry,
-  ToolSetEntry,
-  VariationAssignmentEntry,
-  VariationMemoryLayerEntry,
-} from './resources/bulk-workspace-resources/bulk-workspace-resources';
-import {
   MemoryLayer,
   MemoryLayerCreateParams,
   MemoryLayerDeleteParams,
@@ -1046,12 +1026,6 @@ export class Cadenya {
    */
   workspaceAdmin: API.WorkspaceAdmin = new API.WorkspaceAdmin(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
-  /**
-   * Apply a declarative bundle of workspace resources — tool sets, memory
-   *  layers, agents, variations, assignments, and schedules — in a single
-   *  asynchronous operation.
-   */
-  bulkWorkspaceResources: API.BulkWorkspaceResources = new API.BulkWorkspaceResources(this);
 }
 
 Cadenya.AIProviderKeys = AIProviderKeys;
@@ -1069,7 +1043,6 @@ Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceAdmin = WorkspaceAdmin;
 Cadenya.Webhooks = Webhooks;
-Cadenya.BulkWorkspaceResources = BulkWorkspaceResources;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -1283,27 +1256,6 @@ export declare namespace Cadenya {
     Webhooks as Webhooks,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
-  };
-
-  export {
-    BulkWorkspaceResources as BulkWorkspaceResources,
-    type AgentEntry as AgentEntry,
-    type AgentScheduleEntry as AgentScheduleEntry,
-    type AgentVariationEntry as AgentVariationEntry,
-    type BulkWorkspaceApply as BulkWorkspaceApply,
-    type BulkWorkspaceApplyData as BulkWorkspaceApplyData,
-    type BulkWorkspaceApplyInfo as BulkWorkspaceApplyInfo,
-    type BulkWorkspaceApplyStatus as BulkWorkspaceApplyStatus,
-    type MemoryEntryItem as MemoryEntryItem,
-    type MemoryLayerEntry as MemoryLayerEntry,
-    type ToolEntry as ToolEntry,
-    type ToolSetEntry as ToolSetEntry,
-    type VariationAssignmentEntry as VariationAssignmentEntry,
-    type VariationMemoryLayerEntry as VariationMemoryLayerEntry,
-    type BulkWorkspaceAppliesCursorPagination as BulkWorkspaceAppliesCursorPagination,
-    type BulkWorkspaceResourceRetrieveParams as BulkWorkspaceResourceRetrieveParams,
-    type BulkWorkspaceResourceListParams as BulkWorkspaceResourceListParams,
-    type BulkWorkspaceResourceApplyParams as BulkWorkspaceResourceApplyParams,
   };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;

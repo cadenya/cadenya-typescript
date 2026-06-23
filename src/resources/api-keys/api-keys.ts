@@ -234,11 +234,6 @@ export namespace APIKeyUpdateParams {
 
 export interface APIKeyListParams extends CursorPaginationParams {
   /**
-   * Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * When true, included info fields are populated. Requests with this flag count
    * more against your rate limit.
    */

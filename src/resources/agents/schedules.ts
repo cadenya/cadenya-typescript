@@ -368,11 +368,6 @@ export interface ScheduleListParams extends CursorPaginationParams {
   workspaceId: string;
 
   /**
-   * Query param: Filter by bundle_key — return only resources owned by this bundle.
-   */
-  bundleKey?: string;
-
-  /**
    * Query param: When true, the `info` field on each returned schedule is populated.
    * Requests with this flag count more against your rate limit.
    */

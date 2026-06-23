@@ -30,7 +30,6 @@ describe('resource schedules', () => {
       workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -140,7 +139,6 @@ describe('resource schedules', () => {
       agentId: 'agentId',
       metadata: {
         name: 'name',
-        bundleKey: 'bundleKey',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
@@ -222,7 +220,6 @@ describe('resource schedules', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.agents.schedules.list('agentId', {
       workspaceId: 'workspaceId',
-      bundleKey: 'bundleKey',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,

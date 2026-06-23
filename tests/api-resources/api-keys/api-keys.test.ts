@@ -78,7 +78,6 @@ describe('resource apiKeys', () => {
     await expect(
       client.apiKeys.list(
         {
-          bundleKey: 'bundleKey',
           cursor: 'cursor',
           includeInfo: true,
           limit: 0,
