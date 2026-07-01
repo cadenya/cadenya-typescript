@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.98.0 (2026-07-01)
+
+Full Changelog: [v0.97.0...v0.98.0](https://github.com/cadenya/cadenya-typescript/compare/v0.97.0...v0.98.0)
+
+### Features
+
+* Add SSE streaming endpoint for objective events (ENG-344) ([e5537a6](https://github.com/cadenya/cadenya-typescript/commit/e5537a6fdd7137c6c4e5edbfb05e66e567ec4728))
+* **api:** api update ([f66dcd3](https://github.com/cadenya/cadenya-typescript/commit/f66dcd3099d421eff6fb09dd96776156e472b4ab))
+
 ## 0.97.0 (2026-07-01)
 
 Full Changelog: [v0.96.0...v0.97.0](https://github.com/cadenya/cadenya-typescript/compare/v0.96.0...v0.97.0)
