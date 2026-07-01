@@ -49,6 +49,8 @@ import * as ToolsAPI from './tools';
 import { ObjectiveTool, ObjectiveToolsCursorPagination, ToolListParams, Tools } from './tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
+import { Stream } from '../../core/streaming';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -127,7 +129,7 @@ export class Objectives extends APIResource {
     objectiveID: string,
     params: ObjectiveContinueParams,
     options?: RequestOptions,
-  ): APIPromise<ObjectiveContinueResponse> {
+  ): APIPromise<ObjectiveEvent> {
     const { workspaceId, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:continue`, {
       body,
@@ -159,13 +161,29 @@ export class Objectives extends APIResource {
     objectiveID: string,
     params: ObjectiveListEventsParams,
     options?: RequestOptions,
-  ): PagePromise<ObjectiveListEventsResponsesCursorPagination, ObjectiveListEventsResponse> {
+  ): PagePromise<ObjectiveEventsCursorPagination, ObjectiveEvent> {
     const { workspaceId, ...query } = params;
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events`,
-      CursorPagination<ObjectiveListEventsResponse>,
+      CursorPagination<ObjectiveEvent>,
       { query, ...options },
     );
+  }
+
+  /**
+   * Streams events for an objective in real-time using server-sent events (SSE)
+   */
+  streamEvents(
+    objectiveID: string,
+    params: ObjectiveStreamEventsParams,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ObjectiveEvent>> {
+    const { workspaceId } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events:stream`, {
+      ...options,
+      headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
+      stream: true,
+    }) as APIPromise<Stream<ObjectiveEvent>>;
   }
 }
 
@@ -173,7 +191,7 @@ export type ObjectivesCursorPagination = CursorPagination<Objective>;
 
 export type ObjectiveContextWindowsCursorPagination = CursorPagination<ObjectiveContextWindow>;
 
-export type ObjectiveListEventsResponsesCursorPagination = CursorPagination<ObjectiveListEventsResponse>;
+export type ObjectiveEventsCursorPagination = CursorPagination<ObjectiveEvent>;
 
 export interface AssistantMessage {
   content?: string;
@@ -503,6 +521,20 @@ export interface ObjectiveError {
   type?: string;
 }
 
+export interface ObjectiveEvent {
+  data: ObjectiveEventData;
+
+  /**
+   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+   * runs)
+   */
+  metadata: Shared.OperationMetadata;
+
+  contextWindowId?: string;
+
+  info?: ObjectiveEventInfo;
+}
+
 export interface ObjectiveEventData {
   assistantMessage?: AssistantMessage;
 
@@ -639,23 +671,7 @@ export namespace ObjectiveEventWebhookData {
      */
     objective: Shared.OperationMetadata;
 
-    objectiveEvent: Data.ObjectiveEvent;
-  }
-
-  export namespace Data {
-    export interface ObjectiveEvent {
-      data: ObjectivesAPI.ObjectiveEventData;
-
-      /**
-       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-       * runs)
-       */
-      metadata: Shared.OperationMetadata;
-
-      contextWindowId?: string;
-
-      info?: ObjectivesAPI.ObjectiveEventInfo;
-    }
+    objectiveEvent: ObjectivesAPI.ObjectiveEvent;
   }
 }
 
@@ -849,34 +865,6 @@ export interface ObjectiveCompactResponse {
    * The new context window created by the compaction
    */
   contextWindow?: ObjectiveContextWindowData;
-}
-
-export interface ObjectiveContinueResponse {
-  data: ObjectiveEventData;
-
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata: Shared.OperationMetadata;
-
-  contextWindowId?: string;
-
-  info?: ObjectiveEventInfo;
-}
-
-export interface ObjectiveListEventsResponse {
-  data: ObjectiveEventData;
-
-  /**
-   * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-   * runs)
-   */
-  metadata: Shared.OperationMetadata;
-
-  contextWindowId?: string;
-
-  info?: ObjectiveEventInfo;
 }
 
 export interface ObjectiveCreateParams {
@@ -1109,6 +1097,10 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
   windowId?: string;
 }
 
+export interface ObjectiveStreamEventsParams {
+  workspaceId: string;
+}
+
 Objectives.Tools = Tools;
 Objectives.ToolCalls = ToolCalls;
 Objectives.Tasks = Tasks;
@@ -1127,6 +1119,7 @@ export declare namespace Objectives {
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
     type ObjectiveError as ObjectiveError,
+    type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
     type ObjectiveEventInfo as ObjectiveEventInfo,
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
@@ -1142,11 +1135,9 @@ export declare namespace Objectives {
     type ToolResult as ToolResult,
     type UserMessage as UserMessage,
     type ObjectiveCompactResponse as ObjectiveCompactResponse,
-    type ObjectiveContinueResponse as ObjectiveContinueResponse,
-    type ObjectiveListEventsResponse as ObjectiveListEventsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveContextWindowsCursorPagination as ObjectiveContextWindowsCursorPagination,
-    type ObjectiveListEventsResponsesCursorPagination as ObjectiveListEventsResponsesCursorPagination,
+    type ObjectiveEventsCursorPagination as ObjectiveEventsCursorPagination,
     type ObjectiveCreateParams as ObjectiveCreateParams,
     type ObjectiveRetrieveParams as ObjectiveRetrieveParams,
     type ObjectiveListParams as ObjectiveListParams,
@@ -1155,6 +1146,7 @@ export declare namespace Objectives {
     type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
+    type ObjectiveStreamEventsParams as ObjectiveStreamEventsParams,
   };
 
   export {

@@ -206,4 +206,21 @@ describe('resource objectives', () => {
       windowId: 'windowId',
     });
   });
+
+  // Mock server tests are disabled
+  test.skip('streamEvents: only required params', async () => {
+    const responsePromise = client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('streamEvents: required and optional params', async () => {
+    const response = await client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+  });
 });
