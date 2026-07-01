@@ -32,15 +32,8 @@ describe('resource aiProviderKeys', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        config: {
-          openai: { organizationId: 'organizationId', projectId: 'projectId' },
-          openaiCompatible: { baseUrl: 'baseUrl' },
-          openrouter: { region: 'region' },
-        },
-        credentials: {
-          apiKey: { apiKey: 'apiKey' },
-          headers: { headers: { foo: 'string' } },
-        },
+        apiKey: 'apiKey',
+        openrouter: {},
         provider: 'AI_PROVIDER_UNSPECIFIED',
       },
     });
@@ -85,15 +78,8 @@ describe('resource aiProviderKeys', () => {
         labels: { foo: 'string' },
       },
       spec: {
-        config: {
-          openai: { organizationId: 'organizationId', projectId: 'projectId' },
-          openaiCompatible: { baseUrl: 'baseUrl' },
-          openrouter: { region: 'region' },
-        },
-        credentials: {
-          apiKey: { apiKey: 'apiKey' },
-          headers: { headers: { foo: 'string' } },
-        },
+        apiKey: 'apiKey',
+        openrouter: {},
         provider: 'AI_PROVIDER_UNSPECIFIED',
       },
       updateMask: 'updateMask',
