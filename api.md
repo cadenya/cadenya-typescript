@@ -152,6 +152,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveError</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEvent</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
@@ -167,8 +168,6 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ToolResult</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">UserMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveCompactResponse</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContinueResponse</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveListEventsResponse</a></code>
 
 Methods:
 
@@ -177,9 +176,10 @@ Methods:
 - <code title="get /v1/workspaces/{workspaceId}/objectives">client.objectives.<a href="./src/resources/objectives/objectives.ts">list</a>(workspaceID, { ...params }) -> ObjectivesCursorPagination</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}:cancel">client.objectives.<a href="./src/resources/objectives/objectives.ts">cancel</a>(objectiveID, { ...params }) -> Objective</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}:compact">client.objectives.<a href="./src/resources/objectives/objectives.ts">compact</a>(objectiveID, { ...params }) -> ObjectiveCompactResponse</code>
-- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}:continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveContinueResponse</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}:continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveEvent</code>
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
-- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveListEventsResponsesCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveEventsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events:stream">client.objectives.<a href="./src/resources/objectives/objectives.ts">streamEvents</a>(objectiveID, { ...params }) -> ObjectiveEvent</code>
 
 ## Tools
 

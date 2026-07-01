@@ -31,6 +31,24 @@ const account = await client.account.retrieve();
 console.log(account.info);
 ```
 
+## Streaming responses
+
+We provide support for streaming responses using Server Sent Events (SSE).
+
+```ts
+import Cadenya from '@cadenya/cadenya';
+
+const client = new Cadenya();
+
+const stream = await client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+for await (const objectiveEvent of stream) {
+  console.log(objectiveEvent.data);
+}
+```
+
+If you need to cancel a stream, you can `break` from the loop
+or call `stream.controller.abort()`.
+
 ### Request & Response types
 
 This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:

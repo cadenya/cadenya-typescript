@@ -22,6 +22,7 @@ export {
   type ObjectiveContextWindow,
   type ObjectiveContextWindowData,
   type ObjectiveError,
+  type ObjectiveEvent,
   type ObjectiveEventData,
   type ObjectiveEventInfo,
   type ObjectiveEventWebhookData,
@@ -37,8 +38,6 @@ export {
   type ToolResult,
   type UserMessage,
   type ObjectiveCompactResponse,
-  type ObjectiveContinueResponse,
-  type ObjectiveListEventsResponse,
   type ObjectiveCreateParams,
   type ObjectiveRetrieveParams,
   type ObjectiveListParams,
@@ -47,9 +46,10 @@ export {
   type ObjectiveContinueParams,
   type ObjectiveListContextWindowsParams,
   type ObjectiveListEventsParams,
+  type ObjectiveStreamEventsParams,
   type ObjectivesCursorPagination,
   type ObjectiveContextWindowsCursorPagination,
-  type ObjectiveListEventsResponsesCursorPagination,
+  type ObjectiveEventsCursorPagination,
 } from './objectives';
 export {
   Tasks,
