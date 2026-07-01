@@ -66,23 +66,7 @@ export namespace UnsafeUnwrapWebhookEvent {
      */
     objective: Shared.OperationMetadata;
 
-    objectiveEvent: Data.ObjectiveEvent;
-  }
-
-  export namespace Data {
-    export interface ObjectiveEvent {
-      data: ObjectivesAPI.ObjectiveEventData;
-
-      /**
-       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-       * runs)
-       */
-      metadata: Shared.OperationMetadata;
-
-      contextWindowId?: string;
-
-      info?: ObjectivesAPI.ObjectiveEventInfo;
-    }
+    objectiveEvent: ObjectivesAPI.ObjectiveEvent;
   }
 }
 
@@ -128,23 +112,7 @@ export namespace UnwrapWebhookEvent {
      */
     objective: Shared.OperationMetadata;
 
-    objectiveEvent: Data.ObjectiveEvent;
-  }
-
-  export namespace Data {
-    export interface ObjectiveEvent {
-      data: ObjectivesAPI.ObjectiveEventData;
-
-      /**
-       * Metadata for ephemeral operations and activities (e.g., objectives, executions,
-       * runs)
-       */
-      metadata: Shared.OperationMetadata;
-
-      contextWindowId?: string;
-
-      info?: ObjectivesAPI.ObjectiveEventInfo;
-    }
+    objectiveEvent: ObjectivesAPI.ObjectiveEvent;
   }
 }
 
