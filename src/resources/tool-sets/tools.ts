@@ -118,12 +118,58 @@ export interface ConfigHTTP {
   requestBodyTemplate?: string;
 }
 
-export type ConfigMcp = unknown;
+export interface ConfigMcp {
+  /**
+   * Behavior hints synced from the MCP server's tool definition (ToolAnnotations in
+   * the MCP specification). All hints are advisory: servers are not required to send
+   * them, and clients should not rely on them for security decisions. Absent hints
+   * keep the MCP spec defaults (destructiveHint and openWorldHint default to true;
+   * readOnlyHint and idempotentHint default to false).
+   */
+  annotations?: McpAnnotations;
+}
 
 export interface ConfigOpenAPI {
   method?: string;
 
   path?: string;
+}
+
+/**
+ * Behavior hints synced from the MCP server's tool definition (ToolAnnotations in
+ * the MCP specification). All hints are advisory: servers are not required to send
+ * them, and clients should not rely on them for security decisions. Absent hints
+ * keep the MCP spec defaults (destructiveHint and openWorldHint default to true;
+ * readOnlyHint and idempotentHint default to false).
+ */
+export interface McpAnnotations {
+  /**
+   * If true, the tool may perform destructive updates to its environment. Only
+   * meaningful when read_only_hint is false.
+   */
+  destructiveHint?: boolean;
+
+  /**
+   * If true, calling the tool repeatedly with the same arguments has no additional
+   * effect. Only meaningful when read_only_hint is false.
+   */
+  idempotentHint?: boolean;
+
+  /**
+   * If true, the tool may interact with an "open world" of external entities (e.g.
+   * web search); if false, its domain is closed.
+   */
+  openWorldHint?: boolean;
+
+  /**
+   * If true, the tool does not modify its environment.
+   */
+  readOnlyHint?: boolean;
+
+  /**
+   * A human-readable title for the tool.
+   */
+  title?: string;
 }
 
 export interface Tool {
@@ -341,6 +387,7 @@ export declare namespace Tools {
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
     type ConfigOpenAPI as ConfigOpenAPI,
+    type McpAnnotations as McpAnnotations,
     type Tool as Tool,
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,

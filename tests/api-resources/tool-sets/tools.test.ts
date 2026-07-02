@@ -48,7 +48,15 @@ describe('resource tools', () => {
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
           },
-          mcp: {},
+          mcp: {
+            annotations: {
+              destructiveHint: true,
+              idempotentHint: true,
+              openWorldHint: true,
+              readOnlyHint: true,
+              title: 'title',
+            },
+          },
           openapi: { method: 'method', path: 'path' },
         },
         description: 'description',
@@ -117,7 +125,15 @@ describe('resource tools', () => {
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
           },
-          mcp: {},
+          mcp: {
+            annotations: {
+              destructiveHint: true,
+              idempotentHint: true,
+              openWorldHint: true,
+              readOnlyHint: true,
+              title: 'title',
+            },
+          },
           openapi: { method: 'method', path: 'path' },
         },
         description: 'description',

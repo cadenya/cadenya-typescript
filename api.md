@@ -353,6 +353,7 @@ Types:
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigOpenAPI</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">McpAnnotations</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">Tool</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
