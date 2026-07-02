@@ -48,6 +48,7 @@ export {
   type ConfigHTTP,
   type ConfigMcp,
   type ConfigOpenAPI,
+  type McpAnnotations,
   type Tool,
   type ToolInfo,
   type ToolSpec,
