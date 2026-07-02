@@ -45,12 +45,16 @@ export class Stream<Item> implements AsyncIterable<Item> {
       let done = false;
       try {
         for await (const sse of _iterSSEMessages(response, controller)) {
-          try {
-            yield JSON.parse(sse.data) as Item;
-          } catch (e) {
-            logger.error(`Could not parse message into JSON:`, sse.data);
-            logger.error(`From chunk:`, sse.raw);
-            throw e;
+          if (sse.event === 'open' || sse.event === 'ping') {
+            continue;
+          } else {
+            try {
+              yield JSON.parse(sse.data) as Item;
+            } catch (e) {
+              logger.error(`Could not parse message into JSON:`, sse.data);
+              logger.error(`From chunk:`, sse.raw);
+              throw e;
+            }
           }
         }
         done = true;
