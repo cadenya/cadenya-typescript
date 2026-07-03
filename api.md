@@ -34,11 +34,13 @@ Types:
 - <code><a href="./src/resources/account.ts">AccountSpec</a></code>
 - <code><a href="./src/resources/account.ts">Profile</a></code>
 - <code><a href="./src/resources/account.ts">ProfileSpec</a></code>
+- <code><a href="./src/resources/account.ts">RotateChallengeTokenResponse</a></code>
 - <code><a href="./src/resources/account.ts">RotateWebhookSigningKeyResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>() -> Account</code>
+- <code title="post /v1/account:rotateChallengeToken">client.account.<a href="./src/resources/account.ts">rotateChallengeToken</a>() -> RotateChallengeTokenResponse</code>
 - <code title="post /v1/account:rotateWebhookSigningKey">client.account.<a href="./src/resources/account.ts">rotateWebhookSigningKey</a>() -> RotateWebhookSigningKeyResponse</code>
 
 # Profiles
