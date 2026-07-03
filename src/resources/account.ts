@@ -22,6 +22,14 @@ export class AccountResource extends APIResource {
   }
 
   /**
+   * Rotates the challenge token sent in the X-Cadenya-Challenge-Token header on MCP
+   * tools/list requests. Returns only the new token.
+   */
+  rotateChallengeToken(options?: RequestOptions): APIPromise<RotateChallengeTokenResponse> {
+    return this._client.post('/v1/account:rotateChallengeToken', options);
+  }
+
+  /**
    * Rotates the webhook signing key for the account. Returns only the new key.
    */
   rotateWebhookSigningKey(options?: RequestOptions): APIPromise<RotateWebhookSigningKeyResponse> {
@@ -57,6 +65,15 @@ export interface Account {
  * Server-populated information about the account.
  */
 export interface AccountInfo {
+  /**
+   * The challenge token Cadenya sends in the X-Cadenya-Challenge-Token header on
+   * every MCP tools/list request. Server implementations can accept a valid
+   * challenge token in place of per-user auth when listing tools, while still
+   * requiring real auth on tools/call. Rotate with RotateChallengeToken; update any
+   * servers validating the token before rotating.
+   */
+  challengeToken?: string;
+
   /**
    * An API key for the account. Use workspace-association RPCs to grant the key
    * access to specific workspaces; a key with zero workspaces is valid but cannot
@@ -125,6 +142,13 @@ export interface ProfileSpec {
 }
 
 /**
+ * Response containing the newly generated challenge token.
+ */
+export interface RotateChallengeTokenResponse {
+  challengeToken?: string;
+}
+
+/**
  * Response containing the newly generated webhook signing secret.
  */
 export interface RotateWebhookSigningKeyResponse {
@@ -138,6 +162,7 @@ export declare namespace AccountResource {
     type AccountSpec as AccountSpec,
     type Profile as Profile,
     type ProfileSpec as ProfileSpec,
+    type RotateChallengeTokenResponse as RotateChallengeTokenResponse,
     type RotateWebhookSigningKeyResponse as RotateWebhookSigningKeyResponse,
   };
 }

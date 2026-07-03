@@ -71,6 +71,7 @@ describe('resource toolSets', () => {
                 },
               ],
             },
+            justInTime: { enabled: true, failObjectiveOnToolListError: true },
             toolApprovals: {
               always: true,
               only: {
@@ -234,6 +235,7 @@ describe('resource toolSets', () => {
                 },
               ],
             },
+            justInTime: { enabled: true, failObjectiveOnToolListError: true },
             toolApprovals: {
               always: true,
               only: {

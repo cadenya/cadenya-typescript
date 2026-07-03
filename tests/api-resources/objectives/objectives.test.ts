@@ -154,7 +154,6 @@ describe('resource objectives', () => {
       workspaceId: 'workspaceId',
       enqueue: true,
       message: 'message',
-      secrets: [{ name: 'name', value: 'value' }],
     });
   });
 

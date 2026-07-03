@@ -30,6 +30,7 @@ export {
   type AccountSpec,
   type Profile,
   type ProfileSpec,
+  type RotateChallengeTokenResponse,
   type RotateWebhookSigningKeyResponse,
   type ProfilesCursorPagination,
 } from './account';
