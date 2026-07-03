@@ -26,6 +26,7 @@ import {
   AccountSpec,
   Profile,
   ProfileSpec,
+  RotateChallengeTokenResponse,
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
@@ -1072,6 +1073,7 @@ export declare namespace Cadenya {
     type AccountSpec as AccountSpec,
     type Profile as Profile,
     type ProfileSpec as ProfileSpec,
+    type RotateChallengeTokenResponse as RotateChallengeTokenResponse,
     type RotateWebhookSigningKeyResponse as RotateWebhookSigningKeyResponse,
   };
 

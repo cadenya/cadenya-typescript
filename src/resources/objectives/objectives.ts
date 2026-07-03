@@ -563,6 +563,15 @@ export interface ObjectiveEventData {
    */
   memoryRead?: MemoryRead;
 
+  /**
+   * Notice is a non-terminal diagnostic emitted by the runtime when something
+   * noteworthy but non-fatal happens during an objective — for example a
+   * just-in-time tool set failing to load, or a previously loaded tool being dropped
+   * because it was archived. Notices carry no structured payload; they exist to make
+   * the objective timeline self-explanatory.
+   */
+  notice?: ObjectiveEventData.Notice;
+
   subAgentSpawned?: SubAgentSpawned;
 
   subAgentUpdated?: SubAgentUpdated;
@@ -611,6 +620,29 @@ export namespace ObjectiveEventData {
      * objective.
      */
     output?: unknown;
+  }
+
+  /**
+   * Notice is a non-terminal diagnostic emitted by the runtime when something
+   * noteworthy but non-fatal happens during an objective — for example a
+   * just-in-time tool set failing to load, or a previously loaded tool being dropped
+   * because it was archived. Notices carry no structured payload; they exist to make
+   * the objective timeline self-explanatory.
+   */
+  export interface Notice {
+    /**
+     * Stable machine-readable identifier for the notice kind (for example
+     * "tool_set_load_failed", "tool_archived"). Clients can switch on it or use it as
+     * an i18n key; the message is the English fallback.
+     */
+    key?: string;
+
+    level?: 'LEVEL_UNSPECIFIED' | 'LEVEL_INFO' | 'LEVEL_WARN';
+
+    /**
+     * Human-readable description of what happened.
+     */
+    message?: string;
   }
 }
 
@@ -1041,21 +1073,6 @@ export interface ObjectiveContinueParams {
    * enqueing)
    */
   message?: string;
-
-  /**
-   * Body param: Secrets that should be included with the message. Helpful for when
-   * you need to update secrets on the objective (IE: A secret expires and needs to
-   * be refreshed)
-   */
-  secrets?: Array<ObjectiveContinueParams.Secret>;
-}
-
-export namespace ObjectiveContinueParams {
-  export interface Secret {
-    name?: string;
-
-    value?: string;
-  }
 }
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {

@@ -21,6 +21,18 @@ describe('resource account', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('rotateChallengeToken', async () => {
+    const responsePromise = client.account.rotateChallengeToken();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('rotateWebhookSigningKey', async () => {
     const responsePromise = client.account.rotateWebhookSigningKey();
     const rawResponse = await responsePromise.asResponse();
