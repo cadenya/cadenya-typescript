@@ -317,10 +317,10 @@ export interface Objective {
   configSnapshot: ObjectiveConfigSnapshot;
 
   /**
-   * The initial message sent to the agent. This becomes the first user message in
-   * the LLM chat history.
+   * The first user message in the LLM chat history, either provided explicitly at
+   * creation or rendered from the variation's first_user_message_template.
    */
-  initialMessage: string;
+  firstUserMessage: string;
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -346,14 +346,14 @@ export interface Objective {
   systemPrompt: string;
 
   /**
-   * Arbitrary data for the objective
-   */
-  data?: { [key: string]: unknown };
-
-  /**
    * Episodic is used to configure the episodic memory for the objective
    */
   episodicMemory?: Objective.EpisodicMemory;
+
+  /**
+   * Arbitrary data rendered into the variation's first_user_message_template
+   */
+  firstUserMessageData?: { [key: string]: unknown };
 
   /**
    * ObjectiveInfo provides read-only aggregated statistics about an objective's
@@ -403,9 +403,9 @@ export interface Objective {
   stateMessage?: string;
 
   /**
-   * Arbitrary data used to render the variation's user_message_template
+   * Arbitrary data rendered into the variation's system_prompt_template
    */
-  userData?: { [key: string]: unknown };
+  systemPromptData?: { [key: string]: unknown };
 }
 
 export namespace Objective {
@@ -903,10 +903,11 @@ export interface ObjectiveCreateParams {
   agentId: string;
 
   /**
-   * Arbitrary data for the objective. May be used in liquid templates for prompts
-   * configured on the agent variation
+   * Arbitrary data rendered into the selected variation's system_prompt_template
+   * (liquid) to produce the objective's system prompt. If the agent has a
+   * system_prompt_data_schema, this must satisfy it.
    */
-  data: { [key: string]: unknown };
+  systemPromptData: { [key: string]: unknown };
 
   /**
    * Episodic is used to configure the episodic memory for the objective
@@ -914,13 +915,20 @@ export interface ObjectiveCreateParams {
   episodicMemory?: ObjectiveCreateParams.EpisodicMemory;
 
   /**
-   * Optional override for the initial message sent to the agent. This becomes the
-   * first user message in the LLM chat history. When not set, the selected
-   * variation's user_message_template is rendered with user_data instead. If neither
-   * this field nor a user_message_template is present, the request is rejected with
+   * Optional explicit first user message for the LLM chat history. When not set, the
+   * selected variation's first_user_message_template is rendered with
+   * first_user_message_data instead. If neither this field nor a
+   * first_user_message_template is present, the request is rejected with
    * InvalidArgument.
    */
-  initialMessage?: string;
+  firstUserMessage?: string;
+
+  /**
+   * Arbitrary data rendered into the selected variation's
+   * first_user_message_template (liquid) to produce the first user message. Separate
+   * from `system_prompt_data`, which renders the system prompt template.
+   */
+  firstUserMessageData?: { [key: string]: unknown };
 
   /**
    * Memory layers/entries layered over the baseline cascade inherited from the
@@ -951,13 +959,6 @@ export interface ObjectiveCreateParams {
    * interpolation format.
    */
   secrets?: Array<ObjectiveCreateParams.Secret>;
-
-  /**
-   * Arbitrary data rendered into the selected variation's user_message_template
-   * (liquid) to produce the initial user message. Separate from `data`, which
-   * renders the system prompt template.
-   */
-  userData?: { [key: string]: unknown };
 
   /**
    * Optional explicit variation selection. Overrides the agent's

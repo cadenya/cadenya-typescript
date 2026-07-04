@@ -263,6 +263,16 @@ export interface AgentVariationSpec {
   description?: string;
 
   /**
+   * Liquid template for the first user message of objectives using this variation.
+   * Rendered with CreateObjectiveRequest.first_user_message_data into
+   * Objective.first_user_message, the first user message in the LLM chat history.
+   * CreateObjectiveRequest.first_user_message, when set, overrides the rendered
+   * result. If neither this template nor first_user_message is present, objective
+   * creation is rejected with InvalidArgument.
+   */
+  firstUserMessageTemplate?: string;
+
+  /**
    * ModelConfig defines the model configuration for a variation
    */
   modelConfig?: AgentVariationSpecModelConfig;
@@ -278,18 +288,10 @@ export interface AgentVariationSpec {
 
   /**
    * Liquid template for the system prompt of objectives using this variation.
-   * Rendered with CreateObjectiveRequest.data into Objective.system_prompt.
+   * Rendered with CreateObjectiveRequest.system_prompt_data into
+   * Objective.system_prompt.
    */
   systemPromptTemplate?: string;
-
-  /**
-   * Liquid template for the initial user message of objectives using this variation.
-   * Rendered with CreateObjectiveRequest.user_data and becomes the first user
-   * message in the LLM chat history. CreateObjectiveRequest.initial_message, when
-   * set, overrides the rendered result. If neither this template nor initial_message
-   * is present, objective creation is rejected with InvalidArgument.
-   */
-  userMessageTemplate?: string;
 
   /**
    * Weight for weighted random selection (>= 0). P(v) = v.weight / sum(all_weights).
