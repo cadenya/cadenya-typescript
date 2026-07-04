@@ -12,7 +12,7 @@ describe('resource objectives', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.objectives.create('workspaceId', {
       agentId: 'agentId',
-      data: { foo: 'bar' },
+      systemPromptData: { foo: 'bar' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,16 +27,16 @@ describe('resource objectives', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.objectives.create('workspaceId', {
       agentId: 'agentId',
-      data: { foo: 'bar' },
+      systemPromptData: { foo: 'bar' },
       episodicMemory: { key: 'key' },
-      initialMessage: 'initialMessage',
+      firstUserMessage: 'firstUserMessage',
+      firstUserMessageData: { foo: 'bar' },
       memoryCascade: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
       metadata: {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
       secrets: [{ name: 'name', value: 'value' }],
-      userData: { foo: 'bar' },
       variationId: 'variationId',
     });
   });

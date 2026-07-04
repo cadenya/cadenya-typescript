@@ -41,6 +41,7 @@ describe('resource variations', () => {
         },
         constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
         description: 'description',
+        firstUserMessageTemplate: 'firstUserMessageTemplate',
         modelConfig: { modelId: 'modelId', temperature: 0 },
         progressiveDiscovery: {
           hints: ['string'],
@@ -48,7 +49,6 @@ describe('resource variations', () => {
           rerankThreshold: 0,
         },
         systemPromptTemplate: 'systemPromptTemplate',
-        userMessageTemplate: 'userMessageTemplate',
         weight: 0,
       },
     });
@@ -110,6 +110,7 @@ describe('resource variations', () => {
         },
         constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
         description: 'description',
+        firstUserMessageTemplate: 'firstUserMessageTemplate',
         modelConfig: { modelId: 'modelId', temperature: 0 },
         progressiveDiscovery: {
           hints: ['string'],
@@ -117,7 +118,6 @@ describe('resource variations', () => {
           rerankThreshold: 0,
         },
         systemPromptTemplate: 'systemPromptTemplate',
-        userMessageTemplate: 'userMessageTemplate',
         weight: 0,
       },
       updateMask: 'updateMask',
