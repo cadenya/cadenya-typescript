@@ -171,6 +171,24 @@ export class Objectives extends APIResource {
   }
 
   /**
+   * Returns the context-usage breakdown measured for the objective's most recent
+   * iteration: character lengths per context component (system prompt, memory
+   * appendices, tool definitions, messages by role) alongside the iteration's input
+   * token counts.
+   */
+  retrieveDiagnostics(
+    objectiveID: string,
+    params: ObjectiveRetrieveDiagnosticsParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveRetrieveDiagnosticsResponse> {
+    const { workspaceId } = params;
+    return this._client.get(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/diagnostics`,
+      options,
+    );
+  }
+
+  /**
    * Streams events for an objective in real-time using server-sent events (SSE)
    */
   streamEvents(
@@ -234,6 +252,59 @@ export interface CallableTool {
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
   tool?: Shared.ResourceMetadata;
+}
+
+/**
+ * ContextLengths is the measured character length of each distinct component of an
+ * iteration's assembled context window. Values are raw character lengths of the
+ * component as assembled into the request — token estimates are derived by the
+ * client against input_tokens (component share = component length / sum of all
+ * lengths).
+ *
+ * New components are added as new fields — wire-compatible; absent components read
+ * as 0.
+ */
+export interface ContextLengths {
+  /**
+   * Chat history messages with the assistant role.
+   */
+  assistantMessages: number;
+
+  /**
+   * The discoverable/available-tools appendix attached to the system prompt.
+   */
+  availableTools: number;
+
+  /**
+   * The episodic memory appendix attached to the system prompt.
+   */
+  episodicMemory: number;
+
+  /**
+   * The skills memory appendix attached to the system prompt.
+   */
+  skillsMemory: number;
+
+  /**
+   * The objective's base system prompt (rendered variation template).
+   */
+  systemPrompt: number;
+
+  /**
+   * Serialized tool definitions sent with the completion request (names,
+   * descriptions, and JSON-schema parameters).
+   */
+  toolDefinitions: number;
+
+  /**
+   * Tool results present in the chat history.
+   */
+  toolResults: number;
+
+  /**
+   * Chat history messages with the user role.
+   */
+  userMessages: number;
 }
 
 export interface ContextWindowCompacted {
@@ -513,6 +584,37 @@ export interface ObjectiveContextWindowData {
    * windows an objective has.
    */
   sequence?: number;
+}
+
+/**
+ * ObjectiveDiagnostics is the context-usage breakdown measured for a single
+ * iteration at request-assembly time. It reports how much of the context window
+ * each component occupies so tool parameters, memory cascades, and prompts can be
+ * tuned against real token usage.
+ */
+export interface ObjectiveDiagnostics {
+  /**
+   * The portion of input_tokens served from the provider's prompt cache. Lets
+   * clients distinguish "big but cached" from "big and paid fresh every iteration".
+   */
+  cachedInputTokens: number;
+
+  /**
+   * ContextLengths is the measured character length of each distinct component of an
+   * iteration's assembled context window. Values are raw character lengths of the
+   * component as assembled into the request — token estimates are derived by the
+   * client against input_tokens (component share = component length / sum of all
+   * lengths).
+   *
+   * New components are added as new fields — wire-compatible; absent components read
+   * as 0.
+   */
+  contextLengths: ContextLengths;
+
+  /**
+   * Input tokens reported by the LLM provider for the iteration's completion.
+   */
+  inputTokens: number;
 }
 
 export interface ObjectiveError {
@@ -899,6 +1001,16 @@ export interface ObjectiveCompactResponse {
   contextWindow?: ObjectiveContextWindowData;
 }
 
+export interface ObjectiveRetrieveDiagnosticsResponse {
+  /**
+   * ObjectiveDiagnostics is the context-usage breakdown measured for a single
+   * iteration at request-assembly time. It reports how much of the context window
+   * each component occupies so tool parameters, memory cascades, and prompts can be
+   * tuned against real token usage.
+   */
+  diagnostics: ObjectiveDiagnostics;
+}
+
 export interface ObjectiveCreateParams {
   agentId: string;
 
@@ -1115,6 +1227,10 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
   windowId?: string;
 }
 
+export interface ObjectiveRetrieveDiagnosticsParams {
+  workspaceId: string;
+}
+
 export interface ObjectiveStreamEventsParams {
   workspaceId: string;
 }
@@ -1129,6 +1245,7 @@ export declare namespace Objectives {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
+    type ContextLengths as ContextLengths,
     type ContextWindowCompacted as ContextWindowCompacted,
     type MemoryRead as MemoryRead,
     type MemoryReference as MemoryReference,
@@ -1136,6 +1253,7 @@ export declare namespace Objectives {
     type ObjectiveConfigSnapshot as ObjectiveConfigSnapshot,
     type ObjectiveContextWindow as ObjectiveContextWindow,
     type ObjectiveContextWindowData as ObjectiveContextWindowData,
+    type ObjectiveDiagnostics as ObjectiveDiagnostics,
     type ObjectiveError as ObjectiveError,
     type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
@@ -1153,6 +1271,7 @@ export declare namespace Objectives {
     type ToolResult as ToolResult,
     type UserMessage as UserMessage,
     type ObjectiveCompactResponse as ObjectiveCompactResponse,
+    type ObjectiveRetrieveDiagnosticsResponse as ObjectiveRetrieveDiagnosticsResponse,
     type ObjectivesCursorPagination as ObjectivesCursorPagination,
     type ObjectiveContextWindowsCursorPagination as ObjectiveContextWindowsCursorPagination,
     type ObjectiveEventsCursorPagination as ObjectiveEventsCursorPagination,
@@ -1164,6 +1283,7 @@ export declare namespace Objectives {
     type ObjectiveContinueParams as ObjectiveContinueParams,
     type ObjectiveListContextWindowsParams as ObjectiveListContextWindowsParams,
     type ObjectiveListEventsParams as ObjectiveListEventsParams,
+    type ObjectiveRetrieveDiagnosticsParams as ObjectiveRetrieveDiagnosticsParams,
     type ObjectiveStreamEventsParams as ObjectiveStreamEventsParams,
   };
 
