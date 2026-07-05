@@ -146,6 +146,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ContextLengths</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ContextWindowCompacted</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">MemoryRead</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">MemoryReference</a></code>
@@ -153,6 +154,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveConfigSnapshot</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindow</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveContextWindowData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveDiagnostics</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveError</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEvent</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventData</a></code>
@@ -170,6 +172,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ToolResult</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">UserMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveCompactResponse</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveRetrieveDiagnosticsResponse</a></code>
 
 Methods:
 
@@ -181,6 +184,7 @@ Methods:
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}:continue">client.objectives.<a href="./src/resources/objectives/objectives.ts">continue</a>(objectiveID, { ...params }) -> ObjectiveEvent</code>
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/context_windows">client.objectives.<a href="./src/resources/objectives/objectives.ts">listContextWindows</a>(objectiveID, { ...params }) -> ObjectiveContextWindowsCursorPagination</code>
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events">client.objectives.<a href="./src/resources/objectives/objectives.ts">listEvents</a>(objectiveID, { ...params }) -> ObjectiveEventsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/diagnostics">client.objectives.<a href="./src/resources/objectives/objectives.ts">retrieveDiagnostics</a>(objectiveID, { ...params }) -> ObjectiveRetrieveDiagnosticsResponse</code>
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/events:stream">client.objectives.<a href="./src/resources/objectives/objectives.ts">streamEvents</a>(objectiveID, { ...params }) -> ObjectiveEvent</code>
 
 ## Tools
