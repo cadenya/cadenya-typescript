@@ -23,6 +23,7 @@ export {
   type ToolFilter,
   type ToolSet,
   type ToolSetAdapter,
+  type ToolSetAdapterBare,
   type ToolSetAdapterHTTP,
   type ToolSetAdapterMcp,
   type ToolSetAdapterOpenAPI,
@@ -45,6 +46,7 @@ export {
 } from './tool-sets';
 export {
   Tools,
+  type ConfigBare,
   type ConfigHTTP,
   type ConfigMcp,
   type ConfigOpenAPI,

@@ -33,6 +33,7 @@ describe('resource toolSets', () => {
       },
       spec: {
         adapter: {
+          bare: { contentTimeout: 0 },
           http: {
             baseUrl: 'baseUrl',
             headers: { foo: 'string' },
@@ -197,6 +198,7 @@ describe('resource toolSets', () => {
       },
       spec: {
         adapter: {
+          bare: { contentTimeout: 0 },
           http: {
             baseUrl: 'baseUrl',
             headers: { foo: 'string' },

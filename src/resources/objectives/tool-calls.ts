@@ -74,6 +74,23 @@ export class ToolCalls extends APIResource {
       { body, ...options },
     );
   }
+
+  /**
+   * For bare tool calls (tool sets with no execution adapter), sets the content an
+   * external API consumer supplies for the call — used for human-in-the-loop tools
+   * and reverse harnesses that execute tools locally and report results back.
+   */
+  setContent(
+    toolCallID: string,
+    params: ToolCallSetContentParams,
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveToolCall> {
+    const { workspaceId, objectiveId, ...body } = params;
+    return this._client.post(
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:setContent`,
+      { body, ...options },
+    );
+  }
 }
 
 export type ObjectiveToolCallsCursorPagination = CursorPagination<ObjectiveToolCall>;
@@ -91,7 +108,8 @@ export interface ObjectiveToolCall {
     | 'TOOL_CALL_EXECUTION_STATUS_PENDING'
     | 'TOOL_CALL_EXECUTION_STATUS_RUNNING'
     | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED'
-    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED';
+    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED'
+    | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
 
   /**
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
@@ -261,7 +279,8 @@ export interface ObjectiveToolCallWithResult {
     | 'TOOL_CALL_EXECUTION_STATUS_PENDING'
     | 'TOOL_CALL_EXECUTION_STATUS_RUNNING'
     | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED'
-    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED';
+    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED'
+    | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
 
   info: ObjectiveToolCallInfo;
 
@@ -313,6 +332,46 @@ export interface ResolvedSecret {
     | 'RESOLVED_SECRET_SOURCE_OBJECTIVE';
 }
 
+export interface SetToolCallContentRequestAudioBlock {
+  /**
+   * Base64-encoded audio bytes.
+   */
+  data: string;
+
+  /**
+   * IANA media type of the audio, e.g. audio/wav.
+   */
+  mimeType: string;
+}
+
+/**
+ * ContentBlock is a single block of tool call content supplied on input. Exactly
+ * one of the variants is set.
+ */
+export interface SetToolCallContentRequestContentBlock {
+  audio?: SetToolCallContentRequestAudioBlock;
+
+  image?: SetToolCallContentRequestImageBlock;
+
+  text?: SetToolCallContentRequestTextBlock;
+}
+
+export interface SetToolCallContentRequestImageBlock {
+  /**
+   * Base64-encoded image bytes.
+   */
+  data: string;
+
+  /**
+   * IANA media type of the image, e.g. image/png.
+   */
+  mimeType: string;
+}
+
+export interface SetToolCallContentRequestTextBlock {
+  text: string;
+}
+
 export interface ToolCallRetrieveParams {
   workspaceId: string;
 
@@ -327,6 +386,19 @@ export interface ToolCallListParams extends CursorPaginationParams {
    * Path param
    */
   workspaceId: string;
+
+  /**
+   * Query param: Filter by tool call execution status. Useful for reverse-harness
+   * polling of bare tool calls waiting for externally supplied content
+   * (TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT).
+   */
+  executionStatus?:
+    | 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED'
+    | 'TOOL_CALL_EXECUTION_STATUS_PENDING'
+    | 'TOOL_CALL_EXECUTION_STATUS_RUNNING'
+    | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED'
+    | 'TOOL_CALL_EXECUTION_STATUS_ERRORED'
+    | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -372,6 +444,26 @@ export interface ToolCallDenyParams {
   memo?: string;
 }
 
+export interface ToolCallSetContentParams {
+  /**
+   * Path param
+   */
+  workspaceId: string;
+
+  /**
+   * Path param: The ID of the objective. Supports "external_id:" prefix for external
+   * IDs.
+   */
+  objectiveId: string;
+
+  /**
+   * Body param: The content to set on the tool call. Mirrors
+   * ObjectiveToolCallResult.ContentBlock but writable: media blocks carry raw data
+   * on input where the result-side carries a signed url on output.
+   */
+  content: Array<SetToolCallContentRequestContentBlock>;
+}
+
 export declare namespace ToolCalls {
   export {
     type ObjectiveToolCall as ObjectiveToolCall,
@@ -384,10 +476,15 @@ export declare namespace ToolCalls {
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
+    type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
+    type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
+    type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
+    type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
     type ToolCallRetrieveParams as ToolCallRetrieveParams,
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
     type ToolCallDenyParams as ToolCallDenyParams,
+    type ToolCallSetContentParams as ToolCallSetContentParams,
   };
 }
