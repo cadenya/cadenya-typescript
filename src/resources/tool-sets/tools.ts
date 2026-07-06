@@ -101,6 +101,13 @@ export class Tools extends APIResource {
 
 export type ToolsCursorPagination = CursorPagination<Tool>;
 
+/**
+ * Marks the tool as bare: it has no execution adapter of its own and relies on the
+ * parent tool set being a Bare tool set. Present so a webhook consumer can tell a
+ * tool is bare from the tool data alone, without cross-referencing the tool set.
+ */
+export interface ConfigBare {}
+
 export interface ConfigHTTP {
   requestMethod: 'HTTP_METHOD_UNSPECIFIED' | 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -240,6 +247,13 @@ export interface ToolSpec {
  * be Http. If the tool is an inline tool, the adapter will be Inline.
  */
 export interface ToolSpecConfig {
+  /**
+   * Marks the tool as bare: it has no execution adapter of its own and relies on the
+   * parent tool set being a Bare tool set. Present so a webhook consumer can tell a
+   * tool is bare from the tool data alone, without cross-referencing the tool set.
+   */
+  bare?: ConfigBare;
+
   http?: ConfigHTTP;
 
   mcp?: ConfigMcp;
@@ -392,6 +406,7 @@ export interface ToolRestoreParams {
 
 export declare namespace Tools {
   export {
+    type ConfigBare as ConfigBare,
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
     type ConfigOpenAPI as ConfigOpenAPI,

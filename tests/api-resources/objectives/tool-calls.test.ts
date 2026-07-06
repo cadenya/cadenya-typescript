@@ -48,6 +48,7 @@ describe('resource toolCalls', () => {
     const response = await client.objectives.toolCalls.list('objectiveId', {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
+      executionStatus: 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED',
       includeInfo: true,
       limit: 0,
       status: 'TOOL_CALL_STATUS_UNSPECIFIED',
@@ -98,6 +99,37 @@ describe('resource toolCalls', () => {
       workspaceId: 'workspaceId',
       objectiveId: 'objectiveId',
       memo: 'memo',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('setContent: only required params', async () => {
+    const responsePromise = client.objectives.toolCalls.setContent('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+      content: [{}],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('setContent: required and optional params', async () => {
+    const response = await client.objectives.toolCalls.setContent('toolCallId', {
+      workspaceId: 'workspaceId',
+      objectiveId: 'objectiveId',
+      content: [
+        {
+          audio: { data: 'data', mimeType: 'mimeType' },
+          image: { data: 'data', mimeType: 'mimeType' },
+          text: { text: 'text' },
+        },
+      ],
     });
   });
 });

@@ -138,6 +138,7 @@ export {
   type ToolFilter,
   type ToolSet,
   type ToolSetAdapter,
+  type ToolSetAdapterBare,
   type ToolSetAdapterHTTP,
   type ToolSetAdapterMcp,
   type ToolSetAdapterOpenAPI,

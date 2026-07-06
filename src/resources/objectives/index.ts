@@ -75,10 +75,15 @@ export {
   type ObjectiveToolCallResultTextBlock,
   type ObjectiveToolCallWithResult,
   type ResolvedSecret,
+  type SetToolCallContentRequestAudioBlock,
+  type SetToolCallContentRequestContentBlock,
+  type SetToolCallContentRequestImageBlock,
+  type SetToolCallContentRequestTextBlock,
   type ToolCallRetrieveParams,
   type ToolCallListParams,
   type ToolCallApproveParams,
   type ToolCallDenyParams,
+  type ToolCallSetContentParams,
   type ObjectiveToolCallsCursorPagination,
 } from './tool-calls';
 export { Tools, type ObjectiveTool, type ToolListParams, type ObjectiveToolsCursorPagination } from './tools';

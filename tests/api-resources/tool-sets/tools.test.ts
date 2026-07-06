@@ -40,6 +40,7 @@ describe('resource tools', () => {
       },
       spec: {
         config: {
+          bare: {},
           http: {
             requestMethod: 'HTTP_METHOD_UNSPECIFIED',
             headers: { foo: 'string' },
@@ -117,6 +118,7 @@ describe('resource tools', () => {
       },
       spec: {
         config: {
+          bare: {},
           http: {
             requestMethod: 'HTTP_METHOD_UNSPECIFIED',
             headers: { foo: 'string' },
