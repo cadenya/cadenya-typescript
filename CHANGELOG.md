@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.105.0 (2026-07-06)
+
+Full Changelog: [v0.104.0...v0.105.0](https://github.com/cadenya/cadenya-typescript/compare/v0.104.0...v0.105.0)
+
+### Features
+
+* Bare toolset proto contract: Bare adapter, SetToolCallContent, WAITING_FOR_CONTENT (ENG-385) ([632ce23](https://github.com/cadenya/cadenya-typescript/commit/632ce23e22bab8c1bc6d0c7cfd633f34abdc5ce1))
+
 ## 0.104.0 (2026-07-05)
 
 Full Changelog: [v0.103.0...v0.104.0](https://github.com/cadenya/cadenya-typescript/compare/v0.103.0...v0.104.0)
