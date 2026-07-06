@@ -18,6 +18,7 @@ import {
 } from './secrets';
 import * as ToolsAPI from './tools';
 import {
+  ConfigBare,
   ConfigHTTP,
   ConfigMcp,
   ConfigOpenAPI,
@@ -281,11 +282,35 @@ export interface ToolSet {
 }
 
 export interface ToolSetAdapter {
+  /**
+   * Bare tool sets define tools without an execution adapter. A bare tool call
+   * doesn't fire anything: the objective's workflow pauses and waits for an external
+   * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
+   * reverse harness that polls for pending tool calls, executes locally, and reports
+   * results back via SetToolCallContent).
+   */
+  bare?: ToolSetAdapterBare;
+
   http?: ToolSetAdapterHTTP;
 
   mcp?: ToolSetAdapterMcp;
 
   openapi?: ToolSetAdapterOpenAPI;
+}
+
+/**
+ * Bare tool sets define tools without an execution adapter. A bare tool call
+ * doesn't fire anything: the objective's workflow pauses and waits for an external
+ * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
+ * reverse harness that polls for pending tool calls, executes locally, and reports
+ * results back via SetToolCallContent).
+ */
+export interface ToolSetAdapterBare {
+  /**
+   * How long to wait for content to be set before the tool call errors. If unset,
+   * the call waits indefinitely.
+   */
+  contentTimeout?: number;
 }
 
 export interface ToolSetAdapterHTTP {
@@ -610,6 +635,7 @@ export declare namespace ToolSets {
     type ToolFilter as ToolFilter,
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
+    type ToolSetAdapterBare as ToolSetAdapterBare,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
     type ToolSetAdapterMcp as ToolSetAdapterMcp,
     type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
@@ -633,6 +659,7 @@ export declare namespace ToolSets {
 
   export {
     Tools as Tools,
+    type ConfigBare as ConfigBare,
     type ConfigHTTP as ConfigHTTP,
     type ConfigMcp as ConfigMcp,
     type ConfigOpenAPI as ConfigOpenAPI,

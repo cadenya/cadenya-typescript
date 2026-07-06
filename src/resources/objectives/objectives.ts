@@ -39,14 +39,20 @@ import {
   ObjectiveToolCallWithResult,
   ObjectiveToolCallsCursorPagination,
   ResolvedSecret,
+  SetToolCallContentRequestAudioBlock,
+  SetToolCallContentRequestContentBlock,
+  SetToolCallContentRequestImageBlock,
+  SetToolCallContentRequestTextBlock,
   ToolCallApproveParams,
   ToolCallDenyParams,
   ToolCallListParams,
   ToolCallRetrieveParams,
+  ToolCallSetContentParams,
   ToolCalls,
 } from './tool-calls';
 import * as ToolsAPI from './tools';
 import { ObjectiveTool, ObjectiveToolsCursorPagination, ToolListParams, Tools } from './tools';
+import * as ToolSetsToolsAPI from '../tool-sets/tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { Stream } from '../../core/streaming';
@@ -946,6 +952,26 @@ export interface ToolApproved {
 
 export interface ToolCalled {
   /**
+   * The arguments passed to the tool.
+   */
+  arguments?: { [key: string]: unknown };
+
+  /**
+   * Config defines the adapter to use for the tool. This is used to determine how
+   * the tool is called. For example, if the tool is an HTTP tool, the adapter will
+   * be Http. If the tool is an inline tool, the adapter will be Inline.
+   */
+  config?: ToolSetsToolsAPI.ToolSpecConfig;
+
+  /**
+   * CallableTool is a union that represents a tool that can be called by an agent.
+   * In Cadenya, a tool that is used within an agent objective might be a
+   * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
+   * or a Cadenya Tool (one Cadenya provides).
+   */
+  tool?: CallableTool;
+
+  /**
    * The ID of the objective tool call record that was executed.
    */
   toolCallId?: string;
@@ -1306,11 +1332,16 @@ export declare namespace Objectives {
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
+    type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
+    type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
+    type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
+    type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,
     type ToolCallRetrieveParams as ToolCallRetrieveParams,
     type ToolCallListParams as ToolCallListParams,
     type ToolCallApproveParams as ToolCallApproveParams,
     type ToolCallDenyParams as ToolCallDenyParams,
+    type ToolCallSetContentParams as ToolCallSetContentParams,
   };
 
   export {

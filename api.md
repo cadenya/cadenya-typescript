@@ -211,6 +211,10 @@ Types:
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultTextBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallWithResult</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ResolvedSecret</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestAudioBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestContentBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestImageBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestTextBlock</a></code>
 
 Methods:
 
@@ -218,6 +222,7 @@ Methods:
 - <code title="get /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">list</a>(objectiveID, { ...params }) -> ObjectiveToolCallsCursorPagination</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}:approve">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">approve</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 - <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}:deny">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">deny</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
+- <code title="post /v1/workspaces/{workspaceId}/objectives/{objectiveId}/tool_calls/{toolCallId}:setContent">client.objectives.toolCalls.<a href="./src/resources/objectives/tool-calls.ts">setContent</a>(toolCallID, { ...params }) -> ObjectiveToolCall</code>
 
 ## Tasks
 
@@ -331,6 +336,7 @@ Types:
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolFilter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSet</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterBare</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPI</a></code>
@@ -356,6 +362,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/tool-sets/tools.ts">ConfigBare</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigHTTP</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigMcp</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ConfigOpenAPI</a></code>
