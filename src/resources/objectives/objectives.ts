@@ -415,7 +415,8 @@ export interface Objective {
     | 'STATE_WAITING'
     | 'STATE_FAILED'
     | 'STATE_CANCELLED'
-    | 'STATE_FINALIZED';
+    | 'STATE_FINALIZED'
+    | 'STATE_TIMED_OUT';
 
   /**
    * system_prompt is read-only, derived from the selected variation's prompt
@@ -684,6 +685,16 @@ export interface ObjectiveEventData {
 
   subAgentUpdated?: SubAgentUpdated;
 
+  /**
+   * ObjectiveTimedOut is the terminal event written when an objective is finalized
+   * by the inactivity sweep because it saw no activity (no user messages, no LLM
+   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
+   * maximum when no timeout is configured. The objective produces no output. After
+   * this event, the objective is super-terminal: no further iterations, compaction,
+   * or continuation are permitted.
+   */
+  timedOut?: ObjectiveEventData.TimedOut;
+
   toolApprovalRequested?: ToolApprovalRequested;
 
   toolApproved?: ToolApproved;
@@ -749,6 +760,22 @@ export namespace ObjectiveEventData {
 
     /**
      * Human-readable description of what happened.
+     */
+    message?: string;
+  }
+
+  /**
+   * ObjectiveTimedOut is the terminal event written when an objective is finalized
+   * by the inactivity sweep because it saw no activity (no user messages, no LLM
+   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
+   * maximum when no timeout is configured. The objective produces no output. After
+   * this event, the objective is super-terminal: no further iterations, compaction,
+   * or continuation are permitted.
+   */
+  export interface TimedOut {
+    /**
+     * Human-readable note recorded at timeout time (e.g. "Timed out after 2h of
+     * inactivity").
      */
     message?: string;
   }
@@ -1167,7 +1194,8 @@ export interface ObjectiveListParams extends CursorPaginationParams {
     | 'STATE_WAITING'
     | 'STATE_FAILED'
     | 'STATE_CANCELLED'
-    | 'STATE_FINALIZED';
+    | 'STATE_FINALIZED'
+    | 'STATE_TIMED_OUT';
 }
 
 export interface ObjectiveCancelParams {

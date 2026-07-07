@@ -52,7 +52,11 @@ describe('resource agents', () => {
             toolResultClearing: { preserveRecentResults: 0 },
             triggerThreshold: 0,
           },
-          constraints: { maxSubObjectives: 0, maxToolCalls: 0 },
+          constraints: {
+            inactivityTimeout: 0,
+            maxSubObjectives: 0,
+            maxToolCalls: 0,
+          },
           description: 'description',
           firstUserMessageTemplate: 'firstUserMessageTemplate',
           modelConfig: { modelId: 'modelId', temperature: 0 },
