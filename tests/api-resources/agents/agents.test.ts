@@ -60,11 +60,7 @@ describe('resource agents', () => {
           description: 'description',
           firstUserMessageTemplate: 'firstUserMessageTemplate',
           modelConfig: { modelId: 'modelId', temperature: 0 },
-          progressiveDiscovery: {
-            hints: ['string'],
-            maxTools: 0,
-            rerankThreshold: 0,
-          },
+          progressiveDiscovery: { hints: ['string'], maxTools: 0 },
           systemPromptTemplate: 'systemPromptTemplate',
         },
       },
