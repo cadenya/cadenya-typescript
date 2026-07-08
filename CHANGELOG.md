@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.116.0 (2026-07-08)
+
+Full Changelog: [v0.115.0...v0.116.0](https://github.com/cadenya/cadenya-typescript/compare/v0.115.0...v0.116.0)
+
+### Features
+
+* Remove the GetCurrentWorkspace RPC and /v1/workspaces/current (ENG-436) ([0df5c72](https://github.com/cadenya/cadenya-typescript/commit/0df5c72dcdd9617d585b92736e23b6b840467916))
+
 ## 0.115.0 (2026-07-08)
 
 Full Changelog: [v0.114.0...v0.115.0](https://github.com/cadenya/cadenya-typescript/compare/v0.114.0...v0.115.0)
