@@ -272,43 +272,45 @@ export interface CallableTool {
  */
 export interface ContextLengths {
   /**
-   * Chat history messages with the assistant role.
+   * Character length of the chat history messages with the assistant role.
    */
   assistantMessages: number;
 
   /**
-   * The discoverable/available-tools appendix attached to the system prompt.
+   * Character length of the discoverable/available-tools appendix attached to the
+   * system prompt.
    */
   availableTools: number;
 
   /**
-   * The episodic memory appendix attached to the system prompt.
+   * Character length of the episodic memory appendix attached to the system prompt.
    */
   episodicMemory: number;
 
   /**
-   * The skills memory appendix attached to the system prompt.
+   * Character length of the skills memory appendix attached to the system prompt.
    */
   skillsMemory: number;
 
   /**
-   * The objective's base system prompt (rendered variation template).
+   * Character length of the objective's base system prompt (rendered variation
+   * template). Not tokens -- see the message comment.
    */
   systemPrompt: number;
 
   /**
-   * Serialized tool definitions sent with the completion request (names,
-   * descriptions, and JSON-schema parameters).
+   * Character length of the serialized tool definitions sent with the completion
+   * request (names, descriptions, and JSON-schema parameters).
    */
   toolDefinitions: number;
 
   /**
-   * Tool results present in the chat history.
+   * Character length of the tool results present in the chat history.
    */
   toolResults: number;
 
   /**
-   * Chat history messages with the user role.
+   * Character length of the chat history messages with the user role.
    */
   userMessages: number;
 }
