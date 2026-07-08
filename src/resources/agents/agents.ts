@@ -270,10 +270,13 @@ export interface AgentSpec {
   webhookEventsUrl?: string;
 }
 
+/**
+ * Page carries cursor-based pagination state. There is no total: the cursor walks
+ * the result set without ever counting it, and a count would cost a second query
+ * on every list.
+ */
 export interface Page {
   nextCursor?: string;
-
-  total?: number;
 }
 
 export interface AgentCreateParams {
