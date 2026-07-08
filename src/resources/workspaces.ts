@@ -83,6 +83,13 @@ export interface WorkspaceListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;

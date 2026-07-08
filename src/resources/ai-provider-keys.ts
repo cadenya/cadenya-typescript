@@ -296,6 +296,13 @@ export interface AIProviderKeyListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;

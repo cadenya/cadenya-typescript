@@ -48,6 +48,7 @@ describe('resource models', () => {
           cursor: 'cursor',
           includeInfo: true,
           isAssigned: true,
+          labels: 'labels',
           limit: 0,
           prefix: 'prefix',
           query: 'query',

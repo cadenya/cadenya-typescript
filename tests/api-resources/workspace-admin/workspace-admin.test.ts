@@ -79,6 +79,7 @@ describe('resource workspaceAdmin', () => {
         {
           cursor: 'cursor',
           includeArchived: true,
+          labels: 'labels',
           limit: 0,
         },
         { path: '/_stainless_unknown_path' },

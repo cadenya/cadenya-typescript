@@ -150,6 +150,7 @@ describe('resource variations', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       sortOrder: 'sortOrder',
     });
