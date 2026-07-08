@@ -52,7 +52,14 @@ export class Access extends APIResource {
   }
 }
 
-export interface AccessListParams extends CursorPaginationParams {}
+export interface AccessListParams extends CursorPaginationParams {
+  /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+}
 
 export interface AccessAddParams {
   /**

@@ -309,6 +309,13 @@ export interface EntryListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Query param: Filter by key prefix (e.g., "skills/postmortem/" to list all
    * entries under that hierarchy). Matches against the entry's key, not its name.
    */

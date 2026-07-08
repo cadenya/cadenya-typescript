@@ -28,6 +28,7 @@ describe('resource workspaces', () => {
         {
           cursor: 'cursor',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           sortOrder: 'sortOrder',
         },

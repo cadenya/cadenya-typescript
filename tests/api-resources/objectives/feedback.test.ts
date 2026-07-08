@@ -53,6 +53,7 @@ describe('resource feedback', () => {
     const response = await client.objectives.feedback.list('objectiveId', {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
+      labels: 'labels',
       limit: 0,
     });
   });

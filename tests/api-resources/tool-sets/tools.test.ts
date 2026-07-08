@@ -165,6 +165,7 @@ describe('resource tools', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       names: ['string'],
       prefix: 'prefix',

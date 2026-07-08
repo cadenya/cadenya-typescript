@@ -1173,6 +1173,13 @@ export interface ObjectiveListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Optional filters
    */
   parentObjectiveId?: string;
@@ -1252,6 +1259,13 @@ export interface ObjectiveListContextWindowsParams extends CursorPaginationParam
    * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
+
+  /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
 }
 
 export interface ObjectiveListEventsParams extends CursorPaginationParams {
@@ -1264,6 +1278,13 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
    * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
+
+  /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
 
   /**
    * Query param: Optional string to fetch events since an ID

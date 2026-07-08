@@ -143,6 +143,13 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT';
 
   /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Query param: Optional filter by objective ID
    */
   objectiveId?: string;

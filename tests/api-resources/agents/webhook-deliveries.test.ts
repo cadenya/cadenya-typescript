@@ -26,6 +26,7 @@ describe('resource webhookDeliveries', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       eventType: 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED',
+      labels: 'labels',
       limit: 0,
       objectiveId: 'objectiveId',
     });

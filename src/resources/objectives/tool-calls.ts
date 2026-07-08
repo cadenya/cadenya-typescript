@@ -406,6 +406,13 @@ export interface ToolCallListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Query param: Filter by tool call status
    */
   status?:

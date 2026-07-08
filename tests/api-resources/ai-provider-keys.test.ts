@@ -121,6 +121,7 @@ describe('resource aiProviderKeys', () => {
         {
           cursor: 'cursor',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           prefix: 'prefix',
           promotional: true,

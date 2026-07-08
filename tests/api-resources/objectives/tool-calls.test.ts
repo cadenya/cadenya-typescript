@@ -50,6 +50,7 @@ describe('resource toolCalls', () => {
       cursor: 'cursor',
       executionStatus: 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       status: 'TOOL_CALL_STATUS_UNSPECIFIED',
     });

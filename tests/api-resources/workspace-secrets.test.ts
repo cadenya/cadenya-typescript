@@ -99,6 +99,7 @@ describe('resource workspaceSecrets', () => {
         {
           cursor: 'cursor',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           prefix: 'prefix',
           query: 'query',

@@ -555,6 +555,13 @@ export interface ToolSetListParams extends CursorPaginationParams {
   includeInfo?: boolean;
 
   /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Filter expression (query param: prefix)
    */
   prefix?: string;
@@ -607,6 +614,13 @@ export interface ToolSetListEventsParams extends CursorPaginationParams {
    * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
+
+  /**
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
 
   /**
    * Query param: Sort order for results (asc or desc by creation time)
