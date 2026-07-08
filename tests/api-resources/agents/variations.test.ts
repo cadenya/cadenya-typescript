@@ -53,7 +53,6 @@ describe('resource variations', () => {
           rerankThreshold: 0,
         },
         systemPromptTemplate: 'systemPromptTemplate',
-        weight: 0,
       },
     });
   });
@@ -126,7 +125,6 @@ describe('resource variations', () => {
           rerankThreshold: 0,
         },
         systemPromptTemplate: 'systemPromptTemplate',
-        weight: 0,
       },
       updateMask: 'updateMask',
     });
