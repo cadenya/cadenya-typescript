@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { APIPromise } from '../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
@@ -23,14 +22,6 @@ export class Workspaces extends APIResource {
     options?: RequestOptions,
   ): PagePromise<WorkspacesCursorPagination, Workspace> {
     return this._client.getAPIList('/v1/workspaces', CursorPagination<Workspace>, { query, ...options });
-  }
-
-  /**
-   * Retrieves the workspace associated with the current API token. Useful for
-   * workspace-scoped tokens to identify which workspace they belong to.
-   */
-  get(options?: RequestOptions): APIPromise<Workspace> {
-    return this._client.get('/v1/workspaces/current', options);
   }
 }
 
