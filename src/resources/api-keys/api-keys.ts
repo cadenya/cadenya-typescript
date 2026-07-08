@@ -180,8 +180,11 @@ export namespace APIKeyCreateParams {
     externalId?: string;
 
     /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
+     * Key-value pairs for categorization and filtering. Values are 0-63 alphanumeric
+     * characters with "-", "\_", or "." allowed between; keys follow the same shape
+     * and additionally accept an optional DNS-subdomain prefix (e.g. "cadenya.com/")
+     * of at most 253 characters. Examples: {"environment": "production", "team":
+     * "platform", "version": "v2"}
      */
     labels?: { [key: string]: string };
   }
@@ -225,8 +228,11 @@ export namespace APIKeyUpdateParams {
     externalId?: string;
 
     /**
-     * Arbitrary key-value pairs for categorization and filtering Examples:
-     * {"environment": "production", "team": "platform", "version": "v2"}
+     * Key-value pairs for categorization and filtering. Values are 0-63 alphanumeric
+     * characters with "-", "\_", or "." allowed between; keys follow the same shape
+     * and additionally accept an optional DNS-subdomain prefix (e.g. "cadenya.com/")
+     * of at most 253 characters. Examples: {"environment": "production", "team":
+     * "platform", "version": "v2"}
      */
     labels?: { [key: string]: string };
   }
