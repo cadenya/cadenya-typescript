@@ -40,7 +40,7 @@ describe('resource variations', () => {
           triggerThreshold: 0,
         },
         constraints: {
-          inactivityTimeout: 0,
+          inactivityTimeout: '-160513s',
           maxSubObjectives: 0,
           maxToolCalls: 0,
         },
@@ -113,7 +113,7 @@ describe('resource variations', () => {
           triggerThreshold: 0,
         },
         constraints: {
-          inactivityTimeout: 0,
+          inactivityTimeout: '-160513s',
           maxSubObjectives: 0,
           maxToolCalls: 0,
         },
