@@ -66,7 +66,6 @@ describe('resource agents', () => {
             rerankThreshold: 0,
           },
           systemPromptTemplate: 'systemPromptTemplate',
-          weight: 0,
         },
       },
     });
