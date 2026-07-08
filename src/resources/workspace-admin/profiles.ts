@@ -32,6 +32,13 @@ export class Profiles extends APIResource {
 
 export interface ProfileListParams extends CursorPaginationParams {
   /**
+   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
+   * semantics).
+   */
+  labels?: string;
+
+  /**
    * Free-form search over profile name and email. Case-insensitive substring match;
    * empty returns all profiles.
    */

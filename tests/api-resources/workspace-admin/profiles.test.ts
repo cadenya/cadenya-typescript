@@ -27,6 +27,7 @@ describe('resource profiles', () => {
       client.workspaceAdmin.profiles.list(
         {
           cursor: 'cursor',
+          labels: 'labels',
           limit: 0,
           query: 'query',
         },

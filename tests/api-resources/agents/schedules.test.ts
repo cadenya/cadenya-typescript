@@ -222,6 +222,7 @@ describe('resource schedules', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       prefix: 'prefix',
       query: 'query',

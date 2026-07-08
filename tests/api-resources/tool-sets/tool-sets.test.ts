@@ -345,6 +345,7 @@ describe('resource toolSets', () => {
         {
           cursor: 'cursor',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           prefix: 'prefix',
           query: 'query',
@@ -425,6 +426,7 @@ describe('resource toolSets', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       sortOrder: 'sortOrder',
     });

@@ -101,6 +101,7 @@ describe('resource memoryLayers', () => {
           cursor: 'cursor',
           episodicKeyPrefix: 'episodicKeyPrefix',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           prefix: 'prefix',
           query: 'query',

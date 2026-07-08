@@ -81,6 +81,7 @@ describe('resource objectives', () => {
           agentScheduleId: 'agentScheduleId',
           cursor: 'cursor',
           includeInfo: true,
+          labels: 'labels',
           limit: 0,
           parentObjectiveId: 'parentObjectiveId',
           profileId: 'profileId',
@@ -177,6 +178,7 @@ describe('resource objectives', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
     });
   });
@@ -199,6 +201,7 @@ describe('resource objectives', () => {
       workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
+      labels: 'labels',
       limit: 0,
       sinceEventId: 'sinceEventId',
       sortOrder: 'sortOrder',
