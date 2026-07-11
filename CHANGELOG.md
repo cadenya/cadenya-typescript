@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.117.1 (2026-07-11)
+
+Full Changelog: [v0.117.0...v0.117.1](https://github.com/cadenya/cadenya-typescript/compare/v0.117.0...v0.117.1)
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([1ab69cf](https://github.com/cadenya/cadenya-typescript/commit/1ab69cf7b44d1029f3d6d116720b8b6208cd76d6))
+
 ## 0.117.0 (2026-07-09)
 
 Full Changelog: [v0.116.0...v0.117.0](https://github.com/cadenya/cadenya-typescript/compare/v0.116.0...v0.117.0)
