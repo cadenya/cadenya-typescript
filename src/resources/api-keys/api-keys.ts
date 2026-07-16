@@ -136,8 +136,8 @@ export interface APIKeySpec {
    * "x:read" when "x:manage" is present. The secrets and account resources support
    * only manage. "\*" is an explicit full-access grant.
    *
-   * An empty list grants full access (grandfathered legacy behavior); new keys
-   * should be created with explicit scopes.
+   * Scopes are deny-by-default: a key with an empty list can call only scope-free
+   * endpoints. Full access is always an explicit "\*" grant.
    */
   permissions?: Array<string>;
 
