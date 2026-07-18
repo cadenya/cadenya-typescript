@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.123.0 (2026-07-18)
+
+Full Changelog: [v0.122.0...v0.123.0](https://github.com/cadenya/cadenya-typescript/compare/v0.122.0...v0.123.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([81cd008](https://github.com/cadenya/cadenya-typescript/commit/81cd0086856f9f5fa63c8a83e98382ddf93f8b08))
+
 ## 0.122.0 (2026-07-18)
 
 Full Changelog: [v0.121.0...v0.122.0](https://github.com/cadenya/cadenya-typescript/compare/v0.121.0...v0.122.0)
