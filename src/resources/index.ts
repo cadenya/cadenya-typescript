@@ -18,11 +18,15 @@ export {
   type APIKeyInfo,
   type APIKeySpec,
   type APIKeyCreateParams,
+  type APIKeyRetrieveParams,
   type APIKeyUpdateParams,
   type APIKeyListParams,
+  type APIKeyDeleteParams,
+  type APIKeyDisableParams,
+  type APIKeyEnableParams,
   type APIKeyRotateParams,
   type APIKeysCursorPagination,
-} from './api-keys/api-keys';
+} from './api-keys';
 export {
   AccountResource,
   type Account,
@@ -51,6 +55,7 @@ export {
   type AgentUnpublishParams,
   type AgentsCursorPagination,
 } from './agents/agents';
+export { GlobalAPIKey } from './global-api-key';
 export {
   MemoryLayers,
   type MemoryLayer,

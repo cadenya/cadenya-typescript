@@ -41,6 +41,22 @@ import {
   AIProviderKeysCursorPagination,
 } from './resources/ai-provider-keys';
 import {
+  APIKey,
+  APIKeyCreateParams,
+  APIKeyDeleteParams,
+  APIKeyDisableParams,
+  APIKeyEnableParams,
+  APIKeyInfo,
+  APIKeyListParams,
+  APIKeyRetrieveParams,
+  APIKeyRotateParams,
+  APIKeySpec,
+  APIKeyUpdateParams,
+  APIKeys,
+  APIKeysCursorPagination,
+} from './resources/api-keys';
+import { GlobalAPIKey } from './resources/global-api-key';
+import {
   Model,
   ModelDisableParams,
   ModelEnableParams,
@@ -103,17 +119,6 @@ import {
   AgentsCursorPagination,
   Page,
 } from './resources/agents/agents';
-import {
-  APIKey,
-  APIKeyCreateParams,
-  APIKeyInfo,
-  APIKeyListParams,
-  APIKeyRotateParams,
-  APIKeySpec,
-  APIKeyUpdateParams,
-  APIKeys,
-  APIKeysCursorPagination,
-} from './resources/api-keys/api-keys';
 import {
   MemoryLayer,
   MemoryLayerCreateParams,
@@ -1008,10 +1013,18 @@ export class Cadenya {
    */
   toolSets: API.ToolSets = new API.ToolSets(this);
   /**
-   * Issue, rotate, and revoke API keys for the account, and grant or revoke
-   *  each key's access to individual workspaces.
+   * Issue, rotate, disable, and revoke a workspace's API keys. Every key
+   *  belongs to exactly one workspace; the system-managed global account key is
+   *  managed via GlobalAPIKeyService instead.
    */
   apiKeys: API.APIKeys = new API.APIKeys(this);
+  /**
+   * Manage the account's system-provisioned global API key. The global key is
+   *  the only key that spans every workspace; it is created by the system and
+   *  cannot be deleted, so the surface is retrieve, rotate, and the
+   *  disable/enable kill switch.
+   */
+  globalAPIKey: API.GlobalAPIKey = new API.GlobalAPIKey(this);
   workspaceSecrets: API.WorkspaceSecrets = new API.WorkspaceSecrets(this);
   /**
    * Manage workspaces within an account. Workspaces provide organizational
@@ -1045,6 +1058,7 @@ Cadenya.Models = Models;
 Cadenya.Search = Search;
 Cadenya.ToolSets = ToolSets;
 Cadenya.APIKeys = APIKeys;
+Cadenya.GlobalAPIKey = GlobalAPIKey;
 Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceAdmin = WorkspaceAdmin;
@@ -1230,10 +1244,16 @@ export declare namespace Cadenya {
     type APIKeySpec as APIKeySpec,
     type APIKeysCursorPagination as APIKeysCursorPagination,
     type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyUpdateParams as APIKeyUpdateParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyDeleteParams as APIKeyDeleteParams,
+    type APIKeyDisableParams as APIKeyDisableParams,
+    type APIKeyEnableParams as APIKeyEnableParams,
     type APIKeyRotateParams as APIKeyRotateParams,
   };
+
+  export { GlobalAPIKey as GlobalAPIKey };
 
   export {
     WorkspaceSecrets as WorkspaceSecrets,
