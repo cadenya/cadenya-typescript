@@ -25,7 +25,7 @@ export class Entries extends APIResource {
     params: EntryCreateParams,
     options?: RequestOptions,
   ): APIPromise<MemoryEntryDetail> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries`, {
       body,
       ...options,
@@ -36,10 +36,15 @@ export class Entries extends APIResource {
    * Retrieves a memory entry by ID from a memory layer. Returns the detail view,
    * including the content body.
    */
-  retrieve(id: string, params: EntryRetrieveParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
-    const { workspaceId, memoryLayerId } = params;
+  retrieve(
+    memoryLayerID: string,
+    id: string,
+    params: EntryRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MemoryEntryDetail> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(
-      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries/${id}`,
       options,
     );
   }
@@ -48,10 +53,15 @@ export class Entries extends APIResource {
    * Updates a memory entry in a memory layer. Returns the detail view, including the
    * resolved content body.
    */
-  update(id: string, params: EntryUpdateParams, options?: RequestOptions): APIPromise<MemoryEntryDetail> {
-    const { workspaceId, memoryLayerId, ...body } = params;
+  update(
+    memoryLayerID: string,
+    id: string,
+    params: EntryUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<MemoryEntryDetail> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(
-      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries/${id}`,
       { body, ...options },
     );
   }
@@ -61,10 +71,10 @@ export class Entries extends APIResource {
    */
   list(
     memoryLayerID: string,
-    params: EntryListParams,
+    params: EntryListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<MemoryEntriesCursorPagination, MemoryEntry> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries`,
       CursorPagination<MemoryEntry>,
@@ -75,10 +85,15 @@ export class Entries extends APIResource {
   /**
    * Deletes a memory entry from a memory layer
    */
-  delete(id: string, params: EntryDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId, memoryLayerId } = params;
+  delete(
+    memoryLayerID: string,
+    id: string,
+    params: EntryDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(
-      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerId}/entries/${id}`,
+      path`/v1/workspaces/${workspaceId}/memory_layers/${memoryLayerID}/entries/${id}`,
       { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
     );
   }
@@ -118,24 +133,39 @@ export interface MemoryEntry {
  * either inline content or a reference to a completed Upload; exactly one of the
  * two must be set.
  */
-export interface MemoryEntryCreateSpec {
-  /**
-   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
-   */
-  key: string;
+export type MemoryEntryCreateSpec = MemoryEntryCreateSpecContent | MemoryEntryCreateSpecUploadID;
 
+export interface MemoryEntryCreateSpecContent {
   /**
    * Inline content, written directly into the entry.
    */
-  content?: string;
+  content: string;
+
+  type: 'content';
 
   description?: string;
+
+  /**
+   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
+   */
+  key?: string;
+}
+
+export interface MemoryEntryCreateSpecUploadID {
+  type: 'uploadId';
 
   /**
    * ID of a COMPLETE Upload. The server reads the object from storage, copies its
    * bytes into the entry, and marks the upload consumed.
    */
-  uploadId?: string;
+  uploadId: string;
+
+  description?: string;
+
+  /**
+   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
+   */
+  key?: string;
 }
 
 /**
@@ -236,7 +266,7 @@ export interface EntryCreateParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CreateResourceMetadata contains the user-provided fields for
@@ -255,25 +285,14 @@ export interface EntryCreateParams {
 }
 
 export interface EntryRetrieveParams {
-  workspaceId: string;
-
-  /**
-   * Memory layer ID. Accepts canonical memlyr\_… form or external_id:<value> form.
-   */
-  memoryLayerId: string;
+  workspaceId?: string;
 }
 
 export interface EntryUpdateParams {
   /**
    * Path param
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Memory layer ID. Accepts canonical memlyr\_… form or
-   * external_id:<value> form.
-   */
-  memoryLayerId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -301,7 +320,7 @@ export interface EntryListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -333,18 +352,15 @@ export interface EntryListParams extends CursorPaginationParams {
 }
 
 export interface EntryDeleteParams {
-  workspaceId: string;
-
-  /**
-   * Memory layer ID. Accepts canonical memlyr\_… form or external_id:<value> form.
-   */
-  memoryLayerId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Entries {
   export {
     type MemoryEntry as MemoryEntry,
     type MemoryEntryCreateSpec as MemoryEntryCreateSpec,
+    type MemoryEntryCreateSpecContent as MemoryEntryCreateSpecContent,
+    type MemoryEntryCreateSpecUploadID as MemoryEntryCreateSpecUploadID,
     type MemoryEntryDetail as MemoryEntryDetail,
     type MemoryEntryInfo as MemoryEntryInfo,
     type MemoryEntrySpec as MemoryEntrySpec,

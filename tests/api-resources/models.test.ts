@@ -10,7 +10,9 @@ const client = new Cadenya({
 describe('resource models', () => {
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.models.retrieve('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.models.retrieve('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,12 +24,14 @@ describe('resource models', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.models.retrieve('id', { workspaceId: 'workspaceId' });
+    const response = await client.models.retrieve('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.models.list('workspaceId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.models.list({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -38,31 +42,27 @@ describe('resource models', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.models.list(
-        'workspaceId',
-        {
-          aiProviderKeyId: 'aiProviderKeyId',
-          cursor: 'cursor',
-          includeInfo: true,
-          isAssigned: true,
-          labels: 'labels',
-          limit: 0,
-          prefix: 'prefix',
-          query: 'query',
-          sortOrder: 'sortOrder',
-          state: 'STATE_UNSPECIFIED',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.models.list({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      aiProviderKeyId: 'aiProviderKeyId',
+      cursor: 'cursor',
+      includeInfo: true,
+      isAssigned: true,
+      labels: 'labels',
+      limit: 0,
+      prefix: 'prefix',
+      query: 'query',
+      sortOrder: 'sortOrder',
+      state: 'STATE_UNSPECIFIED',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('disable: only required params', async () => {
-    const responsePromise = client.models.disable('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.models.disable('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -74,12 +74,16 @@ describe('resource models', () => {
 
   // Mock server tests are disabled
   test.skip('disable: required and optional params', async () => {
-    const response = await client.models.disable('id', { workspaceId: 'workspaceId' });
+    const response = await client.models.disable('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('enable: only required params', async () => {
-    const responsePromise = client.models.enable('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.models.enable('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -91,12 +95,14 @@ describe('resource models', () => {
 
   // Mock server tests are disabled
   test.skip('enable: required and optional params', async () => {
-    const response = await client.models.enable('id', { workspaceId: 'workspaceId' });
+    const response = await client.models.enable('model_01HXKD2E5NQM3T9AYWCFKJ4GED', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('swap', async () => {
-    const responsePromise = client.models.swap('workspaceId', {});
+  test.skip('swap: only required params', async () => {
+    const responsePromise = client.models.swap({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -104,5 +110,19 @@ describe('resource models', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('swap: required and optional params', async () => {
+    const response = await client.models.swap({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      modelSwaps: [
+        {
+          currentModelId: 'model_01HXKD2E5NQM3T9AYWCFKJ4GED',
+          disableCurrentAfterSwap: true,
+          nextModelId: 'model_01HXKD2E5NQM3T9AYWCFKJ4GED',
+        },
+      ],
+    });
   });
 });

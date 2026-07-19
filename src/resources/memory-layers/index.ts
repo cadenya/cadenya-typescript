@@ -4,6 +4,8 @@ export {
   Entries,
   type MemoryEntry,
   type MemoryEntryCreateSpec,
+  type MemoryEntryCreateSpecContent,
+  type MemoryEntryCreateSpecUploadID,
   type MemoryEntryDetail,
   type MemoryEntryInfo,
   type MemoryEntrySpec,

@@ -27,6 +27,9 @@ import {
 } from './schedules';
 import * as VariationsAPI from './variations';
 import {
+  AddAgentVariationAssignmentRequestSubAgentID,
+  AddAgentVariationAssignmentRequestToolID,
+  AddAgentVariationAssignmentRequestToolSetID,
   AgentVariation,
   AgentVariationInfo,
   AgentVariationSpec,
@@ -40,6 +43,9 @@ import {
   VariationAddAssignmentParams,
   VariationAddMemoryLayerParams,
   VariationAssignment,
+  VariationAssignmentAgent,
+  VariationAssignmentTool,
+  VariationAssignmentToolSet,
   VariationCreateParams,
   VariationDeleteParams,
   VariationListParams,
@@ -78,36 +84,79 @@ export class Agents extends APIResource {
 
   /**
    * Creates a new agent in the workspace
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.create({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *   metadata: { name: 'name' },
+   *   spec: {
+   *     variationSelectionMode:
+   *       'VARIATION_SELECTION_MODE_UNSPECIFIED',
+   *   },
+   * });
+   * ```
    */
-  create(workspaceID: string, body: AgentCreateParams, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/agents`, { body, ...options });
+  create(params: AgentCreateParams, options?: RequestOptions): APIPromise<Agent> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents`, { body, ...options });
   }
 
   /**
    * Retrieves an agent by ID from the workspace
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.retrieve(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  retrieve(id: string, params: AgentRetrieveParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: AgentRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Agent> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${id}`, options);
   }
 
   /**
    * Updates an agent in the workspace
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.update(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   update(id: string, params: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${id}`, { body, ...options });
   }
 
   /**
    * Lists all agents in the workspace
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const agent of client.agents.list({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   * })) {
+   *   // ...
+   * }
+   * ```
    */
   list(
-    workspaceID: string,
-    query: AgentListParams | null | undefined = {},
+    params: AgentListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentsCursorPagination, Agent> {
-    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/agents`, CursorPagination<Agent>, {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceId}/agents`, CursorPagination<Agent>, {
       query,
       ...options,
     });
@@ -115,9 +164,21 @@ export class Agents extends APIResource {
 
   /**
    * Deletes an agent from the workspace
+   *
+   * @example
+   * ```ts
+   * await client.agents.delete(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  delete(id: string, params: AgentDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: AgentDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -127,27 +188,51 @@ export class Agents extends APIResource {
   /**
    * Transitions an agent to STATE_ARCHIVED. Archived agents are hidden from list
    * results and cannot be used for objectives; active schedules are paused.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.archive(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   archive(id: string, params: AgentArchiveParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:archive`, { body, ...options });
   }
 
   /**
    * Transitions an agent to STATE_PUBLISHED, making it available for objectives. The
    * agent must have at least one variation.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.publish(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   publish(id: string, params: AgentPublishParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:publish`, { body, ...options });
   }
 
   /**
    * Transitions an archived agent back to STATE_DRAFT. Publish the agent again to
    * make it available for objectives.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.unarchive(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   unarchive(id: string, params: AgentUnarchiveParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:unarchive`, {
       body,
       ...options,
@@ -157,9 +242,17 @@ export class Agents extends APIResource {
   /**
    * Transitions a published agent back to STATE_DRAFT. Active schedules for the
    * agent are paused until it is published again.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.unpublish(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   unpublish(id: string, params: AgentUnpublishParams, options?: RequestOptions): APIPromise<Agent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${id}:unpublish`, {
       body,
       ...options,
@@ -281,19 +374,25 @@ export interface Page {
 
 export interface AgentCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
   /**
-   * Agent specification (user-provided configuration)
+   * Body param: Agent specification (user-provided configuration)
    */
   spec: AgentSpec;
 
   /**
-   * Create agent variation request
+   * Body param: Create agent variation request
    */
   defaultVariation?: AgentCreateParams.DefaultVariation;
 }
@@ -321,14 +420,14 @@ export interface AgentRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AgentUpdateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -351,40 +450,45 @@ export interface AgentUpdateParams {
 
 export interface AgentListParams extends CursorPaginationParams {
   /**
-   * When true, the `info` field on each returned agent is populated. Requests with
-   * this flag count more against your rate limit.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: When true, the `info` field on each returned agent is populated.
+   * Requests with this flag count more against your rate limit.
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by agent lifecycle state
+   * Query param: Filter by agent lifecycle state
    */
   state?: 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 
   /**
-   * Filter by variation selection mode
+   * Query param: Filter by variation selection mode
    */
   variationSelectionMode?:
     | 'VARIATION_SELECTION_MODE_UNSPECIFIED'
@@ -396,35 +500,35 @@ export interface AgentDeleteParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AgentArchiveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AgentPublishParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AgentUnarchiveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AgentUnpublishParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 Agents.Feedback = Feedback;
@@ -462,6 +566,9 @@ export declare namespace Agents {
 
   export {
     Variations as Variations,
+    type AddAgentVariationAssignmentRequestSubAgentID as AddAgentVariationAssignmentRequestSubAgentID,
+    type AddAgentVariationAssignmentRequestToolID as AddAgentVariationAssignmentRequestToolID,
+    type AddAgentVariationAssignmentRequestToolSetID as AddAgentVariationAssignmentRequestToolSetID,
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
@@ -472,6 +579,9 @@ export declare namespace Agents {
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type VariationAssignment as VariationAssignment,
+    type VariationAssignmentAgent as VariationAssignmentAgent,
+    type VariationAssignmentTool as VariationAssignmentTool,
+    type VariationAssignmentToolSet as VariationAssignmentToolSet,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
     type VariationCreateParams as VariationCreateParams,

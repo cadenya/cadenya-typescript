@@ -39,6 +39,9 @@ export {
 } from './schedules';
 export {
   Variations,
+  type AddAgentVariationAssignmentRequestSubAgentID,
+  type AddAgentVariationAssignmentRequestToolID,
+  type AddAgentVariationAssignmentRequestToolSetID,
   type AgentVariation,
   type AgentVariationInfo,
   type AgentVariationSpec,
@@ -49,6 +52,9 @@ export {
   type CompactionConfigSummarizationStrategy,
   type CompactionConfigToolResultClearingStrategy,
   type VariationAssignment,
+  type VariationAssignmentAgent,
+  type VariationAssignmentTool,
+  type VariationAssignmentToolSet,
   type VariationMemoryLayerAssignment,
   type VariationCreateParams,
   type VariationRetrieveParams,

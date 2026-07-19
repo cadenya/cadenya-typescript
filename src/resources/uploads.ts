@@ -18,15 +18,20 @@ export class Uploads extends APIResource {
    * returned id is used to reference the upload from resources that accept binary
    * content.
    */
-  create(workspaceID: string, body: UploadCreateParams, options?: RequestOptions): APIPromise<Upload> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/uploads`, { body, ...options });
+  create(params: UploadCreateParams, options?: RequestOptions): APIPromise<Upload> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/uploads`, { body, ...options });
   }
 
   /**
    * Retrieves the current state of an upload, including its lifecycle status
    */
-  retrieve(id: string, params: UploadRetrieveParams, options?: RequestOptions): APIPromise<Upload> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: UploadRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Upload> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/uploads/${id}`, options);
   }
 }
@@ -106,12 +111,21 @@ export interface UploadSpec {
 
 export interface UploadCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: UploadSpec;
 }
 
@@ -119,7 +133,7 @@ export interface UploadRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Uploads {

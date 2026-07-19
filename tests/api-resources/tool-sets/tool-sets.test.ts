@@ -10,7 +10,8 @@ const client = new Cadenya({
 describe('resource toolSets', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.toolSets.create('workspaceId', {
+    const responsePromise = client.toolSets.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,7 +26,8 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.toolSets.create('workspaceId', {
+    const response = await client.toolSets.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -33,11 +35,6 @@ describe('resource toolSets', () => {
       },
       spec: {
         adapter: {
-          bare: { contentTimeout: 0 },
-          http: {
-            baseUrl: 'baseUrl',
-            headers: { foo: 'string' },
-          },
           mcp: {
             excludeTools: {
               operator: 'OPERATOR_UNSPECIFIED',
@@ -45,12 +42,9 @@ describe('resource toolSets', () => {
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
                   matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
                     exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
+                    type: 'exact',
+                    caseSensitive: true,
                   },
                 },
               ],
@@ -62,96 +56,18 @@ describe('resource toolSets', () => {
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
                   matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
                     exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
+                    type: 'exact',
+                    caseSensitive: true,
                   },
                 },
               ],
             },
             justInTime: { enabled: true, failObjectiveOnToolListError: true },
-            toolApprovals: {
-              always: true,
-              only: {
-                operator: 'OPERATOR_UNSPECIFIED',
-                filters: [
-                  {
-                    attribute: 'ATTRIBUTE_UNSPECIFIED',
-                    matcher: {
-                      caseSensitive: true,
-                      contains: 'contains',
-                      endsWith: 'endsWith',
-                      exact: 'exact',
-                      regex: 'regex',
-                      startsWith: 'startsWith',
-                    },
-                  },
-                ],
-              },
-            },
+            toolApprovals: { always: true, type: 'always' },
             url: 'url',
           },
-          openapi: {
-            baseUrl: 'baseUrl',
-            excludeTools: {
-              operator: 'OPERATOR_UNSPECIFIED',
-              filters: [
-                {
-                  attribute: 'ATTRIBUTE_UNSPECIFIED',
-                  matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
-                    exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
-                  },
-                },
-              ],
-            },
-            headers: { foo: 'string' },
-            includeTools: {
-              operator: 'OPERATOR_UNSPECIFIED',
-              filters: [
-                {
-                  attribute: 'ATTRIBUTE_UNSPECIFIED',
-                  matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
-                    exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
-                  },
-                },
-              ],
-            },
-            serverName: 'serverName',
-            toolApprovals: {
-              always: true,
-              only: {
-                operator: 'OPERATOR_UNSPECIFIED',
-                filters: [
-                  {
-                    attribute: 'ATTRIBUTE_UNSPECIFIED',
-                    matcher: {
-                      caseSensitive: true,
-                      contains: 'contains',
-                      endsWith: 'endsWith',
-                      exact: 'exact',
-                      regex: 'regex',
-                      startsWith: 'startsWith',
-                    },
-                  },
-                ],
-              },
-            },
-            uploadId: 'uploadId',
-            url: 'url',
-          },
+          type: 'mcp',
         },
         description: 'description',
       },
@@ -160,7 +76,9 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.toolSets.retrieve('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.retrieve('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -172,12 +90,16 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.toolSets.retrieve('id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.retrieve('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.toolSets.update('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.update('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -189,8 +111,8 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.toolSets.update('id', {
-      workspaceId: 'workspaceId',
+    const response = await client.toolSets.update('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -198,11 +120,6 @@ describe('resource toolSets', () => {
       },
       spec: {
         adapter: {
-          bare: { contentTimeout: 0 },
-          http: {
-            baseUrl: 'baseUrl',
-            headers: { foo: 'string' },
-          },
           mcp: {
             excludeTools: {
               operator: 'OPERATOR_UNSPECIFIED',
@@ -210,12 +127,9 @@ describe('resource toolSets', () => {
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
                   matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
                     exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
+                    type: 'exact',
+                    caseSensitive: true,
                   },
                 },
               ],
@@ -227,96 +141,18 @@ describe('resource toolSets', () => {
                 {
                   attribute: 'ATTRIBUTE_UNSPECIFIED',
                   matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
                     exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
+                    type: 'exact',
+                    caseSensitive: true,
                   },
                 },
               ],
             },
             justInTime: { enabled: true, failObjectiveOnToolListError: true },
-            toolApprovals: {
-              always: true,
-              only: {
-                operator: 'OPERATOR_UNSPECIFIED',
-                filters: [
-                  {
-                    attribute: 'ATTRIBUTE_UNSPECIFIED',
-                    matcher: {
-                      caseSensitive: true,
-                      contains: 'contains',
-                      endsWith: 'endsWith',
-                      exact: 'exact',
-                      regex: 'regex',
-                      startsWith: 'startsWith',
-                    },
-                  },
-                ],
-              },
-            },
+            toolApprovals: { always: true, type: 'always' },
             url: 'url',
           },
-          openapi: {
-            baseUrl: 'baseUrl',
-            excludeTools: {
-              operator: 'OPERATOR_UNSPECIFIED',
-              filters: [
-                {
-                  attribute: 'ATTRIBUTE_UNSPECIFIED',
-                  matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
-                    exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
-                  },
-                },
-              ],
-            },
-            headers: { foo: 'string' },
-            includeTools: {
-              operator: 'OPERATOR_UNSPECIFIED',
-              filters: [
-                {
-                  attribute: 'ATTRIBUTE_UNSPECIFIED',
-                  matcher: {
-                    caseSensitive: true,
-                    contains: 'contains',
-                    endsWith: 'endsWith',
-                    exact: 'exact',
-                    regex: 'regex',
-                    startsWith: 'startsWith',
-                  },
-                },
-              ],
-            },
-            serverName: 'serverName',
-            toolApprovals: {
-              always: true,
-              only: {
-                operator: 'OPERATOR_UNSPECIFIED',
-                filters: [
-                  {
-                    attribute: 'ATTRIBUTE_UNSPECIFIED',
-                    matcher: {
-                      caseSensitive: true,
-                      contains: 'contains',
-                      endsWith: 'endsWith',
-                      exact: 'exact',
-                      regex: 'regex',
-                      startsWith: 'startsWith',
-                    },
-                  },
-                ],
-              },
-            },
-            uploadId: 'uploadId',
-            url: 'url',
-          },
+          type: 'mcp',
         },
         description: 'description',
       },
@@ -325,8 +161,8 @@ describe('resource toolSets', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.toolSets.list('workspaceId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.toolSets.list({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -337,29 +173,25 @@ describe('resource toolSets', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.toolSets.list(
-        'workspaceId',
-        {
-          cursor: 'cursor',
-          includeInfo: true,
-          labels: 'labels',
-          limit: 0,
-          prefix: 'prefix',
-          query: 'query',
-          sortOrder: 'sortOrder',
-          state: 'STATE_UNSPECIFIED',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.toolSets.list({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      cursor: 'cursor',
+      includeInfo: true,
+      labels: 'labels',
+      limit: 0,
+      prefix: 'prefix',
+      query: 'query',
+      sortOrder: 'sortOrder',
+      state: 'STATE_UNSPECIFIED',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.toolSets.delete('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.delete('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -371,12 +203,16 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.toolSets.delete('id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.delete('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.toolSets.archive('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.archive('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -388,12 +224,16 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.toolSets.archive('id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.archive('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('getOpenAPISpec: only required params', async () => {
-    const responsePromise = client.toolSets.getOpenAPISpec('toolSetId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.getOpenAPISpec('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -405,12 +245,16 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('getOpenAPISpec: required and optional params', async () => {
-    const response = await client.toolSets.getOpenAPISpec('toolSetId', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.getOpenAPISpec('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('listEvents: only required params', async () => {
-    const responsePromise = client.toolSets.listEvents('toolSetId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.listEvents('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -422,8 +266,8 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('listEvents: required and optional params', async () => {
-    const response = await client.toolSets.listEvents('toolSetId', {
-      workspaceId: 'workspaceId',
+    const response = await client.toolSets.listEvents('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -434,7 +278,9 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.toolSets.unarchive('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.unarchive('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -446,6 +292,8 @@ describe('resource toolSets', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: required and optional params', async () => {
-    const response = await client.toolSets.unarchive('id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.unarchive('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 });
