@@ -10,7 +10,9 @@ const client = new Cadenya({
 describe('resource webhookDeliveries', () => {
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.agents.webhookDeliveries.list('agentId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.agents.webhookDeliveries.list('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,13 +24,13 @@ describe('resource webhookDeliveries', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.agents.webhookDeliveries.list('agentId', {
-      workspaceId: 'workspaceId',
+    const response = await client.agents.webhookDeliveries.list('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       eventType: 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED',
       labels: 'labels',
       limit: 0,
-      objectiveId: 'objectiveId',
+      objectiveId: 'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
     });
   });
 });

@@ -10,10 +10,10 @@ const client = new Cadenya({
 describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.create('memoryLayerId', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.memoryLayers.entries.create('memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
-      spec: { key: 'key' },
+      spec: { content: 'content', type: 'content' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -26,28 +26,29 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.create('memoryLayerId', {
-      workspaceId: 'workspaceId',
+    const response = await client.memoryLayers.entries.create('memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
       spec: {
-        key: 'key',
         content: 'content',
+        type: 'content',
         description: 'description',
-        uploadId: 'uploadId',
+        key: 'key',
       },
     });
   });
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.retrieve('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-    });
+    const responsePromise = client.memoryLayers.entries.retrieve(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -59,18 +60,20 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.retrieve('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-    });
+    const response = await client.memoryLayers.entries.retrieve(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.update('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-    });
+    const responsePromise = client.memoryLayers.entries.update(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -82,27 +85,32 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.update('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-      metadata: {
-        name: 'name',
-        externalId: 'externalId',
-        labels: { foo: 'string' },
+    const response = await client.memoryLayers.entries.update(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      {
+        workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+        metadata: {
+          name: 'name',
+          externalId: 'externalId',
+          labels: { foo: 'string' },
+        },
+        spec: {
+          content: 'content',
+          description: 'description',
+          key: 'key',
+          uploadId: 'upload_01HXKD2E5NQM3T9AYWCFZ05DNK',
+        },
+        updateMask: 'updateMask',
       },
-      spec: {
-        content: 'content',
-        description: 'description',
-        key: 'key',
-        uploadId: 'uploadId',
-      },
-      updateMask: 'updateMask',
-    });
+    );
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.list('memoryLayerId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.memoryLayers.entries.list('memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -114,8 +122,8 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.list('memoryLayerId', {
-      workspaceId: 'workspaceId',
+    const response = await client.memoryLayers.entries.list('memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -128,10 +136,11 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.memoryLayers.entries.delete('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-    });
+    const responsePromise = client.memoryLayers.entries.delete(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -143,9 +152,10 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.memoryLayers.entries.delete('id', {
-      workspaceId: 'workspaceId',
-      memoryLayerId: 'memoryLayerId',
-    });
+    const response = await client.memoryLayers.entries.delete(
+      'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+      'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 });

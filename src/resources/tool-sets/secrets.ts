@@ -21,7 +21,7 @@ export class Secrets extends APIResource {
    * Creates a new secret scoped to the tool set
    */
   create(toolSetID: string, params: SecretCreateParams, options?: RequestOptions): APIPromise<ToolSetSecret> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/secrets`, {
       body,
       ...options,
@@ -31,10 +31,15 @@ export class Secrets extends APIResource {
   /**
    * Retrieves a tool set secret by ID from the tool set
    */
-  retrieve(id: string, params: SecretRetrieveParams, options?: RequestOptions): APIPromise<ToolSetSecret> {
-    const { workspaceId, toolSetId } = params;
+  retrieve(
+    toolSetID: string,
+    id: string,
+    params: SecretRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ToolSetSecret> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(
-      path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/secrets/${id}`,
+      path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/secrets/${id}`,
       options,
     );
   }
@@ -42,9 +47,14 @@ export class Secrets extends APIResource {
   /**
    * Updates a secret scoped to the tool set
    */
-  update(id: string, params: SecretUpdateParams, options?: RequestOptions): APIPromise<ToolSetSecret> {
-    const { workspaceId, toolSetId, ...body } = params;
-    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/secrets/${id}`, {
+  update(
+    toolSetID: string,
+    id: string,
+    params: SecretUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<ToolSetSecret> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/secrets/${id}`, {
       body,
       ...options,
     });
@@ -55,10 +65,10 @@ export class Secrets extends APIResource {
    */
   list(
     toolSetID: string,
-    params: SecretListParams,
+    params: SecretListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ToolSetSecretsCursorPagination, ToolSetSecret> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/secrets`,
       CursorPagination<ToolSetSecret>,
@@ -69,9 +79,14 @@ export class Secrets extends APIResource {
   /**
    * Deletes a secret scoped to the tool set
    */
-  delete(id: string, params: SecretDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId, toolSetId } = params;
-    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/secrets/${id}`, {
+  delete(
+    toolSetID: string,
+    id: string,
+    params: SecretDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/secrets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -113,7 +128,7 @@ export interface SecretCreateParams {
   /**
    * Path param: The workspace that owns the tool set.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CreateResourceMetadata contains the user-provided fields for
@@ -133,26 +148,14 @@ export interface SecretRetrieveParams {
   /**
    * The workspace that owns the tool set.
    */
-  workspaceId: string;
-
-  /**
-   * The tool set the secret belongs to. Accepts the canonical ts\_… form or the
-   * external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export interface SecretUpdateParams {
   /**
    * Path param: The workspace that owns the tool set.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: The tool set the secret belongs to. Accepts the canonical ts\_… form
-   * or the external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -177,7 +180,7 @@ export interface SecretListParams extends CursorPaginationParams {
   /**
    * Path param: The workspace that owns the tool set.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -204,13 +207,7 @@ export interface SecretDeleteParams {
   /**
    * The workspace that owns the tool set.
    */
-  workspaceId: string;
-
-  /**
-   * The tool set the secret belongs to. Accepts the canonical ts\_… form or the
-   * external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Secrets {

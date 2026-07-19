@@ -12,13 +12,26 @@ export class Feedback extends APIResource {
   /**
    * Submits feedback for an objective's execution. Feedback scores are used by the
    * agent variation scoring system to evaluate and rank variation performance.
+   *
+   * @example
+   * ```ts
+   * const objectiveFeedback =
+   *   await client.objectives.feedback.create(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       data: {},
+   *       metadata: {},
+   *     },
+   *   );
+   * ```
    */
   create(
     objectiveID: string,
     params: FeedbackCreateParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveFeedback> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/feedback`, {
       body,
       ...options,
@@ -27,13 +40,24 @@ export class Feedback extends APIResource {
 
   /**
    * Lists all feedback submitted for an objective
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveFeedback of client.objectives.feedback.list(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     objectiveID: string,
-    params: FeedbackListParams,
+    params: FeedbackListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveFeedbacksCursorPagination, ObjectiveFeedback> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/feedback`,
       CursorPagination<ObjectiveFeedback>,
@@ -108,7 +132,7 @@ export interface FeedbackCreateParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param
@@ -127,7 +151,7 @@ export interface FeedbackListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.

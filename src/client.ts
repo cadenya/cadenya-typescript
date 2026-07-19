@@ -30,6 +30,11 @@ import {
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
+  AIProviderConfigOpenAI,
+  AIProviderConfigOpenAICompatible,
+  AIProviderConfigOpenrouter,
+  AIProviderCredentialAPIKey,
+  AIProviderCredentialHeaders,
   AIProviderKey,
   AIProviderKeyCreateParams,
   AIProviderKeyDeleteParams,
@@ -135,6 +140,9 @@ import {
   AssistantMessage,
   AssistantToolCall,
   CallableTool,
+  CallableToolAgent,
+  CallableToolCadenyaProvidedTool,
+  CallableToolTool,
   ContextLengths,
   ContextWindowCompacted,
   MemoryRead,
@@ -153,6 +161,23 @@ import {
   ObjectiveError,
   ObjectiveEvent,
   ObjectiveEventData,
+  ObjectiveEventDataAssistantMessage,
+  ObjectiveEventDataCancelled,
+  ObjectiveEventDataContextWindowCompacted,
+  ObjectiveEventDataError,
+  ObjectiveEventDataFinalized,
+  ObjectiveEventDataMemoryRead,
+  ObjectiveEventDataNotice,
+  ObjectiveEventDataSubAgentSpawned,
+  ObjectiveEventDataSubAgentUpdated,
+  ObjectiveEventDataTimedOut,
+  ObjectiveEventDataToolApprovalRequested,
+  ObjectiveEventDataToolApproved,
+  ObjectiveEventDataToolCalled,
+  ObjectiveEventDataToolDenied,
+  ObjectiveEventDataToolError,
+  ObjectiveEventDataToolResult,
+  ObjectiveEventDataUserMessage,
   ObjectiveEventInfo,
   ObjectiveEventWebhookData,
   ObjectiveEventsCursorPagination,
@@ -179,8 +204,15 @@ import {
 } from './resources/objectives/objectives';
 import {
   ApprovalRequirementFilter,
+  ApprovalRequirementFilterAlways,
+  ApprovalRequirementFilterOnly,
   AttributeFilter,
   StringMatcher,
+  StringMatcherContains,
+  StringMatcherEndsWith,
+  StringMatcherExact,
+  StringMatcherRegex,
+  StringMatcherStartsWith,
   SyncCompleted,
   SyncFailed,
   SyncStarted,
@@ -188,14 +220,23 @@ import {
   ToolSet,
   ToolSetAdapter,
   ToolSetAdapterBare,
+  ToolSetAdapterBareVariant,
   ToolSetAdapterHTTP,
-  ToolSetAdapterMcp,
+  ToolSetAdapterHTTPVariant,
+  ToolSetAdapterMCP,
+  ToolSetAdapterMCPVariant,
   ToolSetAdapterOpenAPI,
+  ToolSetAdapterOpenAPIURL,
+  ToolSetAdapterOpenAPIUploadID,
+  ToolSetAdapterOpenAPIVariant,
   ToolSetArchiveParams,
   ToolSetCreateParams,
   ToolSetDeleteParams,
   ToolSetEvent,
   ToolSetEventData,
+  ToolSetEventDataSyncCompleted,
+  ToolSetEventDataSyncFailed,
+  ToolSetEventDataSyncStarted,
   ToolSetEventsCursorPagination,
   ToolSetGetOpenAPISpecParams,
   ToolSetGetOpenAPISpecResponse,
@@ -211,8 +252,10 @@ import {
 } from './resources/tool-sets/tool-sets';
 import {
   WorkspaceAdmin,
+  WorkspaceAdminArchiveParams,
   WorkspaceAdminCreateParams,
   WorkspaceAdminListParams,
+  WorkspaceAdminRetrieveParams,
   WorkspaceAdminUpdateParams,
   WorkspaceMember,
 } from './resources/workspace-admin/workspace-admin';
@@ -239,6 +282,11 @@ export interface ClientOptions {
    * Defaults to process.env['CADENYA_WEBHOOK_KEY'].
    */
   webhookKey?: string | null | undefined;
+
+  /**
+   * Workspace to operate on. Fills the {workspaceId} path parameter on workspace-scoped endpoints unless overridden per request.
+   */
+  workspaceID?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -274,7 +322,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 0
    */
   maxRetries?: number | undefined;
 
@@ -315,6 +363,7 @@ export interface ClientOptions {
 export class Cadenya {
   apiKey: string;
   webhookKey: string | null;
+  workspaceID: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -333,11 +382,12 @@ export class Cadenya {
    *
    * @param {string | undefined} [opts.apiKey=process.env['CADENYA_API_KEY'] ?? undefined]
    * @param {string | null | undefined} [opts.webhookKey=process.env['CADENYA_WEBHOOK_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.workspaceID=process.env['CADENYA_WORKSPACE_ID'] ?? null]
    * @param {string} [opts.baseURL=process.env['CADENYA_BASE_URL'] ?? https://api.cadenya.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=0] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
@@ -345,6 +395,7 @@ export class Cadenya {
     baseURL = readEnv('CADENYA_BASE_URL'),
     apiKey = readEnv('CADENYA_API_KEY'),
     webhookKey = readEnv('CADENYA_WEBHOOK_KEY') ?? null,
+    workspaceID = readEnv('CADENYA_WORKSPACE_ID') ?? null,
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
@@ -356,6 +407,7 @@ export class Cadenya {
     const options: ClientOptions = {
       apiKey,
       webhookKey,
+      workspaceID,
       ...opts,
       baseURL: baseURL || `https://api.cadenya.com`,
     };
@@ -371,7 +423,7 @@ export class Cadenya {
       parseLogLevel(readEnv('CADENYA_LOG'), "process.env['CADENYA_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.maxRetries = options.maxRetries ?? 2;
+    this.maxRetries = options.maxRetries ?? 0;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
@@ -391,6 +443,7 @@ export class Cadenya {
 
     this.apiKey = apiKey;
     this.webhookKey = webhookKey;
+    this.workspaceID = workspaceID;
   }
 
   /**
@@ -408,6 +461,7 @@ export class Cadenya {
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
       webhookKey: this.webhookKey,
+      workspaceID: this.workspaceID,
       ...options,
     });
     return client;
@@ -1075,6 +1129,11 @@ export declare namespace Cadenya {
 
   export {
     AIProviderKeys as AIProviderKeys,
+    type AIProviderConfigOpenAI as AIProviderConfigOpenAI,
+    type AIProviderConfigOpenAICompatible as AIProviderConfigOpenAICompatible,
+    type AIProviderConfigOpenrouter as AIProviderConfigOpenrouter,
+    type AIProviderCredentialAPIKey as AIProviderCredentialAPIKey,
+    type AIProviderCredentialHeaders as AIProviderCredentialHeaders,
     type AIProviderKey as AIProviderKey,
     type AIProviderKeySpec as AIProviderKeySpec,
     type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,
@@ -1121,6 +1180,9 @@ export declare namespace Cadenya {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
+    type CallableToolAgent as CallableToolAgent,
+    type CallableToolCadenyaProvidedTool as CallableToolCadenyaProvidedTool,
+    type CallableToolTool as CallableToolTool,
     type ContextLengths as ContextLengths,
     type ContextWindowCompacted as ContextWindowCompacted,
     type MemoryRead as MemoryRead,
@@ -1133,6 +1195,23 @@ export declare namespace Cadenya {
     type ObjectiveError as ObjectiveError,
     type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveEventDataAssistantMessage as ObjectiveEventDataAssistantMessage,
+    type ObjectiveEventDataCancelled as ObjectiveEventDataCancelled,
+    type ObjectiveEventDataContextWindowCompacted as ObjectiveEventDataContextWindowCompacted,
+    type ObjectiveEventDataError as ObjectiveEventDataError,
+    type ObjectiveEventDataFinalized as ObjectiveEventDataFinalized,
+    type ObjectiveEventDataMemoryRead as ObjectiveEventDataMemoryRead,
+    type ObjectiveEventDataNotice as ObjectiveEventDataNotice,
+    type ObjectiveEventDataSubAgentSpawned as ObjectiveEventDataSubAgentSpawned,
+    type ObjectiveEventDataSubAgentUpdated as ObjectiveEventDataSubAgentUpdated,
+    type ObjectiveEventDataTimedOut as ObjectiveEventDataTimedOut,
+    type ObjectiveEventDataToolApprovalRequested as ObjectiveEventDataToolApprovalRequested,
+    type ObjectiveEventDataToolApproved as ObjectiveEventDataToolApproved,
+    type ObjectiveEventDataToolCalled as ObjectiveEventDataToolCalled,
+    type ObjectiveEventDataToolDenied as ObjectiveEventDataToolDenied,
+    type ObjectiveEventDataToolError as ObjectiveEventDataToolError,
+    type ObjectiveEventDataToolResult as ObjectiveEventDataToolResult,
+    type ObjectiveEventDataUserMessage as ObjectiveEventDataUserMessage,
     type ObjectiveEventInfo as ObjectiveEventInfo,
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
@@ -1207,8 +1286,15 @@ export declare namespace Cadenya {
   export {
     ToolSets as ToolSets,
     type ApprovalRequirementFilter as ApprovalRequirementFilter,
+    type ApprovalRequirementFilterAlways as ApprovalRequirementFilterAlways,
+    type ApprovalRequirementFilterOnly as ApprovalRequirementFilterOnly,
     type AttributeFilter as AttributeFilter,
     type StringMatcher as StringMatcher,
+    type StringMatcherContains as StringMatcherContains,
+    type StringMatcherEndsWith as StringMatcherEndsWith,
+    type StringMatcherExact as StringMatcherExact,
+    type StringMatcherRegex as StringMatcherRegex,
+    type StringMatcherStartsWith as StringMatcherStartsWith,
     type SyncCompleted as SyncCompleted,
     type SyncFailed as SyncFailed,
     type SyncStarted as SyncStarted,
@@ -1216,11 +1302,20 @@ export declare namespace Cadenya {
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterBare as ToolSetAdapterBare,
+    type ToolSetAdapterBareVariant as ToolSetAdapterBareVariant,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
-    type ToolSetAdapterMcp as ToolSetAdapterMcp,
+    type ToolSetAdapterHTTPVariant as ToolSetAdapterHTTPVariant,
+    type ToolSetAdapterMCP as ToolSetAdapterMCP,
+    type ToolSetAdapterMCPVariant as ToolSetAdapterMCPVariant,
     type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
+    type ToolSetAdapterOpenAPIUploadID as ToolSetAdapterOpenAPIUploadID,
+    type ToolSetAdapterOpenAPIURL as ToolSetAdapterOpenAPIURL,
+    type ToolSetAdapterOpenAPIVariant as ToolSetAdapterOpenAPIVariant,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
+    type ToolSetEventDataSyncCompleted as ToolSetEventDataSyncCompleted,
+    type ToolSetEventDataSyncFailed as ToolSetEventDataSyncFailed,
+    type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetGetOpenAPISpecResponse as ToolSetGetOpenAPISpecResponse,
@@ -1280,8 +1375,10 @@ export declare namespace Cadenya {
     WorkspaceAdmin as WorkspaceAdmin,
     type WorkspaceMember as WorkspaceMember,
     type WorkspaceAdminCreateParams as WorkspaceAdminCreateParams,
+    type WorkspaceAdminRetrieveParams as WorkspaceAdminRetrieveParams,
     type WorkspaceAdminUpdateParams as WorkspaceAdminUpdateParams,
     type WorkspaceAdminListParams as WorkspaceAdminListParams,
+    type WorkspaceAdminArchiveParams as WorkspaceAdminArchiveParams,
   };
 
   export {

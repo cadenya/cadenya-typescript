@@ -12,12 +12,9 @@ export class AIProviderKeys extends APIResource {
   /**
    * Creates a new customer-provided AI provider key in the workspace
    */
-  create(
-    workspaceID: string,
-    body: AIProviderKeyCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<AIProviderKey> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/ai_provider_keys`, { body, ...options });
+  create(params: AIProviderKeyCreateParams, options?: RequestOptions): APIPromise<AIProviderKey> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/ai_provider_keys`, { body, ...options });
   }
 
   /**
@@ -25,10 +22,10 @@ export class AIProviderKeys extends APIResource {
    */
   retrieve(
     id: string,
-    params: AIProviderKeyRetrieveParams,
+    params: AIProviderKeyRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AIProviderKey> {
-    const { workspaceId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/ai_provider_keys/${id}`, options);
   }
 
@@ -36,7 +33,7 @@ export class AIProviderKeys extends APIResource {
    * Updates an AI provider key's name or key value in the workspace
    */
   update(id: string, params: AIProviderKeyUpdateParams, options?: RequestOptions): APIPromise<AIProviderKey> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/ai_provider_keys/${id}`, {
       body,
       ...options,
@@ -47,12 +44,12 @@ export class AIProviderKeys extends APIResource {
    * Lists all customer-provided AI provider keys in the workspace
    */
   list(
-    workspaceID: string,
-    query: AIProviderKeyListParams | null | undefined = {},
+    params: AIProviderKeyListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AIProviderKeysCursorPagination, AIProviderKey> {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
-      path`/v1/workspaces/${workspaceID}/ai_provider_keys`,
+      path`/v1/workspaces/${workspaceId}/ai_provider_keys`,
       CursorPagination<AIProviderKey>,
       { query, ...options },
     );
@@ -61,8 +58,12 @@ export class AIProviderKeys extends APIResource {
   /**
    * Deletes an AI provider key from the workspace
    */
-  delete(id: string, params: AIProviderKeyDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: AIProviderKeyDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/ai_provider_keys/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -71,6 +72,113 @@ export class AIProviderKeys extends APIResource {
 }
 
 export type AIProviderKeysCursorPagination = CursorPagination<AIProviderKey>;
+
+export interface AIProviderConfigOpenAI {
+  /**
+   * OpenAIConfig holds OpenAI-specific settings.
+   */
+  openai: AIProviderConfigOpenAI.OpenAI;
+
+  type: 'openai';
+}
+
+export namespace AIProviderConfigOpenAI {
+  /**
+   * OpenAIConfig holds OpenAI-specific settings.
+   */
+  export interface OpenAI {
+    /**
+     * Sent as the OpenAI-Organization header when set.
+     */
+    organizationId?: string;
+
+    /**
+     * Sent as the OpenAI-Project header when set.
+     */
+    projectId?: string;
+  }
+}
+
+export interface AIProviderConfigOpenAICompatible {
+  /**
+   * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
+   * Completions API. The base URL is required and its model catalog is discovered
+   * live via GET {base_url}/models.
+   */
+  openaiCompatible: AIProviderConfigOpenAICompatible.OpenAICompatible;
+
+  type: 'openaiCompatible';
+}
+
+export namespace AIProviderConfigOpenAICompatible {
+  /**
+   * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
+   * Completions API. The base URL is required and its model catalog is discovered
+   * live via GET {base_url}/models.
+   */
+  export interface OpenAICompatible {
+    baseUrl: string;
+  }
+}
+
+export interface AIProviderConfigOpenrouter {
+  /**
+   * OpenRouterConfig holds OpenRouter-specific settings.
+   */
+  openrouter: AIProviderConfigOpenrouter.Openrouter;
+
+  type: 'openrouter';
+}
+
+export namespace AIProviderConfigOpenrouter {
+  /**
+   * OpenRouterConfig holds OpenRouter-specific settings.
+   */
+  export interface Openrouter {
+    /**
+     * Data-residency region (e.g. "us", "eu"). Empty uses the provider default.
+     */
+    region?: string;
+  }
+}
+
+export interface AIProviderCredentialAPIKey {
+  /**
+   * CredentialAPIKey carries a single bearer/header API key.
+   */
+  apiKey: AIProviderCredentialAPIKey.APIKey;
+
+  type: 'apiKey';
+}
+
+export namespace AIProviderCredentialAPIKey {
+  /**
+   * CredentialAPIKey carries a single bearer/header API key.
+   */
+  export interface APIKey {
+    apiKey?: string;
+  }
+}
+
+export interface AIProviderCredentialHeaders {
+  /**
+   * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
+   * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
+   */
+  headers: AIProviderCredentialHeaders.Headers;
+
+  type: 'headers';
+}
+
+export namespace AIProviderCredentialHeaders {
+  /**
+   * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
+   * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
+   */
+  export interface Headers {
+    headers?: { [key: string]: string };
+  }
+}
 
 /**
  * AIProviderKey is a credential for an AI provider, scoped to a workspace. Most
@@ -125,14 +233,14 @@ export interface AIProviderKeySpec {
    * intentionally not overridable here; use the OpenAI-compatible provider to target
    * a custom endpoint.
    */
-  config?: AIProviderKeySpec.Config;
+  config?: AIProviderConfigOpenrouter | AIProviderConfigOpenAI | AIProviderConfigOpenAICompatible;
 
   /**
    * AIProviderCredential is the secret material used to authenticate with a
    * provider. The set case must correspond to AIProviderKeySpec.provider. The server
    * encrypts the serialized message at rest and never returns it on reads.
    */
-  credentials?: AIProviderKeySpec.Credentials;
+  credentials?: AIProviderCredentialAPIKey | AIProviderCredentialHeaders;
 
   /**
    * The AI provider this key authenticates against.
@@ -146,113 +254,23 @@ export interface AIProviderKeySpec {
     | 'AI_PROVIDER_OPENAI_COMPATIBLE';
 }
 
-export namespace AIProviderKeySpec {
-  /**
-   * AIProviderConfig holds non-secret, provider-specific settings. The set case must
-   * correspond to AIProviderKeySpec.provider. Providers with no settings (Anthropic,
-   * Gemini) simply leave this unset. The endpoint of a named provider is fixed and
-   * intentionally not overridable here; use the OpenAI-compatible provider to target
-   * a custom endpoint.
-   */
-  export interface Config {
-    /**
-     * OpenAIConfig holds OpenAI-specific settings.
-     */
-    openai?: Config.OpenAI;
-
-    /**
-     * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
-     * Completions API. The base URL is required and its model catalog is discovered
-     * live via GET {base_url}/models.
-     */
-    openaiCompatible?: Config.OpenAICompatible;
-
-    /**
-     * OpenRouterConfig holds OpenRouter-specific settings.
-     */
-    openrouter?: Config.Openrouter;
-  }
-
-  export namespace Config {
-    /**
-     * OpenAIConfig holds OpenAI-specific settings.
-     */
-    export interface OpenAI {
-      /**
-       * Sent as the OpenAI-Organization header when set.
-       */
-      organizationId?: string;
-
-      /**
-       * Sent as the OpenAI-Project header when set.
-       */
-      projectId?: string;
-    }
-
-    /**
-     * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
-     * Completions API. The base URL is required and its model catalog is discovered
-     * live via GET {base_url}/models.
-     */
-    export interface OpenAICompatible {
-      baseUrl?: string;
-    }
-
-    /**
-     * OpenRouterConfig holds OpenRouter-specific settings.
-     */
-    export interface Openrouter {
-      /**
-       * Data-residency region (e.g. "us", "eu"). Empty uses the provider default.
-       */
-      region?: string;
-    }
-  }
-
-  /**
-   * AIProviderCredential is the secret material used to authenticate with a
-   * provider. The set case must correspond to AIProviderKeySpec.provider. The server
-   * encrypts the serialized message at rest and never returns it on reads.
-   */
-  export interface Credentials {
-    /**
-     * CredentialAPIKey carries a single bearer/header API key.
-     */
-    apiKey?: Credentials.APIKey;
-
-    /**
-     * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
-     * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
-     */
-    headers?: Credentials.Headers;
-  }
-
-  export namespace Credentials {
-    /**
-     * CredentialAPIKey carries a single bearer/header API key.
-     */
-    export interface APIKey {
-      apiKey?: string;
-    }
-
-    /**
-     * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
-     * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
-     */
-    export interface Headers {
-      headers?: { [key: string]: string };
-    }
-  }
-}
-
 export interface AIProviderKeyCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: The workspace that will own this key.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: AIProviderKeySpec;
 }
 
@@ -260,14 +278,14 @@ export interface AIProviderKeyRetrieveParams {
   /**
    * The workspace the key belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface AIProviderKeyUpdateParams {
   /**
    * Path param: The workspace the key belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -290,37 +308,42 @@ export interface AIProviderKeyUpdateParams {
 
 export interface AIProviderKeyListParams extends CursorPaginationParams {
   /**
-   * When true, populate each item's info (model counts), at the cost of extra
-   * lookups.
+   * Path param: The workspace whose keys will be listed.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: When true, populate each item's info (model counts), at the cost of
+   * extra lookups.
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * When true, return only promotional keys (provided by Cadenya, e.g. for
-   * onboarding). Defaults to returning all keys, customer-provided and promotional
-   * alike.
+   * Query param: When true, return only promotional keys (provided by Cadenya, e.g.
+   * for onboarding). Defaults to returning all keys, customer-provided and
+   * promotional alike.
    */
   promotional?: boolean;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 }
@@ -329,11 +352,16 @@ export interface AIProviderKeyDeleteParams {
   /**
    * The workspace the key belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export declare namespace AIProviderKeys {
   export {
+    type AIProviderConfigOpenAI as AIProviderConfigOpenAI,
+    type AIProviderConfigOpenAICompatible as AIProviderConfigOpenAICompatible,
+    type AIProviderConfigOpenrouter as AIProviderConfigOpenrouter,
+    type AIProviderCredentialAPIKey as AIProviderCredentialAPIKey,
+    type AIProviderCredentialHeaders as AIProviderCredentialHeaders,
     type AIProviderKey as AIProviderKey,
     type AIProviderKeySpec as AIProviderKeySpec,
     type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,

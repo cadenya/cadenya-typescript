@@ -15,13 +15,24 @@ export class Feedback extends APIResource {
    * Lists feedback submitted across all objectives belonging to an agent. Supports
    * search by comment, sentiment filter, agent variation filter, and creation date
    * range. Results are ordered by creation time, newest first.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveFeedback of client.agents.feedback.list(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     agentID: string,
-    params: FeedbackListParams,
+    params: FeedbackListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveFeedbacksCursorPagination, ObjectivesFeedbackAPI.ObjectiveFeedback> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/agents/${agentID}/feedback`,
       CursorPagination<ObjectivesFeedbackAPI.ObjectiveFeedback>,
@@ -34,7 +45,7 @@ export interface FeedbackListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: Optional filter to limit results to feedback on objectives run by a

@@ -15,13 +15,26 @@ import { path } from '../../internal/utils/path';
 export class Variations extends APIResource {
   /**
    * Creates a new variation for an agent
+   *
+   * @example
+   * ```ts
+   * const agentVariation =
+   *   await client.agents.variations.create(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       metadata: { name: 'name' },
+   *       spec: {},
+   *     },
+   *   );
+   * ```
    */
   create(
     agentID: string,
     params: VariationCreateParams,
     options?: RequestOptions,
   ): APIPromise<AgentVariation> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations`, {
       body,
       ...options,
@@ -30,22 +43,48 @@ export class Variations extends APIResource {
 
   /**
    * Retrieves a variation by ID from an agent
+   *
+   * @example
+   * ```ts
+   * const agentVariation =
+   *   await client.agents.variations.retrieve(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   retrieve(
+    agentID: string,
     id: string,
-    params: VariationRetrieveParams,
+    params: VariationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AgentVariation> {
-    const { workspaceId, agentId } = params;
-    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, options);
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${id}`, options);
   }
 
   /**
    * Updates a variation for an agent
+   *
+   * @example
+   * ```ts
+   * const agentVariation =
+   *   await client.agents.variations.update(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
-  update(id: string, params: VariationUpdateParams, options?: RequestOptions): APIPromise<AgentVariation> {
-    const { workspaceId, agentId, ...body } = params;
-    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, {
+  update(
+    agentID: string,
+    id: string,
+    params: VariationUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentVariation> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${id}`, {
       body,
       ...options,
     });
@@ -53,13 +92,24 @@ export class Variations extends APIResource {
 
   /**
    * Lists all variations for an agent
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const agentVariation of client.agents.variations.list(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     agentID: string,
-    params: VariationListParams,
+    params: VariationListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentVariationsCursorPagination, AgentVariation> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations`,
       CursorPagination<AgentVariation>,
@@ -69,10 +119,24 @@ export class Variations extends APIResource {
 
   /**
    * Deletes a variation from an agent
+   *
+   * @example
+   * ```ts
+   * await client.agents.variations.delete(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  delete(id: string, params: VariationDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId, agentId } = params;
-    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${id}`, {
+  delete(
+    agentID: string,
+    id: string,
+    params: VariationDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -81,15 +145,30 @@ export class Variations extends APIResource {
   /**
    * Assigns a tool, tool set, or sub-agent to a variation. Exactly one target ID
    * must be set.
+   *
+   * @example
+   * ```ts
+   * const variationAssignment =
+   *   await client.agents.variations.addAssignment(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       toolId: 'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+   *       type: 'toolId',
+   *     },
+   *   );
+   * ```
    */
   addAssignment(
+    agentID: string,
     variationID: string,
     params: VariationAddAssignmentParams,
     options?: RequestOptions,
   ): APIPromise<VariationAssignment> {
-    const { workspaceId, agentId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(
-      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationID}/assignments`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${variationID}/assignments`,
       { body, ...options },
     );
   }
@@ -97,15 +176,29 @@ export class Variations extends APIResource {
   /**
    * Attaches a memory layer to a variation at a given position in the variation's
    * baseline memory cascade.
+   *
+   * @example
+   * ```ts
+   * const variationMemoryLayerAssignment =
+   *   await client.agents.variations.addMemoryLayer(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       memoryLayerId: 'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+   *     },
+   *   );
+   * ```
    */
   addMemoryLayer(
+    agentID: string,
     variationID: string,
     params: VariationAddMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    const { workspaceId, agentId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(
-      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationID}/memory_layer_assignments`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${variationID}/memory_layer_assignments`,
       { body, ...options },
     );
   }
@@ -113,15 +206,27 @@ export class Variations extends APIResource {
   /**
    * Detaches an assignment from a variation, identified by the assignment ID
    * returned when it was added.
+   *
+   * @example
+   * ```ts
+   * await client.agents.variations.removeAssignment(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *   'avt_01HXKD2E5NQM3T9AYWCFJE6K89',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   removeAssignment(
+    agentID: string,
+    variationID: string,
     id: string,
-    params: VariationRemoveAssignmentParams,
+    params: VariationRemoveAssignmentParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { workspaceId, agentId, variationId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(
-      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/assignments/${id}`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${variationID}/assignments/${id}`,
       { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
     );
   }
@@ -129,36 +234,130 @@ export class Variations extends APIResource {
   /**
    * Detaches a memory layer assignment from a variation, identified by the
    * assignment id.
+   *
+   * @example
+   * ```ts
+   * await client.agents.variations.removeMemoryLayer(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *   'avml_01HXKD2E5NQM3T9AYWCFX8AF59',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   removeMemoryLayer(
+    agentID: string,
+    variationID: string,
     id: string,
-    params: VariationRemoveMemoryLayerParams,
+    params: VariationRemoveMemoryLayerParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { workspaceId, agentId, variationId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(
-      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${variationID}/memory_layer_assignments/${id}`,
       { ...options, headers: buildHeaders([{ Accept: '*/*' }, options?.headers]) },
     );
   }
 
   /**
    * Updates the position of a memory layer assignment on a variation.
+   *
+   * @example
+   * ```ts
+   * const variationMemoryLayerAssignment =
+   *   await client.agents.variations.updateMemoryLayer(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
+   *     'avml_01HXKD2E5NQM3T9AYWCFX8AF59',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   updateMemoryLayer(
+    agentID: string,
+    variationID: string,
     id: string,
     params: VariationUpdateMemoryLayerParams,
     options?: RequestOptions,
   ): APIPromise<VariationMemoryLayerAssignment> {
-    const { workspaceId, agentId, variationId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(
-      path`/v1/workspaces/${workspaceId}/agents/${agentId}/variations/${variationId}/memory_layer_assignments/${id}`,
+      path`/v1/workspaces/${workspaceId}/agents/${agentID}/variations/${variationID}/memory_layer_assignments/${id}`,
       { body, ...options },
     );
   }
 }
 
 export type AgentVariationsCursorPagination = CursorPagination<AgentVariation>;
+
+export interface AddAgentVariationAssignmentRequestSubAgentID {
+  subAgentId: string;
+
+  type: 'subAgentId';
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId?: string;
+
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the
+   * `external_id:<value>` form.
+   */
+  variationId?: string;
+
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+}
+
+export interface AddAgentVariationAssignmentRequestToolID {
+  toolId: string;
+
+  type: 'toolId';
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId?: string;
+
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the
+   * `external_id:<value>` form.
+   */
+  variationId?: string;
+
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+}
+
+export interface AddAgentVariationAssignmentRequestToolSetID {
+  toolSetId: string;
+
+  type: 'toolSetId';
+
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
+   * form.
+   */
+  agentId?: string;
+
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the
+   * `external_id:<value>` form.
+   */
+  variationId?: string;
+
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+}
 
 /**
  * AgentVariation resource
@@ -420,9 +619,28 @@ export interface CompactionConfigToolResultClearingStrategy {
  * the handle used to remove the assignment. It is returned by the add endpoint and
  * present on every entry in `AgentVariationInfo.assignments`.
  */
-export interface VariationAssignment {
+export type VariationAssignment =
+  | VariationAssignmentTool
+  | VariationAssignmentToolSet
+  | VariationAssignmentAgent;
+
+export interface VariationAssignmentAgent {
+  /**
+   * BareMetadata contains the minimal metadata for a resource: the ID and an
+   * optional human-readable name. These are used for reference fields where the full
+   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
+   * e.g., the tool references inside an agent variation spec or the tools assigned
+   * to an objective. Both fields are server-populated; clients provide IDs through
+   * sibling fields rather than by constructing a BareMetadata themselves.
+   */
+  agent: Shared.BareMetadata;
+
+  type: 'agent';
+
   id?: string;
+}
 
+export interface VariationAssignmentTool {
   /**
    * BareMetadata contains the minimal metadata for a resource: the ID and an
    * optional human-readable name. These are used for reference fields where the full
@@ -431,8 +649,14 @@ export interface VariationAssignment {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  agent?: Shared.BareMetadata;
+  tool: Shared.BareMetadata;
 
+  type: 'tool';
+
+  id?: string;
+}
+
+export interface VariationAssignmentToolSet {
   /**
    * BareMetadata contains the minimal metadata for a resource: the ID and an
    * optional human-readable name. These are used for reference fields where the full
@@ -441,17 +665,11 @@ export interface VariationAssignment {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  tool?: Shared.BareMetadata;
+  toolSet: Shared.BareMetadata;
 
-  /**
-   * BareMetadata contains the minimal metadata for a resource: the ID and an
-   * optional human-readable name. These are used for reference fields where the full
-   * metadata (account scoping, timestamps, labels, external IDs) is not needed —
-   * e.g., the tool references inside an agent variation spec or the tools assigned
-   * to an objective. Both fields are server-populated; clients provide IDs through
-   * sibling fields rather than by constructing a BareMetadata themselves.
-   */
-  toolSet?: Shared.BareMetadata;
+  type: 'toolSet';
+
+  id?: string;
 }
 
 /**
@@ -494,7 +712,7 @@ export interface VariationCreateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CreateResourceMetadata contains the user-provided fields for
@@ -515,26 +733,14 @@ export interface VariationRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export interface VariationUpdateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
-   * `external_id:<value>` form.
-   */
-  agentId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -560,7 +766,7 @@ export interface VariationListParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When true, the `info` field on each returned variation is
@@ -585,60 +791,78 @@ export interface VariationDeleteParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
-export interface VariationAddAssignmentParams {
-  /**
-   * Path param: Workspace ID.
-   */
-  workspaceId: string;
+export type VariationAddAssignmentParams =
+  | VariationAddAssignmentParams.AddAgentVariationAssignmentRequestToolID
+  | VariationAddAssignmentParams.AddAgentVariationAssignmentRequestToolSetID
+  | VariationAddAssignmentParams.AddAgentVariationAssignmentRequestSubAgentID;
 
-  /**
-   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
-   * `external_id:<value>` form.
-   */
-  agentId: string;
+export declare namespace VariationAddAssignmentParams {
+  export interface AddAgentVariationAssignmentRequestToolID {
+    /**
+     * Path param: Workspace ID.
+     */
+    workspaceId?: string;
 
-  /**
-   * Body param
-   */
-  subAgentId?: string;
+    /**
+     * Body param
+     */
+    toolId: string;
 
-  /**
-   * Body param
-   */
-  toolId?: string;
+    /**
+     * Body param
+     */
+    type: 'toolId';
+  }
 
-  /**
-   * Body param
-   */
-  toolSetId?: string;
+  export interface AddAgentVariationAssignmentRequestToolSetID {
+    /**
+     * Path param: Workspace ID.
+     */
+    workspaceId?: string;
+
+    /**
+     * Body param
+     */
+    toolSetId: string;
+
+    /**
+     * Body param
+     */
+    type: 'toolSetId';
+  }
+
+  export interface AddAgentVariationAssignmentRequestSubAgentID {
+    /**
+     * Path param: Workspace ID.
+     */
+    workspaceId?: string;
+
+    /**
+     * Body param
+     */
+    subAgentId: string;
+
+    /**
+     * Body param
+     */
+    type: 'subAgentId';
+  }
 }
 
 export interface VariationAddMemoryLayerParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
-   * `external_id:<value>` form.
-   */
-  agentId: string;
+  workspaceId?: string;
 
   /**
    * Body param: Layer to attach. Accepts the canonical `memlyr_…` form or the
    * `external_id:<value>` form.
    */
-  memoryLayerId?: string;
+  memoryLayerId: string;
 
   /**
    * Body param: Position in the baseline cascade (lower = more specific). If
@@ -651,57 +875,21 @@ export interface VariationRemoveAssignmentParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
-
-  /**
-   * Variation ID. Accepts the canonical `av_…` form or the `external_id:<value>`
-   * form.
-   */
-  variationId: string;
+  workspaceId?: string;
 }
 
 export interface VariationRemoveMemoryLayerParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
-
-  /**
-   * Variation ID. Accepts the canonical `av_…` form or the `external_id:<value>`
-   * form.
-   */
-  variationId: string;
+  workspaceId?: string;
 }
 
 export interface VariationUpdateMemoryLayerParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
-   * `external_id:<value>` form.
-   */
-  agentId: string;
-
-  /**
-   * Path param: Variation ID. Accepts the canonical `av_…` form or the
-   * `external_id:<value>` form.
-   */
-  variationId: string;
+  workspaceId?: string;
 
   /**
    * Body param: New position. Only field currently updatable on an assignment.
@@ -711,6 +899,9 @@ export interface VariationUpdateMemoryLayerParams {
 
 export declare namespace Variations {
   export {
+    type AddAgentVariationAssignmentRequestSubAgentID as AddAgentVariationAssignmentRequestSubAgentID,
+    type AddAgentVariationAssignmentRequestToolID as AddAgentVariationAssignmentRequestToolID,
+    type AddAgentVariationAssignmentRequestToolSetID as AddAgentVariationAssignmentRequestToolSetID,
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
@@ -721,6 +912,9 @@ export declare namespace Variations {
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type VariationAssignment as VariationAssignment,
+    type VariationAssignmentAgent as VariationAssignmentAgent,
+    type VariationAssignmentTool as VariationAssignmentTool,
+    type VariationAssignmentToolSet as VariationAssignmentToolSet,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
     type VariationCreateParams as VariationCreateParams,

@@ -10,7 +10,8 @@ const client = new Cadenya({
 describe('resource aiProviderKeys', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.aiProviderKeys.create('workspaceId', {
+    const responsePromise = client.aiProviderKeys.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
       spec: {},
     });
@@ -25,7 +26,8 @@ describe('resource aiProviderKeys', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.aiProviderKeys.create('workspaceId', {
+    const response = await client.aiProviderKeys.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -33,13 +35,12 @@ describe('resource aiProviderKeys', () => {
       },
       spec: {
         config: {
-          openai: { organizationId: 'organizationId', projectId: 'projectId' },
-          openaiCompatible: { baseUrl: 'baseUrl' },
           openrouter: { region: 'region' },
+          type: 'openrouter',
         },
         credentials: {
           apiKey: { apiKey: 'apiKey' },
-          headers: { headers: { foo: 'string' } },
+          type: 'apiKey',
         },
         provider: 'AI_PROVIDER_UNSPECIFIED',
       },
@@ -48,7 +49,9 @@ describe('resource aiProviderKeys', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.aiProviderKeys.retrieve('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.aiProviderKeys.retrieve('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,12 +63,16 @@ describe('resource aiProviderKeys', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.aiProviderKeys.retrieve('id', { workspaceId: 'workspaceId' });
+    const response = await client.aiProviderKeys.retrieve('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.aiProviderKeys.update('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.aiProviderKeys.update('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,8 +84,8 @@ describe('resource aiProviderKeys', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.aiProviderKeys.update('id', {
-      workspaceId: 'workspaceId',
+    const response = await client.aiProviderKeys.update('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -86,13 +93,12 @@ describe('resource aiProviderKeys', () => {
       },
       spec: {
         config: {
-          openai: { organizationId: 'organizationId', projectId: 'projectId' },
-          openaiCompatible: { baseUrl: 'baseUrl' },
           openrouter: { region: 'region' },
+          type: 'openrouter',
         },
         credentials: {
           apiKey: { apiKey: 'apiKey' },
-          headers: { headers: { foo: 'string' } },
+          type: 'apiKey',
         },
         provider: 'AI_PROVIDER_UNSPECIFIED',
       },
@@ -101,8 +107,10 @@ describe('resource aiProviderKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.aiProviderKeys.list('workspaceId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.aiProviderKeys.list({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -113,29 +121,25 @@ describe('resource aiProviderKeys', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.aiProviderKeys.list(
-        'workspaceId',
-        {
-          cursor: 'cursor',
-          includeInfo: true,
-          labels: 'labels',
-          limit: 0,
-          prefix: 'prefix',
-          promotional: true,
-          query: 'query',
-          sortOrder: 'sortOrder',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.aiProviderKeys.list({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      cursor: 'cursor',
+      includeInfo: true,
+      labels: 'labels',
+      limit: 0,
+      prefix: 'prefix',
+      promotional: true,
+      query: 'query',
+      sortOrder: 'sortOrder',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.aiProviderKeys.delete('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.aiProviderKeys.delete('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -147,6 +151,8 @@ describe('resource aiProviderKeys', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.aiProviderKeys.delete('id', { workspaceId: 'workspaceId' });
+    const response = await client.aiProviderKeys.delete('aipk_01HXKD2E5NQM3T9AYWCFQ41VW3', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 });

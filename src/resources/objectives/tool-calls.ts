@@ -13,28 +13,50 @@ export class ToolCalls extends APIResource {
   /**
    * Retrieves a single tool call, including the content the tool returned. Media
    * content (images, audio) is served as short-lived signed URLs.
+   *
+   * @example
+   * ```ts
+   * const objectiveToolCallWithResult =
+   *   await client.objectives.toolCalls.retrieve(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   retrieve(
+    objectiveID: string,
     toolCallID: string,
-    params: ToolCallRetrieveParams,
+    params: ToolCallRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCallWithResult> {
-    const { workspaceId, objectiveId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls/${toolCallID}`,
       options,
     );
   }
 
   /**
    * Lists all tool calls for an objective
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveToolCall of client.objectives.toolCalls.list(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     objectiveID: string,
-    params: ToolCallListParams,
+    params: ToolCallListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveToolCallsCursorPagination, ObjectiveToolCall> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls`,
       CursorPagination<ObjectiveToolCall>,
@@ -45,15 +67,26 @@ export class ToolCalls extends APIResource {
   /**
    * When an agent attempts to use a tool that requires approval, use this endpoint
    * to mark it as approved.
+   *
+   * @example
+   * ```ts
+   * const objectiveToolCall =
+   *   await client.objectives.toolCalls.approve(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   approve(
+    objectiveID: string,
     toolCallID: string,
     params: ToolCallApproveParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { workspaceId, objectiveId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:approve`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls/${toolCallID}:approve`,
       { body, ...options },
     );
   }
@@ -62,15 +95,26 @@ export class ToolCalls extends APIResource {
    * When an agent attempts to use a tool that requires approval, use this endpoint
    * to mark it as denied. Use a memo to steer the LLM to a different decision or
    * usage of the tool.
+   *
+   * @example
+   * ```ts
+   * const objectiveToolCall =
+   *   await client.objectives.toolCalls.deny(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   deny(
+    objectiveID: string,
     toolCallID: string,
     params: ToolCallDenyParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { workspaceId, objectiveId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:deny`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls/${toolCallID}:deny`,
       { body, ...options },
     );
   }
@@ -79,15 +123,34 @@ export class ToolCalls extends APIResource {
    * For bare tool calls (tool sets with no execution adapter), sets the content an
    * external API consumer supplies for the call — used for human-in-the-loop tools
    * and reverse harnesses that execute tools locally and report results back.
+   *
+   * @example
+   * ```ts
+   * const objectiveToolCall =
+   *   await client.objectives.toolCalls.setContent(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       content: [
+   *         {
+   *           text: { text: 'text' },
+   *           type: 'text',
+   *         },
+   *       ],
+   *     },
+   *   );
+   * ```
    */
   setContent(
+    objectiveID: string,
     toolCallID: string,
     params: ToolCallSetContentParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveToolCall> {
-    const { workspaceId, objectiveId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tool_calls/${toolCallID}:setContent`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tool_calls/${toolCallID}:setContent`,
       { body, ...options },
     );
   }
@@ -233,12 +296,27 @@ export interface ObjectiveToolCallResultAudioBlock {
  * ContentBlock is a single block of tool result content. Exactly one of the
  * variants is set.
  */
-export interface ObjectiveToolCallResultContentBlock {
-  audio?: ObjectiveToolCallResultAudioBlock;
+export type ObjectiveToolCallResultContentBlock =
+  | ObjectiveToolCallResultContentBlockText
+  | ObjectiveToolCallResultContentBlockImage
+  | ObjectiveToolCallResultContentBlockAudio;
 
-  image?: ObjectiveToolCallResultImageBlock;
+export interface ObjectiveToolCallResultContentBlockAudio {
+  audio: ObjectiveToolCallResultAudioBlock;
 
-  text?: ObjectiveToolCallResultTextBlock;
+  type: 'audio';
+}
+
+export interface ObjectiveToolCallResultContentBlockImage {
+  image: ObjectiveToolCallResultImageBlock;
+
+  type: 'image';
+}
+
+export interface ObjectiveToolCallResultContentBlockText {
+  text: ObjectiveToolCallResultTextBlock;
+
+  type: 'text';
 }
 
 export interface ObjectiveToolCallResultImageBlock {
@@ -348,12 +426,27 @@ export interface SetToolCallContentRequestAudioBlock {
  * ContentBlock is a single block of tool call content supplied on input. Exactly
  * one of the variants is set.
  */
-export interface SetToolCallContentRequestContentBlock {
-  audio?: SetToolCallContentRequestAudioBlock;
+export type SetToolCallContentRequestContentBlock =
+  | SetToolCallContentRequestContentBlockText
+  | SetToolCallContentRequestContentBlockImage
+  | SetToolCallContentRequestContentBlockAudio;
 
-  image?: SetToolCallContentRequestImageBlock;
+export interface SetToolCallContentRequestContentBlockAudio {
+  audio: SetToolCallContentRequestAudioBlock;
 
-  text?: SetToolCallContentRequestTextBlock;
+  type: 'audio';
+}
+
+export interface SetToolCallContentRequestContentBlockImage {
+  image: SetToolCallContentRequestImageBlock;
+
+  type: 'image';
+}
+
+export interface SetToolCallContentRequestContentBlockText {
+  text: SetToolCallContentRequestTextBlock;
+
+  type: 'text';
 }
 
 export interface SetToolCallContentRequestImageBlock {
@@ -373,19 +466,14 @@ export interface SetToolCallContentRequestTextBlock {
 }
 
 export interface ToolCallRetrieveParams {
-  workspaceId: string;
-
-  /**
-   * The ID of the objective. Supports "external_id:" prefix for external IDs.
-   */
-  objectiveId: string;
+  workspaceId?: string;
 }
 
 export interface ToolCallListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: Filter by tool call execution status. Useful for reverse-harness
@@ -424,25 +512,14 @@ export interface ToolCallListParams extends CursorPaginationParams {
 }
 
 export interface ToolCallApproveParams {
-  workspaceId: string;
-
-  /**
-   * The ID of the objective. Supports "external_id:" prefix for external IDs.
-   */
-  objectiveId: string;
+  workspaceId?: string;
 }
 
 export interface ToolCallDenyParams {
   /**
    * Path param
    */
-  workspaceId: string;
-
-  /**
-   * Path param: The ID of the objective. Supports "external_id:" prefix for external
-   * IDs.
-   */
-  objectiveId: string;
+  workspaceId?: string;
 
   /**
    * Body param: A memo to associate to the tool call denial. Use a memo to steer the
@@ -455,13 +532,7 @@ export interface ToolCallSetContentParams {
   /**
    * Path param
    */
-  workspaceId: string;
-
-  /**
-   * Path param: The ID of the objective. Supports "external_id:" prefix for external
-   * IDs.
-   */
-  objectiveId: string;
+  workspaceId?: string;
 
   /**
    * Body param: The content to set on the tool call. Mirrors
@@ -479,12 +550,18 @@ export declare namespace ToolCalls {
     type ObjectiveToolCallResult as ObjectiveToolCallResult,
     type ObjectiveToolCallResultAudioBlock as ObjectiveToolCallResultAudioBlock,
     type ObjectiveToolCallResultContentBlock as ObjectiveToolCallResultContentBlock,
+    type ObjectiveToolCallResultContentBlockAudio as ObjectiveToolCallResultContentBlockAudio,
+    type ObjectiveToolCallResultContentBlockImage as ObjectiveToolCallResultContentBlockImage,
+    type ObjectiveToolCallResultContentBlockText as ObjectiveToolCallResultContentBlockText,
     type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
     type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
     type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
+    type SetToolCallContentRequestContentBlockAudio as SetToolCallContentRequestContentBlockAudio,
+    type SetToolCallContentRequestContentBlockImage as SetToolCallContentRequestContentBlockImage,
+    type SetToolCallContentRequestContentBlockText as SetToolCallContentRequestContentBlockText,
     type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
     type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,

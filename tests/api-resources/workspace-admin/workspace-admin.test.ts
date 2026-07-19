@@ -36,8 +36,10 @@ describe('resource workspaceAdmin', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.workspaceAdmin.retrieve('workspaceId');
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.workspaceAdmin.retrieve({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,8 +50,17 @@ describe('resource workspaceAdmin', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.workspaceAdmin.update('workspaceId', {});
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.workspaceAdmin.retrieve({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.workspaceAdmin.update({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,6 +68,20 @@ describe('resource workspaceAdmin', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.workspaceAdmin.update({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
+      },
+      spec: { description: 'description' },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
@@ -88,8 +113,10 @@ describe('resource workspaceAdmin', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('archive', async () => {
-    const responsePromise = client.workspaceAdmin.archive('workspaceId');
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.workspaceAdmin.archive({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,5 +124,12 @@ describe('resource workspaceAdmin', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.workspaceAdmin.archive({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 });

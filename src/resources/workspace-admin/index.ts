@@ -6,7 +6,9 @@ export {
   WorkspaceAdmin,
   type WorkspaceMember,
   type WorkspaceAdminCreateParams,
+  type WorkspaceAdminRetrieveParams,
   type WorkspaceAdminUpdateParams,
   type WorkspaceAdminListParams,
+  type WorkspaceAdminArchiveParams,
   type WorkspaceMembersCursorPagination,
 } from './workspace-admin';

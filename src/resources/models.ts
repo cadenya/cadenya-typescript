@@ -17,8 +17,12 @@ export class Models extends APIResource {
   /**
    * Retrieves a model by ID from the workspace
    */
-  retrieve(id: string, params: ModelRetrieveParams, options?: RequestOptions): APIPromise<Model> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: ModelRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Model> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/models/${id}`, options);
   }
 
@@ -26,11 +30,11 @@ export class Models extends APIResource {
    * Lists all models in the workspace
    */
   list(
-    workspaceID: string,
-    query: ModelListParams | null | undefined = {},
+    params: ModelListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ModelsCursorPagination, Model> {
-    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/models`, CursorPagination<Model>, {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceId}/models`, CursorPagination<Model>, {
       query,
       ...options,
     });
@@ -41,7 +45,7 @@ export class Models extends APIResource {
    * provisioned on the model; use :swapModelOnVariations to move them first.
    */
   disable(id: string, params: ModelDisableParams, options?: RequestOptions): APIPromise<Model> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/models/${id}:disable`, { body, ...options });
   }
 
@@ -50,7 +54,7 @@ export class Models extends APIResource {
    * in the workspace
    */
   enable(id: string, params: ModelEnableParams, options?: RequestOptions): APIPromise<Model> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/models/${id}:enable`, { body, ...options });
   }
 
@@ -58,8 +62,9 @@ export class Models extends APIResource {
    * Reassigns agent variations from one model to another in bulk. Runs
    * asynchronously and returns immediately.
    */
-  swap(workspaceID: string, body: ModelSwapParams, options?: RequestOptions): APIPromise<unknown> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/models:swapModelOnVariations`, {
+  swap(params: ModelSwapParams | null | undefined = {}, options?: RequestOptions): APIPromise<unknown> {
+    const { workspaceId = this._client.workspaceID, ...body } = params ?? {};
+    return this._client.post(path`/v1/workspaces/${workspaceId}/models:swapModelOnVariations`, {
       body,
       ...options,
     });
@@ -121,7 +126,12 @@ export interface ModelSpec {
   /**
    * The model family (e.g., "claude-sonnet-4.6", "gpt-5.4", "gemini-2.5-flash")
    */
-  family?: string;
+  family: string;
+
+  /**
+   * The model provider (e.g., "anthropic", "openai", "google")
+   */
+  provider: string;
 
   /**
    * Cost per million input tokens in cents (e.g., 300 = $3.00)
@@ -142,11 +152,6 @@ export interface ModelSpec {
    * Cost per million output tokens in cents (e.g., 1500 = $15.00)
    */
   outputPricePerMillionTokens?: string;
-
-  /**
-   * The model provider (e.g., "anthropic", "openai", "google")
-   */
-  provider?: string;
 }
 
 /**
@@ -159,55 +164,60 @@ export interface ModelRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ModelListParams extends CursorPaginationParams {
   /**
-   * Filter to models provisioned on a specific AI provider key. Accepts the key's id
-   * or an "external_id:"-prefixed slug.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: Filter to models provisioned on a specific AI provider key. Accepts
+   * the key's id or an "external_id:"-prefixed slug.
    */
   aiProviderKeyId?: string;
 
   /**
-   * When true, populate each item's info (e.g. the AI provider), at the cost of
-   * extra lookups.
+   * Query param: When true, populate each item's info (e.g. the AI provider), at the
+   * cost of extra lookups.
    */
   includeInfo?: boolean;
 
   /**
-   * Filter models to only ones assigned to an active agent variation/agent. Draft
-   * agents count as assigned; archived agents do not. Assignment does not imply
-   * recent traffic — see ModelInfo.last_used_at for that.
+   * Query param: Filter models to only ones assigned to an active agent
+   * variation/agent. Draft agents count as assigned; archived agents do not.
+   * Assignment does not imply recent traffic — see ModelInfo.last_used_at for that.
    */
   isAssigned?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter by a prefix of the model's display name, external id, or id
+   * Query param: Filter by a prefix of the model's display name, external id, or id
    * (case-insensitive). A model's external id is the form used in
    * modelConfig.modelId, so a caller holding that can narrow the list by it.
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by model state
+   * Query param: Filter by model state
    */
   state?: 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 }
@@ -216,19 +226,24 @@ export interface ModelDisableParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ModelEnableParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ModelSwapParams {
   /**
-   * The swaps to perform.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: The swaps to perform.
    */
   modelSwaps?: Array<ModelSwapParams.ModelSwap>;
 }

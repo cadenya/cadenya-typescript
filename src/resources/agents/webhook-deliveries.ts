@@ -12,13 +12,24 @@ import { path } from '../../internal/utils/path';
 export class WebhookDeliveries extends APIResource {
   /**
    * Lists all webhook deliveries for an agent
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const webhookDelivery of client.agents.webhookDeliveries.list(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     agentID: string,
-    params: WebhookDeliveryListParams,
+    params: WebhookDeliveryListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<WebhookDeliveriesCursorPagination, WebhookDelivery> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/agents/${agentID}/webhook_deliveries`,
       CursorPagination<WebhookDelivery>,
@@ -117,7 +128,7 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: Optional filter by event type
