@@ -34,6 +34,9 @@ import {
   ObjectiveToolCallResult,
   ObjectiveToolCallResultAudioBlock,
   ObjectiveToolCallResultContentBlock,
+  ObjectiveToolCallResultContentBlockAudio,
+  ObjectiveToolCallResultContentBlockImage,
+  ObjectiveToolCallResultContentBlockText,
   ObjectiveToolCallResultImageBlock,
   ObjectiveToolCallResultTextBlock,
   ObjectiveToolCallWithResult,
@@ -41,6 +44,9 @@ import {
   ResolvedSecret,
   SetToolCallContentRequestAudioBlock,
   SetToolCallContentRequestContentBlock,
+  SetToolCallContentRequestContentBlockAudio,
+  SetToolCallContentRequestContentBlockImage,
+  SetToolCallContentRequestContentBlockText,
   SetToolCallContentRequestImageBlock,
   SetToolCallContentRequestTextBlock,
   ToolCallApproveParams,
@@ -68,29 +74,61 @@ export class Objectives extends APIResource {
 
   /**
    * Creates a new objective in the workspace
+   *
+   * @example
+   * ```ts
+   * const objective = await client.objectives.create({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *   agentId: 'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   systemPromptData: { foo: 'bar' },
+   * });
+   * ```
    */
-  create(workspaceID: string, body: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/objectives`, { body, ...options });
+  create(params: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/objectives`, { body, ...options });
   }
 
   /**
    * Retrieves an objective by ID from the workspace
+   *
+   * @example
+   * ```ts
+   * const objective = await client.objectives.retrieve(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  retrieve(id: string, params: ObjectiveRetrieveParams, options?: RequestOptions): APIPromise<Objective> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: ObjectiveRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Objective> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/objectives/${id}`, options);
   }
 
   /**
    * Lists all objectives in the workspace
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objective of client.objectives.list({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   * })) {
+   *   // ...
+   * }
+   * ```
    */
   list(
-    workspaceID: string,
-    query: ObjectiveListParams | null | undefined = {},
+    params: ObjectiveListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectivesCursorPagination, Objective> {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
-      path`/v1/workspaces/${workspaceID}/objectives`,
+      path`/v1/workspaces/${workspaceId}/objectives`,
       CursorPagination<Objective>,
       { query, ...options },
     );
@@ -99,13 +137,21 @@ export class Objectives extends APIResource {
   /**
    * Cancels a running or pending objective. The objective's state will be set to
    * STATE_CANCELLED.
+   *
+   * @example
+   * ```ts
+   * const objective = await client.objectives.cancel(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   cancel(
     objectiveID: string,
     params: ObjectiveCancelParams,
     options?: RequestOptions,
   ): APIPromise<Objective> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:cancel`, {
       body,
       ...options,
@@ -115,13 +161,21 @@ export class Objectives extends APIResource {
   /**
    * Triggers compaction on a running objective. Optionally override the variation's
    * compaction config.
+   *
+   * @example
+   * ```ts
+   * const response = await client.objectives.compact(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   compact(
     objectiveID: string,
     params: ObjectiveCompactParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveCompactResponse> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:compact`, {
       body,
       ...options,
@@ -130,13 +184,24 @@ export class Objectives extends APIResource {
 
   /**
    * Continues an objective that has completed
+   *
+   * @example
+   * ```ts
+   * const objectiveEvent = await client.objectives.continue(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   {
+   *     workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *     message: 'message',
+   *   },
+   * );
+   * ```
    */
   continue(
     objectiveID: string,
     params: ObjectiveContinueParams,
     options?: RequestOptions,
   ): APIPromise<ObjectiveEvent> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}:continue`, {
       body,
       ...options,
@@ -146,13 +211,24 @@ export class Objectives extends APIResource {
   /**
    * Read-only list of the last five windows of execution for this objective, ordered
    * by most recent first
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveContextWindow of client.objectives.listContextWindows(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   listContextWindows(
     objectiveID: string,
-    params: ObjectiveListContextWindowsParams,
+    params: ObjectiveListContextWindowsParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveContextWindowsCursorPagination, ObjectiveContextWindow> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/context_windows`,
       CursorPagination<ObjectiveContextWindow>,
@@ -162,13 +238,24 @@ export class Objectives extends APIResource {
 
   /**
    * Lists all events for an objective
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveEvent of client.objectives.listEvents(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   listEvents(
     objectiveID: string,
-    params: ObjectiveListEventsParams,
+    params: ObjectiveListEventsParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveEventsCursorPagination, ObjectiveEvent> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events`,
       CursorPagination<ObjectiveEvent>,
@@ -181,13 +268,22 @@ export class Objectives extends APIResource {
    * iteration: character lengths per context component (system prompt, memory
    * appendices, tool definitions, messages by role) alongside the iteration's input
    * token counts.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.objectives.retrieveDiagnostics(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
   retrieveDiagnostics(
     objectiveID: string,
-    params: ObjectiveRetrieveDiagnosticsParams,
+    params: ObjectiveRetrieveDiagnosticsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ObjectiveRetrieveDiagnosticsResponse> {
-    const { workspaceId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/diagnostics`,
       options,
@@ -196,13 +292,21 @@ export class Objectives extends APIResource {
 
   /**
    * Streams events for an objective in real-time using server-sent events (SSE)
+   *
+   * @example
+   * ```ts
+   * const objectiveEvent = await client.objectives.streamEvents(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
   streamEvents(
     objectiveID: string,
-    params: ObjectiveStreamEventsParams,
+    params: ObjectiveStreamEventsParams | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Stream<ObjectiveEvent>> {
-    const { workspaceId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events:stream`, {
       ...options,
       headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
@@ -243,21 +347,33 @@ export interface AssistantToolCall {
  * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
  * or a Cadenya Tool (one Cadenya provides).
  */
-export interface CallableTool {
-  /**
-   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
-   */
-  agent?: Shared.ResourceMetadata;
+export type CallableTool = CallableToolTool | CallableToolAgent | CallableToolCadenyaProvidedTool;
 
+export interface CallableToolAgent {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  cadenyaProvidedTool?: Shared.ResourceMetadata;
+  agent: Shared.ResourceMetadata;
 
+  type: 'agent';
+}
+
+export interface CallableToolCadenyaProvidedTool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  tool?: Shared.ResourceMetadata;
+  cadenyaProvidedTool: Shared.ResourceMetadata;
+
+  type: 'cadenyaProvidedTool';
+}
+
+export interface CallableToolTool {
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  tool: Shared.ResourceMetadata;
+
+  type: 'tool';
 }
 
 /**
@@ -372,6 +488,8 @@ export interface MemoryRead {
  * form (external_id:my-custom-id). The same applies to memory_entry_id when set.
  */
 export interface MemoryReference {
+  memoryLayerId: string;
+
   /**
    * When set, inserts only this entry from memory_layer_id into the cascade —
    * behaves as a single-entry layer (only this key resolves at this position). The
@@ -379,8 +497,6 @@ export interface MemoryReference {
    * InvalidArgument.
    */
   memoryEntryId?: string;
-
-  memoryLayerId?: string;
 }
 
 /**
@@ -497,7 +613,7 @@ export namespace Objective {
      * The caller-supplied episodic key. Objectives created with the same key (for the
      * same agent) share one episodic memory layer.
      */
-    key?: string;
+    key: string;
 
     /**
      * The episodic memory layer resolved (created or reused) for this objective's key.
@@ -646,75 +762,43 @@ export interface ObjectiveEvent {
   info?: ObjectiveEventInfo;
 }
 
-export interface ObjectiveEventData {
-  assistantMessage?: AssistantMessage;
+export type ObjectiveEventData =
+  | ObjectiveEventDataUserMessage
+  | ObjectiveEventDataToolApprovalRequested
+  | ObjectiveEventDataToolApproved
+  | ObjectiveEventDataToolDenied
+  | ObjectiveEventDataToolCalled
+  | ObjectiveEventDataError
+  | ObjectiveEventDataAssistantMessage
+  | ObjectiveEventDataToolResult
+  | ObjectiveEventDataToolError
+  | ObjectiveEventDataContextWindowCompacted
+  | ObjectiveEventDataMemoryRead
+  | ObjectiveEventDataCancelled
+  | ObjectiveEventDataSubAgentSpawned
+  | ObjectiveEventDataSubAgentUpdated
+  | ObjectiveEventDataFinalized
+  | ObjectiveEventDataNotice
+  | ObjectiveEventDataTimedOut;
 
+export interface ObjectiveEventDataAssistantMessage {
+  assistantMessage: AssistantMessage;
+
+  type: 'assistantMessage';
+}
+
+export interface ObjectiveEventDataCancelled {
   /**
    * ObjectiveCancelled is the terminal event written when an objective is cancelled.
    * After this event, the objective is super-terminal: no further iterations,
    * compaction, or continuation are permitted.
    */
-  cancelled?: ObjectiveEventData.Cancelled;
+  cancelled: ObjectiveEventDataCancelled.Cancelled;
 
-  contextWindowCompacted?: ContextWindowCompacted;
-
-  error?: ObjectiveError;
-
-  /**
-   * ObjectiveFinalized is the terminal event written when an objective is finalized.
-   * After this event, the objective is super-terminal: no further iterations,
-   * compaction, or continuation are permitted.
-   */
-  finalized?: ObjectiveEventData.Finalized;
-
-  /**
-   * MemoryRead is emitted each time the agent resolves a key against the memory
-   * cascade and loads an entry. Lookups that miss (key not found in any layer) do
-   * not emit this event.
-   */
-  memoryRead?: MemoryRead;
-
-  /**
-   * Notice is a non-terminal diagnostic emitted by the runtime when something
-   * noteworthy but non-fatal happens during an objective — for example a
-   * just-in-time tool set failing to load, or a previously loaded tool being dropped
-   * because it was archived. Notices carry no structured payload; they exist to make
-   * the objective timeline self-explanatory.
-   */
-  notice?: ObjectiveEventData.Notice;
-
-  subAgentSpawned?: SubAgentSpawned;
-
-  subAgentUpdated?: SubAgentUpdated;
-
-  /**
-   * ObjectiveTimedOut is the terminal event written when an objective is finalized
-   * by the inactivity sweep because it saw no activity (no user messages, no LLM
-   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
-   * maximum when no timeout is configured. The objective produces no output. After
-   * this event, the objective is super-terminal: no further iterations, compaction,
-   * or continuation are permitted.
-   */
-  timedOut?: ObjectiveEventData.TimedOut;
-
-  toolApprovalRequested?: ToolApprovalRequested;
-
-  toolApproved?: ToolApproved;
-
-  toolCalled?: ToolCalled;
-
-  toolDenied?: ToolDenied;
-
-  toolError?: ToolError;
-
-  toolResult?: ToolResult;
-
-  type?: string;
-
-  userMessage?: UserMessage;
+  type: 'cancelled';
 }
 
-export namespace ObjectiveEventData {
+export namespace ObjectiveEventDataCancelled {
   /**
    * ObjectiveCancelled is the terminal event written when an objective is cancelled.
    * After this event, the objective is super-terminal: no further iterations,
@@ -728,7 +812,32 @@ export namespace ObjectiveEventData {
      */
     message?: string;
   }
+}
 
+export interface ObjectiveEventDataContextWindowCompacted {
+  contextWindowCompacted: ContextWindowCompacted;
+
+  type: 'contextWindowCompacted';
+}
+
+export interface ObjectiveEventDataError {
+  error: ObjectiveError;
+
+  type: 'error';
+}
+
+export interface ObjectiveEventDataFinalized {
+  /**
+   * ObjectiveFinalized is the terminal event written when an objective is finalized.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  finalized: ObjectiveEventDataFinalized.Finalized;
+
+  type: 'finalized';
+}
+
+export namespace ObjectiveEventDataFinalized {
   /**
    * ObjectiveFinalized is the terminal event written when an objective is finalized.
    * After this event, the objective is super-terminal: no further iterations,
@@ -742,7 +851,33 @@ export namespace ObjectiveEventData {
      */
     output?: unknown;
   }
+}
 
+export interface ObjectiveEventDataMemoryRead {
+  /**
+   * MemoryRead is emitted each time the agent resolves a key against the memory
+   * cascade and loads an entry. Lookups that miss (key not found in any layer) do
+   * not emit this event.
+   */
+  memoryRead: MemoryRead;
+
+  type: 'memoryRead';
+}
+
+export interface ObjectiveEventDataNotice {
+  /**
+   * Notice is a non-terminal diagnostic emitted by the runtime when something
+   * noteworthy but non-fatal happens during an objective — for example a
+   * just-in-time tool set failing to load, or a previously loaded tool being dropped
+   * because it was archived. Notices carry no structured payload; they exist to make
+   * the objective timeline self-explanatory.
+   */
+  notice: ObjectiveEventDataNotice.Notice;
+
+  type: 'notice';
+}
+
+export namespace ObjectiveEventDataNotice {
   /**
    * Notice is a non-terminal diagnostic emitted by the runtime when something
    * noteworthy but non-fatal happens during an objective — for example a
@@ -765,7 +900,35 @@ export namespace ObjectiveEventData {
      */
     message?: string;
   }
+}
 
+export interface ObjectiveEventDataSubAgentSpawned {
+  subAgentSpawned: SubAgentSpawned;
+
+  type: 'subAgentSpawned';
+}
+
+export interface ObjectiveEventDataSubAgentUpdated {
+  subAgentUpdated: SubAgentUpdated;
+
+  type: 'subAgentUpdated';
+}
+
+export interface ObjectiveEventDataTimedOut {
+  /**
+   * ObjectiveTimedOut is the terminal event written when an objective is finalized
+   * by the inactivity sweep because it saw no activity (no user messages, no LLM
+   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
+   * maximum when no timeout is configured. The objective produces no output. After
+   * this event, the objective is super-terminal: no further iterations, compaction,
+   * or continuation are permitted.
+   */
+  timedOut: ObjectiveEventDataTimedOut.TimedOut;
+
+  type: 'timedOut';
+}
+
+export namespace ObjectiveEventDataTimedOut {
   /**
    * ObjectiveTimedOut is the terminal event written when an objective is finalized
    * by the inactivity sweep because it saw no activity (no user messages, no LLM
@@ -781,6 +944,48 @@ export namespace ObjectiveEventData {
      */
     message?: string;
   }
+}
+
+export interface ObjectiveEventDataToolApprovalRequested {
+  toolApprovalRequested: ToolApprovalRequested;
+
+  type: 'toolApprovalRequested';
+}
+
+export interface ObjectiveEventDataToolApproved {
+  toolApproved: ToolApproved;
+
+  type: 'toolApproved';
+}
+
+export interface ObjectiveEventDataToolCalled {
+  toolCalled: ToolCalled;
+
+  type: 'toolCalled';
+}
+
+export interface ObjectiveEventDataToolDenied {
+  toolDenied: ToolDenied;
+
+  type: 'toolDenied';
+}
+
+export interface ObjectiveEventDataToolError {
+  toolError: ToolError;
+
+  type: 'toolError';
+}
+
+export interface ObjectiveEventDataToolResult {
+  toolResult: ToolResult;
+
+  type: 'toolResult';
+}
+
+export interface ObjectiveEventDataUserMessage {
+  type: 'userMessage';
+
+  userMessage: UserMessage;
 }
 
 export interface ObjectiveEventInfo {
@@ -1067,23 +1272,31 @@ export interface ObjectiveRetrieveDiagnosticsResponse {
 }
 
 export interface ObjectiveCreateParams {
+  /**
+   * Path param
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param
+   */
   agentId: string;
 
   /**
-   * Arbitrary data rendered into the selected variation's system_prompt_template
-   * (liquid) to produce the objective's system prompt. If the agent has a
-   * system_prompt_data_schema, this must satisfy it.
+   * Body param: Arbitrary data rendered into the selected variation's
+   * system_prompt_template (liquid) to produce the objective's system prompt. If the
+   * agent has a system_prompt_data_schema, this must satisfy it.
    */
   systemPromptData: { [key: string]: unknown };
 
   /**
-   * Episodic is used to configure the episodic memory for the objective
+   * Body param: Episodic is used to configure the episodic memory for the objective
    */
   episodicMemory?: ObjectiveCreateParams.EpisodicMemory;
 
   /**
-   * Optional explicit first user message for the LLM chat history. When not set, the
-   * selected variation's first_user_message_template is rendered with
+   * Body param: Optional explicit first user message for the LLM chat history. When
+   * not set, the selected variation's first_user_message_template is rendered with
    * first_user_message_data instead. If neither this field nor a
    * first_user_message_template is present, the request is rejected with
    * InvalidArgument.
@@ -1091,15 +1304,16 @@ export interface ObjectiveCreateParams {
   firstUserMessage?: string;
 
   /**
-   * Arbitrary data rendered into the selected variation's
+   * Body param: Arbitrary data rendered into the selected variation's
    * first_user_message_template (liquid) to produce the first user message. Separate
    * from `system_prompt_data`, which renders the system prompt template.
    */
   firstUserMessageData?: { [key: string]: unknown };
 
   /**
-   * Memory layers/entries layered over the baseline cascade inherited from the
-   * selected variation — element-level rules over inherited styles, in CSS terms.
+   * Body param: Memory layers/entries layered over the baseline cascade inherited
+   * from the selected variation — element-level rules over inherited styles, in CSS
+   * terms.
    *
    * Array order is resolution order: EARLIER elements are more specific and are
    * consulted first. Entries pinned via memory_entry_id behave as single-entry
@@ -1115,20 +1329,20 @@ export interface ObjectiveCreateParams {
   memoryCascade?: Array<MemoryReference>;
 
   /**
-   * CreateOperationMetadata contains the user-provided fields for creating an
-   * operation. Read-only fields (id, account_id, workspace_id, created_at,
-   * profile_id) are excluded since they are set by the server.
+   * Body param: CreateOperationMetadata contains the user-provided fields for
+   * creating an operation. Read-only fields (id, account_id, workspace_id,
+   * created_at, profile_id) are excluded since they are set by the server.
    */
   metadata?: Shared.CreateOperationMetadata;
 
   /**
-   * Secrets that can be used in the headers for tool calls using the secret
-   * interpolation format.
+   * Body param: Secrets that can be used in the headers for tool calls using the
+   * secret interpolation format.
    */
   secrets?: Array<ObjectiveCreateParams.Secret>;
 
   /**
-   * Optional explicit variation selection. Overrides the agent's
+   * Body param: Optional explicit variation selection. Overrides the agent's
    * variation_selection_mode.
    */
   variationId?: string;
@@ -1143,7 +1357,7 @@ export namespace ObjectiveCreateParams {
      * The caller-supplied episodic key. Objectives created with the same key (for the
      * same agent) share one episodic memory layer.
      */
-    key?: string;
+    key: string;
   }
 
   export interface Secret {
@@ -1154,47 +1368,55 @@ export namespace ObjectiveCreateParams {
 }
 
 export interface ObjectiveRetrieveParams {
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ObjectiveListParams extends CursorPaginationParams {
   /**
-   * Agent ID for filtering
+   * Path param
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: Agent ID for filtering
    */
   agentId?: string;
 
   /**
-   * Filter to objectives produced by a specific AgentSchedule. Accepts canonical
-   * as\_… form or external_id:<value> form.
+   * Query param: Filter to objectives produced by a specific AgentSchedule. Accepts
+   * canonical as\_… form or external_id:<value> form.
    */
   agentScheduleId?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Optional filters
+   * Query param: Optional filters
    */
   parentObjectiveId?: string;
 
+  /**
+   * Query param
+   */
   profileId?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by state
+   * Query param: Filter by state
    */
   state?:
     | 'STATE_UNSPECIFIED'
@@ -1211,7 +1433,7 @@ export interface ObjectiveCancelParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: Optional reason for cancellation
@@ -1223,7 +1445,7 @@ export interface ObjectiveCompactParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CompactionConfig defines how context window compaction behaves for
@@ -1236,26 +1458,26 @@ export interface ObjectiveContinueParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
+
+  /**
+   * Body param: The message to continue an objective that has completed (or you are
+   * enqueing)
+   */
+  message: string;
 
   /**
    * Body param: When set to true, the message will be enqueued for when the agent
    * loop is available to process it.
    */
   enqueue?: boolean;
-
-  /**
-   * Body param: The message to continue an objective that has completed (or you are
-   * enqueing)
-   */
-  message?: string;
 }
 
 export interface ObjectiveListContextWindowsParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -1274,7 +1496,7 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -1305,11 +1527,11 @@ export interface ObjectiveListEventsParams extends CursorPaginationParams {
 }
 
 export interface ObjectiveRetrieveDiagnosticsParams {
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ObjectiveStreamEventsParams {
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 Objectives.Tools = Tools;
@@ -1322,6 +1544,9 @@ export declare namespace Objectives {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
+    type CallableToolAgent as CallableToolAgent,
+    type CallableToolCadenyaProvidedTool as CallableToolCadenyaProvidedTool,
+    type CallableToolTool as CallableToolTool,
     type ContextLengths as ContextLengths,
     type ContextWindowCompacted as ContextWindowCompacted,
     type MemoryRead as MemoryRead,
@@ -1334,6 +1559,23 @@ export declare namespace Objectives {
     type ObjectiveError as ObjectiveError,
     type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveEventDataAssistantMessage as ObjectiveEventDataAssistantMessage,
+    type ObjectiveEventDataCancelled as ObjectiveEventDataCancelled,
+    type ObjectiveEventDataContextWindowCompacted as ObjectiveEventDataContextWindowCompacted,
+    type ObjectiveEventDataError as ObjectiveEventDataError,
+    type ObjectiveEventDataFinalized as ObjectiveEventDataFinalized,
+    type ObjectiveEventDataMemoryRead as ObjectiveEventDataMemoryRead,
+    type ObjectiveEventDataNotice as ObjectiveEventDataNotice,
+    type ObjectiveEventDataSubAgentSpawned as ObjectiveEventDataSubAgentSpawned,
+    type ObjectiveEventDataSubAgentUpdated as ObjectiveEventDataSubAgentUpdated,
+    type ObjectiveEventDataTimedOut as ObjectiveEventDataTimedOut,
+    type ObjectiveEventDataToolApprovalRequested as ObjectiveEventDataToolApprovalRequested,
+    type ObjectiveEventDataToolApproved as ObjectiveEventDataToolApproved,
+    type ObjectiveEventDataToolCalled as ObjectiveEventDataToolCalled,
+    type ObjectiveEventDataToolDenied as ObjectiveEventDataToolDenied,
+    type ObjectiveEventDataToolError as ObjectiveEventDataToolError,
+    type ObjectiveEventDataToolResult as ObjectiveEventDataToolResult,
+    type ObjectiveEventDataUserMessage as ObjectiveEventDataUserMessage,
     type ObjectiveEventInfo as ObjectiveEventInfo,
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
@@ -1379,12 +1621,18 @@ export declare namespace Objectives {
     type ObjectiveToolCallResult as ObjectiveToolCallResult,
     type ObjectiveToolCallResultAudioBlock as ObjectiveToolCallResultAudioBlock,
     type ObjectiveToolCallResultContentBlock as ObjectiveToolCallResultContentBlock,
+    type ObjectiveToolCallResultContentBlockAudio as ObjectiveToolCallResultContentBlockAudio,
+    type ObjectiveToolCallResultContentBlockImage as ObjectiveToolCallResultContentBlockImage,
+    type ObjectiveToolCallResultContentBlockText as ObjectiveToolCallResultContentBlockText,
     type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
     type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
     type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
+    type SetToolCallContentRequestContentBlockAudio as SetToolCallContentRequestContentBlockAudio,
+    type SetToolCallContentRequestContentBlockImage as SetToolCallContentRequestContentBlockImage,
+    type SetToolCallContentRequestContentBlockText as SetToolCallContentRequestContentBlockText,
     type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
     type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,

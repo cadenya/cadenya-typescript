@@ -13,11 +13,11 @@ export class Search extends APIResource {
    * Searches for tools or tool sets in the workspace
    */
   searchToolsOrToolSets(
-    workspaceID: string,
-    query: SearchSearchToolsOrToolSetsParams | null | undefined = {},
+    params: SearchSearchToolsOrToolSetsParams,
     options?: RequestOptions,
   ): APIPromise<SearchSearchToolsOrToolSetsResponse> {
-    return this._client.get(path`/v1/workspaces/${workspaceID}/search/tools_or_tool_sets`, {
+    const { workspaceId = this._client.workspaceID, ...query } = params;
+    return this._client.get(path`/v1/workspaces/${workspaceId}/search/tools_or_tool_sets`, {
       query,
       ...options,
     });
@@ -33,7 +33,17 @@ export interface SearchSearchToolsOrToolSetsResponse {
 }
 
 export interface SearchSearchToolsOrToolSetsParams {
-  query?: string;
+  /**
+   * Path param: NOTE: `query` is runtime-required (buf.validate min_len), but
+   * gnostic does not propagate message-level schema `required` to GET query
+   * parameters — overlay.yaml marks the parameter required instead.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param
+   */
+  query: string;
 }
 
 export declare namespace Search {

@@ -10,8 +10,9 @@ const client = new Cadenya({
 describe('resource objectives', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.objectives.create('workspaceId', {
-      agentId: 'agentId',
+    const responsePromise = client.objectives.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      agentId: 'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
       systemPromptData: { foo: 'bar' },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -25,25 +26,33 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.objectives.create('workspaceId', {
-      agentId: 'agentId',
+    const response = await client.objectives.create({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      agentId: 'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
       systemPromptData: { foo: 'bar' },
       episodicMemory: { key: 'key' },
       firstUserMessage: 'firstUserMessage',
       firstUserMessageData: { foo: 'bar' },
-      memoryCascade: [{ memoryEntryId: 'memoryEntryId', memoryLayerId: 'memoryLayerId' }],
+      memoryCascade: [
+        {
+          memoryLayerId: 'memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH',
+          memoryEntryId: 'mementry_01HXKD2E5NQM3T9AYWCF5E52Z0',
+        },
+      ],
       metadata: {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
       secrets: [{ name: 'name', value: 'value' }],
-      variationId: 'variationId',
+      variationId: 'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
     });
   });
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.objectives.retrieve('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.retrieve('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,12 +64,14 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.objectives.retrieve('id', { workspaceId: 'workspaceId' });
+    const response = await client.objectives.retrieve('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.objectives.list('workspaceId');
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.objectives.list({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -71,31 +82,27 @@ describe('resource objectives', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.objectives.list(
-        'workspaceId',
-        {
-          agentId: 'agentId',
-          agentScheduleId: 'agentScheduleId',
-          cursor: 'cursor',
-          includeInfo: true,
-          labels: 'labels',
-          limit: 0,
-          parentObjectiveId: 'parentObjectiveId',
-          profileId: 'profileId',
-          sortOrder: 'sortOrder',
-          state: 'STATE_UNSPECIFIED',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.objectives.list({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      agentId: 'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+      agentScheduleId: 'agentScheduleId',
+      cursor: 'cursor',
+      includeInfo: true,
+      labels: 'labels',
+      limit: 0,
+      parentObjectiveId: 'parentObjectiveId',
+      profileId: 'profile_01HXKD2E5NQM3T9AYWCFS0AP08',
+      sortOrder: 'sortOrder',
+      state: 'STATE_UNSPECIFIED',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('cancel: only required params', async () => {
-    const responsePromise = client.objectives.cancel('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.cancel('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -107,15 +114,17 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('cancel: required and optional params', async () => {
-    const response = await client.objectives.cancel('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.cancel('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       reason: 'reason',
     });
   });
 
   // Mock server tests are disabled
   test.skip('compact: only required params', async () => {
-    const responsePromise = client.objectives.compact('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.compact('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -127,8 +136,8 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('compact: required and optional params', async () => {
-    const response = await client.objectives.compact('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.compact('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       compactionConfig: {
         summarization: { instructions: 'instructions' },
         toolResultClearing: { preserveRecentResults: 0 },
@@ -139,7 +148,10 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('continue: only required params', async () => {
-    const responsePromise = client.objectives.continue('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.continue('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      message: 'message',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -151,17 +163,17 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('continue: required and optional params', async () => {
-    const response = await client.objectives.continue('objectiveId', {
-      workspaceId: 'workspaceId',
-      enqueue: true,
+    const response = await client.objectives.continue('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       message: 'message',
+      enqueue: true,
     });
   });
 
   // Mock server tests are disabled
   test.skip('listContextWindows: only required params', async () => {
-    const responsePromise = client.objectives.listContextWindows('objectiveId', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.objectives.listContextWindows('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -174,8 +186,8 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('listContextWindows: required and optional params', async () => {
-    const response = await client.objectives.listContextWindows('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.listContextWindows('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -185,7 +197,9 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('listEvents: only required params', async () => {
-    const responsePromise = client.objectives.listEvents('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.listEvents('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -197,8 +211,8 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('listEvents: required and optional params', async () => {
-    const response = await client.objectives.listEvents('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.listEvents('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -211,8 +225,8 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('retrieveDiagnostics: only required params', async () => {
-    const responsePromise = client.objectives.retrieveDiagnostics('objectiveId', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.objectives.retrieveDiagnostics('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -225,14 +239,16 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('retrieveDiagnostics: required and optional params', async () => {
-    const response = await client.objectives.retrieveDiagnostics('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.retrieveDiagnostics('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
     });
   });
 
   // Mock server tests are disabled
   test.skip('streamEvents: only required params', async () => {
-    const responsePromise = client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.streamEvents('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -244,6 +260,8 @@ describe('resource objectives', () => {
 
   // Mock server tests are disabled
   test.skip('streamEvents: required and optional params', async () => {
-    const response = await client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+    const response = await client.objectives.streamEvents('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 });

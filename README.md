@@ -26,9 +26,14 @@ const client = new Cadenya({
   apiKey: process.env['CADENYA_API_KEY'], // This is the default and can be omitted
 });
 
-const account = await client.account.retrieve();
+const objective = await client.objectives.create({
+  workspaceId: 'workspace_01HXKD2E5NQXAMPLE0000000',
+  agentId: 'agent_01HXKD2E5NQXAMPLE0000000',
+  systemPromptData: { customer_name: 'Ada' },
+  firstUserMessage: 'Summarize the open support tickets from yesterday.',
+});
 
-console.log(account.info);
+console.log(objective.configSnapshot);
 ```
 
 ## Streaming responses
@@ -40,7 +45,9 @@ import Cadenya from '@cadenya/cadenya';
 
 const client = new Cadenya();
 
-const stream = await client.objectives.streamEvents('objectiveId', { workspaceId: 'workspaceId' });
+const stream = await client.objectives.streamEvents('obj_01HXKD2E5NQXAMPLE0000000', {
+  workspaceId: 'workspace_01HXKD2E5NQXAMPLE0000000',
+});
 for await (const objectiveEvent of stream) {
   console.log(objectiveEvent.data);
 }
@@ -100,7 +107,7 @@ Error codes are as follows:
 
 ### Retries
 
-Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
+Certain errors will be automatically retried 0 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors will all be retried by default.
 
@@ -149,7 +156,9 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllAIProviderKeys(params) {
   const allAIProviderKeys = [];
   // Automatically fetches more pages as needed.
-  for await (const aiProviderKey of client.aiProviderKeys.list('workspaceId')) {
+  for await (const aiProviderKey of client.aiProviderKeys.list({
+    workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+  })) {
     allAIProviderKeys.push(aiProviderKey);
   }
   return allAIProviderKeys;
@@ -159,7 +168,9 @@ async function fetchAllAIProviderKeys(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.aiProviderKeys.list('workspaceId');
+let page = await client.aiProviderKeys.list({
+  workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+});
 for (const aiProviderKey of page.items) {
   console.log(aiProviderKey);
 }
@@ -271,7 +282,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.account.retrieve({
+client.objectives.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

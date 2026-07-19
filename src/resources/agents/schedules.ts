@@ -16,9 +16,21 @@ import { path } from '../../internal/utils/path';
 export class Schedules extends APIResource {
   /**
    * Creates a new schedule for an agent
+   *
+   * @example
+   * ```ts
+   * const agentSchedule = await client.agents.schedules.create(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   {
+   *     workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *     metadata: { name: 'name' },
+   *     spec: { schedule: {} },
+   *   },
+   * );
+   * ```
    */
   create(agentID: string, params: ScheduleCreateParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules`, {
       body,
       ...options,
@@ -27,18 +39,47 @@ export class Schedules extends APIResource {
 
   /**
    * Retrieves a schedule by ID from an agent
+   *
+   * @example
+   * ```ts
+   * const agentSchedule =
+   *   await client.agents.schedules.retrieve(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
-  retrieve(id: string, params: ScheduleRetrieveParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, agentId } = params;
-    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, options);
+  retrieve(
+    agentID: string,
+    id: string,
+    params: ScheduleRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AgentSchedule> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.get(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}`, options);
   }
 
   /**
    * Updates a schedule for an agent
+   *
+   * @example
+   * ```ts
+   * const agentSchedule = await client.agents.schedules.update(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  update(id: string, params: ScheduleUpdateParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, agentId, ...body } = params;
-    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, {
+  update(
+    agentID: string,
+    id: string,
+    params: ScheduleUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentSchedule> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}`, {
       body,
       ...options,
     });
@@ -46,13 +87,24 @@ export class Schedules extends APIResource {
 
   /**
    * Lists all schedules for an agent
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const agentSchedule of client.agents.schedules.list(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     agentID: string,
-    params: ScheduleListParams,
+    params: ScheduleListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentSchedulesCursorPagination, AgentSchedule> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules`,
       CursorPagination<AgentSchedule>,
@@ -62,10 +114,24 @@ export class Schedules extends APIResource {
 
   /**
    * Deletes a schedule from an agent
+   *
+   * @example
+   * ```ts
+   * await client.agents.schedules.delete(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  delete(id: string, params: ScheduleDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId, agentId } = params;
-    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}`, {
+  delete(
+    agentID: string,
+    id: string,
+    params: ScheduleDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -75,10 +141,24 @@ export class Schedules extends APIResource {
    * Transitions a schedule to STATE_ARCHIVED and removes its underlying timer.
    * Archiving is terminal: archived schedules never fire and cannot be reactivated;
    * create a new schedule instead.
+   *
+   * @example
+   * ```ts
+   * const agentSchedule = await client.agents.schedules.archive(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  archive(id: string, params: ScheduleArchiveParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, agentId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:archive`, {
+  archive(
+    agentID: string,
+    id: string,
+    params: ScheduleArchiveParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentSchedule> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}:archive`, {
       body,
       ...options,
     });
@@ -87,10 +167,24 @@ export class Schedules extends APIResource {
   /**
    * Transitions a schedule to STATE_PAUSED. Paused schedules retain history but do
    * not fire.
+   *
+   * @example
+   * ```ts
+   * const agentSchedule = await client.agents.schedules.pause(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  pause(id: string, params: SchedulePauseParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, agentId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:pause`, {
+  pause(
+    agentID: string,
+    id: string,
+    params: SchedulePauseParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentSchedule> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}:pause`, {
       body,
       ...options,
     });
@@ -99,10 +193,24 @@ export class Schedules extends APIResource {
   /**
    * Transitions a paused schedule back to STATE_ACTIVE so it fires on its cadence
    * again. Archived schedules cannot be resumed.
+   *
+   * @example
+   * ```ts
+   * const agentSchedule = await client.agents.schedules.resume(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
+   * ```
    */
-  resume(id: string, params: ScheduleResumeParams, options?: RequestOptions): APIPromise<AgentSchedule> {
-    const { workspaceId, agentId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentId}/schedules/${id}:resume`, {
+  resume(
+    agentID: string,
+    id: string,
+    params: ScheduleResumeParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentSchedule> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/agents/${agentID}/schedules/${id}:resume`, {
       body,
       ...options,
     });
@@ -302,7 +410,7 @@ export interface ScheduleCreateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CreateResourceMetadata contains the user-provided fields for
@@ -322,26 +430,14 @@ export interface ScheduleRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export interface ScheduleUpdateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Agent ID. Accepts the canonical `agent_…` form or the
-   * `external_id:<value>` form.
-   */
-  agentId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -366,7 +462,7 @@ export interface ScheduleListParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When true, the `info` field on each returned schedule is populated.
@@ -401,52 +497,28 @@ export interface ScheduleDeleteParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export interface ScheduleArchiveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export interface SchedulePauseParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export interface ScheduleResumeParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>`
-   * form.
-   */
-  agentId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Schedules {

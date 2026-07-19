@@ -9,8 +9,11 @@ const client = new Cadenya({
 
 describe('resource search', () => {
   // Mock server tests are disabled
-  test.skip('searchToolsOrToolSets', async () => {
-    const responsePromise = client.search.searchToolsOrToolSets('workspaceId');
+  test.skip('searchToolsOrToolSets: only required params', async () => {
+    const responsePromise = client.search.searchToolsOrToolSets({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      query: 'query',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,14 +24,10 @@ describe('resource search', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('searchToolsOrToolSets: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.search.searchToolsOrToolSets(
-        'workspaceId',
-        { query: 'query' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Cadenya.NotFoundError);
+  test.skip('searchToolsOrToolSets: required and optional params', async () => {
+    const response = await client.search.searchToolsOrToolSets({
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      query: 'query',
+    });
   });
 });

@@ -13,12 +13,9 @@ export class WorkspaceSecrets extends APIResource {
   /**
    * Creates a new workspace secret in the workspace
    */
-  create(
-    workspaceID: string,
-    body: WorkspaceSecretCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<WorkspaceSecret> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/workspace_secrets`, { body, ...options });
+  create(params: WorkspaceSecretCreateParams, options?: RequestOptions): APIPromise<WorkspaceSecret> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/workspace_secrets`, { body, ...options });
   }
 
   /**
@@ -26,10 +23,10 @@ export class WorkspaceSecrets extends APIResource {
    */
   retrieve(
     id: string,
-    params: WorkspaceSecretRetrieveParams,
+    params: WorkspaceSecretRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<WorkspaceSecret> {
-    const { workspaceId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, options);
   }
 
@@ -41,7 +38,7 @@ export class WorkspaceSecrets extends APIResource {
     params: WorkspaceSecretUpdateParams,
     options?: RequestOptions,
   ): APIPromise<WorkspaceSecret> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, {
       body,
       ...options,
@@ -52,12 +49,12 @@ export class WorkspaceSecrets extends APIResource {
    * Lists all workspace secrets in the workspace
    */
   list(
-    workspaceID: string,
-    query: WorkspaceSecretListParams | null | undefined = {},
+    params: WorkspaceSecretListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<WorkspaceSecretsCursorPagination, WorkspaceSecret> {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
-      path`/v1/workspaces/${workspaceID}/workspace_secrets`,
+      path`/v1/workspaces/${workspaceId}/workspace_secrets`,
       CursorPagination<WorkspaceSecret>,
       { query, ...options },
     );
@@ -66,8 +63,12 @@ export class WorkspaceSecrets extends APIResource {
   /**
    * Deletes a workspace secret from the workspace
    */
-  delete(id: string, params: WorkspaceSecretDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: WorkspaceSecretDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/workspace_secrets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -108,12 +109,21 @@ export interface WorkspaceSecretSpec {
 
 export interface WorkspaceSecretCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: The workspace that will own this secret.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: WorkspaceSecretSpec;
 }
 
@@ -121,14 +131,14 @@ export interface WorkspaceSecretRetrieveParams {
   /**
    * The workspace the secret belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface WorkspaceSecretUpdateParams {
   /**
    * Path param: The workspace the secret belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -151,29 +161,34 @@ export interface WorkspaceSecretUpdateParams {
 
 export interface WorkspaceSecretListParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: The workspace whose secrets will be listed.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 }
@@ -182,7 +197,7 @@ export interface WorkspaceSecretDeleteParams {
   /**
    * The workspace the secret belongs to.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export declare namespace WorkspaceSecrets {

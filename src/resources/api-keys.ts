@@ -18,15 +18,20 @@ export class APIKeys extends APIResource {
   /**
    * Creates a new API key in the workspace.
    */
-  create(workspaceID: string, body: APIKeyCreateParams, options?: RequestOptions): APIPromise<APIKey> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/api_keys`, { body, ...options });
+  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<APIKey> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/api_keys`, { body, ...options });
   }
 
   /**
    * Retrieves an API key by ID.
    */
-  retrieve(id: string, params: APIKeyRetrieveParams, options?: RequestOptions): APIPromise<APIKey> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: APIKeyRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<APIKey> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, options);
   }
 
@@ -34,7 +39,7 @@ export class APIKeys extends APIResource {
    * Updates an API key.
    */
   update(id: string, params: APIKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, { body, ...options });
   }
 
@@ -42,11 +47,11 @@ export class APIKeys extends APIResource {
    * Lists the workspace's API keys.
    */
   list(
-    workspaceID: string,
-    query: APIKeyListParams | null | undefined = {},
+    params: APIKeyListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<APIKeysCursorPagination, APIKey> {
-    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/api_keys`, CursorPagination<APIKey>, {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceId}/api_keys`, CursorPagination<APIKey>, {
       query,
       ...options,
     });
@@ -55,8 +60,12 @@ export class APIKeys extends APIResource {
   /**
    * Deletes an API key.
    */
-  delete(id: string, params: APIKeyDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: APIKeyDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/api_keys/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -68,7 +77,7 @@ export class APIKeys extends APIResource {
    * authentication on every endpoint; the key is retained. Idempotent.
    */
   disable(id: string, params: APIKeyDisableParams, options?: RequestOptions): APIPromise<APIKey> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/api_keys/${id}:disable`, {
       body,
       ...options,
@@ -79,7 +88,7 @@ export class APIKeys extends APIResource {
    * Re-enables a disabled API key so its token authenticates again. Idempotent.
    */
   enable(id: string, params: APIKeyEnableParams, options?: RequestOptions): APIPromise<APIKey> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/api_keys/${id}:enable`, { body, ...options });
   }
 
@@ -88,7 +97,7 @@ export class APIKeys extends APIResource {
    * invalidated.
    */
   rotate(id: string, params: APIKeyRotateParams, options?: RequestOptions): APIPromise<APIKey> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/api_keys/${id}:rotate`, { body, ...options });
   }
 }
@@ -170,14 +179,19 @@ export interface APIKeySpec {
 
 export interface APIKeyCreateParams {
   /**
-   * CreateAccountResourceMetadata contains the user-provided fields for creating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
+   * Path param: The workspace this API key belongs to (path).
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateAccountResourceMetadata contains the user-provided fields for
+   * creating an account-scoped resource. Read-only fields (id, account_id,
+   * profile_id) are excluded since they are set by the server.
    */
   metadata: APIKeyCreateParams.Metadata;
 
   /**
-   * Configuration for an API key.
+   * Body param: Configuration for an API key.
    */
   spec: APIKeySpec;
 }
@@ -215,14 +229,14 @@ export interface APIKeyRetrieveParams {
   /**
    * The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface APIKeyUpdateParams {
   /**
    * Path param: The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateAccountResourceMetadata contains the user-provided fields for
@@ -273,30 +287,35 @@ export namespace APIKeyUpdateParams {
 
 export interface APIKeyListParams extends CursorPaginationParams {
   /**
-   * When true, included info fields are populated. Requests with this flag count
-   * more against your rate limit.
+   * Path param: The workspace whose API keys will be listed (path).
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: When true, included info fields are populated. Requests with this
+   * flag count more against your rate limit.
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter by ID prefix.
+   * Query param: Filter by ID prefix.
    */
   prefix?: string;
 
   /**
-   * Free-form search query.
+   * Query param: Free-form search query.
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time).
+   * Query param: Sort order for results (asc or desc by creation time).
    */
   sortOrder?: string;
 }
@@ -305,28 +324,28 @@ export interface APIKeyDeleteParams {
   /**
    * The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface APIKeyDisableParams {
   /**
    * The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface APIKeyEnableParams {
   /**
    * The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface APIKeyRotateParams {
   /**
    * The workspace the API key belongs to (path).
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export declare namespace APIKeys {

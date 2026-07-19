@@ -27,6 +27,14 @@ export class WorkspaceAdmin extends APIResource {
 
   /**
    * Creates a new workspace in the account. Admin only.
+   *
+   * @example
+   * ```ts
+   * const workspace = await client.workspaceAdmin.create({
+   *   metadata: { name: 'name' },
+   *   spec: {},
+   * });
+   * ```
    */
   create(body: WorkspaceAdminCreateParams, options?: RequestOptions): APIPromise<WorkspacesAPI.Workspace> {
     return this._client.post('/v1/account/workspaces', { body, ...options });
@@ -34,25 +42,51 @@ export class WorkspaceAdmin extends APIResource {
 
   /**
    * Retrieves a workspace in the account by ID. Admin only.
+   *
+   * @example
+   * ```ts
+   * const workspace = await client.workspaceAdmin.retrieve({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   * });
+   * ```
    */
-  retrieve(workspaceID: string, options?: RequestOptions): APIPromise<WorkspacesAPI.Workspace> {
-    return this._client.get(path`/v1/account/workspaces/${workspaceID}`, options);
+  retrieve(
+    params: WorkspaceAdminRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<WorkspacesAPI.Workspace> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.get(path`/v1/account/workspaces/${workspaceId}`, options);
   }
 
   /**
    * Updates a workspace's metadata (e.g. name) and spec. Admin only.
+   *
+   * @example
+   * ```ts
+   * const workspace = await client.workspaceAdmin.update({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   * });
+   * ```
    */
   update(
-    workspaceID: string,
-    body: WorkspaceAdminUpdateParams,
+    params: WorkspaceAdminUpdateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<WorkspacesAPI.Workspace> {
-    return this._client.patch(path`/v1/account/workspaces/${workspaceID}`, { body, ...options });
+    const { workspaceId = this._client.workspaceID, ...body } = params ?? {};
+    return this._client.patch(path`/v1/account/workspaces/${workspaceId}`, { body, ...options });
   }
 
   /**
    * Lists every workspace in the account, optionally including archived ones. Admin
    * only.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const workspace of client.workspaceAdmin.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: WorkspaceAdminListParams | null | undefined = {},
@@ -69,9 +103,20 @@ export class WorkspaceAdmin extends APIResource {
    * subsequent request scoped to it returns a permission error. Archiving the
    * account's last active (non-archived) workspace is not allowed and returns
    * FailedPrecondition. Admin only.
+   *
+   * @example
+   * ```ts
+   * await client.workspaceAdmin.archive({
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   * });
+   * ```
    */
-  archive(workspaceID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/account/workspaces/${workspaceID}`, {
+  archive(
+    params: WorkspaceAdminArchiveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.delete(path`/v1/account/workspaces/${workspaceId}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -151,18 +196,33 @@ export namespace WorkspaceAdminCreateParams {
   }
 }
 
+export interface WorkspaceAdminRetrieveParams {
+  /**
+   * Workspace ID to retrieve (path).
+   */
+  workspaceId?: string;
+}
+
 export interface WorkspaceAdminUpdateParams {
   /**
-   * UpdateAccountResourceMetadata contains the user-provided fields for updating an
-   * account-scoped resource. Read-only fields (id, account_id, profile_id) are
-   * excluded since they are set by the server.
+   * Path param: Workspace ID to update (path).
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: UpdateAccountResourceMetadata contains the user-provided fields for
+   * updating an account-scoped resource. Read-only fields (id, account_id,
+   * profile_id) are excluded since they are set by the server.
    */
   metadata?: WorkspaceAdminUpdateParams.Metadata;
 
+  /**
+   * Body param
+   */
   spec?: WorkspacesAPI.WorkspaceSpec;
 
   /**
-   * Fields to update.
+   * Body param: Fields to update.
    */
   updateMask?: string;
 }
@@ -211,6 +271,13 @@ export interface WorkspaceAdminListParams extends CursorPaginationParams {
   labels?: string;
 }
 
+export interface WorkspaceAdminArchiveParams {
+  /**
+   * Workspace ID to archive (path).
+   */
+  workspaceId?: string;
+}
+
 WorkspaceAdmin.Members = Members;
 WorkspaceAdmin.Profiles = Profiles;
 
@@ -218,8 +285,10 @@ export declare namespace WorkspaceAdmin {
   export {
     type WorkspaceMember as WorkspaceMember,
     type WorkspaceAdminCreateParams as WorkspaceAdminCreateParams,
+    type WorkspaceAdminRetrieveParams as WorkspaceAdminRetrieveParams,
     type WorkspaceAdminUpdateParams as WorkspaceAdminUpdateParams,
     type WorkspaceAdminListParams as WorkspaceAdminListParams,
+    type WorkspaceAdminArchiveParams as WorkspaceAdminArchiveParams,
   };
 
   export {

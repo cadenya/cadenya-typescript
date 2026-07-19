@@ -10,24 +10,50 @@ import { path } from '../../internal/utils/path';
 export class Tasks extends APIResource {
   /**
    * Retrieves a task by ID from an objective
+   *
+   * @example
+   * ```ts
+   * const objectiveTask =
+   *   await client.objectives.tasks.retrieve(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'id',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
+   * ```
    */
-  retrieve(id: string, params: TaskRetrieveParams, options?: RequestOptions): APIPromise<ObjectiveTask> {
-    const { workspaceId, objectiveId } = params;
+  retrieve(
+    objectiveID: string,
+    id: string,
+    params: TaskRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ObjectiveTask> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(
-      path`/v1/workspaces/${workspaceId}/objectives/${objectiveId}/tasks/${id}`,
+      path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tasks/${id}`,
       options,
     );
   }
 
   /**
    * Lists all tasks for an objective
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveTask of client.objectives.tasks.list(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     objectiveID: string,
-    params: TaskListParams,
+    params: TaskListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveTasksCursorPagination, ObjectiveTask> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tasks`,
       CursorPagination<ObjectiveTask>,
@@ -79,19 +105,14 @@ export interface ObjectiveTaskData {
 }
 
 export interface TaskRetrieveParams {
-  workspaceId: string;
-
-  /**
-   * The ID of the objective. Supports "external_id:" prefix for external IDs.
-   */
-  objectiveId: string;
+  workspaceId?: string;
 }
 
 export interface TaskListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: Sort order for results

@@ -18,6 +18,14 @@ export class Profiles extends APIResource {
   /**
    * Searches the account's profiles for a member picker, with free-form name/email
    * search and an optional type filter. Account-scoped; admin only.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const profile of client.workspaceAdmin.profiles.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: ProfileListParams | null | undefined = {},

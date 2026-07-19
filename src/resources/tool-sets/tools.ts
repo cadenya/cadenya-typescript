@@ -21,7 +21,7 @@ export class Tools extends APIResource {
    * Creates a new tool in the tool set
    */
   create(toolSetID: string, params: ToolCreateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools`, {
       body,
       ...options,
@@ -31,17 +31,27 @@ export class Tools extends APIResource {
   /**
    * Retrieves a tool by ID from the workspace
    */
-  retrieve(id: string, params: ToolRetrieveParams, options?: RequestOptions): APIPromise<Tool> {
-    const { workspaceId, toolSetId } = params;
-    return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, options);
+  retrieve(
+    toolSetID: string,
+    id: string,
+    params: ToolRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Tool> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools/${id}`, options);
   }
 
   /**
    * Updates a tool in the tool set
    */
-  update(id: string, params: ToolUpdateParams, options?: RequestOptions): APIPromise<Tool> {
-    const { workspaceId, toolSetId, ...body } = params;
-    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
+  update(
+    toolSetID: string,
+    id: string,
+    params: ToolUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<Tool> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools/${id}`, {
       body,
       ...options,
     });
@@ -52,10 +62,10 @@ export class Tools extends APIResource {
    */
   list(
     toolSetID: string,
-    params: ToolListParams,
+    params: ToolListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ToolsCursorPagination, Tool> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools`,
       CursorPagination<Tool>,
@@ -66,9 +76,14 @@ export class Tools extends APIResource {
   /**
    * Deletes a tool in the tool set
    */
-  delete(id: string, params: ToolDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId, toolSetId } = params;
-    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}`, {
+  delete(
+    toolSetID: string,
+    id: string,
+    params: ToolDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
+    return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -78,9 +93,9 @@ export class Tools extends APIResource {
    * Transitions a tool to STATE_OMITTED, excluding it from agent use. Fails if the
    * tool is currently assigned to agent variations.
    */
-  omit(id: string, params: ToolOmitParams, options?: RequestOptions): APIPromise<Tool> {
-    const { workspaceId, toolSetId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}:omit`, {
+  omit(toolSetID: string, id: string, params: ToolOmitParams, options?: RequestOptions): APIPromise<Tool> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools/${id}:omit`, {
       body,
       ...options,
     });
@@ -90,9 +105,14 @@ export class Tools extends APIResource {
    * Transitions an omitted tool back to STATE_AVAILABLE. For managed tool sets, the
    * next sync may omit the tool again if its filters still exclude it.
    */
-  restore(id: string, params: ToolRestoreParams, options?: RequestOptions): APIPromise<Tool> {
-    const { workspaceId, toolSetId, ...body } = params;
-    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetId}/tools/${id}:restore`, {
+  restore(
+    toolSetID: string,
+    id: string,
+    params: ToolRestoreParams,
+    options?: RequestOptions,
+  ): APIPromise<Tool> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/tools/${id}:restore`, {
       body,
       ...options,
     });
@@ -125,7 +145,7 @@ export interface ConfigHTTP {
   requestBodyTemplate?: string;
 }
 
-export interface ConfigMcp {
+export interface ConfigMCP {
   /**
    * Behavior hints synced from the MCP server's tool definition (ToolAnnotations in
    * the MCP specification). All hints are advisory: servers are not required to send
@@ -133,7 +153,7 @@ export interface ConfigMcp {
    * keep the MCP spec defaults (destructiveHint and openWorldHint default to true;
    * readOnlyHint and idempotentHint default to false).
    */
-  annotations?: McpAnnotations;
+  annotations?: MCPAnnotations;
 }
 
 export interface ConfigOpenAPI {
@@ -149,7 +169,7 @@ export interface ConfigOpenAPI {
  * keep the MCP spec defaults (destructiveHint and openWorldHint default to true;
  * readOnlyHint and idempotentHint default to false).
  */
-export interface McpAnnotations {
+export interface MCPAnnotations {
   /**
    * If true, the tool may perform destructive updates to its environment. Only
    * meaningful when read_only_hint is false.
@@ -252,26 +272,46 @@ export interface ToolSpec {
  * the tool is called. For example, if the tool is an HTTP tool, the adapter will
  * be Http. If the tool is an inline tool, the adapter will be Inline.
  */
-export interface ToolSpecConfig {
+export type ToolSpecConfig =
+  | ToolSpecConfigHTTP
+  | ToolSpecConfigMCP
+  | ToolSpecConfigOpenAPI
+  | ToolSpecConfigBare;
+
+export interface ToolSpecConfigBare {
   /**
    * Marks the tool as bare: it has no execution adapter of its own and relies on the
    * parent tool set being a Bare tool set. Present so a webhook consumer can tell a
    * tool is bare from the tool data alone, without cross-referencing the tool set.
    */
-  bare?: ConfigBare;
+  bare: ConfigBare;
 
-  http?: ConfigHTTP;
+  type: 'bare';
+}
 
-  mcp?: ConfigMcp;
+export interface ToolSpecConfigHTTP {
+  http: ConfigHTTP;
 
-  openapi?: ConfigOpenAPI;
+  type: 'http';
+}
+
+export interface ToolSpecConfigMCP {
+  mcp: ConfigMCP;
+
+  type: 'mcp';
+}
+
+export interface ToolSpecConfigOpenAPI {
+  openapi: ConfigOpenAPI;
+
+  type: 'openapi';
 }
 
 export interface ToolCreateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: CreateResourceMetadata contains the user-provided fields for
@@ -291,25 +331,14 @@ export interface ToolRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export interface ToolUpdateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Path param: Tool set ID. Accepts the canonical ts\_… form or the
-   * external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -334,7 +363,7 @@ export interface ToolListParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -385,49 +414,38 @@ export interface ToolDeleteParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export interface ToolOmitParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export interface ToolRestoreParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
-
-  /**
-   * Tool set ID. Accepts the canonical ts\_… form or the external_id:<value> form.
-   */
-  toolSetId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Tools {
   export {
     type ConfigBare as ConfigBare,
     type ConfigHTTP as ConfigHTTP,
-    type ConfigMcp as ConfigMcp,
+    type ConfigMCP as ConfigMCP,
     type ConfigOpenAPI as ConfigOpenAPI,
-    type McpAnnotations as McpAnnotations,
+    type MCPAnnotations as MCPAnnotations,
     type Tool as Tool,
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecConfigBare as ToolSpecConfigBare,
+    type ToolSpecConfigHTTP as ToolSpecConfigHTTP,
+    type ToolSpecConfigMCP as ToolSpecConfigMCP,
+    type ToolSpecConfigOpenAPI as ToolSpecConfigOpenAPI,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

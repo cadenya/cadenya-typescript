@@ -10,13 +10,24 @@ import { path } from '../../internal/utils/path';
 export class Tools extends APIResource {
   /**
    * Lists all tools that were assigned to an objective
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const objectiveTool of client.objectives.tools.list(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     objectiveID: string,
-    params: ToolListParams,
+    params: ToolListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ObjectiveToolsCursorPagination, ObjectiveTool> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/tools`,
       CursorPagination<ObjectiveTool>,
@@ -53,7 +64,7 @@ export interface ToolListParams extends CursorPaginationParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export declare namespace Tools {

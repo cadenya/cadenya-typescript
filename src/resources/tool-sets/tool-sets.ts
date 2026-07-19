@@ -20,9 +20,9 @@ import * as ToolsAPI from './tools';
 import {
   ConfigBare,
   ConfigHTTP,
-  ConfigMcp,
+  ConfigMCP,
   ConfigOpenAPI,
-  McpAnnotations,
+  MCPAnnotations,
   Tool,
   ToolCreateParams,
   ToolDeleteParams,
@@ -33,6 +33,10 @@ import {
   ToolRetrieveParams,
   ToolSpec,
   ToolSpecConfig,
+  ToolSpecConfigBare,
+  ToolSpecConfigHTTP,
+  ToolSpecConfigMCP,
+  ToolSpecConfigOpenAPI,
   ToolUpdateParams,
   Tools,
   ToolsCursorPagination,
@@ -57,15 +61,20 @@ export class ToolSets extends APIResource {
   /**
    * Creates a new tool set in the workspace
    */
-  create(workspaceID: string, body: ToolSetCreateParams, options?: RequestOptions): APIPromise<ToolSet> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/tool_sets`, { body, ...options });
+  create(params: ToolSetCreateParams, options?: RequestOptions): APIPromise<ToolSet> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets`, { body, ...options });
   }
 
   /**
    * Retrieves a tool set by ID from the workspace
    */
-  retrieve(id: string, params: ToolSetRetrieveParams, options?: RequestOptions): APIPromise<ToolSet> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: ToolSetRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ToolSet> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, options);
   }
 
@@ -73,7 +82,7 @@ export class ToolSets extends APIResource {
    * Updates a tool set in the workspace
    */
   update(id: string, params: ToolSetUpdateParams, options?: RequestOptions): APIPromise<ToolSet> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, { body, ...options });
   }
 
@@ -81,11 +90,11 @@ export class ToolSets extends APIResource {
    * Lists all tool sets in the workspace
    */
   list(
-    workspaceID: string,
-    query: ToolSetListParams | null | undefined = {},
+    params: ToolSetListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ToolSetsCursorPagination, ToolSet> {
-    return this._client.getAPIList(path`/v1/workspaces/${workspaceID}/tool_sets`, CursorPagination<ToolSet>, {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    return this._client.getAPIList(path`/v1/workspaces/${workspaceId}/tool_sets`, CursorPagination<ToolSet>, {
       query,
       ...options,
     });
@@ -94,8 +103,12 @@ export class ToolSets extends APIResource {
   /**
    * Deletes a tool set in the workspace
    */
-  delete(id: string, params: ToolSetDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: ToolSetDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/tool_sets/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -110,7 +123,7 @@ export class ToolSets extends APIResource {
    * still assigned to agent variations.
    */
   archive(id: string, params: ToolSetArchiveParams, options?: RequestOptions): APIPromise<ToolSet> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${id}:archive`, {
       body,
       ...options,
@@ -123,10 +136,10 @@ export class ToolSets extends APIResource {
    */
   getOpenAPISpec(
     toolSetID: string,
-    params: ToolSetGetOpenAPISpecParams,
+    params: ToolSetGetOpenAPISpecParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ToolSetGetOpenAPISpecResponse> {
-    const { workspaceId } = params;
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/openapi_spec`, options);
   }
 
@@ -135,10 +148,10 @@ export class ToolSets extends APIResource {
    */
   listEvents(
     toolSetID: string,
-    params: ToolSetListEventsParams,
+    params: ToolSetListEventsParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ToolSetEventsCursorPagination, ToolSetEvent> {
-    const { workspaceId, ...query } = params;
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
       path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/events`,
       CursorPagination<ToolSetEvent>,
@@ -152,7 +165,7 @@ export class ToolSets extends APIResource {
    * again.
    */
   unarchive(id: string, params: ToolSetUnarchiveParams, options?: RequestOptions): APIPromise<ToolSet> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.post(path`/v1/workspaces/${workspaceId}/tool_sets/${id}:unarchive`, {
       body,
       ...options,
@@ -168,13 +181,21 @@ export type ToolSetEventsCursorPagination = CursorPagination<ToolSetEvent>;
  * Approval filters that will automatically set the approval requirement on tools
  * synced from an external source
  */
-export interface ApprovalRequirementFilter {
-  always?: boolean;
+export type ApprovalRequirementFilter = ApprovalRequirementFilterAlways | ApprovalRequirementFilterOnly;
 
+export interface ApprovalRequirementFilterAlways {
+  always: boolean;
+
+  type: 'always';
+}
+
+export interface ApprovalRequirementFilterOnly {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  only?: ToolFilter;
+  only: ToolFilter;
+
+  type: 'only';
 }
 
 /**
@@ -192,18 +213,51 @@ export interface AttributeFilter {
 /**
  * String matching operations
  */
-export interface StringMatcher {
+export type StringMatcher =
+  | StringMatcherExact
+  | StringMatcherStartsWith
+  | StringMatcherEndsWith
+  | StringMatcherContains
+  | StringMatcherRegex;
+
+export interface StringMatcherContains {
+  contains: string;
+
+  type: 'contains';
+
   caseSensitive?: boolean;
+}
 
-  contains?: string;
+export interface StringMatcherEndsWith {
+  endsWith: string;
 
-  endsWith?: string;
+  type: 'endsWith';
 
-  exact?: string;
+  caseSensitive?: boolean;
+}
 
-  regex?: string;
+export interface StringMatcherExact {
+  exact: string;
 
-  startsWith?: string;
+  type: 'exact';
+
+  caseSensitive?: boolean;
+}
+
+export interface StringMatcherRegex {
+  regex: string;
+
+  type: 'regex';
+
+  caseSensitive?: boolean;
+}
+
+export interface StringMatcherStartsWith {
+  startsWith: string;
+
+  type: 'startsWith';
+
+  caseSensitive?: boolean;
 }
 
 /**
@@ -281,22 +335,11 @@ export interface ToolSet {
   info?: ToolSetInfo;
 }
 
-export interface ToolSetAdapter {
-  /**
-   * Bare tool sets define tools without an execution adapter. A bare tool call
-   * doesn't fire anything: the objective's workflow pauses and waits for an external
-   * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
-   * reverse harness that polls for pending tool calls, executes locally, and reports
-   * results back via SetToolCallContent).
-   */
-  bare?: ToolSetAdapterBare;
-
-  http?: ToolSetAdapterHTTP;
-
-  mcp?: ToolSetAdapterMcp;
-
-  openapi?: ToolSetAdapterOpenAPI;
-}
+export type ToolSetAdapter =
+  | ToolSetAdapterMCPVariant
+  | ToolSetAdapterHTTPVariant
+  | ToolSetAdapterOpenAPIVariant
+  | ToolSetAdapterBareVariant;
 
 /**
  * Bare tool sets define tools without an execution adapter. A bare tool call
@@ -313,13 +356,32 @@ export interface ToolSetAdapterBare {
   contentTimeout?: number;
 }
 
+export interface ToolSetAdapterBareVariant {
+  /**
+   * Bare tool sets define tools without an execution adapter. A bare tool call
+   * doesn't fire anything: the objective's workflow pauses and waits for an external
+   * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
+   * reverse harness that polls for pending tool calls, executes locally, and reports
+   * results back via SetToolCallContent).
+   */
+  bare: ToolSetAdapterBare;
+
+  type: 'bare';
+}
+
 export interface ToolSetAdapterHTTP {
   baseUrl?: string;
 
   headers?: { [key: string]: string };
 }
 
-export interface ToolSetAdapterMcp {
+export interface ToolSetAdapterHTTPVariant {
+  http: ToolSetAdapterHTTP;
+
+  type: 'http';
+}
+
+export interface ToolSetAdapterMCP {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
@@ -335,7 +397,7 @@ export interface ToolSetAdapterMcp {
   /**
    * Defines behavior for just-in-time capable tool set adapters (IE: MCP).
    */
-  justInTime?: ToolSetAdapterMcp.JustInTime;
+  justInTime?: ToolSetAdapterMCP.JustInTime;
 
   /**
    * Approval filters that will automatically set the approval requirement on tools
@@ -346,7 +408,7 @@ export interface ToolSetAdapterMcp {
   url?: string;
 }
 
-export namespace ToolSetAdapterMcp {
+export namespace ToolSetAdapterMCP {
   /**
    * Defines behavior for just-in-time capable tool set adapters (IE: MCP).
    */
@@ -363,7 +425,22 @@ export namespace ToolSetAdapterMcp {
   }
 }
 
-export interface ToolSetAdapterOpenAPI {
+export interface ToolSetAdapterMCPVariant {
+  mcp: ToolSetAdapterMCP;
+
+  type: 'mcp';
+}
+
+export type ToolSetAdapterOpenAPI = ToolSetAdapterOpenAPIURL | ToolSetAdapterOpenAPIUploadID;
+
+export interface ToolSetAdapterOpenAPIUploadID {
+  type: 'uploadId';
+
+  /**
+   * ID of a COMPLETE Upload containing the OpenAPI spec document.
+   */
+  uploadId: string;
+
   /**
    * Base URL for dispatching tool calls. If set, overrides the server resolved from
    * the spec's servers array.
@@ -397,16 +474,55 @@ export interface ToolSetAdapterOpenAPI {
    * synced from an external source
    */
   toolApprovals?: ApprovalRequirementFilter;
+}
 
-  /**
-   * ID of a COMPLETE Upload containing the OpenAPI spec document.
-   */
-  uploadId?: string;
+export interface ToolSetAdapterOpenAPIURL {
+  type: 'url';
 
   /**
    * URL to fetch the OpenAPI spec from. Synced automatically every hour.
    */
-  url?: string;
+  url: string;
+
+  /**
+   * Base URL for dispatching tool calls. If set, overrides the server resolved from
+   * the spec's servers array.
+   */
+  baseUrl?: string;
+
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  excludeTools?: ToolFilter;
+
+  /**
+   * Headers sent when fetching the spec from a URL and when dispatching tool calls.
+   */
+  headers?: { [key: string]: string };
+
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  includeTools?: ToolFilter;
+
+  /**
+   * Name of the server entry in the spec's servers array (OpenAPI 3.2 server.name
+   * field). Used to select which server URL to dispatch to when base_url is not set.
+   * If unset, the first server is used. Ignored when base_url is set.
+   */
+  serverName?: string;
+
+  /**
+   * Approval filters that will automatically set the approval requirement on tools
+   * synced from an external source
+   */
+  toolApprovals?: ApprovalRequirementFilter;
+}
+
+export interface ToolSetAdapterOpenAPIVariant {
+  openapi: ToolSetAdapterOpenAPI;
+
+  type: 'openapi';
 }
 
 /**
@@ -451,26 +567,36 @@ export namespace ToolSetEvent {
 /**
  * Event payload for a tool set operation.
  */
-export interface ToolSetEventData {
+export type ToolSetEventData =
+  | ToolSetEventDataSyncStarted
+  | ToolSetEventDataSyncCompleted
+  | ToolSetEventDataSyncFailed;
+
+export interface ToolSetEventDataSyncCompleted {
   /**
    * Emitted when a tool set sync operation completes successfully.
    */
-  syncCompleted?: SyncCompleted;
+  syncCompleted: SyncCompleted;
 
+  type: 'syncCompleted';
+}
+
+export interface ToolSetEventDataSyncFailed {
   /**
    * Emitted when a tool set sync operation fails.
    */
-  syncFailed?: SyncFailed;
+  syncFailed: SyncFailed;
 
+  type: 'syncFailed';
+}
+
+export interface ToolSetEventDataSyncStarted {
   /**
    * Emitted when a tool set sync operation begins.
    */
-  syncStarted?: SyncStarted;
+  syncStarted: SyncStarted;
 
-  /**
-   * Type of the event (e.g., "sync_started", "sync_completed", "sync_failed").
-   */
-  type?: string;
+  type: 'syncStarted';
 }
 
 export interface ToolSetInfo {
@@ -507,12 +633,21 @@ export interface ToolSetGetOpenAPISpecResponse {
 
 export interface ToolSetCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: ToolSetSpec;
 }
 
@@ -520,14 +655,14 @@ export interface ToolSetRetrieveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ToolSetUpdateParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -550,35 +685,40 @@ export interface ToolSetUpdateParams {
 
 export interface ToolSetListParams extends CursorPaginationParams {
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by tool set lifecycle state. Defaults to STATE_ACTIVE when unspecified;
-   * pass STATE_ARCHIVED to list archived tool sets.
+   * Query param: Filter by tool set lifecycle state. Defaults to STATE_ACTIVE when
+   * unspecified; pass STATE_ARCHIVED to list archived tool sets.
    */
   state?: 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_ARCHIVED';
 }
@@ -587,28 +727,28 @@ export interface ToolSetDeleteParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ToolSetArchiveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ToolSetGetOpenAPISpecParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface ToolSetListEventsParams extends CursorPaginationParams {
   /**
    * Path param: Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Query param: When set to true you may use more of your alloted API rate-limit
@@ -632,7 +772,7 @@ export interface ToolSetUnarchiveParams {
   /**
    * Workspace ID.
    */
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 ToolSets.Tools = Tools;
@@ -641,8 +781,15 @@ ToolSets.Secrets = Secrets;
 export declare namespace ToolSets {
   export {
     type ApprovalRequirementFilter as ApprovalRequirementFilter,
+    type ApprovalRequirementFilterAlways as ApprovalRequirementFilterAlways,
+    type ApprovalRequirementFilterOnly as ApprovalRequirementFilterOnly,
     type AttributeFilter as AttributeFilter,
     type StringMatcher as StringMatcher,
+    type StringMatcherContains as StringMatcherContains,
+    type StringMatcherEndsWith as StringMatcherEndsWith,
+    type StringMatcherExact as StringMatcherExact,
+    type StringMatcherRegex as StringMatcherRegex,
+    type StringMatcherStartsWith as StringMatcherStartsWith,
     type SyncCompleted as SyncCompleted,
     type SyncFailed as SyncFailed,
     type SyncStarted as SyncStarted,
@@ -650,11 +797,20 @@ export declare namespace ToolSets {
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterBare as ToolSetAdapterBare,
+    type ToolSetAdapterBareVariant as ToolSetAdapterBareVariant,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
-    type ToolSetAdapterMcp as ToolSetAdapterMcp,
+    type ToolSetAdapterHTTPVariant as ToolSetAdapterHTTPVariant,
+    type ToolSetAdapterMCP as ToolSetAdapterMCP,
+    type ToolSetAdapterMCPVariant as ToolSetAdapterMCPVariant,
     type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
+    type ToolSetAdapterOpenAPIUploadID as ToolSetAdapterOpenAPIUploadID,
+    type ToolSetAdapterOpenAPIURL as ToolSetAdapterOpenAPIURL,
+    type ToolSetAdapterOpenAPIVariant as ToolSetAdapterOpenAPIVariant,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
+    type ToolSetEventDataSyncCompleted as ToolSetEventDataSyncCompleted,
+    type ToolSetEventDataSyncFailed as ToolSetEventDataSyncFailed,
+    type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetGetOpenAPISpecResponse as ToolSetGetOpenAPISpecResponse,
@@ -675,13 +831,17 @@ export declare namespace ToolSets {
     Tools as Tools,
     type ConfigBare as ConfigBare,
     type ConfigHTTP as ConfigHTTP,
-    type ConfigMcp as ConfigMcp,
+    type ConfigMCP as ConfigMCP,
     type ConfigOpenAPI as ConfigOpenAPI,
-    type McpAnnotations as McpAnnotations,
+    type MCPAnnotations as MCPAnnotations,
     type Tool as Tool,
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecConfigBare as ToolSpecConfigBare,
+    type ToolSpecConfigHTTP as ToolSpecConfigHTTP,
+    type ToolSpecConfigMCP as ToolSpecConfigMCP,
+    type ToolSpecConfigOpenAPI as ToolSpecConfigOpenAPI,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

@@ -14,6 +14,8 @@ import {
   MemoryEntriesCursorPagination,
   MemoryEntry,
   MemoryEntryCreateSpec,
+  MemoryEntryCreateSpecContent,
+  MemoryEntryCreateSpecUploadID,
   MemoryEntryDetail,
   MemoryEntryInfo,
   MemoryEntrySpec,
@@ -37,19 +39,20 @@ export class MemoryLayers extends APIResource {
   /**
    * Creates a new memory layer in the workspace
    */
-  create(
-    workspaceID: string,
-    body: MemoryLayerCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<MemoryLayer> {
-    return this._client.post(path`/v1/workspaces/${workspaceID}/memory_layers`, { body, ...options });
+  create(params: MemoryLayerCreateParams, options?: RequestOptions): APIPromise<MemoryLayer> {
+    const { workspaceId = this._client.workspaceID, ...body } = params;
+    return this._client.post(path`/v1/workspaces/${workspaceId}/memory_layers`, { body, ...options });
   }
 
   /**
    * Retrieves a memory layer by ID from the workspace
    */
-  retrieve(id: string, params: MemoryLayerRetrieveParams, options?: RequestOptions): APIPromise<MemoryLayer> {
-    const { workspaceId } = params;
+  retrieve(
+    id: string,
+    params: MemoryLayerRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MemoryLayer> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, options);
   }
 
@@ -57,7 +60,7 @@ export class MemoryLayers extends APIResource {
    * Updates a memory layer in the workspace
    */
   update(id: string, params: MemoryLayerUpdateParams, options?: RequestOptions): APIPromise<MemoryLayer> {
-    const { workspaceId, ...body } = params;
+    const { workspaceId = this._client.workspaceID, ...body } = params;
     return this._client.patch(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, { body, ...options });
   }
 
@@ -65,12 +68,12 @@ export class MemoryLayers extends APIResource {
    * Lists all memory layers in the workspace
    */
   list(
-    workspaceID: string,
-    query: MemoryLayerListParams | null | undefined = {},
+    params: MemoryLayerListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<MemoryLayersCursorPagination, MemoryLayer> {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
     return this._client.getAPIList(
-      path`/v1/workspaces/${workspaceID}/memory_layers`,
+      path`/v1/workspaces/${workspaceId}/memory_layers`,
       CursorPagination<MemoryLayer>,
       { query, ...options },
     );
@@ -79,8 +82,12 @@ export class MemoryLayers extends APIResource {
   /**
    * Deletes a memory layer from the workspace
    */
-  delete(id: string, params: MemoryLayerDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { workspaceId } = params;
+  delete(
+    id: string,
+    params: MemoryLayerDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.delete(path`/v1/workspaces/${workspaceId}/memory_layers/${id}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
@@ -172,24 +179,33 @@ export interface MemoryLayerSpec {
 
 export interface MemoryLayerCreateParams {
   /**
-   * CreateResourceMetadata contains the user-provided fields for creating a
-   * workspace-scoped resource. Read-only fields (id, account_id, workspace_id,
-   * profile_id, created_at) are excluded since they are set by the server.
+   * Path param
+   */
+  workspaceId?: string;
+
+  /**
+   * Body param: CreateResourceMetadata contains the user-provided fields for
+   * creating a workspace-scoped resource. Read-only fields (id, account_id,
+   * workspace_id, profile_id, created_at) are excluded since they are set by the
+   * server.
    */
   metadata: Shared.CreateResourceMetadata;
 
+  /**
+   * Body param
+   */
   spec: MemoryLayerSpec;
 }
 
 export interface MemoryLayerRetrieveParams {
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export interface MemoryLayerUpdateParams {
   /**
    * Path param
    */
-  workspaceId: string;
+  workspaceId?: string;
 
   /**
    * Body param: UpdateResourceMetadata contains the user-provided fields for
@@ -212,52 +228,57 @@ export interface MemoryLayerUpdateParams {
 
 export interface MemoryLayerListParams extends CursorPaginationParams {
   /**
-   * Filter to episodic layers belonging to this agent.
+   * Path param
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: Filter to episodic layers belonging to this agent.
    */
   agentId?: string;
 
   /**
-   * Filter to episodic layers whose episodic key starts with this prefix (e.g.
-   * "customer/" matches "customer/42" and "customer/43"). Useful for namespaced
-   * keys, similar to a redis key scan.
+   * Query param: Filter to episodic layers whose episodic key starts with this
+   * prefix (e.g. "customer/" matches "customer/42" and "customer/43"). Useful for
+   * namespaced keys, similar to a redis key scan.
    */
   episodicKeyPrefix?: string;
 
   /**
-   * When set to true you may use more of your alloted API rate-limit
+   * Query param: When set to true you may use more of your alloted API rate-limit
    */
   includeInfo?: boolean;
 
   /**
-   * Filters by metadata labels. Comma-separated key=value pairs, e.g.
+   * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
    * "env=prod,team=ai". A resource matches only if every pair matches exactly (AND
    * semantics).
    */
   labels?: string;
 
   /**
-   * Filter expression (query param: prefix)
+   * Query param: Filter expression (query param: prefix)
    */
   prefix?: string;
 
   /**
-   * Free-form search query
+   * Query param: Free-form search query
    */
   query?: string;
 
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Query param: Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
 
   /**
-   * Filter by layer type
+   * Query param: Filter by layer type
    */
   type?: 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 }
 
 export interface MemoryLayerDeleteParams {
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 MemoryLayers.Entries = Entries;
@@ -279,6 +300,8 @@ export declare namespace MemoryLayers {
     Entries as Entries,
     type MemoryEntry as MemoryEntry,
     type MemoryEntryCreateSpec as MemoryEntryCreateSpec,
+    type MemoryEntryCreateSpecContent as MemoryEntryCreateSpecContent,
+    type MemoryEntryCreateSpecUploadID as MemoryEntryCreateSpecUploadID,
     type MemoryEntryDetail as MemoryEntryDetail,
     type MemoryEntryInfo as MemoryEntryInfo,
     type MemoryEntrySpec as MemoryEntrySpec,
