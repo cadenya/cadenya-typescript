@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.125.0 (2026-07-19)
+
+Full Changelog: [v0.124.0...v0.125.0](https://github.com/cadenya/cadenya-typescript/compare/v0.124.0...v0.125.0)
+
+### Features
+
+* Add oneof discriminator field extension and OpenAPI discriminated unions (ENG-467) ([fed1127](https://github.com/cadenya/cadenya-typescript/commit/fed1127a6261488b62b9a412737a4b525a75fee2))
+* **api:** api update ([420cbb6](https://github.com/cadenya/cadenya-typescript/commit/420cbb6982f2f9e50c3616433a536181109d7160))
+
 ## 0.124.0 (2026-07-19)
 
 Full Changelog: [v0.123.0...v0.124.0](https://github.com/cadenya/cadenya-typescript/compare/v0.123.0...v0.124.0)
