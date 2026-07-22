@@ -399,6 +399,7 @@ Types:
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventDataSyncStarted</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetUsage</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetGetOpenAPISpecResponse</a></code>
 
 Methods:
@@ -411,6 +412,7 @@ Methods:
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets/{id}:archive">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">archive</a>(id, { ...params }) -> ToolSet</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/openapi_spec">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">getOpenAPISpec</a>(toolSetID, { ...params }) -> ToolSetGetOpenAPISpecResponse</code>
 - <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/events">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listEvents</a>(toolSetID, { ...params }) -> ToolSetEventsCursorPagination</code>
+- <code title="get /v1/workspaces/{workspaceId}/tool_sets/{toolSetId}/usage">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">listUsage</a>(toolSetID, { ...params }) -> ToolSetUsagesCursorPagination</code>
 - <code title="post /v1/workspaces/{workspaceId}/tool_sets/{id}:unarchive">client.toolSets.<a href="./src/resources/tool-sets/tool-sets.ts">unarchive</a>(id, { ...params }) -> ToolSet</code>
 
 ## Tools
