@@ -47,6 +47,7 @@ export {
   type ToolSetEventDataSyncStarted,
   type ToolSetInfo,
   type ToolSetSpec,
+  type ToolSetUsage,
   type ToolSetGetOpenAPISpecResponse,
   type ToolSetCreateParams,
   type ToolSetRetrieveParams,
@@ -56,9 +57,11 @@ export {
   type ToolSetArchiveParams,
   type ToolSetGetOpenAPISpecParams,
   type ToolSetListEventsParams,
+  type ToolSetListUsageParams,
   type ToolSetUnarchiveParams,
   type ToolSetsCursorPagination,
   type ToolSetEventsCursorPagination,
+  type ToolSetUsagesCursorPagination,
 } from './tool-sets';
 export {
   Tools,
