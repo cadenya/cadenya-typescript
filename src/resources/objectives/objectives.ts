@@ -759,6 +759,14 @@ export interface ObjectiveEvent {
 
   contextWindowId?: string;
 
+  /**
+   * Elapsed time of the work this event records, when it is known at write time
+   * (e.g. assistant message generation, tool execution for result/error events).
+   * Unset means the event is instantaneous or the duration is not measurable.
+   * Serialized as a canonical duration string (e.g. "4.1s").
+   */
+  duration?: string;
+
   info?: ObjectiveEventInfo;
 }
 
