@@ -763,11 +763,19 @@ export interface ObjectiveEvent {
    * Elapsed time of the work this event records, when it is known at write time
    * (e.g. assistant message generation, tool execution for result/error events).
    * Unset means the event is instantaneous or the duration is not measurable.
-   * Serialized as a canonical duration string (e.g. "4.1s").
+   * Serialized as a canonical duration string (e.g. "4.1s"). Always set together
+   * with started_at.
    */
   duration?: string;
 
   info?: ObjectiveEventInfo;
+
+  /**
+   * When the work this event records began. Set together with duration, so the work
+   * interval is [started_at, started_at + duration]. The event's created_at remains
+   * the time the event was persisted.
+   */
+  startedAt?: string;
 }
 
 export type ObjectiveEventData =
