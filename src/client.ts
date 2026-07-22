@@ -243,10 +243,13 @@ import {
   ToolSetInfo,
   ToolSetListEventsParams,
   ToolSetListParams,
+  ToolSetListUsageParams,
   ToolSetRetrieveParams,
   ToolSetSpec,
   ToolSetUnarchiveParams,
   ToolSetUpdateParams,
+  ToolSetUsage,
+  ToolSetUsagesCursorPagination,
   ToolSets,
   ToolSetsCursorPagination,
 } from './resources/tool-sets/tool-sets';
@@ -1318,9 +1321,11 @@ export declare namespace Cadenya {
     type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
+    type ToolSetUsage as ToolSetUsage,
     type ToolSetGetOpenAPISpecResponse as ToolSetGetOpenAPISpecResponse,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
+    type ToolSetUsagesCursorPagination as ToolSetUsagesCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetRetrieveParams as ToolSetRetrieveParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
@@ -1329,6 +1334,7 @@ export declare namespace Cadenya {
     type ToolSetArchiveParams as ToolSetArchiveParams,
     type ToolSetGetOpenAPISpecParams as ToolSetGetOpenAPISpecParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
+    type ToolSetListUsageParams as ToolSetListUsageParams,
     type ToolSetUnarchiveParams as ToolSetUnarchiveParams,
   };
 

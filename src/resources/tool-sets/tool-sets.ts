@@ -160,6 +160,25 @@ export class ToolSets extends APIResource {
   }
 
   /**
+   * Lists the agent variations (with their parent agent) that have the tool set
+   * assigned. Pass tool_id to instead list variations with a direct assignment of
+   * that individual tool; variations that receive the tool implicitly through a
+   * whole-set assignment are not included in that filtered view.
+   */
+  listUsage(
+    toolSetID: string,
+    params: ToolSetListUsageParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<ToolSetUsagesCursorPagination, ToolSetUsage> {
+    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    return this._client.getAPIList(
+      path`/v1/workspaces/${workspaceId}/tool_sets/${toolSetID}/usage`,
+      CursorPagination<ToolSetUsage>,
+      { query, ...options },
+    );
+  }
+
+  /**
    * Transitions an archived tool set back to STATE_ACTIVE. Managed tool sets resume
    * syncing on their next cycle and their tools become available to objectives
    * again.
@@ -176,6 +195,8 @@ export class ToolSets extends APIResource {
 export type ToolSetsCursorPagination = CursorPagination<ToolSet>;
 
 export type ToolSetEventsCursorPagination = CursorPagination<ToolSetEvent>;
+
+export type ToolSetUsagesCursorPagination = CursorPagination<ToolSetUsage>;
 
 /**
  * Approval filters that will automatically set the approval requirement on tools
@@ -624,6 +645,32 @@ export interface ToolSetSpec {
   description?: string;
 }
 
+/**
+ * ToolSetUsage describes one agent variation that uses the tool set (or, when
+ * filtering by tool, an individual tool within it).
+ */
+export interface ToolSetUsage {
+  /**
+   * When the assignment was created.
+   */
+  assignedAt: string;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agent?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  agentVariation?: Shared.ResourceMetadata;
+
+  /**
+   * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+   */
+  model?: Shared.ResourceMetadata;
+}
+
 export interface ToolSetGetOpenAPISpecResponse {
   /**
    * The consumed OpenAPI specification as a JSON string.
@@ -768,6 +815,25 @@ export interface ToolSetListEventsParams extends CursorPaginationParams {
   sortOrder?: string;
 }
 
+export interface ToolSetListUsageParams extends CursorPaginationParams {
+  /**
+   * Path param: Workspace ID.
+   */
+  workspaceId?: string;
+
+  /**
+   * Query param: Sort order for results (asc or desc by assignment creation time)
+   */
+  sortOrder?: string;
+
+  /**
+   * Query param: When set, lists only variations with a direct assignment of this
+   * individual tool. When unset, lists variations assigned the whole tool set. The
+   * tool must belong to the tool set.
+   */
+  toolId?: string;
+}
+
 export interface ToolSetUnarchiveParams {
   /**
    * Workspace ID.
@@ -813,9 +879,11 @@ export declare namespace ToolSets {
     type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
+    type ToolSetUsage as ToolSetUsage,
     type ToolSetGetOpenAPISpecResponse as ToolSetGetOpenAPISpecResponse,
     type ToolSetsCursorPagination as ToolSetsCursorPagination,
     type ToolSetEventsCursorPagination as ToolSetEventsCursorPagination,
+    type ToolSetUsagesCursorPagination as ToolSetUsagesCursorPagination,
     type ToolSetCreateParams as ToolSetCreateParams,
     type ToolSetRetrieveParams as ToolSetRetrieveParams,
     type ToolSetUpdateParams as ToolSetUpdateParams,
@@ -824,6 +892,7 @@ export declare namespace ToolSets {
     type ToolSetArchiveParams as ToolSetArchiveParams,
     type ToolSetGetOpenAPISpecParams as ToolSetGetOpenAPISpecParams,
     type ToolSetListEventsParams as ToolSetListEventsParams,
+    type ToolSetListUsageParams as ToolSetListUsageParams,
     type ToolSetUnarchiveParams as ToolSetUnarchiveParams,
   };
 
