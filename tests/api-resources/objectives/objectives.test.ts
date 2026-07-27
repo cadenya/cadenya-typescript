@@ -100,6 +100,8 @@ describe('resource objectives', () => {
       state: 'STATE_UNSPECIFIED',
       subjectId: 'subjectId',
       tenantId: 'tenantId',
+      widgetId: 'widgetId',
+      widgetSessionId: 'widgetSessionId',
     });
   });
 
