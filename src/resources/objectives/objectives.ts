@@ -4,6 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as ObjectivesAPI from './objectives';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
+import * as WidgetSessionsAPI from '../widget-sessions';
 import * as AgentsAPI from '../agents/agents';
 import * as SchedulesAPI from '../agents/schedules';
 import * as VariationsAPI from '../agents/variations';
@@ -588,6 +589,12 @@ export interface Objective {
   parentObjectiveId?: string;
 
   /**
+   * Parameters forced onto this objective's tool calls, as provided at creation. See
+   * CreateObjectiveRequest.pinned_parameters for semantics.
+   */
+  pinnedParameters?: { [key: string]: string };
+
+  /**
    * Secrets that can be used in the headers for tool calls using the secret
    * interpolation format.
    */
@@ -1131,6 +1138,18 @@ export interface ObjectiveInfo {
    * Total number of tool calls made during execution
    */
   totalToolCalls: number;
+
+  /**
+   * SubjectReference is the read-only echo of a resource's subject association,
+   * carrying both Cadenya's canonical id and the customer's own key.
+   */
+  subject?: WidgetSessionsAPI.SubjectReference;
+
+  /**
+   * TenantReference is the read-only echo of a resource's tenant association,
+   * carrying both Cadenya's canonical id and the customer's own key.
+   */
+  tenant?: WidgetSessionsAPI.TenantReference;
 }
 
 export interface ObjectiveSecret {
@@ -1352,10 +1371,35 @@ export interface ObjectiveCreateParams {
   metadata?: Shared.CreateOperationMetadata;
 
   /**
+   * Body param: Parameters forced onto this objective's tool calls. A pinned
+   * parameter is an overlay on a tool's JSON schema: the parameter is removed from
+   * what the LLM sees, and its value is always overwritten server-side with the
+   * pinned value — the model cannot choose a different value for it.
+   */
+  pinnedParameters?: { [key: string]: string };
+
+  /**
    * Body param: Secrets that can be used in the headers for tool calls using the
    * secret interpolation format.
    */
   secrets?: Array<ObjectiveCreateParams.Secret>;
+
+  /**
+   * Body param: SubjectAssertion identifies a person within a tenant in the
+   * customer's own namespace — typically their user id. Asserting a subject upserts
+   * the subject record under the asserted tenant and associates the created resource
+   * with it. A subject assertion is only valid alongside a tenant assertion: subject
+   * identifiers are scoped to their tenant.
+   */
+  subject?: WidgetSessionsAPI.SubjectAssertion;
+
+  /**
+   * Body param: TenantAssertion identifies a tenant in the customer's own namespace
+   * — their org, company, or team identifier for an end user. Asserting a tenant
+   * upserts the tenant record in the workspace (keyed on `id` as the tenant's
+   * external_id) and associates the created resource with it.
+   */
+  tenant?: WidgetSessionsAPI.TenantAssertion;
 
   /**
    * Body param: Optional explicit variation selection. Overrides the agent's
@@ -1443,6 +1487,19 @@ export interface ObjectiveListParams extends CursorPaginationParams {
     | 'STATE_CANCELLED'
     | 'STATE_FINALIZED'
     | 'STATE_TIMED_OUT';
+
+  /**
+   * Query param: Filter to objectives associated with a subject. Accepts the
+   * canonical `subj_…` form or the `external_id:<value>` form; the external_id form
+   * is scoped within a tenant and requires `tenant_id` to also be set.
+   */
+  subjectId?: string;
+
+  /**
+   * Query param: Filter to objectives associated with a tenant. Accepts the
+   * canonical `tenant_…` form or the `external_id:<value>` form.
+   */
+  tenantId?: string;
 }
 
 export interface ObjectiveCancelParams {

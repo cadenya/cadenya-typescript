@@ -43,7 +43,10 @@ describe('resource objectives', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
+      pinnedParameters: { foo: 'string' },
       secrets: [{ name: 'name', value: 'value' }],
+      subject: { id: 'customer-user-42', name: 'Jane Doe' },
+      tenant: { id: 'acme-corp', name: 'Acme Corp' },
       variationId: 'agentvar_01HXKD2E5NQM3T9AYWCF32BSPP',
     });
   });
@@ -95,6 +98,8 @@ describe('resource objectives', () => {
       profileId: 'profile_01HXKD2E5NQM3T9AYWCFS0AP08',
       sortOrder: 'sortOrder',
       state: 'STATE_UNSPECIFIED',
+      subjectId: 'subjectId',
+      tenantId: 'tenantId',
     });
   });
 
