@@ -553,3 +553,43 @@ Methods:
 
 - <code>client.webhooks.<a href="./src/resources/webhooks.ts">unsafeUnwrap</a>(body) -> void</code>
 - <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
+
+# Widgets
+
+Types:
+
+- <code><a href="./src/resources/widgets.ts">Widget</a></code>
+- <code><a href="./src/resources/widgets.ts">WidgetInfo</a></code>
+- <code><a href="./src/resources/widgets.ts">WidgetSpec</a></code>
+
+Methods:
+
+- <code title="post /v1/workspaces/{workspaceId}/widgets">client.widgets.<a href="./src/resources/widgets.ts">create</a>({ ...params }) -> Widget</code>
+- <code title="get /v1/workspaces/{workspaceId}/widgets/{id}">client.widgets.<a href="./src/resources/widgets.ts">retrieve</a>(id, { ...params }) -> Widget</code>
+- <code title="patch /v1/workspaces/{workspaceId}/widgets/{id}">client.widgets.<a href="./src/resources/widgets.ts">update</a>(id, { ...params }) -> Widget</code>
+- <code title="get /v1/workspaces/{workspaceId}/widgets">client.widgets.<a href="./src/resources/widgets.ts">list</a>({ ...params }) -> WidgetsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/widgets/{id}">client.widgets.<a href="./src/resources/widgets.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:archive">client.widgets.<a href="./src/resources/widgets.ts">archive</a>(id, { ...params }) -> Widget</code>
+- <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:unarchive">client.widgets.<a href="./src/resources/widgets.ts">unarchive</a>(id, { ...params }) -> Widget</code>
+
+# WidgetSessions
+
+Types:
+
+- <code><a href="./src/resources/widget-sessions.ts">SubjectAssertion</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">SubjectReference</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">TenantAssertion</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">TenantReference</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">WidgetSession</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">WidgetSessionInfo</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">WidgetSessionSpec</a></code>
+- <code><a href="./src/resources/widget-sessions.ts">WidgetSessionDeleteTenantResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/workspaces/{workspaceId}/widget_sessions">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">create</a>({ ...params }) -> WidgetSession</code>
+- <code title="get /v1/workspaces/{workspaceId}/widget_sessions/{id}">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">retrieve</a>(id, { ...params }) -> WidgetSession</code>
+- <code title="get /v1/workspaces/{workspaceId}/widget_sessions">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">list</a>({ ...params }) -> WidgetSessionsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/widget_sessions/{id}">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">delete</a>(id, { ...params }) -> void</code>
+- <code title="delete /v1/workspaces/{workspaceId}/widget_sessions">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">deleteTenant</a>({ ...params }) -> WidgetSessionDeleteTenantResponse</code>
+- <code title="post /v1/workspaces/{workspaceId}/widget_sessions/{id}:revoke">client.widgetSessions.<a href="./src/resources/widget-sessions.ts">revoke</a>(id, { ...params }) -> WidgetSession</code>
