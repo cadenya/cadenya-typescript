@@ -218,6 +218,38 @@ export {
 } from './uploads';
 export { Webhooks, type UnsafeUnwrapWebhookEvent, type UnwrapWebhookEvent } from './webhooks';
 export {
+  WidgetSessions,
+  type SubjectAssertion,
+  type SubjectReference,
+  type TenantAssertion,
+  type TenantReference,
+  type WidgetSession,
+  type WidgetSessionInfo,
+  type WidgetSessionSpec,
+  type WidgetSessionDeleteTenantResponse,
+  type WidgetSessionCreateParams,
+  type WidgetSessionRetrieveParams,
+  type WidgetSessionListParams,
+  type WidgetSessionDeleteParams,
+  type WidgetSessionDeleteTenantParams,
+  type WidgetSessionRevokeParams,
+  type WidgetSessionsCursorPagination,
+} from './widget-sessions';
+export {
+  Widgets,
+  type Widget,
+  type WidgetInfo,
+  type WidgetSpec,
+  type WidgetCreateParams,
+  type WidgetRetrieveParams,
+  type WidgetUpdateParams,
+  type WidgetListParams,
+  type WidgetDeleteParams,
+  type WidgetArchiveParams,
+  type WidgetUnarchiveParams,
+  type WidgetsCursorPagination,
+} from './widgets';
+export {
   WorkspaceAdmin,
   type WorkspaceMember,
   type WorkspaceAdminCreateParams,

@@ -89,6 +89,38 @@ import {
 } from './resources/uploads';
 import { UnsafeUnwrapWebhookEvent, UnwrapWebhookEvent, Webhooks } from './resources/webhooks';
 import {
+  SubjectAssertion,
+  SubjectReference,
+  TenantAssertion,
+  TenantReference,
+  WidgetSession,
+  WidgetSessionCreateParams,
+  WidgetSessionDeleteParams,
+  WidgetSessionDeleteTenantParams,
+  WidgetSessionDeleteTenantResponse,
+  WidgetSessionInfo,
+  WidgetSessionListParams,
+  WidgetSessionRetrieveParams,
+  WidgetSessionRevokeParams,
+  WidgetSessionSpec,
+  WidgetSessions,
+  WidgetSessionsCursorPagination,
+} from './resources/widget-sessions';
+import {
+  Widget,
+  WidgetArchiveParams,
+  WidgetCreateParams,
+  WidgetDeleteParams,
+  WidgetInfo,
+  WidgetListParams,
+  WidgetRetrieveParams,
+  WidgetSpec,
+  WidgetUnarchiveParams,
+  WidgetUpdateParams,
+  Widgets,
+  WidgetsCursorPagination,
+} from './resources/widgets';
+import {
   WorkspaceSecret,
   WorkspaceSecretCreateParams,
   WorkspaceSecretDeleteParams,
@@ -1102,6 +1134,19 @@ export class Cadenya {
    */
   workspaceAdmin: API.WorkspaceAdmin = new API.WorkspaceAdmin(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  /**
+   * Manage embeddable chat widgets. A widget binds an agent to a globally
+   *  unique hostname with a per-widget origin allowlist; browsers reach it with
+   *  session tokens minted via WidgetSessionService.
+   */
+  widgets: API.Widgets = new API.Widgets(this);
+  /**
+   * Mint and manage widget sessions. Session creation is server-to-server only:
+   *  the customer's backend authenticates its visitor, asserts tenant/subject
+   *  context, attaches any per-visitor secrets, and receives a short-lived
+   *  bearer token the browser uses against the widget host.
+   */
+  widgetSessions: API.WidgetSessions = new API.WidgetSessions(this);
 }
 
 Cadenya.AIProviderKeys = AIProviderKeys;
@@ -1120,6 +1165,8 @@ Cadenya.WorkspaceSecrets = WorkspaceSecrets;
 Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceAdmin = WorkspaceAdmin;
 Cadenya.Webhooks = Webhooks;
+Cadenya.Widgets = Widgets;
+Cadenya.WidgetSessions = WidgetSessions;
 
 export declare namespace Cadenya {
   export type RequestOptions = Opts.RequestOptions;
@@ -1391,6 +1438,40 @@ export declare namespace Cadenya {
     Webhooks as Webhooks,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
+  };
+
+  export {
+    Widgets as Widgets,
+    type Widget as Widget,
+    type WidgetInfo as WidgetInfo,
+    type WidgetSpec as WidgetSpec,
+    type WidgetsCursorPagination as WidgetsCursorPagination,
+    type WidgetCreateParams as WidgetCreateParams,
+    type WidgetRetrieveParams as WidgetRetrieveParams,
+    type WidgetUpdateParams as WidgetUpdateParams,
+    type WidgetListParams as WidgetListParams,
+    type WidgetDeleteParams as WidgetDeleteParams,
+    type WidgetArchiveParams as WidgetArchiveParams,
+    type WidgetUnarchiveParams as WidgetUnarchiveParams,
+  };
+
+  export {
+    WidgetSessions as WidgetSessions,
+    type SubjectAssertion as SubjectAssertion,
+    type SubjectReference as SubjectReference,
+    type TenantAssertion as TenantAssertion,
+    type TenantReference as TenantReference,
+    type WidgetSession as WidgetSession,
+    type WidgetSessionInfo as WidgetSessionInfo,
+    type WidgetSessionSpec as WidgetSessionSpec,
+    type WidgetSessionDeleteTenantResponse as WidgetSessionDeleteTenantResponse,
+    type WidgetSessionsCursorPagination as WidgetSessionsCursorPagination,
+    type WidgetSessionCreateParams as WidgetSessionCreateParams,
+    type WidgetSessionRetrieveParams as WidgetSessionRetrieveParams,
+    type WidgetSessionListParams as WidgetSessionListParams,
+    type WidgetSessionDeleteParams as WidgetSessionDeleteParams,
+    type WidgetSessionDeleteTenantParams as WidgetSessionDeleteTenantParams,
+    type WidgetSessionRevokeParams as WidgetSessionRevokeParams,
   };
 
   export type AccountResourceMetadata = API.AccountResourceMetadata;
