@@ -572,6 +572,27 @@ Methods:
 - <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:archive">client.widgets.<a href="./src/resources/widgets.ts">archive</a>(id, { ...params }) -> Widget</code>
 - <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:unarchive">client.widgets.<a href="./src/resources/widgets.ts">unarchive</a>(id, { ...params }) -> Widget</code>
 
+# Tenants
+
+Types:
+
+- <code><a href="./src/resources/tenants/tenants.ts">Subject</a></code>
+- <code><a href="./src/resources/tenants/tenants.ts">SubjectInfo</a></code>
+- <code><a href="./src/resources/tenants/tenants.ts">Tenant</a></code>
+- <code><a href="./src/resources/tenants/tenants.ts">TenantInfo</a></code>
+
+Methods:
+
+- <code title="get /v1/workspaces/{workspaceId}/tenants/{id}">client.tenants.<a href="./src/resources/tenants/tenants.ts">retrieve</a>(id, { ...params }) -> Tenant</code>
+- <code title="get /v1/workspaces/{workspaceId}/tenants">client.tenants.<a href="./src/resources/tenants/tenants.ts">list</a>({ ...params }) -> TenantsCursorPagination</code>
+- <code title="delete /v1/workspaces/{workspaceId}/tenants/{id}">client.tenants.<a href="./src/resources/tenants/tenants.ts">delete</a>(id, { ...params }) -> Tenant</code>
+
+## Subjects
+
+Methods:
+
+- <code title="get /v1/workspaces/{workspaceId}/tenants/{tenantId}/subjects">client.tenants.subjects.<a href="./src/resources/tenants/subjects.ts">list</a>(tenantID, { ...params }) -> SubjectsCursorPagination</code>
+
 # WidgetSessions
 
 Types:
