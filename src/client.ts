@@ -235,6 +235,17 @@ import {
   UserMessage,
 } from './resources/objectives/objectives';
 import {
+  Subject,
+  SubjectInfo,
+  Tenant,
+  TenantDeleteParams,
+  TenantInfo,
+  TenantListParams,
+  TenantRetrieveParams,
+  Tenants,
+  TenantsCursorPagination,
+} from './resources/tenants/tenants';
+import {
   ApprovalRequirementFilter,
   ApprovalRequirementFilterAlways,
   ApprovalRequirementFilterOnly,
@@ -1141,6 +1152,13 @@ export class Cadenya {
    */
   widgets: API.Widgets = new API.Widgets(this);
   /**
+   * Read and erase tenants and the subjects under them. Tenants and subjects are
+   *  created by assertion — on objective creation or widget session mint — never
+   *  directly, so this service has no create or update: it exists to enumerate what
+   *  assertions have produced, and to destroy it on request.
+   */
+  tenants: API.Tenants = new API.Tenants(this);
+  /**
    * Mint and manage widget sessions. Session creation is server-to-server only:
    *  the customer's backend authenticates its visitor, asserts tenant/subject
    *  context, attaches any per-visitor secrets, and receives a short-lived
@@ -1166,6 +1184,7 @@ Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceAdmin = WorkspaceAdmin;
 Cadenya.Webhooks = Webhooks;
 Cadenya.Widgets = Widgets;
+Cadenya.Tenants = Tenants;
 Cadenya.WidgetSessions = WidgetSessions;
 
 export declare namespace Cadenya {
@@ -1453,6 +1472,18 @@ export declare namespace Cadenya {
     type WidgetDeleteParams as WidgetDeleteParams,
     type WidgetArchiveParams as WidgetArchiveParams,
     type WidgetUnarchiveParams as WidgetUnarchiveParams,
+  };
+
+  export {
+    Tenants as Tenants,
+    type Subject as Subject,
+    type SubjectInfo as SubjectInfo,
+    type Tenant as Tenant,
+    type TenantInfo as TenantInfo,
+    type TenantsCursorPagination as TenantsCursorPagination,
+    type TenantRetrieveParams as TenantRetrieveParams,
+    type TenantListParams as TenantListParams,
+    type TenantDeleteParams as TenantDeleteParams,
   };
 
   export {
