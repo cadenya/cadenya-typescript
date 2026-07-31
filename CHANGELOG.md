@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.132.1 (2026-07-31)
+
+Full Changelog: [v0.132.0...v0.132.1](https://github.com/cadenya/cadenya-typescript/compare/v0.132.0...v0.132.1)
+
+### Bug Fixes
+
+* **stlc:** stop hand-edited CI workflows from blocking seals and builds ([122b9d0](https://github.com/cadenya/cadenya-typescript/commit/122b9d01dae6bc879a7aa38197e4c0c77e446924))
+
 ## 0.132.0 (2026-07-30)
 
 Full Changelog: [v0.131.0...v0.132.0](https://github.com/cadenya/cadenya-typescript/compare/v0.131.0...v0.132.0)
