@@ -179,6 +179,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataFinalized</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataMemoryRead</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataNotice</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataReasoning</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentSpawned</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentUpdated</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataTimedOut</a></code>
@@ -193,6 +194,7 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSecret</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">Reasoning</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">SubAgentSpawned</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">SubAgentUpdated</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolApprovalRequested</a></code>
