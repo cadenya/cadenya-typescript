@@ -46,7 +46,7 @@ export class WorkspaceAdmin extends APIResource {
    * @example
    * ```ts
    * const workspace = await client.workspaceAdmin.retrieve({
-   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *   workspaceId: 'workspaceId',
    * });
    * ```
    */
@@ -64,7 +64,7 @@ export class WorkspaceAdmin extends APIResource {
    * @example
    * ```ts
    * const workspace = await client.workspaceAdmin.update({
-   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *   workspaceId: 'workspaceId',
    * });
    * ```
    */
@@ -107,7 +107,7 @@ export class WorkspaceAdmin extends APIResource {
    * @example
    * ```ts
    * await client.workspaceAdmin.archive({
-   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *   workspaceId: 'workspaceId',
    * });
    * ```
    */

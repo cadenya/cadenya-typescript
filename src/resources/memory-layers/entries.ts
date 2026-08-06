@@ -133,39 +133,30 @@ export interface MemoryEntry {
  * either inline content or a reference to a completed Upload; exactly one of the
  * two must be set.
  */
-export type MemoryEntryCreateSpec = MemoryEntryCreateSpecContent | MemoryEntryCreateSpecUploadID;
+export interface MemoryEntryCreateSpec {
+  /**
+   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
+   */
+  key: string;
 
-export interface MemoryEntryCreateSpecContent {
   /**
    * Inline content, written directly into the entry.
    */
-  content: string;
-
-  type: 'content';
+  content?: string;
 
   description?: string;
 
   /**
-   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
+   * The JSON name of the variant set in `source` (e.g. "content"). Required on
+   * input; drives the discriminated union in the generated OpenAPI.
    */
-  key?: string;
-}
-
-export interface MemoryEntryCreateSpecUploadID {
-  type: 'uploadId';
+  type?: string;
 
   /**
    * ID of a COMPLETE Upload. The server reads the object from storage, copies its
    * bytes into the entry, and marks the upload consumed.
    */
-  uploadId: string;
-
-  description?: string;
-
-  /**
-   * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
-   */
-  key?: string;
+  uploadId?: string;
 }
 
 /**
@@ -359,8 +350,6 @@ export declare namespace Entries {
   export {
     type MemoryEntry as MemoryEntry,
     type MemoryEntryCreateSpec as MemoryEntryCreateSpec,
-    type MemoryEntryCreateSpecContent as MemoryEntryCreateSpecContent,
-    type MemoryEntryCreateSpecUploadID as MemoryEntryCreateSpecUploadID,
     type MemoryEntryDetail as MemoryEntryDetail,
     type MemoryEntryInfo as MemoryEntryInfo,
     type MemoryEntrySpec as MemoryEntrySpec,

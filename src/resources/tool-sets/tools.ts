@@ -272,39 +272,26 @@ export interface ToolSpec {
  * the tool is called. For example, if the tool is an HTTP tool, the adapter will
  * be Http. If the tool is an inline tool, the adapter will be Inline.
  */
-export type ToolSpecConfig =
-  | ToolSpecConfigHTTP
-  | ToolSpecConfigMCP
-  | ToolSpecConfigOpenAPI
-  | ToolSpecConfigBare;
-
-export interface ToolSpecConfigBare {
+export interface ToolSpecConfig {
   /**
    * Marks the tool as bare: it has no execution adapter of its own and relies on the
    * parent tool set being a Bare tool set. Present so a webhook consumer can tell a
    * tool is bare from the tool data alone, without cross-referencing the tool set.
    */
-  bare: ConfigBare;
+  bare?: ConfigBare;
 
-  type: 'bare';
-}
+  http?: ConfigHTTP;
 
-export interface ToolSpecConfigHTTP {
-  http: ConfigHTTP;
+  mcp?: ConfigMCP;
 
-  type: 'http';
-}
+  openapi?: ConfigOpenAPI;
 
-export interface ToolSpecConfigMCP {
-  mcp: ConfigMCP;
-
-  type: 'mcp';
-}
-
-export interface ToolSpecConfigOpenAPI {
-  openapi: ConfigOpenAPI;
-
-  type: 'openapi';
+  /**
+   * The JSON name of the variant set in `adapter` (e.g. "http"). Required from
+   * clients on writes, filled by the server on reads; drives the discriminated union
+   * in the generated OpenAPI.
+   */
+  type?: string;
 }
 
 export interface ToolCreateParams {
@@ -442,10 +429,6 @@ export declare namespace Tools {
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
-    type ToolSpecConfigBare as ToolSpecConfigBare,
-    type ToolSpecConfigHTTP as ToolSpecConfigHTTP,
-    type ToolSpecConfigMCP as ToolSpecConfigMCP,
-    type ToolSpecConfigOpenAPI as ToolSpecConfigOpenAPI,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

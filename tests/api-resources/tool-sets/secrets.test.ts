@@ -10,8 +10,8 @@ const client = new Cadenya({
 describe('resource secrets', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.toolSets.secrets.create('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    const responsePromise = client.toolSets.secrets.create('toolSetId', {
+      workspaceId: 'workspaceId',
       metadata: { name: 'name' },
       spec: {},
     });
@@ -26,8 +26,8 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.toolSets.secrets.create('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    const response = await client.toolSets.secrets.create('toolSetId', {
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -39,11 +39,9 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.toolSets.secrets.retrieve(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.toolSets.secrets.retrieve('toolSetId', 'id', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,20 +53,14 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.toolSets.secrets.retrieve(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const response = await client.toolSets.secrets.retrieve('toolSetId', 'id', {
+      workspaceId: 'workspaceId',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.toolSets.secrets.update(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.toolSets.secrets.update('toolSetId', 'id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -80,27 +72,21 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.toolSets.secrets.update(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      {
-        workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-        metadata: {
-          name: 'name',
-          externalId: 'externalId',
-          labels: { foo: 'string' },
-        },
-        spec: { value: 'value' },
-        updateMask: 'updateMask',
+    const response = await client.toolSets.secrets.update('toolSetId', 'id', {
+      workspaceId: 'workspaceId',
+      metadata: {
+        name: 'name',
+        externalId: 'externalId',
+        labels: { foo: 'string' },
       },
-    );
+      spec: { value: 'value' },
+      updateMask: 'updateMask',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.toolSets.secrets.list('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.toolSets.secrets.list('toolSetId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -112,8 +98,8 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.toolSets.secrets.list('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    const response = await client.toolSets.secrets.list('toolSetId', {
+      workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
       limit: 0,
@@ -125,11 +111,7 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.toolSets.secrets.delete(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.toolSets.secrets.delete('toolSetId', 'id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -141,10 +123,6 @@ describe('resource secrets', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.toolSets.secrets.delete(
-      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
-      'toolsecret_01HXKD2E5NQM3T9AYWCF8PWC4R',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const response = await client.toolSets.secrets.delete('toolSetId', 'id', { workspaceId: 'workspaceId' });
   });
 });

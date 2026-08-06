@@ -37,9 +37,7 @@ describe('resource workspaceAdmin', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.retrieve({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.retrieve({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,16 +49,12 @@ describe('resource workspaceAdmin', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.workspaceAdmin.retrieve({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.workspaceAdmin.retrieve({ workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.update({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.update({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -73,7 +67,7 @@ describe('resource workspaceAdmin', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.workspaceAdmin.update({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -114,9 +108,7 @@ describe('resource workspaceAdmin', () => {
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.archive({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.archive({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -128,8 +120,6 @@ describe('resource workspaceAdmin', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.workspaceAdmin.archive({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.workspaceAdmin.archive({ workspaceId: 'workspaceId' });
   });
 });

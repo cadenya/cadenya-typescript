@@ -10,11 +10,9 @@ const client = new Cadenya({
 describe('resource toolCalls', () => {
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.retrieve(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.objectives.toolCalls.retrieve('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,18 +24,14 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.retrieve(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const response = await client.objectives.toolCalls.retrieve('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.objectives.toolCalls.list('objectiveId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,8 +43,8 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    const response = await client.objectives.toolCalls.list('objectiveId', {
+      workspaceId: 'workspaceId',
       cursor: 'cursor',
       executionStatus: 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED',
       includeInfo: true,
@@ -62,11 +56,9 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('approve: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.approve(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.objectives.toolCalls.approve('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,20 +70,16 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('approve: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.approve(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const response = await client.objectives.toolCalls.approve('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('deny: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.deny(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
-    );
+    const responsePromise = client.objectives.toolCalls.deny('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,28 +91,18 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('deny: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.deny(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q', memo: 'memo' },
-    );
+    const response = await client.objectives.toolCalls.deny('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+      memo: 'memo',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('setContent: only required params', async () => {
-    const responsePromise = client.objectives.toolCalls.setContent(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      {
-        workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-        content: [
-          {
-            text: { text: 'text' },
-            type: 'text',
-          },
-        ],
-      },
-    );
+    const responsePromise = client.objectives.toolCalls.setContent('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+      content: [{}],
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -136,18 +114,16 @@ describe('resource toolCalls', () => {
 
   // Mock server tests are disabled
   test.skip('setContent: required and optional params', async () => {
-    const response = await client.objectives.toolCalls.setContent(
-      'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-      'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-      {
-        workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-        content: [
-          {
-            text: { text: 'text' },
-            type: 'text',
-          },
-        ],
-      },
-    );
+    const response = await client.objectives.toolCalls.setContent('objectiveId', 'toolCallId', {
+      workspaceId: 'workspaceId',
+      content: [
+        {
+          audio: { data: 'data', mimeType: 'mimeType' },
+          image: { data: 'data', mimeType: 'mimeType' },
+          text: { text: 'text' },
+          type: 'type',
+        },
+      ],
+    });
   });
 });

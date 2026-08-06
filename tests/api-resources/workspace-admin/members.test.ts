@@ -10,9 +10,7 @@ const client = new Cadenya({
 describe('resource members', () => {
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.members.list({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.members.list({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -25,7 +23,7 @@ describe('resource members', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.workspaceAdmin.members.list({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       cursor: 'cursor',
       limit: 0,
     });
@@ -33,9 +31,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('add: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.members.add({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.members.add({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,7 +44,7 @@ describe('resource members', () => {
   // Mock server tests are disabled
   test.skip('add: required and optional params', async () => {
     const response = await client.workspaceAdmin.members.add({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       email: 'email',
       profileId: 'profile_01HXKD2E5NQM3T9AYWCFS0AP08',
     });
@@ -56,9 +52,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('remove: only required params', async () => {
-    const responsePromise = client.workspaceAdmin.members.remove('profile_01HXKD2E5NQM3T9AYWCFS0AP08', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.workspaceAdmin.members.remove('profileId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -70,8 +64,6 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('remove: required and optional params', async () => {
-    const response = await client.workspaceAdmin.members.remove('profile_01HXKD2E5NQM3T9AYWCFS0AP08', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.workspaceAdmin.members.remove('profileId', { workspaceId: 'workspaceId' });
   });
 });

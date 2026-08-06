@@ -15,9 +15,9 @@ export class Tasks extends APIResource {
    * ```ts
    * const objectiveTask =
    *   await client.objectives.tasks.retrieve(
-   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     'objectiveId',
    *     'id',
-   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *     { workspaceId: 'workspaceId' },
    *   );
    * ```
    */
@@ -41,8 +41,8 @@ export class Tasks extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveTask of client.objectives.tasks.list(
-   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   'objectiveId',
+   *   { workspaceId: 'workspaceId' },
    * )) {
    *   // ...
    * }

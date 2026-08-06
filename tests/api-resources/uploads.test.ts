@@ -11,7 +11,7 @@ describe('resource uploads', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.uploads.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       metadata: { name: 'name' },
       spec: {
         contentType: 'contentType',
@@ -31,7 +31,7 @@ describe('resource uploads', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.uploads.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -47,9 +47,7 @@ describe('resource uploads', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.uploads.retrieve('upload_01HXKD2E5NQM3T9AYWCFZ05DNK', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.uploads.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -61,8 +59,6 @@ describe('resource uploads', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.uploads.retrieve('upload_01HXKD2E5NQM3T9AYWCFZ05DNK', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.uploads.retrieve('id', { workspaceId: 'workspaceId' });
   });
 });

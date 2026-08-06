@@ -7,10 +7,10 @@ const client = new Cadenya({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource search', () => {
+describe('resource subjects', () => {
   // Mock server tests are disabled
-  test.skip('searchToolsOrToolSets: only required params', async () => {
-    const responsePromise = client.search.searchToolsOrToolSets({ workspaceId: 'workspaceId' });
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.tenants.subjects.list('tenantId', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,10 +21,14 @@ describe('resource search', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('searchToolsOrToolSets: required and optional params', async () => {
-    const response = await client.search.searchToolsOrToolSets({
+  test.skip('list: required and optional params', async () => {
+    const response = await client.tenants.subjects.list('tenantId', {
       workspaceId: 'workspaceId',
+      cursor: 'cursor',
+      includeInfo: true,
+      limit: 0,
       query: 'query',
+      sortOrder: 'sortOrder',
     });
   });
 });

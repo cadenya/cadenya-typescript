@@ -30,11 +30,6 @@ import {
   RotateWebhookSigningKeyResponse,
 } from './resources/account';
 import {
-  AIProviderConfigOpenAI,
-  AIProviderConfigOpenAICompatible,
-  AIProviderConfigOpenrouter,
-  AIProviderCredentialAPIKey,
-  AIProviderCredentialHeaders,
   AIProviderKey,
   AIProviderKeyCreateParams,
   AIProviderKeyDeleteParams,
@@ -87,7 +82,7 @@ import {
   UploadSpec,
   Uploads as UploadsAPIUploads,
 } from './resources/uploads';
-import { UnsafeUnwrapWebhookEvent, UnwrapWebhookEvent, Webhooks } from './resources/webhooks';
+import { Webhooks } from './resources/webhooks';
 import {
   SubjectAssertion,
   SubjectReference,
@@ -172,9 +167,6 @@ import {
   AssistantMessage,
   AssistantToolCall,
   CallableTool,
-  CallableToolAgent,
-  CallableToolCadenyaProvidedTool,
-  CallableToolTool,
   ContextLengths,
   ContextWindowCompacted,
   MemoryRead,
@@ -193,25 +185,7 @@ import {
   ObjectiveError,
   ObjectiveEvent,
   ObjectiveEventData,
-  ObjectiveEventDataAssistantMessage,
-  ObjectiveEventDataCancelled,
-  ObjectiveEventDataContextWindowCompacted,
-  ObjectiveEventDataError,
-  ObjectiveEventDataFinalized,
-  ObjectiveEventDataMemoryRead,
-  ObjectiveEventDataNotice,
-  ObjectiveEventDataSubAgentSpawned,
-  ObjectiveEventDataSubAgentUpdated,
-  ObjectiveEventDataTimedOut,
-  ObjectiveEventDataToolApprovalRequested,
-  ObjectiveEventDataToolApproved,
-  ObjectiveEventDataToolCalled,
-  ObjectiveEventDataToolDenied,
-  ObjectiveEventDataToolError,
-  ObjectiveEventDataToolResult,
-  ObjectiveEventDataUserMessage,
   ObjectiveEventInfo,
-  ObjectiveEventWebhookData,
   ObjectiveEventsCursorPagination,
   ObjectiveInfo,
   ObjectiveListContextWindowsParams,
@@ -224,6 +198,7 @@ import {
   ObjectiveStreamEventsParams,
   Objectives,
   ObjectivesCursorPagination,
+  Reasoning,
   SubAgentSpawned,
   SubAgentUpdated,
   ToolApprovalRequested,
@@ -235,16 +210,20 @@ import {
   UserMessage,
 } from './resources/objectives/objectives';
 import {
+  Subject,
+  SubjectInfo,
+  Tenant,
+  TenantDeleteParams,
+  TenantInfo,
+  TenantListParams,
+  TenantRetrieveParams,
+  Tenants,
+  TenantsCursorPagination,
+} from './resources/tenants/tenants';
+import {
   ApprovalRequirementFilter,
-  ApprovalRequirementFilterAlways,
-  ApprovalRequirementFilterOnly,
   AttributeFilter,
   StringMatcher,
-  StringMatcherContains,
-  StringMatcherEndsWith,
-  StringMatcherExact,
-  StringMatcherRegex,
-  StringMatcherStartsWith,
   SyncCompleted,
   SyncFailed,
   SyncStarted,
@@ -252,23 +231,14 @@ import {
   ToolSet,
   ToolSetAdapter,
   ToolSetAdapterBare,
-  ToolSetAdapterBareVariant,
   ToolSetAdapterHTTP,
-  ToolSetAdapterHTTPVariant,
   ToolSetAdapterMCP,
-  ToolSetAdapterMCPVariant,
   ToolSetAdapterOpenAPI,
-  ToolSetAdapterOpenAPIURL,
-  ToolSetAdapterOpenAPIUploadID,
-  ToolSetAdapterOpenAPIVariant,
   ToolSetArchiveParams,
   ToolSetCreateParams,
   ToolSetDeleteParams,
   ToolSetEvent,
   ToolSetEventData,
-  ToolSetEventDataSyncCompleted,
-  ToolSetEventDataSyncFailed,
-  ToolSetEventDataSyncStarted,
   ToolSetEventsCursorPagination,
   ToolSetGetOpenAPISpecParams,
   ToolSetGetOpenAPISpecResponse,
@@ -1141,6 +1111,13 @@ export class Cadenya {
    */
   widgets: API.Widgets = new API.Widgets(this);
   /**
+   * Read and erase tenants and the subjects under them. Tenants and subjects are
+   *  created by assertion — on objective creation or widget session mint — never
+   *  directly, so this service has no create or update: it exists to enumerate what
+   *  assertions have produced, and to destroy it on request.
+   */
+  tenants: API.Tenants = new API.Tenants(this);
+  /**
    * Mint and manage widget sessions. Session creation is server-to-server only:
    *  the customer's backend authenticates its visitor, asserts tenant/subject
    *  context, attaches any per-visitor secrets, and receives a short-lived
@@ -1166,6 +1143,7 @@ Cadenya.Workspaces = Workspaces;
 Cadenya.WorkspaceAdmin = WorkspaceAdmin;
 Cadenya.Webhooks = Webhooks;
 Cadenya.Widgets = Widgets;
+Cadenya.Tenants = Tenants;
 Cadenya.WidgetSessions = WidgetSessions;
 
 export declare namespace Cadenya {
@@ -1179,11 +1157,6 @@ export declare namespace Cadenya {
 
   export {
     AIProviderKeys as AIProviderKeys,
-    type AIProviderConfigOpenAI as AIProviderConfigOpenAI,
-    type AIProviderConfigOpenAICompatible as AIProviderConfigOpenAICompatible,
-    type AIProviderConfigOpenrouter as AIProviderConfigOpenrouter,
-    type AIProviderCredentialAPIKey as AIProviderCredentialAPIKey,
-    type AIProviderCredentialHeaders as AIProviderCredentialHeaders,
     type AIProviderKey as AIProviderKey,
     type AIProviderKeySpec as AIProviderKeySpec,
     type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,
@@ -1230,9 +1203,6 @@ export declare namespace Cadenya {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
-    type CallableToolAgent as CallableToolAgent,
-    type CallableToolCadenyaProvidedTool as CallableToolCadenyaProvidedTool,
-    type CallableToolTool as CallableToolTool,
     type ContextLengths as ContextLengths,
     type ContextWindowCompacted as ContextWindowCompacted,
     type MemoryRead as MemoryRead,
@@ -1245,27 +1215,10 @@ export declare namespace Cadenya {
     type ObjectiveError as ObjectiveError,
     type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
-    type ObjectiveEventDataAssistantMessage as ObjectiveEventDataAssistantMessage,
-    type ObjectiveEventDataCancelled as ObjectiveEventDataCancelled,
-    type ObjectiveEventDataContextWindowCompacted as ObjectiveEventDataContextWindowCompacted,
-    type ObjectiveEventDataError as ObjectiveEventDataError,
-    type ObjectiveEventDataFinalized as ObjectiveEventDataFinalized,
-    type ObjectiveEventDataMemoryRead as ObjectiveEventDataMemoryRead,
-    type ObjectiveEventDataNotice as ObjectiveEventDataNotice,
-    type ObjectiveEventDataSubAgentSpawned as ObjectiveEventDataSubAgentSpawned,
-    type ObjectiveEventDataSubAgentUpdated as ObjectiveEventDataSubAgentUpdated,
-    type ObjectiveEventDataTimedOut as ObjectiveEventDataTimedOut,
-    type ObjectiveEventDataToolApprovalRequested as ObjectiveEventDataToolApprovalRequested,
-    type ObjectiveEventDataToolApproved as ObjectiveEventDataToolApproved,
-    type ObjectiveEventDataToolCalled as ObjectiveEventDataToolCalled,
-    type ObjectiveEventDataToolDenied as ObjectiveEventDataToolDenied,
-    type ObjectiveEventDataToolError as ObjectiveEventDataToolError,
-    type ObjectiveEventDataToolResult as ObjectiveEventDataToolResult,
-    type ObjectiveEventDataUserMessage as ObjectiveEventDataUserMessage,
     type ObjectiveEventInfo as ObjectiveEventInfo,
-    type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveSecret as ObjectiveSecret,
+    type Reasoning as Reasoning,
     type SubAgentSpawned as SubAgentSpawned,
     type SubAgentUpdated as SubAgentUpdated,
     type ToolApprovalRequested as ToolApprovalRequested,
@@ -1336,15 +1289,8 @@ export declare namespace Cadenya {
   export {
     ToolSets as ToolSets,
     type ApprovalRequirementFilter as ApprovalRequirementFilter,
-    type ApprovalRequirementFilterAlways as ApprovalRequirementFilterAlways,
-    type ApprovalRequirementFilterOnly as ApprovalRequirementFilterOnly,
     type AttributeFilter as AttributeFilter,
     type StringMatcher as StringMatcher,
-    type StringMatcherContains as StringMatcherContains,
-    type StringMatcherEndsWith as StringMatcherEndsWith,
-    type StringMatcherExact as StringMatcherExact,
-    type StringMatcherRegex as StringMatcherRegex,
-    type StringMatcherStartsWith as StringMatcherStartsWith,
     type SyncCompleted as SyncCompleted,
     type SyncFailed as SyncFailed,
     type SyncStarted as SyncStarted,
@@ -1352,20 +1298,11 @@ export declare namespace Cadenya {
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterBare as ToolSetAdapterBare,
-    type ToolSetAdapterBareVariant as ToolSetAdapterBareVariant,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
-    type ToolSetAdapterHTTPVariant as ToolSetAdapterHTTPVariant,
     type ToolSetAdapterMCP as ToolSetAdapterMCP,
-    type ToolSetAdapterMCPVariant as ToolSetAdapterMCPVariant,
     type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
-    type ToolSetAdapterOpenAPIUploadID as ToolSetAdapterOpenAPIUploadID,
-    type ToolSetAdapterOpenAPIURL as ToolSetAdapterOpenAPIURL,
-    type ToolSetAdapterOpenAPIVariant as ToolSetAdapterOpenAPIVariant,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
-    type ToolSetEventDataSyncCompleted as ToolSetEventDataSyncCompleted,
-    type ToolSetEventDataSyncFailed as ToolSetEventDataSyncFailed,
-    type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetUsage as ToolSetUsage,
@@ -1434,11 +1371,7 @@ export declare namespace Cadenya {
     type WorkspaceAdminArchiveParams as WorkspaceAdminArchiveParams,
   };
 
-  export {
-    Webhooks as Webhooks,
-    type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
-    type UnwrapWebhookEvent as UnwrapWebhookEvent,
-  };
+  export { Webhooks as Webhooks };
 
   export {
     Widgets as Widgets,
@@ -1453,6 +1386,18 @@ export declare namespace Cadenya {
     type WidgetDeleteParams as WidgetDeleteParams,
     type WidgetArchiveParams as WidgetArchiveParams,
     type WidgetUnarchiveParams as WidgetUnarchiveParams,
+  };
+
+  export {
+    Tenants as Tenants,
+    type Subject as Subject,
+    type SubjectInfo as SubjectInfo,
+    type Tenant as Tenant,
+    type TenantInfo as TenantInfo,
+    type TenantsCursorPagination as TenantsCursorPagination,
+    type TenantRetrieveParams as TenantRetrieveParams,
+    type TenantListParams as TenantListParams,
+    type TenantDeleteParams as TenantDeleteParams,
   };
 
   export {

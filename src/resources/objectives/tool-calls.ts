@@ -18,9 +18,9 @@ export class ToolCalls extends APIResource {
    * ```ts
    * const objectiveToolCallWithResult =
    *   await client.objectives.toolCalls.retrieve(
-   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *     'objectiveId',
+   *     'toolCallId',
+   *     { workspaceId: 'workspaceId' },
    *   );
    * ```
    */
@@ -44,8 +44,8 @@ export class ToolCalls extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveToolCall of client.objectives.toolCalls.list(
-   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   'objectiveId',
+   *   { workspaceId: 'workspaceId' },
    * )) {
    *   // ...
    * }
@@ -72,9 +72,9 @@ export class ToolCalls extends APIResource {
    * ```ts
    * const objectiveToolCall =
    *   await client.objectives.toolCalls.approve(
-   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *     'objectiveId',
+   *     'toolCallId',
+   *     { workspaceId: 'workspaceId' },
    *   );
    * ```
    */
@@ -100,9 +100,9 @@ export class ToolCalls extends APIResource {
    * ```ts
    * const objectiveToolCall =
    *   await client.objectives.toolCalls.deny(
-   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *     'objectiveId',
+   *     'toolCallId',
+   *     { workspaceId: 'workspaceId' },
    *   );
    * ```
    */
@@ -128,17 +128,9 @@ export class ToolCalls extends APIResource {
    * ```ts
    * const objectiveToolCall =
    *   await client.objectives.toolCalls.setContent(
-   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
-   *     'toolcall_01HXKD2E5NQM3T9AYWCFTANFGV',
-   *     {
-   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-   *       content: [
-   *         {
-   *           text: { text: 'text' },
-   *           type: 'text',
-   *         },
-   *       ],
-   *     },
+   *     'objectiveId',
+   *     'toolCallId',
+   *     { workspaceId: 'workspaceId', content: [{}] },
    *   );
    * ```
    */
@@ -296,27 +288,18 @@ export interface ObjectiveToolCallResultAudioBlock {
  * ContentBlock is a single block of tool result content. Exactly one of the
  * variants is set.
  */
-export type ObjectiveToolCallResultContentBlock =
-  | ObjectiveToolCallResultContentBlockText
-  | ObjectiveToolCallResultContentBlockImage
-  | ObjectiveToolCallResultContentBlockAudio;
+export interface ObjectiveToolCallResultContentBlock {
+  audio?: ObjectiveToolCallResultAudioBlock;
 
-export interface ObjectiveToolCallResultContentBlockAudio {
-  audio: ObjectiveToolCallResultAudioBlock;
+  image?: ObjectiveToolCallResultImageBlock;
 
-  type: 'audio';
-}
+  text?: ObjectiveToolCallResultTextBlock;
 
-export interface ObjectiveToolCallResultContentBlockImage {
-  image: ObjectiveToolCallResultImageBlock;
-
-  type: 'image';
-}
-
-export interface ObjectiveToolCallResultContentBlockText {
-  text: ObjectiveToolCallResultTextBlock;
-
-  type: 'text';
+  /**
+   * The JSON name of the variant set in `block` (e.g. "text"). Filled by the server;
+   * drives the discriminated union in the generated OpenAPI.
+   */
+  type?: string;
 }
 
 export interface ObjectiveToolCallResultImageBlock {
@@ -426,27 +409,18 @@ export interface SetToolCallContentRequestAudioBlock {
  * ContentBlock is a single block of tool call content supplied on input. Exactly
  * one of the variants is set.
  */
-export type SetToolCallContentRequestContentBlock =
-  | SetToolCallContentRequestContentBlockText
-  | SetToolCallContentRequestContentBlockImage
-  | SetToolCallContentRequestContentBlockAudio;
+export interface SetToolCallContentRequestContentBlock {
+  audio?: SetToolCallContentRequestAudioBlock;
 
-export interface SetToolCallContentRequestContentBlockAudio {
-  audio: SetToolCallContentRequestAudioBlock;
+  image?: SetToolCallContentRequestImageBlock;
 
-  type: 'audio';
-}
+  text?: SetToolCallContentRequestTextBlock;
 
-export interface SetToolCallContentRequestContentBlockImage {
-  image: SetToolCallContentRequestImageBlock;
-
-  type: 'image';
-}
-
-export interface SetToolCallContentRequestContentBlockText {
-  text: SetToolCallContentRequestTextBlock;
-
-  type: 'text';
+  /**
+   * The JSON name of the variant set in `block` (e.g. "text"). Required on input;
+   * drives the discriminated union in the generated OpenAPI.
+   */
+  type?: string;
 }
 
 export interface SetToolCallContentRequestImageBlock {
@@ -550,18 +524,12 @@ export declare namespace ToolCalls {
     type ObjectiveToolCallResult as ObjectiveToolCallResult,
     type ObjectiveToolCallResultAudioBlock as ObjectiveToolCallResultAudioBlock,
     type ObjectiveToolCallResultContentBlock as ObjectiveToolCallResultContentBlock,
-    type ObjectiveToolCallResultContentBlockAudio as ObjectiveToolCallResultContentBlockAudio,
-    type ObjectiveToolCallResultContentBlockImage as ObjectiveToolCallResultContentBlockImage,
-    type ObjectiveToolCallResultContentBlockText as ObjectiveToolCallResultContentBlockText,
     type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
     type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
     type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
-    type SetToolCallContentRequestContentBlockAudio as SetToolCallContentRequestContentBlockAudio,
-    type SetToolCallContentRequestContentBlockImage as SetToolCallContentRequestContentBlockImage,
-    type SetToolCallContentRequestContentBlockText as SetToolCallContentRequestContentBlockText,
     type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
     type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,

@@ -11,7 +11,7 @@ describe('resource widgetSessions', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.widgetSessions.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       spec: { widgetId: 'wgt_01HXKD2E5NQM3T9AYWCFMZZZBD' },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -26,7 +26,7 @@ describe('resource widgetSessions', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.widgetSessions.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       spec: {
         widgetId: 'wgt_01HXKD2E5NQM3T9AYWCFMZZZBD',
         expiresAt: '2019-12-27T18:11:19.117Z',
@@ -44,9 +44,7 @@ describe('resource widgetSessions', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.widgetSessions.retrieve('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.widgetSessions.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,16 +56,12 @@ describe('resource widgetSessions', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.widgetSessions.retrieve('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.widgetSessions.retrieve('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.widgetSessions.list({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.widgetSessions.list({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -80,7 +74,7 @@ describe('resource widgetSessions', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.widgetSessions.list({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -95,9 +89,7 @@ describe('resource widgetSessions', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.widgetSessions.delete('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.widgetSessions.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -109,16 +101,12 @@ describe('resource widgetSessions', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.widgetSessions.delete('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.widgetSessions.delete('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('deleteTenant: only required params', async () => {
-    const responsePromise = client.widgetSessions.deleteTenant({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.widgetSessions.deleteTenant({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -131,16 +119,14 @@ describe('resource widgetSessions', () => {
   // Mock server tests are disabled
   test.skip('deleteTenant: required and optional params', async () => {
     const response = await client.widgetSessions.deleteTenant({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       tenantId: 'tenantId',
     });
   });
 
   // Mock server tests are disabled
   test.skip('revoke: only required params', async () => {
-    const responsePromise = client.widgetSessions.revoke('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.widgetSessions.revoke('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -152,8 +138,6 @@ describe('resource widgetSessions', () => {
 
   // Mock server tests are disabled
   test.skip('revoke: required and optional params', async () => {
-    const response = await client.widgetSessions.revoke('id', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.widgetSessions.revoke('id', { workspaceId: 'workspaceId' });
   });
 });

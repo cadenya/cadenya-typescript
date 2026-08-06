@@ -17,8 +17,8 @@ export class WebhookDeliveries extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const webhookDelivery of client.agents.webhookDeliveries.list(
-   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
-   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   'agentId',
+   *   { workspaceId: 'workspaceId' },
    * )) {
    *   // ...
    * }
@@ -82,7 +82,8 @@ export interface WebhookDeliveryData {
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
     | 'OBJECTIVE_EVENT_TYPE_FINALIZED'
     | 'OBJECTIVE_EVENT_TYPE_NOTICE'
-    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT';
+    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT'
+    | 'OBJECTIVE_EVENT_TYPE_REASONING';
 
   /**
    * Response details. The response body is not retained.
@@ -151,7 +152,8 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
     | 'OBJECTIVE_EVENT_TYPE_FINALIZED'
     | 'OBJECTIVE_EVENT_TYPE_NOTICE'
-    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT';
+    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT'
+    | 'OBJECTIVE_EVENT_TYPE_REASONING';
 
   /**
    * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.

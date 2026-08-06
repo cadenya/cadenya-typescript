@@ -11,7 +11,7 @@ describe('resource agents', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.agents.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       metadata: { name: 'name' },
       spec: { variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED' },
     });
@@ -27,7 +27,7 @@ describe('resource agents', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.agents.create({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -71,9 +71,7 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.agents.retrieve('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.retrieve('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -85,16 +83,12 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.agents.retrieve('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.retrieve('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.agents.update('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.update('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -106,8 +100,8 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.agents.update('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    const response = await client.agents.update('id', {
+      workspaceId: 'workspaceId',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -128,7 +122,7 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.agents.list({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
+    const responsePromise = client.agents.list({ workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -141,7 +135,7 @@ describe('resource agents', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.agents.list({
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      workspaceId: 'workspaceId',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -156,9 +150,7 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.agents.delete('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.delete('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -170,16 +162,12 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.agents.delete('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.delete('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.agents.archive('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.archive('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -191,16 +179,12 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.agents.archive('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.archive('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('publish: only required params', async () => {
-    const responsePromise = client.agents.publish('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.publish('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -212,16 +196,12 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('publish: required and optional params', async () => {
-    const response = await client.agents.publish('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.publish('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.agents.unarchive('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.unarchive('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -233,16 +213,12 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: required and optional params', async () => {
-    const response = await client.agents.unarchive('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.unarchive('id', { workspaceId: 'workspaceId' });
   });
 
   // Mock server tests are disabled
   test.skip('unpublish: only required params', async () => {
-    const responsePromise = client.agents.unpublish('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const responsePromise = client.agents.unpublish('id', { workspaceId: 'workspaceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -254,8 +230,6 @@ describe('resource agents', () => {
 
   // Mock server tests are disabled
   test.skip('unpublish: required and optional params', async () => {
-    const response = await client.agents.unpublish('agent_01HXKD2E5NQM3T9AYWCFMGWT9Y', {
-      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-    });
+    const response = await client.agents.unpublish('id', { workspaceId: 'workspaceId' });
   });
 });
