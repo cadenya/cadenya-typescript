@@ -10,8 +10,8 @@ const client = new Cadenya({
 describe('resource feedback', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.objectives.feedback.create('objectiveId', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.objectives.feedback.create('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       data: {},
       metadata: {},
     });
@@ -26,8 +26,8 @@ describe('resource feedback', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.objectives.feedback.create('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.feedback.create('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       data: { comment: 'comment', score: 0 },
       metadata: {
         externalId: 'externalId',
@@ -38,7 +38,9 @@ describe('resource feedback', () => {
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.objectives.feedback.list('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.feedback.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -50,8 +52,8 @@ describe('resource feedback', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.objectives.feedback.list('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.feedback.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       labels: 'labels',
       limit: 0,

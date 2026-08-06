@@ -33,6 +33,10 @@ import {
   ToolRetrieveParams,
   ToolSpec,
   ToolSpecConfig,
+  ToolSpecConfigBare,
+  ToolSpecConfigHTTP,
+  ToolSpecConfigMCP,
+  ToolSpecConfigOpenAPI,
   ToolUpdateParams,
   Tools,
   ToolsCursorPagination,
@@ -198,20 +202,21 @@ export type ToolSetUsagesCursorPagination = CursorPagination<ToolSetUsage>;
  * Approval filters that will automatically set the approval requirement on tools
  * synced from an external source
  */
-export interface ApprovalRequirementFilter {
-  always?: boolean;
+export type ApprovalRequirementFilter = ApprovalRequirementFilterAlways | ApprovalRequirementFilterOnly;
 
+export interface ApprovalRequirementFilterAlways {
+  always: boolean;
+
+  type: 'always';
+}
+
+export interface ApprovalRequirementFilterOnly {
   /**
    * Top-level filter with simple boolean logic (no nesting)
    */
-  only?: ToolFilter;
+  only: ToolFilter;
 
-  /**
-   * The JSON name of the variant set in `requirement` (e.g. "always"). Required from
-   * clients on writes, filled by the server on reads; drives the discriminated union
-   * in the generated OpenAPI.
-   */
-  type?: string;
+  type: 'only';
 }
 
 /**
@@ -229,25 +234,51 @@ export interface AttributeFilter {
 /**
  * String matching operations
  */
-export interface StringMatcher {
+export type StringMatcher =
+  | StringMatcherExact
+  | StringMatcherStartsWith
+  | StringMatcherEndsWith
+  | StringMatcherContains
+  | StringMatcherRegex;
+
+export interface StringMatcherContains {
+  contains: string;
+
+  type: 'contains';
+
   caseSensitive?: boolean;
+}
 
-  contains?: string;
+export interface StringMatcherEndsWith {
+  endsWith: string;
 
-  endsWith?: string;
+  type: 'endsWith';
 
-  exact?: string;
+  caseSensitive?: boolean;
+}
 
-  regex?: string;
+export interface StringMatcherExact {
+  exact: string;
 
-  startsWith?: string;
+  type: 'exact';
 
-  /**
-   * The JSON name of the variant set in `match_type` (e.g. "startsWith"). Required
-   * from clients on writes, filled by the server on reads; drives the discriminated
-   * union in the generated OpenAPI.
-   */
-  type?: string;
+  caseSensitive?: boolean;
+}
+
+export interface StringMatcherRegex {
+  regex: string;
+
+  type: 'regex';
+
+  caseSensitive?: boolean;
+}
+
+export interface StringMatcherStartsWith {
+  startsWith: string;
+
+  type: 'startsWith';
+
+  caseSensitive?: boolean;
 }
 
 /**
@@ -325,29 +356,11 @@ export interface ToolSet {
   info?: ToolSetInfo;
 }
 
-export interface ToolSetAdapter {
-  /**
-   * Bare tool sets define tools without an execution adapter. A bare tool call
-   * doesn't fire anything: the objective's workflow pauses and waits for an external
-   * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
-   * reverse harness that polls for pending tool calls, executes locally, and reports
-   * results back via SetToolCallContent).
-   */
-  bare?: ToolSetAdapterBare;
-
-  http?: ToolSetAdapterHTTP;
-
-  mcp?: ToolSetAdapterMCP;
-
-  openapi?: ToolSetAdapterOpenAPI;
-
-  /**
-   * The JSON name of the variant set in `adapter` (e.g. "mcp"). Required from
-   * clients on writes, filled by the server on reads; drives the discriminated union
-   * in the generated OpenAPI.
-   */
-  type?: string;
-}
+export type ToolSetAdapter =
+  | ToolSetAdapterMCPVariant
+  | ToolSetAdapterHTTPVariant
+  | ToolSetAdapterOpenAPIVariant
+  | ToolSetAdapterBareVariant;
 
 /**
  * Bare tool sets define tools without an execution adapter. A bare tool call
@@ -364,10 +377,29 @@ export interface ToolSetAdapterBare {
   contentTimeout?: number;
 }
 
+export interface ToolSetAdapterBareVariant {
+  /**
+   * Bare tool sets define tools without an execution adapter. A bare tool call
+   * doesn't fire anything: the objective's workflow pauses and waits for an external
+   * API consumer to set the tool call's content (e.g. human-in-the-loop tools, or a
+   * reverse harness that polls for pending tool calls, executes locally, and reports
+   * results back via SetToolCallContent).
+   */
+  bare: ToolSetAdapterBare;
+
+  type: 'bare';
+}
+
 export interface ToolSetAdapterHTTP {
   baseUrl?: string;
 
   headers?: { [key: string]: string };
+}
+
+export interface ToolSetAdapterHTTPVariant {
+  http: ToolSetAdapterHTTP;
+
+  type: 'http';
 }
 
 export interface ToolSetAdapterMCP {
@@ -414,7 +446,22 @@ export namespace ToolSetAdapterMCP {
   }
 }
 
-export interface ToolSetAdapterOpenAPI {
+export interface ToolSetAdapterMCPVariant {
+  mcp: ToolSetAdapterMCP;
+
+  type: 'mcp';
+}
+
+export type ToolSetAdapterOpenAPI = ToolSetAdapterOpenAPIURL | ToolSetAdapterOpenAPIUploadID;
+
+export interface ToolSetAdapterOpenAPIUploadID {
+  type: 'uploadId';
+
+  /**
+   * ID of a COMPLETE Upload containing the OpenAPI spec document.
+   */
+  uploadId: string;
+
   /**
    * Base URL for dispatching tool calls. If set, overrides the server resolved from
    * the spec's servers array.
@@ -448,23 +495,55 @@ export interface ToolSetAdapterOpenAPI {
    * synced from an external source
    */
   toolApprovals?: ApprovalRequirementFilter;
+}
 
-  /**
-   * The JSON name of the variant set in `source` (e.g. "url"). Required from clients
-   * on writes, filled by the server on reads; drives the discriminated union in the
-   * generated OpenAPI.
-   */
-  type?: string;
-
-  /**
-   * ID of a COMPLETE Upload containing the OpenAPI spec document.
-   */
-  uploadId?: string;
+export interface ToolSetAdapterOpenAPIURL {
+  type: 'url';
 
   /**
    * URL to fetch the OpenAPI spec from. Synced automatically every hour.
    */
-  url?: string;
+  url: string;
+
+  /**
+   * Base URL for dispatching tool calls. If set, overrides the server resolved from
+   * the spec's servers array.
+   */
+  baseUrl?: string;
+
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  excludeTools?: ToolFilter;
+
+  /**
+   * Headers sent when fetching the spec from a URL and when dispatching tool calls.
+   */
+  headers?: { [key: string]: string };
+
+  /**
+   * Top-level filter with simple boolean logic (no nesting)
+   */
+  includeTools?: ToolFilter;
+
+  /**
+   * Name of the server entry in the spec's servers array (OpenAPI 3.2 server.name
+   * field). Used to select which server URL to dispatch to when base_url is not set.
+   * If unset, the first server is used. Ignored when base_url is set.
+   */
+  serverName?: string;
+
+  /**
+   * Approval filters that will automatically set the approval requirement on tools
+   * synced from an external source
+   */
+  toolApprovals?: ApprovalRequirementFilter;
+}
+
+export interface ToolSetAdapterOpenAPIVariant {
+  openapi: ToolSetAdapterOpenAPI;
+
+  type: 'openapi';
 }
 
 /**
@@ -509,27 +588,36 @@ export namespace ToolSetEvent {
 /**
  * Event payload for a tool set operation.
  */
-export interface ToolSetEventData {
+export type ToolSetEventData =
+  | ToolSetEventDataSyncStarted
+  | ToolSetEventDataSyncCompleted
+  | ToolSetEventDataSyncFailed;
+
+export interface ToolSetEventDataSyncCompleted {
   /**
    * Emitted when a tool set sync operation completes successfully.
    */
-  syncCompleted?: SyncCompleted;
+  syncCompleted: SyncCompleted;
 
+  type: 'syncCompleted';
+}
+
+export interface ToolSetEventDataSyncFailed {
   /**
    * Emitted when a tool set sync operation fails.
    */
-  syncFailed?: SyncFailed;
+  syncFailed: SyncFailed;
 
+  type: 'syncFailed';
+}
+
+export interface ToolSetEventDataSyncStarted {
   /**
    * Emitted when a tool set sync operation begins.
    */
-  syncStarted?: SyncStarted;
+  syncStarted: SyncStarted;
 
-  /**
-   * The JSON name of the variant set in `data` (e.g. "syncStarted"). Filled by the
-   * server; drives the discriminated union in the generated OpenAPI.
-   */
-  type?: string;
+  type: 'syncStarted';
 }
 
 export interface ToolSetInfo {
@@ -759,8 +847,15 @@ ToolSets.Secrets = Secrets;
 export declare namespace ToolSets {
   export {
     type ApprovalRequirementFilter as ApprovalRequirementFilter,
+    type ApprovalRequirementFilterAlways as ApprovalRequirementFilterAlways,
+    type ApprovalRequirementFilterOnly as ApprovalRequirementFilterOnly,
     type AttributeFilter as AttributeFilter,
     type StringMatcher as StringMatcher,
+    type StringMatcherContains as StringMatcherContains,
+    type StringMatcherEndsWith as StringMatcherEndsWith,
+    type StringMatcherExact as StringMatcherExact,
+    type StringMatcherRegex as StringMatcherRegex,
+    type StringMatcherStartsWith as StringMatcherStartsWith,
     type SyncCompleted as SyncCompleted,
     type SyncFailed as SyncFailed,
     type SyncStarted as SyncStarted,
@@ -768,11 +863,20 @@ export declare namespace ToolSets {
     type ToolSet as ToolSet,
     type ToolSetAdapter as ToolSetAdapter,
     type ToolSetAdapterBare as ToolSetAdapterBare,
+    type ToolSetAdapterBareVariant as ToolSetAdapterBareVariant,
     type ToolSetAdapterHTTP as ToolSetAdapterHTTP,
+    type ToolSetAdapterHTTPVariant as ToolSetAdapterHTTPVariant,
     type ToolSetAdapterMCP as ToolSetAdapterMCP,
+    type ToolSetAdapterMCPVariant as ToolSetAdapterMCPVariant,
     type ToolSetAdapterOpenAPI as ToolSetAdapterOpenAPI,
+    type ToolSetAdapterOpenAPIUploadID as ToolSetAdapterOpenAPIUploadID,
+    type ToolSetAdapterOpenAPIURL as ToolSetAdapterOpenAPIURL,
+    type ToolSetAdapterOpenAPIVariant as ToolSetAdapterOpenAPIVariant,
     type ToolSetEvent as ToolSetEvent,
     type ToolSetEventData as ToolSetEventData,
+    type ToolSetEventDataSyncCompleted as ToolSetEventDataSyncCompleted,
+    type ToolSetEventDataSyncFailed as ToolSetEventDataSyncFailed,
+    type ToolSetEventDataSyncStarted as ToolSetEventDataSyncStarted,
     type ToolSetInfo as ToolSetInfo,
     type ToolSetSpec as ToolSetSpec,
     type ToolSetUsage as ToolSetUsage,
@@ -803,6 +907,10 @@ export declare namespace ToolSets {
     type ToolInfo as ToolInfo,
     type ToolSpec as ToolSpec,
     type ToolSpecConfig as ToolSpecConfig,
+    type ToolSpecConfigBare as ToolSpecConfigBare,
+    type ToolSpecConfigHTTP as ToolSpecConfigHTTP,
+    type ToolSpecConfigMCP as ToolSpecConfigMCP,
+    type ToolSpecConfigOpenAPI as ToolSpecConfigOpenAPI,
     type ToolsCursorPagination as ToolsCursorPagination,
     type ToolCreateParams as ToolCreateParams,
     type ToolRetrieveParams as ToolRetrieveParams,

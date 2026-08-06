@@ -13,10 +13,10 @@ export class Search extends APIResource {
    * Searches for tools or tool sets in the workspace
    */
   searchToolsOrToolSets(
-    params: SearchSearchToolsOrToolSetsParams | null | undefined = {},
+    params: SearchSearchToolsOrToolSetsParams,
     options?: RequestOptions,
   ): APIPromise<SearchSearchToolsOrToolSetsResponse> {
-    const { workspaceId = this._client.workspaceID, ...query } = params ?? {};
+    const { workspaceId = this._client.workspaceID, ...query } = params;
     return this._client.get(path`/v1/workspaces/${workspaceId}/search/tools_or_tool_sets`, {
       query,
       ...options,
@@ -43,7 +43,7 @@ export interface SearchSearchToolsOrToolSetsParams {
   /**
    * Query param
    */
-  query?: string;
+  query: string;
 }
 
 export declare namespace Search {

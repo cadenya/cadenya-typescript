@@ -16,11 +16,14 @@ export class Feedback extends APIResource {
    * @example
    * ```ts
    * const objectiveFeedback =
-   *   await client.objectives.feedback.create('objectiveId', {
-   *     workspaceId: 'workspaceId',
-   *     data: {},
-   *     metadata: {},
-   *   });
+   *   await client.objectives.feedback.create(
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     {
+   *       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *       data: {},
+   *       metadata: {},
+   *     },
+   *   );
    * ```
    */
   create(
@@ -42,8 +45,8 @@ export class Feedback extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveFeedback of client.objectives.feedback.list(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }

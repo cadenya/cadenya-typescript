@@ -27,6 +27,9 @@ import {
 } from './schedules';
 import * as VariationsAPI from './variations';
 import {
+  AddAgentVariationAssignmentRequestSubAgentID,
+  AddAgentVariationAssignmentRequestToolID,
+  AddAgentVariationAssignmentRequestToolSetID,
   AgentVariation,
   AgentVariationInfo,
   AgentVariationSpec,
@@ -40,6 +43,9 @@ import {
   VariationAddAssignmentParams,
   VariationAddMemoryLayerParams,
   VariationAssignment,
+  VariationAssignmentAgent,
+  VariationAssignmentTool,
+  VariationAssignmentToolSet,
   VariationCreateParams,
   VariationDeleteParams,
   VariationListParams,
@@ -82,7 +88,7 @@ export class Agents extends APIResource {
    * @example
    * ```ts
    * const agent = await client.agents.create({
-   *   workspaceId: 'workspaceId',
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    *   metadata: { name: 'name' },
    *   spec: {
    *     variationSelectionMode:
@@ -101,9 +107,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.retrieve('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.retrieve(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   retrieve(
@@ -120,9 +127,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.update('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.update(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   update(id: string, params: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
@@ -137,7 +145,7 @@ export class Agents extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const agent of client.agents.list({
-   *   workspaceId: 'workspaceId',
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    * })) {
    *   // ...
    * }
@@ -159,9 +167,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * await client.agents.delete('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * await client.agents.delete(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   delete(
@@ -182,9 +191,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.archive('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.archive(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   archive(id: string, params: AgentArchiveParams, options?: RequestOptions): APIPromise<Agent> {
@@ -198,9 +208,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.publish('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.publish(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   publish(id: string, params: AgentPublishParams, options?: RequestOptions): APIPromise<Agent> {
@@ -214,9 +225,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.unarchive('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.unarchive(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   unarchive(id: string, params: AgentUnarchiveParams, options?: RequestOptions): APIPromise<Agent> {
@@ -233,9 +245,10 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.unpublish('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const agent = await client.agents.unpublish(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   unpublish(id: string, params: AgentUnpublishParams, options?: RequestOptions): APIPromise<Agent> {
@@ -553,6 +566,9 @@ export declare namespace Agents {
 
   export {
     Variations as Variations,
+    type AddAgentVariationAssignmentRequestSubAgentID as AddAgentVariationAssignmentRequestSubAgentID,
+    type AddAgentVariationAssignmentRequestToolID as AddAgentVariationAssignmentRequestToolID,
+    type AddAgentVariationAssignmentRequestToolSetID as AddAgentVariationAssignmentRequestToolSetID,
     type AgentVariation as AgentVariation,
     type AgentVariationInfo as AgentVariationInfo,
     type AgentVariationSpec as AgentVariationSpec,
@@ -563,6 +579,9 @@ export declare namespace Agents {
     type CompactionConfigSummarizationStrategy as CompactionConfigSummarizationStrategy,
     type CompactionConfigToolResultClearingStrategy as CompactionConfigToolResultClearingStrategy,
     type VariationAssignment as VariationAssignment,
+    type VariationAssignmentAgent as VariationAssignmentAgent,
+    type VariationAssignmentTool as VariationAssignmentTool,
+    type VariationAssignmentToolSet as VariationAssignmentToolSet,
     type VariationMemoryLayerAssignment as VariationMemoryLayerAssignment,
     type AgentVariationsCursorPagination as AgentVariationsCursorPagination,
     type VariationCreateParams as VariationCreateParams,

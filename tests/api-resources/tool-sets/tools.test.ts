@@ -10,11 +10,14 @@ const client = new Cadenya({
 describe('resource tools', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.toolSets.tools.create('toolSetId', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.toolSets.tools.create('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
       spec: {
-        config: {},
+        config: {
+          http: { requestMethod: 'HTTP_METHOD_UNSPECIFIED' },
+          type: 'http',
+        },
         description: 'description',
         parameters: { foo: 'bar' },
         requiresApproval: true,
@@ -31,8 +34,8 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.toolSets.tools.create('toolSetId', {
-      workspaceId: 'workspaceId',
+    const response = await client.toolSets.tools.create('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: {
         name: 'name',
         externalId: 'externalId',
@@ -40,7 +43,6 @@ describe('resource tools', () => {
       },
       spec: {
         config: {
-          bare: {},
           http: {
             requestMethod: 'HTTP_METHOD_UNSPECIFIED',
             headers: { foo: 'string' },
@@ -49,17 +51,7 @@ describe('resource tools', () => {
             requestBodyContentType: 'requestBodyContentType',
             requestBodyTemplate: 'requestBodyTemplate',
           },
-          mcp: {
-            annotations: {
-              destructiveHint: true,
-              idempotentHint: true,
-              openWorldHint: true,
-              readOnlyHint: true,
-              title: 'title',
-            },
-          },
-          openapi: { method: 'method', path: 'path' },
-          type: 'type',
+          type: 'http',
         },
         description: 'description',
         parameters: { foo: 'bar' },
@@ -71,7 +63,11 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.toolSets.tools.retrieve('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.retrieve(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -83,12 +79,20 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.toolSets.tools.retrieve('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.tools.retrieve(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.toolSets.tools.update('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.update(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -100,48 +104,43 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.toolSets.tools.update('toolSetId', 'id', {
-      workspaceId: 'workspaceId',
-      metadata: {
-        name: 'name',
-        externalId: 'externalId',
-        labels: { foo: 'string' },
-      },
-      spec: {
-        config: {
-          bare: {},
-          http: {
-            requestMethod: 'HTTP_METHOD_UNSPECIFIED',
-            headers: { foo: 'string' },
-            path: 'path',
-            query: 'query',
-            requestBodyContentType: 'requestBodyContentType',
-            requestBodyTemplate: 'requestBodyTemplate',
-          },
-          mcp: {
-            annotations: {
-              destructiveHint: true,
-              idempotentHint: true,
-              openWorldHint: true,
-              readOnlyHint: true,
-              title: 'title',
-            },
-          },
-          openapi: { method: 'method', path: 'path' },
-          type: 'type',
+    const response = await client.toolSets.tools.update(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      {
+        workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+        metadata: {
+          name: 'name',
+          externalId: 'externalId',
+          labels: { foo: 'string' },
         },
-        description: 'description',
-        parameters: { foo: 'bar' },
-        requiresApproval: true,
-        llmToolName: 'llmToolName',
+        spec: {
+          config: {
+            http: {
+              requestMethod: 'HTTP_METHOD_UNSPECIFIED',
+              headers: { foo: 'string' },
+              path: 'path',
+              query: 'query',
+              requestBodyContentType: 'requestBodyContentType',
+              requestBodyTemplate: 'requestBodyTemplate',
+            },
+            type: 'http',
+          },
+          description: 'description',
+          parameters: { foo: 'bar' },
+          requiresApproval: true,
+          llmToolName: 'llmToolName',
+        },
+        updateMask: 'updateMask',
       },
-      updateMask: 'updateMask',
-    });
+    );
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.toolSets.tools.list('toolSetId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.list('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -153,8 +152,8 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.toolSets.tools.list('toolSetId', {
-      workspaceId: 'workspaceId',
+    const response = await client.toolSets.tools.list('toolset_01HXKD2E5NQM3T9AYWCFNRMN74', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -170,7 +169,11 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.toolSets.tools.delete('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.delete(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -182,12 +185,20 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.toolSets.tools.delete('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.tools.delete(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 
   // Mock server tests are disabled
   test.skip('omit: only required params', async () => {
-    const responsePromise = client.toolSets.tools.omit('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.omit(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -199,12 +210,20 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('omit: required and optional params', async () => {
-    const response = await client.toolSets.tools.omit('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.tools.omit(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 
   // Mock server tests are disabled
   test.skip('restore: only required params', async () => {
-    const responsePromise = client.toolSets.tools.restore('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.toolSets.tools.restore(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -216,6 +235,10 @@ describe('resource tools', () => {
 
   // Mock server tests are disabled
   test.skip('restore: required and optional params', async () => {
-    const response = await client.toolSets.tools.restore('toolSetId', 'id', { workspaceId: 'workspaceId' });
+    const response = await client.toolSets.tools.restore(
+      'toolset_01HXKD2E5NQM3T9AYWCFNRMN74',
+      'tool_01HXKD2E5NQM3T9AYWCFWVYY9K',
+      { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+    );
   });
 });

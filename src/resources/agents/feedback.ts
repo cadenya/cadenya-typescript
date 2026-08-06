@@ -20,8 +20,8 @@ export class Feedback extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveFeedback of client.agents.feedback.list(
-   *   'agentId',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }

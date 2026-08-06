@@ -73,6 +73,113 @@ export class AIProviderKeys extends APIResource {
 
 export type AIProviderKeysCursorPagination = CursorPagination<AIProviderKey>;
 
+export interface AIProviderConfigOpenAI {
+  /**
+   * OpenAIConfig holds OpenAI-specific settings.
+   */
+  openai: AIProviderConfigOpenAI.OpenAI;
+
+  type: 'openai';
+}
+
+export namespace AIProviderConfigOpenAI {
+  /**
+   * OpenAIConfig holds OpenAI-specific settings.
+   */
+  export interface OpenAI {
+    /**
+     * Sent as the OpenAI-Organization header when set.
+     */
+    organizationId?: string;
+
+    /**
+     * Sent as the OpenAI-Project header when set.
+     */
+    projectId?: string;
+  }
+}
+
+export interface AIProviderConfigOpenAICompatible {
+  /**
+   * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
+   * Completions API. The base URL is required and its model catalog is discovered
+   * live via GET {base_url}/models.
+   */
+  openaiCompatible: AIProviderConfigOpenAICompatible.OpenAICompatible;
+
+  type: 'openaiCompatible';
+}
+
+export namespace AIProviderConfigOpenAICompatible {
+  /**
+   * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
+   * Completions API. The base URL is required and its model catalog is discovered
+   * live via GET {base_url}/models.
+   */
+  export interface OpenAICompatible {
+    baseUrl: string;
+  }
+}
+
+export interface AIProviderConfigOpenrouter {
+  /**
+   * OpenRouterConfig holds OpenRouter-specific settings.
+   */
+  openrouter: AIProviderConfigOpenrouter.Openrouter;
+
+  type: 'openrouter';
+}
+
+export namespace AIProviderConfigOpenrouter {
+  /**
+   * OpenRouterConfig holds OpenRouter-specific settings.
+   */
+  export interface Openrouter {
+    /**
+     * Data-residency region (e.g. "us", "eu"). Empty uses the provider default.
+     */
+    region?: string;
+  }
+}
+
+export interface AIProviderCredentialAPIKey {
+  /**
+   * CredentialAPIKey carries a single bearer/header API key.
+   */
+  apiKey: AIProviderCredentialAPIKey.APIKey;
+
+  type: 'apiKey';
+}
+
+export namespace AIProviderCredentialAPIKey {
+  /**
+   * CredentialAPIKey carries a single bearer/header API key.
+   */
+  export interface APIKey {
+    apiKey?: string;
+  }
+}
+
+export interface AIProviderCredentialHeaders {
+  /**
+   * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
+   * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
+   */
+  headers: AIProviderCredentialHeaders.Headers;
+
+  type: 'headers';
+}
+
+export namespace AIProviderCredentialHeaders {
+  /**
+   * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
+   * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
+   */
+  export interface Headers {
+    headers?: { [key: string]: string };
+  }
+}
+
 /**
  * AIProviderKey is a credential for an AI provider, scoped to a workspace. Most
  * keys are customer-provided (BYOK); Cadenya also provisions promotional keys (see
@@ -126,14 +233,14 @@ export interface AIProviderKeySpec {
    * intentionally not overridable here; use the OpenAI-compatible provider to target
    * a custom endpoint.
    */
-  config?: AIProviderKeySpec.Config;
+  config?: AIProviderConfigOpenrouter | AIProviderConfigOpenAI | AIProviderConfigOpenAICompatible;
 
   /**
    * AIProviderCredential is the secret material used to authenticate with a
    * provider. The set case must correspond to AIProviderKeySpec.provider. The server
    * encrypts the serialized message at rest and never returns it on reads.
    */
-  credentials?: AIProviderKeySpec.Credentials;
+  credentials?: AIProviderCredentialAPIKey | AIProviderCredentialHeaders;
 
   /**
    * The AI provider this key authenticates against.
@@ -145,119 +252,6 @@ export interface AIProviderKeySpec {
     | 'AI_PROVIDER_ANTHROPIC'
     | 'AI_PROVIDER_GEMINI'
     | 'AI_PROVIDER_OPENAI_COMPATIBLE';
-}
-
-export namespace AIProviderKeySpec {
-  /**
-   * AIProviderConfig holds non-secret, provider-specific settings. The set case must
-   * correspond to AIProviderKeySpec.provider. Providers with no settings (Anthropic,
-   * Gemini) simply leave this unset. The endpoint of a named provider is fixed and
-   * intentionally not overridable here; use the OpenAI-compatible provider to target
-   * a custom endpoint.
-   */
-  export interface Config {
-    /**
-     * OpenAIConfig holds OpenAI-specific settings.
-     */
-    openai?: Config.OpenAI;
-
-    /**
-     * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
-     * Completions API. The base URL is required and its model catalog is discovered
-     * live via GET {base_url}/models.
-     */
-    openaiCompatible?: Config.OpenAICompatible;
-
-    /**
-     * OpenRouterConfig holds OpenRouter-specific settings.
-     */
-    openrouter?: Config.Openrouter;
-
-    /**
-     * The JSON name of the variant set in `config` (e.g. "openrouter"). Required from
-     * clients on writes, filled by the server on reads; drives the discriminated union
-     * in the generated OpenAPI.
-     */
-    type?: string;
-  }
-
-  export namespace Config {
-    /**
-     * OpenAIConfig holds OpenAI-specific settings.
-     */
-    export interface OpenAI {
-      /**
-       * Sent as the OpenAI-Organization header when set.
-       */
-      organizationId?: string;
-
-      /**
-       * Sent as the OpenAI-Project header when set.
-       */
-      projectId?: string;
-    }
-
-    /**
-     * OpenAICompatibleConfig configures a generic endpoint that speaks the OpenAI Chat
-     * Completions API. The base URL is required and its model catalog is discovered
-     * live via GET {base_url}/models.
-     */
-    export interface OpenAICompatible {
-      baseUrl: string;
-    }
-
-    /**
-     * OpenRouterConfig holds OpenRouter-specific settings.
-     */
-    export interface Openrouter {
-      /**
-       * Data-residency region (e.g. "us", "eu"). Empty uses the provider default.
-       */
-      region?: string;
-    }
-  }
-
-  /**
-   * AIProviderCredential is the secret material used to authenticate with a
-   * provider. The set case must correspond to AIProviderKeySpec.provider. The server
-   * encrypts the serialized message at rest and never returns it on reads.
-   */
-  export interface Credentials {
-    /**
-     * CredentialAPIKey carries a single bearer/header API key.
-     */
-    apiKey?: Credentials.APIKey;
-
-    /**
-     * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
-     * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
-     */
-    headers?: Credentials.Headers;
-
-    /**
-     * The JSON name of the variant set in `credential` (e.g. "apiKey"). Required on
-     * input; never returned (the credential is write-only). Drives the discriminated
-     * union in the generated OpenAPI.
-     */
-    type?: string;
-  }
-
-  export namespace Credentials {
-    /**
-     * CredentialAPIKey carries a single bearer/header API key.
-     */
-    export interface APIKey {
-      apiKey?: string;
-    }
-
-    /**
-     * CredentialHeaders carries arbitrary HTTP headers sent with every request to the
-     * provider (e.g. {"Authorization": "Bearer ...", "X-Api-Key": "..."}).
-     */
-    export interface Headers {
-      headers?: { [key: string]: string };
-    }
-  }
 }
 
 export interface AIProviderKeyCreateParams {
@@ -363,6 +357,11 @@ export interface AIProviderKeyDeleteParams {
 
 export declare namespace AIProviderKeys {
   export {
+    type AIProviderConfigOpenAI as AIProviderConfigOpenAI,
+    type AIProviderConfigOpenAICompatible as AIProviderConfigOpenAICompatible,
+    type AIProviderConfigOpenrouter as AIProviderConfigOpenrouter,
+    type AIProviderCredentialAPIKey as AIProviderCredentialAPIKey,
+    type AIProviderCredentialHeaders as AIProviderCredentialHeaders,
     type AIProviderKey as AIProviderKey,
     type AIProviderKeySpec as AIProviderKeySpec,
     type AIProviderKeysCursorPagination as AIProviderKeysCursorPagination,

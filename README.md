@@ -156,7 +156,9 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllAIProviderKeys(params) {
   const allAIProviderKeys = [];
   // Automatically fetches more pages as needed.
-  for await (const aiProviderKey of client.aiProviderKeys.list({ workspaceId: 'workspaceId' })) {
+  for await (const aiProviderKey of client.aiProviderKeys.list({
+    workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+  })) {
     allAIProviderKeys.push(aiProviderKey);
   }
   return allAIProviderKeys;
@@ -166,7 +168,9 @@ async function fetchAllAIProviderKeys(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.aiProviderKeys.list({ workspaceId: 'workspaceId' });
+let page = await client.aiProviderKeys.list({
+  workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+});
 for (const aiProviderKey of page.items) {
   console.log(aiProviderKey);
 }

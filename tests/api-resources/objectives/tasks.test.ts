@@ -10,8 +10,8 @@ const client = new Cadenya({
 describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.objectives.tasks.retrieve('objectiveId', 'id', {
-      workspaceId: 'workspaceId',
+    const responsePromise = client.objectives.tasks.retrieve('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', 'id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -24,14 +24,16 @@ describe('resource tasks', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.objectives.tasks.retrieve('objectiveId', 'id', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.tasks.retrieve('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', 'id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
     });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.objectives.tasks.list('objectiveId', { workspaceId: 'workspaceId' });
+    const responsePromise = client.objectives.tasks.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -43,8 +45,8 @@ describe('resource tasks', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.objectives.tasks.list('objectiveId', {
-      workspaceId: 'workspaceId',
+    const response = await client.objectives.tasks.list('obj_01HXKD2E5NQM3T9AYWCFQAZGFV', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       limit: 0,
       sortOrder: 'sortOrder',

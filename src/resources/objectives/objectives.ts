@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ObjectivesAPI from './objectives';
 import * as AccountAPI from '../account';
 import * as Shared from '../shared';
 import * as WidgetSessionsAPI from '../widget-sessions';
@@ -34,6 +35,9 @@ import {
   ObjectiveToolCallResult,
   ObjectiveToolCallResultAudioBlock,
   ObjectiveToolCallResultContentBlock,
+  ObjectiveToolCallResultContentBlockAudio,
+  ObjectiveToolCallResultContentBlockImage,
+  ObjectiveToolCallResultContentBlockText,
   ObjectiveToolCallResultImageBlock,
   ObjectiveToolCallResultTextBlock,
   ObjectiveToolCallWithResult,
@@ -41,6 +45,9 @@ import {
   ResolvedSecret,
   SetToolCallContentRequestAudioBlock,
   SetToolCallContentRequestContentBlock,
+  SetToolCallContentRequestContentBlockAudio,
+  SetToolCallContentRequestContentBlockImage,
+  SetToolCallContentRequestContentBlockText,
   SetToolCallContentRequestImageBlock,
   SetToolCallContentRequestTextBlock,
   ToolCallApproveParams,
@@ -56,6 +63,7 @@ import * as ToolSetsToolsAPI from '../tool-sets/tools';
 import { APIPromise } from '../../core/api-promise';
 import { CursorPagination, type CursorPaginationParams, PagePromise } from '../../core/pagination';
 import { Stream } from '../../core/streaming';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -71,7 +79,7 @@ export class Objectives extends APIResource {
    * @example
    * ```ts
    * const objective = await client.objectives.create({
-   *   workspaceId: 'workspaceId',
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    *   agentId: 'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
    *   systemPromptData: { foo: 'bar' },
    * });
@@ -87,9 +95,10 @@ export class Objectives extends APIResource {
    *
    * @example
    * ```ts
-   * const objective = await client.objectives.retrieve('id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * const objective = await client.objectives.retrieve(
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   retrieve(
@@ -108,7 +117,7 @@ export class Objectives extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objective of client.objectives.list({
-   *   workspaceId: 'workspaceId',
+   *   workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    * })) {
    *   // ...
    * }
@@ -133,8 +142,8 @@ export class Objectives extends APIResource {
    * @example
    * ```ts
    * const objective = await client.objectives.cancel(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -157,8 +166,8 @@ export class Objectives extends APIResource {
    * @example
    * ```ts
    * const response = await client.objectives.compact(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -180,8 +189,11 @@ export class Objectives extends APIResource {
    * @example
    * ```ts
    * const objectiveEvent = await client.objectives.continue(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId', message: 'message' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   {
+   *     workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+   *     message: 'message',
+   *   },
    * );
    * ```
    */
@@ -205,8 +217,8 @@ export class Objectives extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveContextWindow of client.objectives.listContextWindows(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }
@@ -232,8 +244,8 @@ export class Objectives extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveEvent of client.objectives.listEvents(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }
@@ -262,8 +274,8 @@ export class Objectives extends APIResource {
    * ```ts
    * const response =
    *   await client.objectives.retrieveDiagnostics(
-   *     'objectiveId',
-   *     { workspaceId: 'workspaceId' },
+   *     'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    *   );
    * ```
    */
@@ -285,8 +297,8 @@ export class Objectives extends APIResource {
    * @example
    * ```ts
    * const objectiveEvent = await client.objectives.streamEvents(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -298,6 +310,7 @@ export class Objectives extends APIResource {
     const { workspaceId = this._client.workspaceID } = params ?? {};
     return this._client.get(path`/v1/workspaces/${workspaceId}/objectives/${objectiveID}/events:stream`, {
       ...options,
+      headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
       stream: true,
     }) as APIPromise<Stream<ObjectiveEvent>>;
   }
@@ -335,27 +348,33 @@ export interface AssistantToolCall {
  * user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context),
  * or a Cadenya Tool (one Cadenya provides).
  */
-export interface CallableTool {
+export type CallableTool = CallableToolTool | CallableToolAgent | CallableToolCadenyaProvidedTool;
+
+export interface CallableToolAgent {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agent?: Shared.ResourceMetadata;
+  agent: Shared.ResourceMetadata;
 
+  type: 'agent';
+}
+
+export interface CallableToolCadenyaProvidedTool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  cadenyaProvidedTool?: Shared.ResourceMetadata;
+  cadenyaProvidedTool: Shared.ResourceMetadata;
 
+  type: 'cadenyaProvidedTool';
+}
+
+export interface CallableToolTool {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  tool?: Shared.ResourceMetadata;
+  tool: Shared.ResourceMetadata;
 
-  /**
-   * The JSON name of the variant set in `callable` (e.g. "tool"). Filled by the
-   * server; drives the discriminated union in the generated OpenAPI.
-   */
-  type?: string;
+  type: 'tool';
 }
 
 /**
@@ -766,88 +785,44 @@ export interface ObjectiveEvent {
   startedAt?: string;
 }
 
-export interface ObjectiveEventData {
-  assistantMessage?: AssistantMessage;
+export type ObjectiveEventData =
+  | ObjectiveEventDataUserMessage
+  | ObjectiveEventDataToolApprovalRequested
+  | ObjectiveEventDataToolApproved
+  | ObjectiveEventDataToolDenied
+  | ObjectiveEventDataToolCalled
+  | ObjectiveEventDataError
+  | ObjectiveEventDataAssistantMessage
+  | ObjectiveEventDataToolResult
+  | ObjectiveEventDataToolError
+  | ObjectiveEventDataContextWindowCompacted
+  | ObjectiveEventDataMemoryRead
+  | ObjectiveEventDataCancelled
+  | ObjectiveEventDataSubAgentSpawned
+  | ObjectiveEventDataSubAgentUpdated
+  | ObjectiveEventDataFinalized
+  | ObjectiveEventDataNotice
+  | ObjectiveEventDataTimedOut
+  | ObjectiveEventDataReasoning;
 
+export interface ObjectiveEventDataAssistantMessage {
+  assistantMessage: AssistantMessage;
+
+  type: 'assistantMessage';
+}
+
+export interface ObjectiveEventDataCancelled {
   /**
    * ObjectiveCancelled is the terminal event written when an objective is cancelled.
    * After this event, the objective is super-terminal: no further iterations,
    * compaction, or continuation are permitted.
    */
-  cancelled?: ObjectiveEventData.Cancelled;
+  cancelled: ObjectiveEventDataCancelled.Cancelled;
 
-  contextWindowCompacted?: ContextWindowCompacted;
-
-  error?: ObjectiveError;
-
-  /**
-   * ObjectiveFinalized is the terminal event written when an objective is finalized.
-   * After this event, the objective is super-terminal: no further iterations,
-   * compaction, or continuation are permitted.
-   */
-  finalized?: ObjectiveEventData.Finalized;
-
-  /**
-   * MemoryRead is emitted each time the agent resolves a key against the memory
-   * cascade and loads an entry. Lookups that miss (key not found in any layer) do
-   * not emit this event.
-   */
-  memoryRead?: MemoryRead;
-
-  /**
-   * Notice is a non-terminal diagnostic emitted by the runtime when something
-   * noteworthy but non-fatal happens during an objective — for example a
-   * just-in-time tool set failing to load, or a previously loaded tool being dropped
-   * because it was archived. Notices carry no structured payload; they exist to make
-   * the objective timeline self-explanatory.
-   */
-  notice?: ObjectiveEventData.Notice;
-
-  /**
-   * Reasoning carries the human-readable reasoning text a model produced while
-   * working on an iteration — extended thinking (Anthropic, Gemini) or reasoning
-   * summaries (OpenAI). It is emitted alongside the assistant message from the same
-   * model response and is purely informational: the text shown here is never sent
-   * back to the model.
-   */
-  reasoning?: Reasoning;
-
-  subAgentSpawned?: SubAgentSpawned;
-
-  subAgentUpdated?: SubAgentUpdated;
-
-  /**
-   * ObjectiveTimedOut is the terminal event written when an objective is finalized
-   * by the inactivity sweep because it saw no activity (no user messages, no LLM
-   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
-   * maximum when no timeout is configured. The objective produces no output. After
-   * this event, the objective is super-terminal: no further iterations, compaction,
-   * or continuation are permitted.
-   */
-  timedOut?: ObjectiveEventData.TimedOut;
-
-  toolApprovalRequested?: ToolApprovalRequested;
-
-  toolApproved?: ToolApproved;
-
-  toolCalled?: ToolCalled;
-
-  toolDenied?: ToolDenied;
-
-  toolError?: ToolError;
-
-  toolResult?: ToolResult;
-
-  /**
-   * The JSON name of the variant set in `data` (e.g. "userMessage"). Filled by the
-   * server; drives the discriminated union in the generated OpenAPI.
-   */
-  type?: string;
-
-  userMessage?: UserMessage;
+  type: 'cancelled';
 }
 
-export namespace ObjectiveEventData {
+export namespace ObjectiveEventDataCancelled {
   /**
    * ObjectiveCancelled is the terminal event written when an objective is cancelled.
    * After this event, the objective is super-terminal: no further iterations,
@@ -861,7 +836,32 @@ export namespace ObjectiveEventData {
      */
     message?: string;
   }
+}
 
+export interface ObjectiveEventDataContextWindowCompacted {
+  contextWindowCompacted: ContextWindowCompacted;
+
+  type: 'contextWindowCompacted';
+}
+
+export interface ObjectiveEventDataError {
+  error: ObjectiveError;
+
+  type: 'error';
+}
+
+export interface ObjectiveEventDataFinalized {
+  /**
+   * ObjectiveFinalized is the terminal event written when an objective is finalized.
+   * After this event, the objective is super-terminal: no further iterations,
+   * compaction, or continuation are permitted.
+   */
+  finalized: ObjectiveEventDataFinalized.Finalized;
+
+  type: 'finalized';
+}
+
+export namespace ObjectiveEventDataFinalized {
   /**
    * ObjectiveFinalized is the terminal event written when an objective is finalized.
    * After this event, the objective is super-terminal: no further iterations,
@@ -875,7 +875,33 @@ export namespace ObjectiveEventData {
      */
     output?: unknown;
   }
+}
 
+export interface ObjectiveEventDataMemoryRead {
+  /**
+   * MemoryRead is emitted each time the agent resolves a key against the memory
+   * cascade and loads an entry. Lookups that miss (key not found in any layer) do
+   * not emit this event.
+   */
+  memoryRead: MemoryRead;
+
+  type: 'memoryRead';
+}
+
+export interface ObjectiveEventDataNotice {
+  /**
+   * Notice is a non-terminal diagnostic emitted by the runtime when something
+   * noteworthy but non-fatal happens during an objective — for example a
+   * just-in-time tool set failing to load, or a previously loaded tool being dropped
+   * because it was archived. Notices carry no structured payload; they exist to make
+   * the objective timeline self-explanatory.
+   */
+  notice: ObjectiveEventDataNotice.Notice;
+
+  type: 'notice';
+}
+
+export namespace ObjectiveEventDataNotice {
   /**
    * Notice is a non-terminal diagnostic emitted by the runtime when something
    * noteworthy but non-fatal happens during an objective — for example a
@@ -898,7 +924,48 @@ export namespace ObjectiveEventData {
      */
     message?: string;
   }
+}
 
+export interface ObjectiveEventDataReasoning {
+  /**
+   * Reasoning carries the human-readable reasoning text a model produced while
+   * working on an iteration — extended thinking (Anthropic, Gemini) or reasoning
+   * summaries (OpenAI). It is emitted alongside the assistant message from the same
+   * model response and is purely informational: the text shown here is never sent
+   * back to the model.
+   */
+  reasoning: Reasoning;
+
+  type: 'reasoning';
+}
+
+export interface ObjectiveEventDataSubAgentSpawned {
+  subAgentSpawned: SubAgentSpawned;
+
+  type: 'subAgentSpawned';
+}
+
+export interface ObjectiveEventDataSubAgentUpdated {
+  subAgentUpdated: SubAgentUpdated;
+
+  type: 'subAgentUpdated';
+}
+
+export interface ObjectiveEventDataTimedOut {
+  /**
+   * ObjectiveTimedOut is the terminal event written when an objective is finalized
+   * by the inactivity sweep because it saw no activity (no user messages, no LLM
+   * calls) within its variation's inactivity timeout — or the system-wide 24 hour
+   * maximum when no timeout is configured. The objective produces no output. After
+   * this event, the objective is super-terminal: no further iterations, compaction,
+   * or continuation are permitted.
+   */
+  timedOut: ObjectiveEventDataTimedOut.TimedOut;
+
+  type: 'timedOut';
+}
+
+export namespace ObjectiveEventDataTimedOut {
   /**
    * ObjectiveTimedOut is the terminal event written when an objective is finalized
    * by the inactivity sweep because it saw no activity (no user messages, no LLM
@@ -916,6 +983,48 @@ export namespace ObjectiveEventData {
   }
 }
 
+export interface ObjectiveEventDataToolApprovalRequested {
+  toolApprovalRequested: ToolApprovalRequested;
+
+  type: 'toolApprovalRequested';
+}
+
+export interface ObjectiveEventDataToolApproved {
+  toolApproved: ToolApproved;
+
+  type: 'toolApproved';
+}
+
+export interface ObjectiveEventDataToolCalled {
+  toolCalled: ToolCalled;
+
+  type: 'toolCalled';
+}
+
+export interface ObjectiveEventDataToolDenied {
+  toolDenied: ToolDenied;
+
+  type: 'toolDenied';
+}
+
+export interface ObjectiveEventDataToolError {
+  toolError: ToolError;
+
+  type: 'toolError';
+}
+
+export interface ObjectiveEventDataToolResult {
+  toolResult: ToolResult;
+
+  type: 'toolResult';
+}
+
+export interface ObjectiveEventDataUserMessage {
+  type: 'userMessage';
+
+  userMessage: UserMessage;
+}
+
 export interface ObjectiveEventInfo {
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
@@ -929,6 +1038,52 @@ export interface ObjectiveEventInfo {
    * runs)
    */
   objective?: Shared.OperationMetadata;
+}
+
+/**
+ * The envelope for an objective event webhook delivery. Contains timestamp, event
+ * type, and the webhook data payload.
+ */
+export interface ObjectiveEventWebhookData {
+  /**
+   * The webhook data payload with flat top-level keys for agent, variation,
+   * objective, and event.
+   */
+  data: ObjectiveEventWebhookData.Data;
+
+  timestamp: string;
+
+  /**
+   * The event type, prefixed with objective_event. (e.g.,
+   * objective_event.tool_result)
+   */
+  type: string;
+}
+
+export namespace ObjectiveEventWebhookData {
+  /**
+   * The webhook data payload with flat top-level keys for agent, variation,
+   * objective, and event.
+   */
+  export interface Data {
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    agent: Shared.ResourceMetadata;
+
+    /**
+     * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
+     */
+    agentVariation: Shared.ResourceMetadata;
+
+    /**
+     * Metadata for ephemeral operations and activities (e.g., objectives, executions,
+     * runs)
+     */
+    objective: Shared.OperationMetadata;
+
+    objectiveEvent: ObjectivesAPI.ObjectiveEvent;
+  }
 }
 
 /**
@@ -1512,6 +1667,9 @@ export declare namespace Objectives {
     type AssistantMessage as AssistantMessage,
     type AssistantToolCall as AssistantToolCall,
     type CallableTool as CallableTool,
+    type CallableToolAgent as CallableToolAgent,
+    type CallableToolCadenyaProvidedTool as CallableToolCadenyaProvidedTool,
+    type CallableToolTool as CallableToolTool,
     type ContextLengths as ContextLengths,
     type ContextWindowCompacted as ContextWindowCompacted,
     type MemoryRead as MemoryRead,
@@ -1524,7 +1682,26 @@ export declare namespace Objectives {
     type ObjectiveError as ObjectiveError,
     type ObjectiveEvent as ObjectiveEvent,
     type ObjectiveEventData as ObjectiveEventData,
+    type ObjectiveEventDataAssistantMessage as ObjectiveEventDataAssistantMessage,
+    type ObjectiveEventDataCancelled as ObjectiveEventDataCancelled,
+    type ObjectiveEventDataContextWindowCompacted as ObjectiveEventDataContextWindowCompacted,
+    type ObjectiveEventDataError as ObjectiveEventDataError,
+    type ObjectiveEventDataFinalized as ObjectiveEventDataFinalized,
+    type ObjectiveEventDataMemoryRead as ObjectiveEventDataMemoryRead,
+    type ObjectiveEventDataNotice as ObjectiveEventDataNotice,
+    type ObjectiveEventDataReasoning as ObjectiveEventDataReasoning,
+    type ObjectiveEventDataSubAgentSpawned as ObjectiveEventDataSubAgentSpawned,
+    type ObjectiveEventDataSubAgentUpdated as ObjectiveEventDataSubAgentUpdated,
+    type ObjectiveEventDataTimedOut as ObjectiveEventDataTimedOut,
+    type ObjectiveEventDataToolApprovalRequested as ObjectiveEventDataToolApprovalRequested,
+    type ObjectiveEventDataToolApproved as ObjectiveEventDataToolApproved,
+    type ObjectiveEventDataToolCalled as ObjectiveEventDataToolCalled,
+    type ObjectiveEventDataToolDenied as ObjectiveEventDataToolDenied,
+    type ObjectiveEventDataToolError as ObjectiveEventDataToolError,
+    type ObjectiveEventDataToolResult as ObjectiveEventDataToolResult,
+    type ObjectiveEventDataUserMessage as ObjectiveEventDataUserMessage,
     type ObjectiveEventInfo as ObjectiveEventInfo,
+    type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveSecret as ObjectiveSecret,
     type Reasoning as Reasoning,
@@ -1569,12 +1746,18 @@ export declare namespace Objectives {
     type ObjectiveToolCallResult as ObjectiveToolCallResult,
     type ObjectiveToolCallResultAudioBlock as ObjectiveToolCallResultAudioBlock,
     type ObjectiveToolCallResultContentBlock as ObjectiveToolCallResultContentBlock,
+    type ObjectiveToolCallResultContentBlockAudio as ObjectiveToolCallResultContentBlockAudio,
+    type ObjectiveToolCallResultContentBlockImage as ObjectiveToolCallResultContentBlockImage,
+    type ObjectiveToolCallResultContentBlockText as ObjectiveToolCallResultContentBlockText,
     type ObjectiveToolCallResultImageBlock as ObjectiveToolCallResultImageBlock,
     type ObjectiveToolCallResultTextBlock as ObjectiveToolCallResultTextBlock,
     type ObjectiveToolCallWithResult as ObjectiveToolCallWithResult,
     type ResolvedSecret as ResolvedSecret,
     type SetToolCallContentRequestAudioBlock as SetToolCallContentRequestAudioBlock,
     type SetToolCallContentRequestContentBlock as SetToolCallContentRequestContentBlock,
+    type SetToolCallContentRequestContentBlockAudio as SetToolCallContentRequestContentBlockAudio,
+    type SetToolCallContentRequestContentBlockImage as SetToolCallContentRequestContentBlockImage,
+    type SetToolCallContentRequestContentBlockText as SetToolCallContentRequestContentBlockText,
     type SetToolCallContentRequestImageBlock as SetToolCallContentRequestImageBlock,
     type SetToolCallContentRequestTextBlock as SetToolCallContentRequestTextBlock,
     type ObjectiveToolCallsCursorPagination as ObjectiveToolCallsCursorPagination,

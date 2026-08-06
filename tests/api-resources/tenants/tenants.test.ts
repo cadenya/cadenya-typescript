@@ -10,7 +10,9 @@ const client = new Cadenya({
 describe('resource tenants', () => {
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.tenants.retrieve('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.tenants.retrieve('id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,12 +24,15 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.tenants.retrieve('id', { workspaceId: 'workspaceId', includeInfo: true });
+    const response = await client.tenants.retrieve('id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+      includeInfo: true,
+    });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.tenants.list({ workspaceId: 'workspaceId' });
+    const responsePromise = client.tenants.list({ workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,7 +45,7 @@ describe('resource tenants', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.tenants.list({
-      workspaceId: 'workspaceId',
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       cursor: 'cursor',
       includeInfo: true,
       labels: 'labels',
@@ -52,7 +57,9 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.tenants.delete('id', { workspaceId: 'workspaceId' });
+    const responsePromise = client.tenants.delete('id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -64,6 +71,8 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.tenants.delete('id', { workspaceId: 'workspaceId' });
+    const response = await client.tenants.delete('id', {
+      workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
+    });
   });
 });

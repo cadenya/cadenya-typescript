@@ -25,7 +25,7 @@ export class Members extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const workspaceMember of client.workspaceAdmin.members.list(
-   *   { workspaceId: 'workspaceId' },
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }
@@ -53,7 +53,7 @@ export class Members extends APIResource {
    * ```ts
    * const workspaceMember =
    *   await client.workspaceAdmin.members.add({
-   *     workspaceId: 'workspaceId',
+   *     workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    *   });
    * ```
    */
@@ -71,9 +71,10 @@ export class Members extends APIResource {
    *
    * @example
    * ```ts
-   * await client.workspaceAdmin.members.remove('profileId', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * await client.workspaceAdmin.members.remove(
+   *   'profile_01HXKD2E5NQM3T9AYWCFS0AP08',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   remove(

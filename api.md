@@ -14,6 +14,11 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderConfigOpenAI</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderConfigOpenAICompatible</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderConfigOpenrouter</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderCredentialAPIKey</a></code>
+- <code><a href="./src/resources/ai-provider-keys.ts">AIProviderCredentialHeaders</a></code>
 - <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKey</a></code>
 - <code><a href="./src/resources/ai-provider-keys.ts">AIProviderKeySpec</a></code>
 
@@ -91,6 +96,9 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/agents/variations.ts">AddAgentVariationAssignmentRequestSubAgentID</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AddAgentVariationAssignmentRequestToolID</a></code>
+- <code><a href="./src/resources/agents/variations.ts">AddAgentVariationAssignmentRequestToolSetID</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariation</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationInfo</a></code>
 - <code><a href="./src/resources/agents/variations.ts">AgentVariationSpec</a></code>
@@ -101,6 +109,9 @@ Types:
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigSummarizationStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">CompactionConfigToolResultClearingStrategy</a></code>
 - <code><a href="./src/resources/agents/variations.ts">VariationAssignment</a></code>
+- <code><a href="./src/resources/agents/variations.ts">VariationAssignmentAgent</a></code>
+- <code><a href="./src/resources/agents/variations.ts">VariationAssignmentTool</a></code>
+- <code><a href="./src/resources/agents/variations.ts">VariationAssignmentToolSet</a></code>
 - <code><a href="./src/resources/agents/variations.ts">VariationMemoryLayerAssignment</a></code>
 
 Methods:
@@ -146,6 +157,9 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">AssistantToolCall</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">CallableTool</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">CallableToolAgent</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">CallableToolCadenyaProvidedTool</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">CallableToolTool</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ContextLengths</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ContextWindowCompacted</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">MemoryRead</a></code>
@@ -158,7 +172,26 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveError</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEvent</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventData</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataAssistantMessage</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataCancelled</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataContextWindowCompacted</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataError</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataFinalized</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataMemoryRead</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataNotice</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataReasoning</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentSpawned</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentUpdated</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataTimedOut</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolApprovalRequested</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolApproved</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolCalled</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolDenied</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolError</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataToolResult</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataUserMessage</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventInfo</a></code>
+- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSecret</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">Reasoning</a></code>
@@ -207,12 +240,18 @@ Types:
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResult</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultAudioBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultContentBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultContentBlockAudio</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultContentBlockImage</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultContentBlockText</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultImageBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallResultTextBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ObjectiveToolCallWithResult</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">ResolvedSecret</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestAudioBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestContentBlock</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestContentBlockAudio</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestContentBlockImage</a></code>
+- <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestContentBlockText</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestImageBlock</a></code>
 - <code><a href="./src/resources/objectives/tool-calls.ts">SetToolCallContentRequestTextBlock</a></code>
 
@@ -271,6 +310,8 @@ Types:
 
 - <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntry</a></code>
 - <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryCreateSpec</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryCreateSpecContent</a></code>
+- <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryCreateSpecUploadID</a></code>
 - <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryDetail</a></code>
 - <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntryInfo</a></code>
 - <code><a href="./src/resources/memory-layers/entries.ts">MemoryEntrySpec</a></code>
@@ -328,8 +369,15 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ApprovalRequirementFilter</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ApprovalRequirementFilterAlways</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ApprovalRequirementFilterOnly</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">AttributeFilter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcher</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcherContains</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcherEndsWith</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcherExact</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcherRegex</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">StringMatcherStartsWith</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncCompleted</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncFailed</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">SyncStarted</a></code>
@@ -337,11 +385,20 @@ Types:
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSet</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapter</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterBare</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterBareVariant</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTP</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterHTTPVariant</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMCP</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterMCPVariant</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPI</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPIUploadID</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPIURL</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetAdapterOpenAPIVariant</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEvent</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventData</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventDataSyncCompleted</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventDataSyncFailed</a></code>
+- <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetEventDataSyncStarted</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetSpec</a></code>
 - <code><a href="./src/resources/tool-sets/tool-sets.ts">ToolSetUsage</a></code>
@@ -373,6 +430,10 @@ Types:
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolInfo</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpec</a></code>
 - <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfig</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfigBare</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfigHTTP</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfigMCP</a></code>
+- <code><a href="./src/resources/tool-sets/tools.ts">ToolSpecConfigOpenAPI</a></code>
 
 Methods:
 
@@ -484,6 +545,16 @@ Methods:
 - <code title="get /v1/account/profiles">client.workspaceAdmin.profiles.<a href="./src/resources/workspace-admin/profiles.ts">list</a>({ ...params }) -> ProfilesCursorPagination</code>
 
 # Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">UnsafeUnwrapWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
+
+Methods:
+
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unsafeUnwrap</a>(body) -> void</code>
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
 
 # Widgets
 

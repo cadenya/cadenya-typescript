@@ -15,8 +15,8 @@ export class Tools extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const objectiveTool of client.objectives.tools.list(
-   *   'objectiveId',
-   *   { workspaceId: 'workspaceId' },
+   *   'obj_01HXKD2E5NQM3T9AYWCFQAZGFV',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }

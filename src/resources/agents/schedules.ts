@@ -20,9 +20,9 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule = await client.agents.schedules.create(
-   *   'agentId',
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
    *   {
-   *     workspaceId: 'workspaceId',
+   *     workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
    *     metadata: { name: 'name' },
    *     spec: { schedule: {} },
    *   },
@@ -43,9 +43,11 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule =
-   *   await client.agents.schedules.retrieve('agentId', 'id', {
-   *     workspaceId: 'workspaceId',
-   *   });
+   *   await client.agents.schedules.retrieve(
+   *     'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *     'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *     { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   *   );
    * ```
    */
   retrieve(
@@ -64,9 +66,9 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule = await client.agents.schedules.update(
-   *   'agentId',
-   *   'id',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -90,8 +92,8 @@ export class Schedules extends APIResource {
    * ```ts
    * // Automatically fetches more pages as needed.
    * for await (const agentSchedule of client.agents.schedules.list(
-   *   'agentId',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * )) {
    *   // ...
    * }
@@ -115,9 +117,11 @@ export class Schedules extends APIResource {
    *
    * @example
    * ```ts
-   * await client.agents.schedules.delete('agentId', 'id', {
-   *   workspaceId: 'workspaceId',
-   * });
+   * await client.agents.schedules.delete(
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
+   * );
    * ```
    */
   delete(
@@ -141,9 +145,9 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule = await client.agents.schedules.archive(
-   *   'agentId',
-   *   'id',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -167,9 +171,9 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule = await client.agents.schedules.pause(
-   *   'agentId',
-   *   'id',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
@@ -193,9 +197,9 @@ export class Schedules extends APIResource {
    * @example
    * ```ts
    * const agentSchedule = await client.agents.schedules.resume(
-   *   'agentId',
-   *   'id',
-   *   { workspaceId: 'workspaceId' },
+   *   'agent_01HXKD2E5NQM3T9AYWCFMGWT9Y',
+   *   'as_01HXKD2E5NQM3T9AYWCFMZZZBD',
+   *   { workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q' },
    * );
    * ```
    */
