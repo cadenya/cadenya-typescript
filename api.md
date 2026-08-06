@@ -179,7 +179,6 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataFinalized</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataMemoryRead</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataNotice</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataReasoning</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentSpawned</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataSubAgentUpdated</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventDataTimedOut</a></code>
@@ -194,7 +193,6 @@ Types:
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveEventWebhookData</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveInfo</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ObjectiveSecret</a></code>
-- <code><a href="./src/resources/objectives/objectives.ts">Reasoning</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">SubAgentSpawned</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">SubAgentUpdated</a></code>
 - <code><a href="./src/resources/objectives/objectives.ts">ToolApprovalRequested</a></code>
@@ -573,27 +571,6 @@ Methods:
 - <code title="delete /v1/workspaces/{workspaceId}/widgets/{id}">client.widgets.<a href="./src/resources/widgets.ts">delete</a>(id, { ...params }) -> void</code>
 - <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:archive">client.widgets.<a href="./src/resources/widgets.ts">archive</a>(id, { ...params }) -> Widget</code>
 - <code title="post /v1/workspaces/{workspaceId}/widgets/{id}:unarchive">client.widgets.<a href="./src/resources/widgets.ts">unarchive</a>(id, { ...params }) -> Widget</code>
-
-# Tenants
-
-Types:
-
-- <code><a href="./src/resources/tenants/tenants.ts">Subject</a></code>
-- <code><a href="./src/resources/tenants/tenants.ts">SubjectInfo</a></code>
-- <code><a href="./src/resources/tenants/tenants.ts">Tenant</a></code>
-- <code><a href="./src/resources/tenants/tenants.ts">TenantInfo</a></code>
-
-Methods:
-
-- <code title="get /v1/workspaces/{workspaceId}/tenants/{id}">client.tenants.<a href="./src/resources/tenants/tenants.ts">retrieve</a>(id, { ...params }) -> Tenant</code>
-- <code title="get /v1/workspaces/{workspaceId}/tenants">client.tenants.<a href="./src/resources/tenants/tenants.ts">list</a>({ ...params }) -> TenantsCursorPagination</code>
-- <code title="delete /v1/workspaces/{workspaceId}/tenants/{id}">client.tenants.<a href="./src/resources/tenants/tenants.ts">delete</a>(id, { ...params }) -> Tenant</code>
-
-## Subjects
-
-Methods:
-
-- <code title="get /v1/workspaces/{workspaceId}/tenants/{tenantId}/subjects">client.tenants.subjects.<a href="./src/resources/tenants/subjects.ts">list</a>(tenantID, { ...params }) -> SubjectsCursorPagination</code>
 
 # WidgetSessions
 

@@ -802,8 +802,7 @@ export type ObjectiveEventData =
   | ObjectiveEventDataSubAgentUpdated
   | ObjectiveEventDataFinalized
   | ObjectiveEventDataNotice
-  | ObjectiveEventDataTimedOut
-  | ObjectiveEventDataReasoning;
+  | ObjectiveEventDataTimedOut;
 
 export interface ObjectiveEventDataAssistantMessage {
   assistantMessage: AssistantMessage;
@@ -924,19 +923,6 @@ export namespace ObjectiveEventDataNotice {
      */
     message?: string;
   }
-}
-
-export interface ObjectiveEventDataReasoning {
-  /**
-   * Reasoning carries the human-readable reasoning text a model produced while
-   * working on an iteration — extended thinking (Anthropic, Gemini) or reasoning
-   * summaries (OpenAI). It is emitted alongside the assistant message from the same
-   * model response and is purely informational: the text shown here is never sent
-   * back to the model.
-   */
-  reasoning: Reasoning;
-
-  type: 'reasoning';
 }
 
 export interface ObjectiveEventDataSubAgentSpawned {
@@ -1178,21 +1164,6 @@ export interface ObjectiveInfo {
 
 export interface ObjectiveSecret {
   name?: string;
-}
-
-/**
- * Reasoning carries the human-readable reasoning text a model produced while
- * working on an iteration — extended thinking (Anthropic, Gemini) or reasoning
- * summaries (OpenAI). It is emitted alongside the assistant message from the same
- * model response and is purely informational: the text shown here is never sent
- * back to the model.
- */
-export interface Reasoning {
-  /**
-   * The reasoning text. May be a verbatim chain of thought or a provider-generated
-   * summary depending on the model.
-   */
-  content: string;
 }
 
 export interface SubAgentSpawned {
@@ -1689,7 +1660,6 @@ export declare namespace Objectives {
     type ObjectiveEventDataFinalized as ObjectiveEventDataFinalized,
     type ObjectiveEventDataMemoryRead as ObjectiveEventDataMemoryRead,
     type ObjectiveEventDataNotice as ObjectiveEventDataNotice,
-    type ObjectiveEventDataReasoning as ObjectiveEventDataReasoning,
     type ObjectiveEventDataSubAgentSpawned as ObjectiveEventDataSubAgentSpawned,
     type ObjectiveEventDataSubAgentUpdated as ObjectiveEventDataSubAgentUpdated,
     type ObjectiveEventDataTimedOut as ObjectiveEventDataTimedOut,
@@ -1704,7 +1674,6 @@ export declare namespace Objectives {
     type ObjectiveEventWebhookData as ObjectiveEventWebhookData,
     type ObjectiveInfo as ObjectiveInfo,
     type ObjectiveSecret as ObjectiveSecret,
-    type Reasoning as Reasoning,
     type SubAgentSpawned as SubAgentSpawned,
     type SubAgentUpdated as SubAgentUpdated,
     type ToolApprovalRequested as ToolApprovalRequested,

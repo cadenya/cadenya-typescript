@@ -152,12 +152,6 @@ export interface ModelSpec {
    * Cost per million output tokens in cents (e.g., 1500 = $15.00)
    */
   outputPricePerMillionTokens?: string;
-
-  /**
-   * The model's reasoning capability. Catalog data used to decide whether thinking
-   * is requested for objective iterations on this model.
-   */
-  reasoning?: 'REASONING_UNSPECIFIED' | 'REASONING_NONE' | 'REASONING_ADAPTIVE' | 'REASONING_BUDGET';
 }
 
 /**

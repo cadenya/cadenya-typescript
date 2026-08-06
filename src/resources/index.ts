@@ -112,7 +112,6 @@ export {
   type ObjectiveEventDataFinalized,
   type ObjectiveEventDataMemoryRead,
   type ObjectiveEventDataNotice,
-  type ObjectiveEventDataReasoning,
   type ObjectiveEventDataSubAgentSpawned,
   type ObjectiveEventDataSubAgentUpdated,
   type ObjectiveEventDataTimedOut,
@@ -127,7 +126,6 @@ export {
   type ObjectiveEventWebhookData,
   type ObjectiveInfo,
   type ObjectiveSecret,
-  type Reasoning,
   type SubAgentSpawned,
   type SubAgentUpdated,
   type ToolApprovalRequested,
@@ -159,18 +157,6 @@ export {
   type SearchSearchToolsOrToolSetsResponse,
   type SearchSearchToolsOrToolSetsParams,
 } from './search';
-export {
-  Tenants,
-  type Subject,
-  type SubjectInfo,
-  type Tenant,
-  type TenantInfo,
-  type TenantRetrieveParams,
-  type TenantListParams,
-  type TenantDeleteParams,
-  type SubjectsCursorPagination,
-  type TenantsCursorPagination,
-} from './tenants/tenants';
 export {
   ToolSets,
   type ApprovalRequirementFilter,

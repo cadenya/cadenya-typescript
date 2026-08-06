@@ -82,8 +82,7 @@ export interface WebhookDeliveryData {
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
     | 'OBJECTIVE_EVENT_TYPE_FINALIZED'
     | 'OBJECTIVE_EVENT_TYPE_NOTICE'
-    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT'
-    | 'OBJECTIVE_EVENT_TYPE_REASONING';
+    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT';
 
   /**
    * Response details. The response body is not retained.
@@ -152,8 +151,7 @@ export interface WebhookDeliveryListParams extends CursorPaginationParams {
     | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED'
     | 'OBJECTIVE_EVENT_TYPE_FINALIZED'
     | 'OBJECTIVE_EVENT_TYPE_NOTICE'
-    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT'
-    | 'OBJECTIVE_EVENT_TYPE_REASONING';
+    | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT';
 
   /**
    * Query param: Filters by metadata labels. Comma-separated key=value pairs, e.g.
