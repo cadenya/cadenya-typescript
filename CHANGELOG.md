@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.134.0](https://github.com/cadenya/cadenya-typescript/compare/v0.133.0...v0.134.0) (2026-08-06)
+
+
+### Features
+
+* regenerate from spec with webhooks and discriminator overlays ([ed53999](https://github.com/cadenya/cadenya-typescript/commit/ed539991e4c785ff3564c4834c0686f14b183863))
+* sync SDKs to current API spec and add stlc promote/sync workflows ([1241efe](https://github.com/cadenya/cadenya-typescript/commit/1241efe6b6fbe896f89470b308cae7bb905da5cd))
+
 ## 0.133.0 (2026-08-05)
 
 Full Changelog: [v0.132.1...v0.133.0](https://github.com/cadenya/cadenya-typescript/compare/v0.132.1...v0.133.0)
