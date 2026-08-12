@@ -3,15 +3,17 @@ name: Promote to production
 # Phase three of the SDK promotion pipeline: every push to this staging
 # repo's main rolls into a single sync branch + PR on the production repo.
 # A human merges that PR to release; release-please on the production repo
-# then opens its version PR and the publish workflow ships the release.
+# derives the version bump and changelog from the sync commit's
+# conventional-commit lines and opens its version PR, and the publish
+# workflow ships the release when that merges.
 #
 # The sync branch is built as production/main plus ONE commit whose tree is
-# exactly staging main (not staging's commit history). That keeps the PR
-# diff equal to "what changes in production" and — because no shared
-# history is required — survives squash merges: the old approach of
-# pushing staging's raw history conflicted on the next sync after any
-# squash-merged promotion. The branch is force-updated on every push (it
-# is derived state), so one rolling PR stays current until it is merged.
+# exactly staging main (not staging's commit history) — squash-merge safe,
+# and the PR diff always equals "what changes in production". The commit's
+# title is the first conventional staging subject since the last sync and
+# its body carries the rest, each as its own paragraph, which release-please
+# parses as separate changelog entries. A Staging-Sha footer records the
+# synced staging commit so the next run knows its range.
 
 on:
   push:
@@ -60,24 +62,47 @@ jobs:
             exit 0
           fi
 
-          # production/main + one commit carrying staging's exact tree.
+          # Range since the last sync, recovered from the previous sync
+          # commit's Staging-Sha footer; first sync falls back to the last
+          # 15 staging commits.
+          prev=$(git log production/main --grep '^Staging-Sha: ' -1 --format=%B 2>/dev/null | sed -n 's/^Staging-Sha: \([0-9a-f]\{40\}\)$/\1/p' | head -1)
+          if [ -n "$prev" ] && git cat-file -e "$prev^{commit}" 2>/dev/null; then
+            subjects=$(git log --format=%s --no-merges "$prev..origin/main")
+          else
+            subjects=$(git log --format=%s --no-merges -15 origin/main)
+          fi
+          conventional=$(printf '%s\n' "$subjects" | grep -E '^(feat|fix|perf|refactor|docs|chore|build|ci|test|style)(\([^)]*\))?!?: ' || true)
+          title=$(printf '%s\n' "$conventional" | head -1)
+          [ -n "$title" ] || title="chore: sync from staging"
+
           git checkout --detach production/main
           git read-tree -u --reset origin/main
-          staging_sha=$(git rev-parse --short origin/main)
           {
-            echo "Sync from staging @${staging_sha}"
-            echo ""
-            echo "Tree-sync of ${{ github.repository }} main. Recent staging commits:"
-            git log --oneline -15 origin/main | sed 's/^/  /'
+            echo "$title"
+            # Remaining conventional subjects as their own paragraphs —
+            # release-please parses each as an additional changelog entry.
+            printf '%s\n' "$conventional" | tail -n +2 | while IFS= read -r line; do
+              [ -n "$line" ] || continue
+              echo
+              echo "$line"
+            done
+            echo
+            echo "Staging-Sha: $(git rev-parse origin/main)"
           } > /tmp/sync-msg
           git commit -qF /tmp/sync-msg
           git -c "http.https://github.com/.extraheader=" push --force production "HEAD:refs/heads/${SYNC_BRANCH}"
 
+          {
+            echo "Rolling sync of \`${{ github.repository }}\` main into production, rebuilt on every staging push as a single tree-sync commit on top of production main (safe to squash-merge — release-please reads the commit's conventional lines for the version bump and changelog)."
+            echo
+            echo "Staging commits in this sync:"
+            printf '%s\n' "$subjects" | sed 's/^/- /'
+          } > /tmp/pr-body
           existing=$(gh pr list --repo "$PRODUCTION_REPO" --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number' || true)
           if [ -n "${existing:-}" ]; then
-            echo "Rolling sync PR #$existing already open — branch rebuilt."
+            gh pr edit "$existing" --repo "$PRODUCTION_REPO" --body-file /tmp/pr-body
+            echo "Rolling sync PR #$existing rebuilt and body updated."
           else
             gh pr create --repo "$PRODUCTION_REPO" --base main --head "$SYNC_BRANCH" \
-              --title "Sync from staging" \
-              --body "Rolling sync of \`${{ github.repository }}\` main into production, rebuilt on every staging push as a single tree-sync commit on top of production main (safe to squash-merge). Merging releases the accumulated changes; release-please opens the version PR next."
+              --title "Sync from staging" --body-file /tmp/pr-body
           fi
