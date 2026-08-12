@@ -60,6 +60,7 @@ import {
 } from './resources/api-keys';
 import { GlobalAPIKey } from './resources/global-api-key';
 import {
+  CapabilityCaching,
   CapabilityMaxOutputTokens,
   CapabilityReasoning,
   CapabilityStopSequences,
@@ -73,6 +74,7 @@ import {
   ModelRetrieveParams,
   ModelSpec,
   ModelSpecCapability,
+  ModelSpecCapabilityCaching,
   ModelSpecCapabilityMaxOutputTokens,
   ModelSpecCapabilityReasoning,
   ModelSpecCapabilityStopSequences,
@@ -1350,6 +1352,7 @@ export declare namespace Cadenya {
 
   export {
     Models as Models,
+    type CapabilityCaching as CapabilityCaching,
     type CapabilityMaxOutputTokens as CapabilityMaxOutputTokens,
     type CapabilityReasoning as CapabilityReasoning,
     type CapabilityStopSequences as CapabilityStopSequences,
@@ -1359,6 +1362,7 @@ export declare namespace Cadenya {
     type Model as Model,
     type ModelSpec as ModelSpec,
     type ModelSpecCapability as ModelSpecCapability,
+    type ModelSpecCapabilityCaching as ModelSpecCapabilityCaching,
     type ModelSpecCapabilityMaxOutputTokens as ModelSpecCapabilityMaxOutputTokens,
     type ModelSpecCapabilityReasoning as ModelSpecCapabilityReasoning,
     type ModelSpecCapabilityStopSequences as ModelSpecCapabilityStopSequences,

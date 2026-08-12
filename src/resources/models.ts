@@ -72,6 +72,14 @@ export class Models extends APIResource {
 export type ModelsCursorPagination = CursorPagination<Model>;
 
 /**
+ * Prompt/token caching (ModelConfig.caching_enabled). A model that cannot cache
+ * prompt prefixes simply omits this capability. When the capability is present,
+ * caching defaults to ON — a variation opts out by setting caching_enabled to
+ * false.
+ */
+export type CapabilityCaching = unknown;
+
+/**
  * Per-request output token cap (ModelConfig.max_output_tokens). The effective
  * ceiling is ModelSpec.max_output_tokens.
  */
@@ -214,7 +222,20 @@ export type ModelSpecCapability =
   | ModelSpecCapabilityTopK
   | ModelSpecCapabilityStopSequences
   | ModelSpecCapabilityMaxOutputTokens
-  | ModelSpecCapabilityReasoning;
+  | ModelSpecCapabilityReasoning
+  | ModelSpecCapabilityCaching;
+
+export interface ModelSpecCapabilityCaching {
+  /**
+   * Prompt/token caching (ModelConfig.caching_enabled). A model that cannot cache
+   * prompt prefixes simply omits this capability. When the capability is present,
+   * caching defaults to ON — a variation opts out by setting caching_enabled to
+   * false.
+   */
+  caching: CapabilityCaching;
+
+  type: 'caching';
+}
 
 export interface ModelSpecCapabilityMaxOutputTokens {
   /**
@@ -387,6 +408,7 @@ export namespace ModelSwapParams {
 
 export declare namespace Models {
   export {
+    type CapabilityCaching as CapabilityCaching,
     type CapabilityMaxOutputTokens as CapabilityMaxOutputTokens,
     type CapabilityReasoning as CapabilityReasoning,
     type CapabilityStopSequences as CapabilityStopSequences,
@@ -396,6 +418,7 @@ export declare namespace Models {
     type Model as Model,
     type ModelSpec as ModelSpec,
     type ModelSpecCapability as ModelSpecCapability,
+    type ModelSpecCapabilityCaching as ModelSpecCapabilityCaching,
     type ModelSpecCapabilityMaxOutputTokens as ModelSpecCapabilityMaxOutputTokens,
     type ModelSpecCapabilityReasoning as ModelSpecCapabilityReasoning,
     type ModelSpecCapabilityStopSequences as ModelSpecCapabilityStopSequences,

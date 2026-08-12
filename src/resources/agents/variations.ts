@@ -558,6 +558,14 @@ export interface AgentVariationSpecModelConfig {
   modelId: string;
 
   /**
+   * Prompt/token caching. Requires the model's "caching" capability.
+   * Presence-tracked tri-state: unset means the default — caching is ON whenever
+   * the model has the capability; false opts this variation out; true is an
+   * explicit opt-in (equivalent to unset).
+   */
+  cachingEnabled?: boolean;
+
+  /**
    * Cap on output tokens per LLM call. Must not exceed the model's
    * spec.max_output_tokens. Requires the model's "maxOutputTokens" capability.
    */

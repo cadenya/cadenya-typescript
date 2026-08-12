@@ -73,6 +73,7 @@ export {
 } from './memory-layers/memory-layers';
 export {
   Models,
+  type CapabilityCaching,
   type CapabilityMaxOutputTokens,
   type CapabilityReasoning,
   type CapabilityStopSequences,
@@ -82,6 +83,7 @@ export {
   type Model,
   type ModelSpec,
   type ModelSpecCapability,
+  type ModelSpecCapabilityCaching,
   type ModelSpecCapabilityMaxOutputTokens,
   type ModelSpecCapabilityReasoning,
   type ModelSpecCapabilityStopSequences,

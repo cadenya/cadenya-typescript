@@ -342,6 +342,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/models.ts">CapabilityCaching</a></code>
 - <code><a href="./src/resources/models.ts">CapabilityMaxOutputTokens</a></code>
 - <code><a href="./src/resources/models.ts">CapabilityReasoning</a></code>
 - <code><a href="./src/resources/models.ts">CapabilityStopSequences</a></code>
@@ -351,6 +352,7 @@ Types:
 - <code><a href="./src/resources/models.ts">Model</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpec</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpecCapability</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityCaching</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpecCapabilityMaxOutputTokens</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpecCapabilityReasoning</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpecCapabilityStopSequences</a></code>

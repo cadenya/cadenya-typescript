@@ -46,6 +46,7 @@ describe('resource variations', () => {
         firstUserMessageTemplate: 'firstUserMessageTemplate',
         modelConfig: {
           modelId: 'claude/opus-4.6',
+          cachingEnabled: true,
           maxOutputTokens: 0,
           reasoningEffort: 'REASONING_EFFORT_UNSPECIFIED',
           stopSequences: ['string'],
@@ -127,6 +128,7 @@ describe('resource variations', () => {
           firstUserMessageTemplate: 'firstUserMessageTemplate',
           modelConfig: {
             modelId: 'claude/opus-4.6',
+            cachingEnabled: true,
             maxOutputTokens: 0,
             reasoningEffort: 'REASONING_EFFORT_UNSPECIFIED',
             stopSequences: ['string'],
