@@ -6,7 +6,7 @@
 ### Features
 
 * regenerate from spec with webhooks and discriminator overlays ([ed53999](https://github.com/cadenya/cadenya-typescript/commit/ed539991e4c785ff3564c4834c0686f14b183863))
-* sync SDKs to current API spec and add stlc promote/sync workflows ([1241efe](https://github.com/cadenya/cadenya-typescript/commit/1241efe6b6fbe896f89470b308cae7bb905da5cd))
+* sync SDKs to current API spec and add promote/sync workflows ([1241efe](https://github.com/cadenya/cadenya-typescript/commit/1241efe6b6fbe896f89470b308cae7bb905da5cd))
 
 ## 0.133.0 (2026-08-05)
 
@@ -22,7 +22,7 @@ Full Changelog: [v0.132.0...v0.132.1](https://github.com/cadenya/cadenya-typescr
 
 ### Bug Fixes
 
-* **stlc:** stop hand-edited CI workflows from blocking seals and builds ([122b9d0](https://github.com/cadenya/cadenya-typescript/commit/122b9d01dae6bc879a7aa38197e4c0c77e446924))
+* **ci:** stop hand-edited CI workflows from blocking seals and builds ([122b9d0](https://github.com/cadenya/cadenya-typescript/commit/122b9d01dae6bc879a7aa38197e4c0c77e446924))
 
 ## 0.132.0 (2026-07-30)
 
@@ -108,7 +108,7 @@ Full Changelog: [v0.122.0...v0.123.0](https://github.com/cadenya/cadenya-typescr
 
 ### Features
 
-* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([81cd008](https://github.com/cadenya/cadenya-typescript/commit/81cd0086856f9f5fa63c8a83e98382ddf93f8b08))
+* **ci:** configurable CI runner and private-production-repo support in workflow templates ([81cd008](https://github.com/cadenya/cadenya-typescript/commit/81cd0086856f9f5fa63c8a83e98382ddf93f8b08))
 
 ## 0.122.0 (2026-07-18)
 
@@ -1163,7 +1163,7 @@ Full Changelog: [v0.25.0...v0.26.0](https://github.com/cadenya/typescript-sdk/co
 
 ### Chores
 
-* **ci:** skip uploading artifacts on stainless-internal branches ([bab3fcf](https://github.com/cadenya/typescript-sdk/commit/bab3fcf20d6b9938312522ccca7433db3673309d))
+* **ci:** skip uploading artifacts on internal branches ([bab3fcf](https://github.com/cadenya/typescript-sdk/commit/bab3fcf20d6b9938312522ccca7433db3673309d))
 
 ## 0.25.0 (2026-03-06)
 

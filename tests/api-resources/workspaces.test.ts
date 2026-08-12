@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import Cadenya from '@cadenya/cadenya';
 
 const client = new Cadenya({
@@ -32,7 +30,7 @@ describe('resource workspaces', () => {
           limit: 0,
           sortOrder: 'sortOrder',
         },
-        { path: '/_stainless_unknown_path' },
+        { path: '/_unknown_nonexistent_path' },
       ),
     ).rejects.toThrow(Cadenya.NotFoundError);
   });

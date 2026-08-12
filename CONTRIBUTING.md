@@ -14,13 +14,12 @@ This will install all the required dependencies and build output files to `dist/
 
 ## Modifying/Adding code
 
-Most of the SDK is generated code. Modifications to code will be persisted between generations, but may
-result in merge conflicts between manual patches and changes from the generator. The generator will never
-modify the contents of the `src/lib/` and `examples/` directories.
+Changes to this SDK are made directly in this repository — there is no code generator. Edit the source
+under `src/`, add or update tests under `tests/`, and open a pull request.
 
 ## Adding and running examples
 
-All files in the `examples/` directory are not modified by the generator and can be freely edited or added to.
+Files in the `examples/` directory can be freely edited or added to.
 
 ```ts
 // add an example to examples/<your-example>.ts

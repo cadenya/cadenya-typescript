@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 /**
  * AccountResourceMetadata is used to represent a resource that is associated to an
  * account but not to a workspace.
