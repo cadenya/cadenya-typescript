@@ -472,7 +472,10 @@ export interface AgentVariationSpec {
   firstUserMessageTemplate?: string;
 
   /**
-   * ModelConfig defines the model configuration for a variation
+   * ModelConfig defines the model configuration for a variation.
+   *
+   * Every knob besides model_id is honored only when the assigned model's
+   * spec.capabilities lists the matching capability.
    */
   modelConfig?: AgentVariationSpecModelConfig;
 
@@ -544,20 +547,61 @@ export interface AgentVariationSpecConstraints {
 }
 
 /**
- * ModelConfig defines the model configuration for a variation
+ * ModelConfig defines the model configuration for a variation.
+ *
+ * Every knob besides model_id is honored only when the assigned model's
+ * spec.capabilities lists the matching capability.
  */
 export interface AgentVariationSpecModelConfig {
   /**
    * The model identifier in family/model format (e.g., "claude/opus-4.6",
    * "claude/sonnet-4.5")
    */
-  modelId?: string;
+  modelId: string;
+
+  /**
+   * Cap on output tokens per LLM call. Must not exceed the model's
+   * spec.max_output_tokens. Requires the model's "maxOutputTokens" capability.
+   */
+  maxOutputTokens?: number;
+
+  /**
+   * Reasoning effort. Requires the model's "reasoning" capability.
+   */
+  reasoningEffort?:
+    | 'REASONING_EFFORT_UNSPECIFIED'
+    | 'REASONING_EFFORT_NONE'
+    | 'REASONING_EFFORT_LOW'
+    | 'REASONING_EFFORT_MEDIUM'
+    | 'REASONING_EFFORT_HIGH';
+
+  /**
+   * Sequences that stop generation when produced. Empty means none. No count cap
+   * here — providers impose their own limits (surfaced as the "stopSequences"
+   * capability's `limit` on the model spec), and it is the caller's responsibility
+   * to stay within the selected model's limit. Requires the model's "stopSequences"
+   * capability.
+   */
+  stopSequences?: Array<string>;
 
   /**
    * Sampling temperature for model inference (0.0 to 1.0) Lower values produce more
-   * deterministic outputs, higher values increase randomness
+   * deterministic outputs, higher values increase randomness. Presence-tracked so a
+   * deliberate 0.0 (fully deterministic) is distinguishable from unset.
    */
   temperature?: number;
+
+  /**
+   * Only sample from the top_k most likely tokens. Requires the model's "topK"
+   * capability.
+   */
+  topK?: number;
+
+  /**
+   * Nucleus sampling: only tokens comprising the top_p probability mass are
+   * considered. Requires the model's "topP" capability.
+   */
+  topP?: number;
 }
 
 /**

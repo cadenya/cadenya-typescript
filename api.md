@@ -342,8 +342,21 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/models.ts">CapabilityMaxOutputTokens</a></code>
+- <code><a href="./src/resources/models.ts">CapabilityReasoning</a></code>
+- <code><a href="./src/resources/models.ts">CapabilityStopSequences</a></code>
+- <code><a href="./src/resources/models.ts">CapabilityTemperature</a></code>
+- <code><a href="./src/resources/models.ts">CapabilityTopK</a></code>
+- <code><a href="./src/resources/models.ts">CapabilityTopP</a></code>
 - <code><a href="./src/resources/models.ts">Model</a></code>
 - <code><a href="./src/resources/models.ts">ModelSpec</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapability</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityMaxOutputTokens</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityReasoning</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityStopSequences</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityTemperature</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityTopK</a></code>
+- <code><a href="./src/resources/models.ts">ModelSpecCapabilityTopP</a></code>
 - <code><a href="./src/resources/models.ts">ModelSwapResponse</a></code>
 
 Methods:
