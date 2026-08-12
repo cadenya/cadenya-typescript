@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types';
 import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from './internal/types';
 import { uuid4 } from './internal/utils/uuid';
@@ -62,12 +60,25 @@ import {
 } from './resources/api-keys';
 import { GlobalAPIKey } from './resources/global-api-key';
 import {
+  CapabilityMaxOutputTokens,
+  CapabilityReasoning,
+  CapabilityStopSequences,
+  CapabilityTemperature,
+  CapabilityTopK,
+  CapabilityTopP,
   Model,
   ModelDisableParams,
   ModelEnableParams,
   ModelListParams,
   ModelRetrieveParams,
   ModelSpec,
+  ModelSpecCapability,
+  ModelSpecCapabilityMaxOutputTokens,
+  ModelSpecCapabilityReasoning,
+  ModelSpecCapabilityStopSequences,
+  ModelSpecCapabilityTemperature,
+  ModelSpecCapabilityTopK,
+  ModelSpecCapabilityTopP,
   ModelSwapParams,
   ModelSwapResponse,
   Models,
@@ -543,7 +554,7 @@ export class Cadenya {
   }
 
   protected defaultIdempotencyKey(): string {
-    return `stainless-node-retry-${uuid4()}`;
+    return `cadenya-node-retry-${uuid4()}`;
   }
 
   protected makeStatusError(
@@ -977,8 +988,8 @@ export class Cadenya {
       {
         Accept: 'application/json',
         'User-Agent': this.getUserAgent(),
-        'X-Stainless-Retry-Count': String(retryCount),
-        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
+        'X-Cadenya-Retry-Count': String(retryCount),
+        ...(options.timeout ? { 'X-Cadenya-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
       await this.authHeaders(options),
@@ -1339,8 +1350,21 @@ export declare namespace Cadenya {
 
   export {
     Models as Models,
+    type CapabilityMaxOutputTokens as CapabilityMaxOutputTokens,
+    type CapabilityReasoning as CapabilityReasoning,
+    type CapabilityStopSequences as CapabilityStopSequences,
+    type CapabilityTemperature as CapabilityTemperature,
+    type CapabilityTopK as CapabilityTopK,
+    type CapabilityTopP as CapabilityTopP,
     type Model as Model,
     type ModelSpec as ModelSpec,
+    type ModelSpecCapability as ModelSpecCapability,
+    type ModelSpecCapabilityMaxOutputTokens as ModelSpecCapabilityMaxOutputTokens,
+    type ModelSpecCapabilityReasoning as ModelSpecCapabilityReasoning,
+    type ModelSpecCapabilityStopSequences as ModelSpecCapabilityStopSequences,
+    type ModelSpecCapabilityTemperature as ModelSpecCapabilityTemperature,
+    type ModelSpecCapabilityTopK as ModelSpecCapabilityTopK,
+    type ModelSpecCapabilityTopP as ModelSpecCapabilityTopP,
     type ModelSwapResponse as ModelSwapResponse,
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,

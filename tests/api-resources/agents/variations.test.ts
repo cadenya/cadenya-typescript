@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import Cadenya from '@cadenya/cadenya';
 
 const client = new Cadenya({
@@ -46,7 +44,15 @@ describe('resource variations', () => {
         },
         description: 'description',
         firstUserMessageTemplate: 'firstUserMessageTemplate',
-        modelConfig: { modelId: 'claude/opus-4.6', temperature: 0 },
+        modelConfig: {
+          modelId: 'claude/opus-4.6',
+          maxOutputTokens: 0,
+          reasoningEffort: 'REASONING_EFFORT_UNSPECIFIED',
+          stopSequences: ['string'],
+          temperature: 0,
+          topK: 0,
+          topP: 0,
+        },
         progressiveDiscovery: { hints: ['string'], maxTools: 0 },
         systemPromptTemplate: 'systemPromptTemplate',
       },
@@ -119,7 +125,15 @@ describe('resource variations', () => {
           },
           description: 'description',
           firstUserMessageTemplate: 'firstUserMessageTemplate',
-          modelConfig: { modelId: 'claude/opus-4.6', temperature: 0 },
+          modelConfig: {
+            modelId: 'claude/opus-4.6',
+            maxOutputTokens: 0,
+            reasoningEffort: 'REASONING_EFFORT_UNSPECIFIED',
+            stopSequences: ['string'],
+            temperature: 0,
+            topK: 0,
+            topP: 0,
+          },
           progressiveDiscovery: { hints: ['string'], maxTools: 0 },
           systemPromptTemplate: 'systemPromptTemplate',
         },

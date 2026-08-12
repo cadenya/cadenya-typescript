@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import { APIResource } from '../core/resource';
 import * as AIProviderKeysAPI from './ai-provider-keys';
 import * as Shared from './shared';
@@ -73,6 +71,50 @@ export class Models extends APIResource {
 
 export type ModelsCursorPagination = CursorPagination<Model>;
 
+/**
+ * Per-request output token cap (ModelConfig.max_output_tokens). The effective
+ * ceiling is ModelSpec.max_output_tokens.
+ */
+export type CapabilityMaxOutputTokens = unknown;
+
+/**
+ * Reasoning / extended thinking (ModelConfig.reasoning_effort). A model that does
+ * not reason simply omits this capability.
+ */
+export interface CapabilityReasoning {
+  /**
+   * How reasoning is enabled for this model. Catalog data used to decide whether
+   * thinking is requested for objective iterations on this model.
+   */
+  mode?: 'MODE_UNSPECIFIED' | 'MODE_ADAPTIVE' | 'MODE_BUDGET';
+}
+
+/**
+ * Custom stop sequences (ModelConfig.stop_sequences).
+ */
+export interface CapabilityStopSequences {
+  /**
+   * Maximum number of stop sequences the model accepts per request. 0 means the
+   * provider imposes no meaningful limit.
+   */
+  limit?: number;
+}
+
+/**
+ * Sampling temperature (ModelConfig.temperature).
+ */
+export type CapabilityTemperature = unknown;
+
+/**
+ * Top-k sampling (ModelConfig.top_k).
+ */
+export type CapabilityTopK = unknown;
+
+/**
+ * Nucleus sampling (ModelConfig.top_p).
+ */
+export type CapabilityTopP = unknown;
+
 export interface Model {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -134,6 +176,13 @@ export interface ModelSpec {
   provider: string;
 
   /**
+   * The inference knobs this model supports. Catalog data; drives which ModelConfig
+   * fields a variation on this model may set. Reasoning support (and its mode) lives
+   * here too, as the "reasoning" capability.
+   */
+  capabilities?: Array<ModelSpecCapability>;
+
+  /**
    * Cost per million input tokens in cents (e.g., 300 = $3.00)
    */
   inputPricePerMillionTokens?: string;
@@ -152,12 +201,75 @@ export interface ModelSpec {
    * Cost per million output tokens in cents (e.g., 1500 = $15.00)
    */
   outputPricePerMillionTokens?: string;
+}
 
+/**
+ * Capability describes one inference knob this model supports, with any
+ * model-specific parameters for it. A variation's ModelConfig may only set a knob
+ * whose capability is listed on the model's spec.
+ */
+export type ModelSpecCapability =
+  | ModelSpecCapabilityTemperature
+  | ModelSpecCapabilityTopP
+  | ModelSpecCapabilityTopK
+  | ModelSpecCapabilityStopSequences
+  | ModelSpecCapabilityMaxOutputTokens
+  | ModelSpecCapabilityReasoning;
+
+export interface ModelSpecCapabilityMaxOutputTokens {
   /**
-   * The model's reasoning capability. Catalog data used to decide whether thinking
-   * is requested for objective iterations on this model.
+   * Per-request output token cap (ModelConfig.max_output_tokens). The effective
+   * ceiling is ModelSpec.max_output_tokens.
    */
-  reasoning?: 'REASONING_UNSPECIFIED' | 'REASONING_NONE' | 'REASONING_ADAPTIVE' | 'REASONING_BUDGET';
+  maxOutputTokens: CapabilityMaxOutputTokens;
+
+  type: 'maxOutputTokens';
+}
+
+export interface ModelSpecCapabilityReasoning {
+  /**
+   * Reasoning / extended thinking (ModelConfig.reasoning_effort). A model that does
+   * not reason simply omits this capability.
+   */
+  reasoning: CapabilityReasoning;
+
+  type: 'reasoning';
+}
+
+export interface ModelSpecCapabilityStopSequences {
+  /**
+   * Custom stop sequences (ModelConfig.stop_sequences).
+   */
+  stopSequences: CapabilityStopSequences;
+
+  type: 'stopSequences';
+}
+
+export interface ModelSpecCapabilityTemperature {
+  /**
+   * Sampling temperature (ModelConfig.temperature).
+   */
+  temperature: CapabilityTemperature;
+
+  type: 'temperature';
+}
+
+export interface ModelSpecCapabilityTopK {
+  /**
+   * Top-k sampling (ModelConfig.top_k).
+   */
+  topK: CapabilityTopK;
+
+  type: 'topK';
+}
+
+export interface ModelSpecCapabilityTopP {
+  /**
+   * Nucleus sampling (ModelConfig.top_p).
+   */
+  topP: CapabilityTopP;
+
+  type: 'topP';
 }
 
 /**
@@ -275,8 +387,21 @@ export namespace ModelSwapParams {
 
 export declare namespace Models {
   export {
+    type CapabilityMaxOutputTokens as CapabilityMaxOutputTokens,
+    type CapabilityReasoning as CapabilityReasoning,
+    type CapabilityStopSequences as CapabilityStopSequences,
+    type CapabilityTemperature as CapabilityTemperature,
+    type CapabilityTopK as CapabilityTopK,
+    type CapabilityTopP as CapabilityTopP,
     type Model as Model,
     type ModelSpec as ModelSpec,
+    type ModelSpecCapability as ModelSpecCapability,
+    type ModelSpecCapabilityMaxOutputTokens as ModelSpecCapabilityMaxOutputTokens,
+    type ModelSpecCapabilityReasoning as ModelSpecCapabilityReasoning,
+    type ModelSpecCapabilityStopSequences as ModelSpecCapabilityStopSequences,
+    type ModelSpecCapabilityTemperature as ModelSpecCapabilityTemperature,
+    type ModelSpecCapabilityTopK as ModelSpecCapabilityTopK,
+    type ModelSpecCapabilityTopP as ModelSpecCapabilityTopP,
     type ModelSwapResponse as ModelSwapResponse,
     type ModelsCursorPagination as ModelsCursorPagination,
     type ModelRetrieveParams as ModelRetrieveParams,

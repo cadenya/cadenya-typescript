@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import { VERSION } from '../version';
 
 export const isRunningInBrowser = () => {
@@ -50,68 +48,68 @@ type PlatformName =
   | 'Unknown';
 type Browser = 'ie' | 'edge' | 'chrome' | 'firefox' | 'safari';
 type PlatformProperties = {
-  'X-Stainless-Lang': 'js';
-  'X-Stainless-Package-Version': string;
-  'X-Stainless-OS': PlatformName;
-  'X-Stainless-Arch': Arch;
-  'X-Stainless-Runtime': 'node' | 'deno' | 'edge' | `browser:${Browser}` | 'unknown';
-  'X-Stainless-Runtime-Version': string;
+  'X-Cadenya-Lang': 'js';
+  'X-Cadenya-Package-Version': string;
+  'X-Cadenya-OS': PlatformName;
+  'X-Cadenya-Arch': Arch;
+  'X-Cadenya-Runtime': 'node' | 'deno' | 'edge' | `browser:${Browser}` | 'unknown';
+  'X-Cadenya-Runtime-Version': string;
 };
 const getPlatformProperties = (): PlatformProperties => {
   const detectedPlatform = getDetectedPlatform();
   if (detectedPlatform === 'deno') {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': normalizePlatform(Deno.build.os),
-      'X-Stainless-Arch': normalizeArch(Deno.build.arch),
-      'X-Stainless-Runtime': 'deno',
-      'X-Stainless-Runtime-Version':
+      'X-Cadenya-Lang': 'js',
+      'X-Cadenya-Package-Version': VERSION,
+      'X-Cadenya-OS': normalizePlatform(Deno.build.os),
+      'X-Cadenya-Arch': normalizeArch(Deno.build.arch),
+      'X-Cadenya-Runtime': 'deno',
+      'X-Cadenya-Runtime-Version':
         typeof Deno.version === 'string' ? Deno.version : Deno.version?.deno ?? 'unknown',
     };
   }
   if (typeof EdgeRuntime !== 'undefined') {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': 'Unknown',
-      'X-Stainless-Arch': `other:${EdgeRuntime}`,
-      'X-Stainless-Runtime': 'edge',
-      'X-Stainless-Runtime-Version': (globalThis as any).process.version,
+      'X-Cadenya-Lang': 'js',
+      'X-Cadenya-Package-Version': VERSION,
+      'X-Cadenya-OS': 'Unknown',
+      'X-Cadenya-Arch': `other:${EdgeRuntime}`,
+      'X-Cadenya-Runtime': 'edge',
+      'X-Cadenya-Runtime-Version': (globalThis as any).process.version,
     };
   }
   // Check if Node.js
   if (detectedPlatform === 'node') {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': normalizePlatform((globalThis as any).process.platform ?? 'unknown'),
-      'X-Stainless-Arch': normalizeArch((globalThis as any).process.arch ?? 'unknown'),
-      'X-Stainless-Runtime': 'node',
-      'X-Stainless-Runtime-Version': (globalThis as any).process.version ?? 'unknown',
+      'X-Cadenya-Lang': 'js',
+      'X-Cadenya-Package-Version': VERSION,
+      'X-Cadenya-OS': normalizePlatform((globalThis as any).process.platform ?? 'unknown'),
+      'X-Cadenya-Arch': normalizeArch((globalThis as any).process.arch ?? 'unknown'),
+      'X-Cadenya-Runtime': 'node',
+      'X-Cadenya-Runtime-Version': (globalThis as any).process.version ?? 'unknown',
     };
   }
 
   const browserInfo = getBrowserInfo();
   if (browserInfo) {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': 'Unknown',
-      'X-Stainless-Arch': 'unknown',
-      'X-Stainless-Runtime': `browser:${browserInfo.browser}`,
-      'X-Stainless-Runtime-Version': browserInfo.version,
+      'X-Cadenya-Lang': 'js',
+      'X-Cadenya-Package-Version': VERSION,
+      'X-Cadenya-OS': 'Unknown',
+      'X-Cadenya-Arch': 'unknown',
+      'X-Cadenya-Runtime': `browser:${browserInfo.browser}`,
+      'X-Cadenya-Runtime-Version': browserInfo.version,
     };
   }
 
   // TODO add support for Cloudflare workers, etc.
   return {
-    'X-Stainless-Lang': 'js',
-    'X-Stainless-Package-Version': VERSION,
-    'X-Stainless-OS': 'Unknown',
-    'X-Stainless-Arch': 'unknown',
-    'X-Stainless-Runtime': 'unknown',
-    'X-Stainless-Runtime-Version': 'unknown',
+    'X-Cadenya-Lang': 'js',
+    'X-Cadenya-Package-Version': VERSION,
+    'X-Cadenya-OS': 'Unknown',
+    'X-Cadenya-Arch': 'unknown',
+    'X-Cadenya-Runtime': 'unknown',
+    'X-Cadenya-Runtime-Version': 'unknown',
   };
 };
 

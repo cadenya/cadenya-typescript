@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 export { Subjects, type SubjectListParams } from './subjects';
 export {
   Tenants,

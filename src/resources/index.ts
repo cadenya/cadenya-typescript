@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 export * from './shared';
 export {
   AIProviderKeys,
@@ -75,8 +73,21 @@ export {
 } from './memory-layers/memory-layers';
 export {
   Models,
+  type CapabilityMaxOutputTokens,
+  type CapabilityReasoning,
+  type CapabilityStopSequences,
+  type CapabilityTemperature,
+  type CapabilityTopK,
+  type CapabilityTopP,
   type Model,
   type ModelSpec,
+  type ModelSpecCapability,
+  type ModelSpecCapabilityMaxOutputTokens,
+  type ModelSpecCapabilityReasoning,
+  type ModelSpecCapabilityStopSequences,
+  type ModelSpecCapabilityTemperature,
+  type ModelSpecCapabilityTopK,
+  type ModelSpecCapabilityTopP,
   type ModelSwapResponse,
   type ModelRetrieveParams,
   type ModelListParams,
