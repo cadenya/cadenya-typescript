@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.135.0](https://github.com/cadenya/cadenya-typescript/compare/v0.134.0...v0.135.0) (2026-08-12)
+
+
+### Features
+
+* add the caching model capability and per-variation cachingEnabled opt-out ([#151](https://github.com/cadenya/cadenya-typescript/issues/151)) ([36aa894](https://github.com/cadenya/cadenya-typescript/commit/36aa894acde39050dce2aa52761e5efc1b8d8f63))
+* **api:** api update ([36aa894](https://github.com/cadenya/cadenya-typescript/commit/36aa894acde39050dce2aa52761e5efc1b8d8f63))
+* regenerate from spec with webhooks and discriminator overlays ([36aa894](https://github.com/cadenya/cadenya-typescript/commit/36aa894acde39050dce2aa52761e5efc1b8d8f63))
+* sync SDKs to current API spec and add stlc promote/sync workflows ([36aa894](https://github.com/cadenya/cadenya-typescript/commit/36aa894acde39050dce2aa52761e5efc1b8d8f63))
+
 ## [0.134.0](https://github.com/cadenya/cadenya-typescript/compare/v0.133.0...v0.134.0) (2026-08-06)
 
 
