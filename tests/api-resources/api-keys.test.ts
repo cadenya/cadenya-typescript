@@ -11,7 +11,7 @@ describe('resource apiKeys', () => {
     const responsePromise = client.apiKeys.create({
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
-      spec: {},
+      spec: { token: 'token', system: true },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -31,7 +31,7 @@ describe('resource apiKeys', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { description: 'description', permissions: ['string'] },
+      spec: { description: 'description', permissions: ['string'], token: 'token', system: true },
     });
   });
 
@@ -79,7 +79,7 @@ describe('resource apiKeys', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { description: 'description', permissions: ['string'] },
+      spec: { description: 'description', permissions: ['string'], token: 'token', system: true },
       updateMask: 'updateMask',
     });
   });

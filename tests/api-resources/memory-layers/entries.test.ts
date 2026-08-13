@@ -11,7 +11,7 @@ describe('resource entries', () => {
     const responsePromise = client.memoryLayers.entries.create('memlyr_01HXKD2E5NQM3T9AYWCFFFBMJH', {
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
-      spec: { content: 'content', type: 'content' },
+      spec: { content: 'content', type: 'content', key: 'key' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);

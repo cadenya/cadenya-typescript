@@ -123,7 +123,7 @@ export interface MemoryEntry {
    */
   spec: MemoryEntrySpec;
 
-  info?: MemoryEntryInfo;
+  info: MemoryEntryInfo;
 }
 
 /**
@@ -146,7 +146,7 @@ export interface MemoryEntryCreateSpecContent {
   /**
    * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
    */
-  key?: string;
+  key: string;
 }
 
 export interface MemoryEntryCreateSpecUploadID {
@@ -163,7 +163,7 @@ export interface MemoryEntryCreateSpecUploadID {
   /**
    * See MemoryEntrySpec.key for the full rule set. Same constraints apply here.
    */
-  key?: string;
+  key: string;
 }
 
 /**
@@ -192,7 +192,7 @@ export interface MemoryEntryDetail {
    */
   spec: MemoryEntrySpec;
 
-  info?: MemoryEntryInfo;
+  info: MemoryEntryInfo;
 }
 
 export interface MemoryEntryInfo {
@@ -241,7 +241,7 @@ export interface MemoryEntrySpec {
    * written for the model as the audience. Ignored for layer types that do not
    * advertise frontmatter.
    */
-  description?: string;
+  description: string;
 }
 
 /**

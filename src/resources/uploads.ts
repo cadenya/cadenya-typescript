@@ -68,7 +68,7 @@ export interface UploadInfo {
    * exists) → CONSUMED (a resource referenced this upload), or → EXPIRED (URL
    * elapsed without a PUT).
    */
-  status?:
+  status:
     | 'UPLOAD_STATUS_UNSPECIFIED'
     | 'UPLOAD_STATUS_PENDING'
     | 'UPLOAD_STATUS_COMPLETE'
@@ -79,7 +79,7 @@ export interface UploadInfo {
    * Presigned PUT URL. Short-lived. The client must PUT with the exact Content-Type
    * declared in the spec, and the body length must match size_bytes.
    */
-  uploadUrl?: string;
+  uploadUrl: string;
 
   /**
    * Absolute time at which upload_url stops working.

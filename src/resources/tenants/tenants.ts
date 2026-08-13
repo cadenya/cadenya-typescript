@@ -93,13 +93,13 @@ export interface SubjectInfo {
   /**
    * Number of objectives associated with this subject.
    */
-  objectiveCount?: number;
+  objectiveCount: number;
 
   /**
    * TenantReference is the read-only echo of a resource's tenant association,
    * carrying both Cadenya's canonical id and the customer's own key.
    */
-  tenant?: WidgetSessionsAPI.TenantReference;
+  tenant: WidgetSessionsAPI.TenantReference;
 }
 
 /**
@@ -136,17 +136,17 @@ export interface TenantInfo {
    * footprint a delete would destroy, which is why it is worth the count query that
    * populating `info` costs.
    */
-  objectiveCount?: number;
+  objectiveCount: number;
 
   /**
    * Number of subjects asserted under this tenant.
    */
-  subjectCount?: number;
+  subjectCount: number;
 
   /**
    * Number of widget sessions minted for this tenant that still exist.
    */
-  widgetSessionCount?: number;
+  widgetSessionCount: number;
 }
 
 export interface TenantRetrieveParams {

@@ -242,7 +242,7 @@ export interface AgentSchedule {
   /**
    * AgentScheduleInfo provides read-only runtime data about a schedule.
    */
-  info?: AgentScheduleInfo;
+  info: AgentScheduleInfo;
 }
 
 /**
@@ -285,7 +285,7 @@ export interface AgentScheduleInfo {
   /**
    * Lifetime count of objectives created by this schedule.
    */
-  totalFires?: number;
+  totalFires: number;
 }
 
 /**

@@ -203,7 +203,7 @@ export interface ObjectiveToolCallData {
   /**
    * The arguments passed to the tool
    */
-  arguments?: { [key: string]: unknown };
+  arguments: { [key: string]: unknown };
 
   /**
    * A memo supplied by the reviewer when denying the tool call
@@ -213,7 +213,7 @@ export interface ObjectiveToolCallData {
   /**
    * List of resolved secrets used by the tool call
    */
-  resolvedSecrets?: Array<ResolvedSecret>;
+  resolvedSecrets: Array<ResolvedSecret>;
 
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
@@ -235,7 +235,7 @@ export interface ObjectiveToolCallInfo {
    * Metadata for ephemeral operations and activities (e.g., objectives, executions,
    * runs)
    */
-  objective?: Shared.OperationMetadata;
+  objective: Shared.OperationMetadata;
 
   /**
    * BareMetadata contains the minimal metadata for a resource: the ID and an
@@ -379,7 +379,7 @@ export interface ObjectiveToolCallWithResult {
   /**
    * List of resolved secrets used by the tool call
    */
-  resolvedSecrets?: Array<ResolvedSecret>;
+  resolvedSecrets: Array<ResolvedSecret>;
 
   /**
    * ObjectiveToolCallResult is the content a tool returned after execution. Tools
@@ -399,9 +399,9 @@ export interface ObjectiveToolCallWithResult {
  * - Workspace
  */
 export interface ResolvedSecret {
-  key?: string;
+  key: string;
 
-  source?:
+  source:
     | 'RESOLVED_SECRET_SOURCE_UNSPECIFIED'
     | 'RESOLVED_SECRET_SOURCE_WORKSPACE'
     | 'RESOLVED_SECRET_SOURCE_TOOLSET'

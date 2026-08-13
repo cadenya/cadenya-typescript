@@ -111,7 +111,7 @@ export interface MemoryLayer {
 
   spec: MemoryLayerSpec;
 
-  info?: MemoryLayerInfo;
+  info: MemoryLayerInfo;
 }
 
 export interface MemoryLayerInfo {
@@ -130,7 +130,7 @@ export interface MemoryLayerInfo {
   /**
    * Number of entries currently in this layer.
    */
-  entryCount?: number;
+  entryCount: number;
 
   /**
    * Timestamp of the most recent objective that resolved against this layer. Useful
@@ -146,7 +146,7 @@ export interface MemoryLayerSpec {
    * Server-set on episodic layers: the agent this layer belongs to. Unset for
    * non-episodic layers.
    */
-  agentId?: string;
+  agentId: string;
 
   /**
    * Human-readable description of the layer's purpose. Encouraged for user-created
@@ -158,7 +158,7 @@ export interface MemoryLayerSpec {
    * Server-set on episodic layers: the caller-supplied episodic key the layer was
    * created for. Unset for non-episodic layers.
    */
-  episodicKey?: string;
+  episodicKey: string;
 
   /**
    * For layers with a finite lifetime (e.g., episodic), the time at which the layer
@@ -172,7 +172,7 @@ export interface MemoryLayerSpec {
    * cannot be assigned to objective cascades via the API and cannot be mutated by
    * clients — their lifecycle is controlled entirely by the runtime.
    */
-  systemManaged?: boolean;
+  systemManaged: boolean;
 }
 
 export interface MemoryLayerCreateParams {

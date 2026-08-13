@@ -228,7 +228,7 @@ export interface ToolInfo {
    * the same llm_tool_name but different parameters or description (as MCP servers
    * may return per user) have distinct signatures.
    */
-  signature?: string;
+  signature: string;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)

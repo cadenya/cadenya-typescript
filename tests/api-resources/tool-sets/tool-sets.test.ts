@@ -11,7 +11,7 @@ describe('resource toolSets', () => {
     const responsePromise = client.toolSets.create({
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
-      spec: {},
+      spec: { adapter: { bare: {}, type: 'bare' } },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);

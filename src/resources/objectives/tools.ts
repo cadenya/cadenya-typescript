@@ -55,7 +55,7 @@ export interface ObjectiveTool {
    * can change over time, snapshots are used to ensure tools don't change
    * unexpectedly during an objective's lifecycle.
    */
-  snapshot?: ToolSetsToolsAPI.Tool;
+  snapshot: ToolSetsToolsAPI.Tool;
 }
 
 export interface ToolListParams extends CursorPaginationParams {

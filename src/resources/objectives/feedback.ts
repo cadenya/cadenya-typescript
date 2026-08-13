@@ -80,7 +80,7 @@ export interface ObjectiveFeedback {
    */
   metadata: Shared.OperationMetadata;
 
-  info?: ObjectiveFeedbackInfo;
+  info: ObjectiveFeedbackInfo;
 }
 
 export interface ObjectiveFeedbackData {
@@ -123,7 +123,7 @@ export interface ObjectiveFeedbackInfo {
    * account level. Profiles are account-scoped and can be granted access to multiple
    * workspaces.
    */
-  submittedBy?: AccountAPI.Profile;
+  submittedBy: AccountAPI.Profile;
 }
 
 export interface FeedbackCreateParams {

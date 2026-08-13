@@ -43,7 +43,7 @@ export interface Workspace {
    * Lifecycle status of the workspace. Archived workspaces reject all requests
    * scoped to them. Server-populated.
    */
-  status?: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
+  status: 'STATUS_ENABLED' | 'STATUS_DISABLED' | 'STATUS_ARCHIVED';
 }
 
 export namespace Workspace {
@@ -51,13 +51,13 @@ export namespace Workspace {
    * WorkspaceInfo returns counts
    */
   export interface Info {
-    totalAgents?: number;
+    totalAgents: number;
 
-    totalAgentVariations?: number;
+    totalAgentVariations: number;
 
-    totalAvailableTools?: number;
+    totalAvailableTools: number;
 
-    totalMemoryEntries?: number;
+    totalMemoryEntries: number;
   }
 }
 

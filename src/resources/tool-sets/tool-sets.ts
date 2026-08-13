@@ -286,12 +286,12 @@ export interface SyncCompleted {
   /**
    * Optional message with additional details.
    */
-  message?: string;
+  message: string;
 
   /**
    * Number of tools synced.
    */
-  toolsSynced?: number;
+  toolsSynced: number;
 }
 
 /**
@@ -301,17 +301,17 @@ export interface SyncFailed {
   /**
    * Indicates this is an error event.
    */
-  error?: boolean;
+  error: boolean;
 
   /**
    * Optional error type/code for programmatic handling.
    */
-  errorType?: string;
+  errorType: string;
 
   /**
    * Error message describing what went wrong.
    */
-  message?: string;
+  message: string;
 }
 
 /**
@@ -321,7 +321,7 @@ export interface SyncStarted {
   /**
    * Human-readable message describing the start of the sync.
    */
-  message?: string;
+  message: string;
 }
 
 /**
@@ -557,14 +557,14 @@ export interface ToolSetEvent {
   /**
    * Event payload for a tool set operation.
    */
-  event?: ToolSetEventData;
+  event: ToolSetEventData;
 
   info?: ToolSetEvent.Info;
 
   /**
    * The tool set this event is associated with.
    */
-  toolSetId?: string;
+  toolSetId: string;
 }
 
 export namespace ToolSetEvent {
@@ -619,9 +619,9 @@ export interface ToolSetEventDataSyncStarted {
 }
 
 export interface ToolSetInfo {
-  agentCount?: number;
+  agentCount: number;
 
-  availableTools?: number;
+  availableTools: number;
 
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
@@ -632,13 +632,13 @@ export interface ToolSetInfo {
 
   lastSync?: string;
 
-  omittedTools?: number;
+  omittedTools: number;
 
-  toolCount?: number;
+  toolCount: number;
 }
 
 export interface ToolSetSpec {
-  adapter?: ToolSetAdapter;
+  adapter: ToolSetAdapter;
 
   description?: string;
 }
@@ -656,24 +656,24 @@ export interface ToolSetUsage {
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agent?: Shared.ResourceMetadata;
+  agent: Shared.ResourceMetadata;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  agentVariation?: Shared.ResourceMetadata;
+  agentVariation: Shared.ResourceMetadata;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
    */
-  model?: Shared.ResourceMetadata;
+  model: Shared.ResourceMetadata;
 }
 
 export interface ToolSetGetOpenAPISpecResponse {
   /**
    * The consumed OpenAPI specification as a JSON string.
    */
-  spec?: string;
+  spec: string;
 }
 
 export interface ToolSetCreateParams {

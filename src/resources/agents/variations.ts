@@ -374,7 +374,7 @@ export interface AgentVariation {
   /**
    * AgentVariationInfo provides read-only summary information about a variation
    */
-  info?: AgentVariationInfo;
+  info: AgentVariationInfo;
 }
 
 /**
@@ -386,7 +386,7 @@ export interface AgentVariationInfo {
    * reads so clients can render a variation's full assignment list without calling
    * the add/remove endpoints just to enumerate.
    */
-  assignments?: Array<VariationAssignment>;
+  assignments: Array<VariationAssignment>;
 
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
@@ -398,19 +398,19 @@ export interface AgentVariationInfo {
   /**
    * Total number of objective feedbacks received for this variation
    */
-  feedbackCount?: number;
+  feedbackCount: number;
 
   /**
    * Read-only list of memory layer assignments for this variation, returned in
    * ascending `position` (most specific first — resolution order). Capped at 10
    * entries.
    */
-  memoryLayerAssignments?: Array<VariationMemoryLayerAssignment>;
+  memoryLayerAssignments: Array<VariationMemoryLayerAssignment>;
 
   /**
    * Count of memory layer assignments.
    */
-  memoryLayerCount?: number;
+  memoryLayerCount: number;
 
   /**
    * Standard metadata for persistent, named resources (e.g., agents, tools, prompts)
@@ -421,22 +421,22 @@ export interface AgentVariationInfo {
    * Thompson Sampling score: posterior mean of Beta(ts_alpha, ts_beta). Range [0, 1]
    * where 0.5 = neutral, >0.5 = positive, <0.5 = negative.
    */
-  score?: number;
+  score: number;
 
   /**
    * Number of sub-agents assigned to this variation
    */
-  subAgentCount?: number;
+  subAgentCount: number;
 
   /**
    * Number of individual tools assigned to this variation
    */
-  toolCount?: number;
+  toolCount: number;
 
   /**
    * Number of tool sets assigned to this variation
    */
-  toolSetCount?: number;
+  toolSetCount: number;
 }
 
 /**
@@ -687,7 +687,7 @@ export interface VariationAssignmentAgent {
 
   type: 'agent';
 
-  id?: string;
+  id: string;
 }
 
 export interface VariationAssignmentTool {
@@ -703,7 +703,7 @@ export interface VariationAssignmentTool {
 
   type: 'tool';
 
-  id?: string;
+  id: string;
 }
 
 export interface VariationAssignmentToolSet {
@@ -719,7 +719,7 @@ export interface VariationAssignmentToolSet {
 
   type: 'toolSet';
 
-  id?: string;
+  id: string;
 }
 
 /**
@@ -735,7 +735,7 @@ export interface VariationMemoryLayerAssignment {
    * Assignment row id — handle for removing the assignment. Distinct from the
    * referenced memory layer's id.
    */
-  id?: string;
+  id: string;
 
   /**
    * BareMetadata contains the minimal metadata for a resource: the ID and an
@@ -745,7 +745,7 @@ export interface VariationMemoryLayerAssignment {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  memoryLayer?: Shared.BareMetadata;
+  memoryLayer: Shared.BareMetadata;
 
   /**
    * Position in the variation's baseline cascade. Position is specificity,
@@ -755,7 +755,7 @@ export interface VariationMemoryLayerAssignment {
    * request that would collide with an existing assignment's position is rejected
    * with InvalidArgument.
    */
-  position?: number;
+  position: number;
 }
 
 export interface VariationCreateParams {

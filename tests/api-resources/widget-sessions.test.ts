@@ -10,7 +10,7 @@ describe('resource widgetSessions', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.widgetSessions.create({
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
-      spec: { widgetId: 'wgt_01HXKD2E5NQM3T9AYWCFMZZZBD' },
+      spec: { widgetId: 'wgt_01HXKD2E5NQM3T9AYWCFMZZZBD', token: 'token' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,6 +27,7 @@ describe('resource widgetSessions', () => {
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       spec: {
         widgetId: 'wgt_01HXKD2E5NQM3T9AYWCFMZZZBD',
+        token: 'token',
         expiresAt: '2019-12-27T18:11:19.117Z',
         pinnedParameters: { foo: 'string' },
         subject: { id: 'customer-user-42', name: 'Jane Doe' },

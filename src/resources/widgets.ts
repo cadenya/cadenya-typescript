@@ -143,7 +143,7 @@ export interface WidgetInfo {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  agent?: Shared.BareMetadata;
+  agent: Shared.BareMetadata;
 
   /**
    * A profile identifies a user or non-human principal (such as an API key) at the
@@ -157,13 +157,13 @@ export interface WidgetInfo {
    * Server-generated at creation, globally unique, immutable, and deliberately
    * unrelated to the widget's id.
    */
-  dnsLabel?: string;
+  dnsLabel: string;
 
   /**
    * The full hostname browsers talk to. Authoritative — clients must use this value
    * rather than constructing the hostname themselves.
    */
-  host?: string;
+  host: string;
 }
 
 /**
