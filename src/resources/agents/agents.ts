@@ -285,7 +285,7 @@ export interface Agent {
    * AgentInfo contains simple information about an agent for display or quick
    * reference
    */
-  info?: AgentInfo;
+  info: AgentInfo;
 }
 
 /**
@@ -300,7 +300,7 @@ export interface AgentInfo {
    */
   createdBy?: AccountAPI.Profile;
 
-  variationCount?: number;
+  variationCount: number;
 }
 
 /**
@@ -367,7 +367,7 @@ export interface AgentSpec {
  * on every list.
  */
 export interface Page {
-  nextCursor?: string;
+  nextCursor: string;
 }
 
 export interface AgentCreateParams {

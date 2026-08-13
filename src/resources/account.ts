@@ -69,27 +69,27 @@ export interface AccountInfo {
    * requiring real auth on tools/call. Rotate with RotateChallengeToken; update any
    * servers validating the token before rotating.
    */
-  challengeToken?: string;
+  challengeToken: string;
 
   /**
    * The generated secret that will sign all webhooks that are sent to your
    * configured Webhook URL. Formatted as "wh_asdf1234" per the
    * https://www.standardwebhooks.com/ format.
    */
-  webhookEventsHmacSecret?: string;
+  webhookEventsHmacSecret: string;
 }
 
 /**
  * Configuration for an account.
  */
 export interface AccountSpec {
-  billingEmail?: string;
+  billingEmail: string;
 
-  description?: string;
+  description: string;
 
-  domain?: string;
+  domain: string;
 
-  workspaces?: Array<WorkspacesAPI.Workspace>;
+  workspaces: Array<WorkspacesAPI.Workspace>;
 }
 
 /**
@@ -123,26 +123,26 @@ export interface ProfileSpec {
    * Email address of the profile. Required and unique within an account for user
    * profiles.
    */
-  email?: string;
+  email: string;
 
   /**
    * Display name (e.g., "Bobby Tables").
    */
-  name?: string;
+  name: string;
 }
 
 /**
  * Response containing the newly generated challenge token.
  */
 export interface RotateChallengeTokenResponse {
-  challengeToken?: string;
+  challengeToken: string;
 }
 
 /**
  * Response containing the newly generated webhook signing secret.
  */
 export interface RotateWebhookSigningKeyResponse {
-  webhookEventsHmacSecret?: string;
+  webhookEventsHmacSecret: string;
 }
 
 export declare namespace AccountResource {

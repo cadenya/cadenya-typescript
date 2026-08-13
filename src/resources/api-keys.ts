@@ -147,7 +147,7 @@ export interface APIKeySpec {
    * The bearer token used to authenticate as this API key. Returned only on creation
    * and rotation; subsequent reads omit this field.
    */
-  token?: string;
+  token: string;
 
   /**
    * Free-form description of what this API key is used for.
@@ -173,7 +173,7 @@ export interface APIKeySpec {
    * True when this key is managed by the system (i.e. the auto-provisioned global
    * account key). System keys cannot be deleted but can be rotated.
    */
-  system?: boolean;
+  system: boolean;
 }
 
 export interface APIKeyCreateParams {

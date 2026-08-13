@@ -26,7 +26,7 @@ export interface AccountResourceMetadata {
   /**
    * External ID for the resource (e.g., a workflow ID from an external system)
    */
-  externalId?: string;
+  externalId: string;
 
   /**
    * Key-value pairs for categorization and filtering. Values are 0-63 alphanumeric
@@ -35,7 +35,7 @@ export interface AccountResourceMetadata {
    * of at most 253 characters. Examples: {"environment": "production", "team":
    * "platform", "version": "v2"}
    */
-  labels?: { [key: string]: string };
+  labels: { [key: string]: string };
 }
 
 /**
@@ -47,7 +47,7 @@ export interface AccountResourceMetadata {
  * sibling fields rather than by constructing a BareMetadata themselves.
  */
 export interface BareMetadata {
-  id?: string;
+  id: string;
 
   /**
    * Human-readable name of the referenced resource, populated by the server on reads
@@ -139,7 +139,7 @@ export interface OperationMetadata {
   /**
    * External ID for the operation (e.g., a workflow ID from an external system)
    */
-  externalId?: string;
+  externalId: string;
 
   /**
    * Key-value pairs for categorization and filtering. Values are 0-63 alphanumeric
@@ -148,7 +148,7 @@ export interface OperationMetadata {
    * of at most 253 characters. Examples: {"priority": "high", "source": "api",
    * "workflow": "onboarding"}
    */
-  labels?: { [key: string]: string };
+  labels: { [key: string]: string };
 }
 
 /**

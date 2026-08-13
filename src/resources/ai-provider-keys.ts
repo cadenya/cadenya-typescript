@@ -208,18 +208,18 @@ export namespace AIProviderKey {
     /**
      * Number of disabled models provisioned on this key.
      */
-    disabledModelCount?: number;
+    disabledModelCount: number;
 
     /**
      * Number of enabled models provisioned on this key.
      */
-    enabledModelCount?: number;
+    enabledModelCount: number;
 
     /**
      * Cadenya includes promotional keys (one for onboarding, and potentially more in
      * the future). These are not added or maintained by account administrators.
      */
-    isPromotional?: boolean;
+    isPromotional: boolean;
   }
 }
 

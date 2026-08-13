@@ -115,12 +115,12 @@ export interface WebhookDeliveryData {
    */
   webhookUrl: string;
 
-  errorMessage?: string;
+  errorMessage: string;
 
   /**
    * Response headers received from the webhook endpoint
    */
-  responseHeaders?: { [key: string]: string };
+  responseHeaders: { [key: string]: string };
 }
 
 export interface WebhookDeliveryListParams extends CursorPaginationParams {

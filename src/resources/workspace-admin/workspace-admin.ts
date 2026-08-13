@@ -146,12 +146,12 @@ export interface WorkspaceMember {
   /**
    * Email address of the member's profile.
    */
-  email?: string;
+  email: string;
 
   /**
    * Display name of the member's profile.
    */
-  name?: string;
+  name: string;
 }
 
 export interface WorkspaceAdminCreateParams {

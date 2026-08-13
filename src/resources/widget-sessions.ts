@@ -221,7 +221,7 @@ export interface WidgetSession {
    * creation, encrypted at rest, and interpolated into tool-call headers server-side
    * — never returned by any API.
    */
-  secrets?: Array<WidgetSession.Secret>;
+  secrets: Array<WidgetSession.Secret>;
 }
 
 export namespace WidgetSession {
@@ -230,7 +230,7 @@ export namespace WidgetSession {
    * never returned.
    */
   export interface Secret {
-    name?: string;
+    name: string;
   }
 }
 
@@ -246,13 +246,13 @@ export interface WidgetSessionInfo {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  agent?: Shared.BareMetadata;
+  agent: Shared.BareMetadata;
 
   /**
    * The widget hostname this session's tokens are bound to. Authoritative — clients
    * must use this value rather than constructing the hostname.
    */
-  host?: string;
+  host: string;
 
   /**
    * When the session last created a conversation, sent a message, or refreshed a
@@ -264,7 +264,7 @@ export interface WidgetSessionInfo {
    * Number of conversation messages created through this session, counted against
    * the session's message cap.
    */
-  messageCount?: number;
+  messageCount: number;
 
   /**
    * SubjectReference is the read-only echo of a resource's subject association,
@@ -286,7 +286,7 @@ export interface WidgetSessionInfo {
    * to an objective. Both fields are server-populated; clients provide IDs through
    * sibling fields rather than by constructing a BareMetadata themselves.
    */
-  widget?: Shared.BareMetadata;
+  widget: Shared.BareMetadata;
 }
 
 /**
@@ -304,7 +304,7 @@ export interface WidgetSessionSpec {
    * The token is short-lived; the widget refreshes it at the widget host without
    * involving the customer's backend.
    */
-  token?: string;
+  token: string;
 
   /**
    * Hard session expiry. Tokens never outlive it; after it passes the session
@@ -354,12 +354,12 @@ export interface WidgetSessionDeleteTenantResponse {
   /**
    * Number of conversations (objectives) deleted along with the sessions.
    */
-  objectivesDeleted?: number;
+  objectivesDeleted: number;
 
   /**
    * Number of sessions deleted.
    */
-  sessionsDeleted?: number;
+  sessionsDeleted: number;
 }
 
 export interface WidgetSessionCreateParams {

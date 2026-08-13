@@ -94,7 +94,7 @@ export interface CapabilityReasoning {
    * How reasoning is enabled for this model. Catalog data used to decide whether
    * thinking is requested for objective iterations on this model.
    */
-  mode?: 'MODE_UNSPECIFIED' | 'MODE_ADAPTIVE' | 'MODE_BUDGET';
+  mode: 'MODE_UNSPECIFIED' | 'MODE_ADAPTIVE' | 'MODE_BUDGET';
 }
 
 /**
@@ -105,7 +105,7 @@ export interface CapabilityStopSequences {
    * Maximum number of stop sequences the model accepts per request. 0 means the
    * provider imposes no meaningful limit.
    */
-  limit?: number;
+  limit: number;
 }
 
 /**
@@ -155,7 +155,7 @@ export namespace Model {
      * Number of agent variations currently provisioned on this model. Useful for
      * previewing how many variations a swap would affect.
      */
-    agentVariationCount?: number;
+    agentVariationCount: number;
 
     /**
      * AIProviderKey is a credential for an AI provider, scoped to a workspace. Most
@@ -188,27 +188,27 @@ export interface ModelSpec {
    * fields a variation on this model may set. Reasoning support (and its mode) lives
    * here too, as the "reasoning" capability.
    */
-  capabilities?: Array<ModelSpecCapability>;
+  capabilities: Array<ModelSpecCapability>;
 
   /**
    * Cost per million input tokens in cents (e.g., 300 = $3.00)
    */
-  inputPricePerMillionTokens?: string;
+  inputPricePerMillionTokens: string;
 
   /**
    * Maximum number of input tokens the model supports
    */
-  maxInputTokens?: number;
+  maxInputTokens: number;
 
   /**
    * Maximum number of output tokens the model can generate
    */
-  maxOutputTokens?: number;
+  maxOutputTokens: number;
 
   /**
    * Cost per million output tokens in cents (e.g., 1500 = $15.00)
    */
-  outputPricePerMillionTokens?: string;
+  outputPricePerMillionTokens: string;
 }
 
 /**

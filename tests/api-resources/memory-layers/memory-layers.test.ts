@@ -11,7 +11,12 @@ describe('resource memoryLayers', () => {
     const responsePromise = client.memoryLayers.create({
       workspaceId: 'workspace_01HXKD2E5NQM3T9AYWCF133E3Q',
       metadata: { name: 'name' },
-      spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' },
+      spec: {
+        type: 'MEMORY_LAYER_TYPE_UNSPECIFIED',
+        agentId: 'agentId',
+        episodicKey: 'episodicKey',
+        systemManaged: true,
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -31,7 +36,13 @@ describe('resource memoryLayers', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED', description: 'description' },
+      spec: {
+        type: 'MEMORY_LAYER_TYPE_UNSPECIFIED',
+        agentId: 'agentId',
+        episodicKey: 'episodicKey',
+        systemManaged: true,
+        description: 'description',
+      },
     });
   });
 
@@ -79,7 +90,13 @@ describe('resource memoryLayers', () => {
         externalId: 'externalId',
         labels: { foo: 'string' },
       },
-      spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED', description: 'description' },
+      spec: {
+        type: 'MEMORY_LAYER_TYPE_UNSPECIFIED',
+        agentId: 'agentId',
+        episodicKey: 'episodicKey',
+        systemManaged: true,
+        description: 'description',
+      },
       updateMask: 'updateMask',
     });
   });
