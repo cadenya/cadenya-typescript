@@ -2366,6 +2366,12 @@ export interface ObjectiveToolCallInfo {
  *  short-lived signed URLs rather than inline bytes.
  */
 export interface ObjectiveToolCallResult {
+    /**
+     * The result content as recorded — which is what the model was shown.
+     *  When a tool set overlay transformed the result (ToolOverlay
+     *  result_actions), this is the transformed content; the adapter's raw
+     *  response is kept in the tool call's debug log, not here.
+     */
     content: Array<ObjectiveToolCallResult_ContentBlock>;
 }
 export interface ObjectiveToolCallResult_AudioBlock {
@@ -2765,32 +2771,63 @@ export interface RestoreToolRequest {
     id?: string;
 }
 /**
- * Default: ON_RENDER_ERROR_RAW_CONTENT.
+ * Default: ON_ERROR_RAW_CONTENT.
  */
-export type ResultActionTransformOnRenderError = 'ON_RENDER_ERROR_UNSPECIFIED' | 'ON_RENDER_ERROR_RAW_CONTENT' | 'ON_RENDER_ERROR_FAIL';
+export type ResultActionTransformOnError = 'ON_ERROR_UNSPECIFIED' | 'ON_ERROR_RAW_CONTENT' | 'ON_ERROR_FAIL';
 /**
- * Replace the result content with a rendered Liquid template. Used to
- *  compact verbose responses to the fields the model actually needs.
+ * Replace the result's text content with a rendered Liquid template.
+ *  Used to compact verbose responses to the fields the model actually
+ *  needs, or to rewrite a JSON response into a smaller JSON document.
  *
  *  `content_template` is rendered against the call:
  *
- *    {{ result }}             the result content. For HTTP and OpenAPI
- *                             tools this is the response body, parsed
- *                             when the response is JSON; for MCP tools it
- *                             is the content blocks; for bare tools it is
- *                             the content that was set.
- *    {{ parameters }}         the final arguments the tool was called
- *                             with, after parameter actions were applied
+ *    {{ result.text }}        the result's text content (text blocks
+ *                             joined with newlines)
+ *    {{ result.json }}        result.text parsed as JSON — objects and
+ *                             arrays are navigable (`result.json.items`,
+ *                             `| map: "id"`); absent when the text is not
+ *                             valid JSON
+ *    {{ result.blocks }}      every content block: [{type, text?,
+ *                             mime_type?, size_bytes?}]
+ *    {{ parameters }}         the arguments the tool was called with,
+ *                             after parameter actions were applied
  *    {{ tool.name }}          the tool's metadata.name
  *    {{ tool.llm_tool_name }} the name the model called it by
  *    {{ pinned_parameters }}  the objective's pinned parameters
+ *    {{ objective.id }} / {{ objective.external_id }} /
+ *    {{ objective.labels.<key> }}
+ *
+ *  Templates render with strict variables: referencing `result.json` on
+ *  a non-JSON result, or any other undefined variable, is a render error
+ *  and `on_error` decides the outcome. The `json` filter pretty-prints a
+ *  value as JSON; `sanitized_json` emits it compact and escaped for
+ *  embedding.
+ *
+ *  Transforms are text-only. `result.text` and `result.json` are built
+ *  from the result's text blocks; media blocks (images, audio) are opaque
+ *  to the template and pass through unchanged. The rendered text replaces
+ *  the text blocks as a single text block. A result with no text blocks
+ *  at all (an image-only or audio-only result) is out of scope: the
+ *  transform is skipped, the result is recorded as returned, and the
+ *  skip is noted in the tool call's debug log — this is not an `on_error`
+ *  case, nothing was attempted. The one exception is `expect_json`, where
+ *  a result with no text is a violated precondition and `on_error`
+ *  applies.
  */
 export interface ResultAction_Transform {
     contentTemplate: string;
     /**
-     * Default: ON_RENDER_ERROR_RAW_CONTENT.
+     * Default: ON_ERROR_RAW_CONTENT.
      */
-    onRenderError: ResultActionTransformOnRenderError;
+    onError: ResultActionTransformOnError;
+    /**
+     * Require the tool result to have text content that parses as JSON
+     *  before rendering. A non-JSON (or text-less) result is then an error
+     *  subject to `on_error` even if the template never reads
+     *  `result.json`. Off by default: `result.json` is simply absent for
+     *  non-JSON results, and text-less results skip the transform.
+     */
+    expectJson: boolean;
 }
 /**
  * Resume agent schedule request.
@@ -3337,6 +3374,10 @@ export interface ToolInfo {
  *      nothing into tools that lack the parameter.
  *    - Overlays apply to just-in-time tool sets as well; the tools are
  *      evaluated against overlays at the moment they are loaded.
+ *    - Result actions run once, when the tool call's result is recorded; the
+ *      stored result is the transformed one, so every reader (the model,
+ *      compaction, the API) sees the same content. They are not supported on
+ *      bare tool sets.
  */
 export interface ToolOverlay {
     /**
@@ -3393,9 +3434,19 @@ export interface ToolOverlay_ParameterPath {
 }
 /**
  * A post-call action. Result actions rewrite a tool call's result after
- *  the adapter returns and before the content is handed to the model. They
- *  do not affect what is recorded on the tool call — the raw result is
- *  still stored; the transformed content is what the model reads.
+ *  the adapter returns and before it is recorded: the transformed content
+ *  is what is stored and what the model reads (ObjectiveToolCallResult
+ *  content). The adapter's raw response is kept in the tool call's debug
+ *  log for operators; it is not otherwise retained.
+ *
+ *  Result actions apply to MCP, OpenAPI and HTTP tool sets. They are not
+ *  supported on bare tool sets — a bare tool's content is supplied by an
+ *  external consumer, so there is nothing for the platform to reshape —
+ *  and a tool set whose adapter is `bare` rejects overlays that carry
+ *  result actions.
+ *
+ *  When several matching overlays carry transforms they run in overlay
+ *  order, each one reading the previous one's output.
  */
 export type ToolOverlay_ResultAction = ToolOverlay_ResultAction_Transform;
 /**
