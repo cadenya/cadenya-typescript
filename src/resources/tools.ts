@@ -41,6 +41,14 @@ export interface ToolListParams {
    */
   requiresApproval?: boolean;
   /**
+   * Filter to tools matched by the tool set overlays with these keys
+   *  (ToolSetSpec.overlays), i.e. tools whose info.overlays contains the
+   *  key. Multiple values are OR'd together. Selectors are evaluated
+   *  against every tool in the set to answer this, so total counts reflect
+   *  the filtered set. An unknown overlay key matches nothing.
+   */
+  overlays?: Array<string>;
+  /**
    * Filters by metadata labels. Comma-separated key=value pairs,
    *  e.g. "env=prod,team=ai". A resource matches only if every pair
    *  matches exactly (AND semantics).
@@ -133,7 +141,7 @@ export class Tools {
     const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
     if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
     const _base = snapshotParams(params);
-    const response = await this._client.request<ListToolsResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, names: params?.names, states: params?.states, requiresApproval: params?.requiresApproval, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
+    const response = await this._client.request<ListToolsResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, names: params?.names, states: params?.states, requiresApproval: params?.requiresApproval, overlays: params?.overlays, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
     return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.list(toolSetId, { ..._base, cursor: cursor }, options));
   }
 

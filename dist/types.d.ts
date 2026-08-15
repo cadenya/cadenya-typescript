@@ -1190,9 +1190,12 @@ export interface CreateObjectiveRequest {
     subject?: SubjectAssertion;
     /**
      * Parameters forced onto this objective's tool calls. A pinned parameter
-     *  is an overlay on a tool's JSON schema: the parameter is removed from
-     *  what the LLM sees, and its value is always overwritten server-side with
-     *  the pinned value — the model cannot choose a different value for it.
+     *  is removed from the tool schema the LLM sees, and its value is always
+     *  overwritten server-side with the pinned value — the model cannot choose
+     *  a different value for it. By default a pinned key applies to every tool
+     *  with a top-level parameter of the same name; a tool set's overlays
+     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
+     *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
 }
@@ -2536,6 +2539,78 @@ export interface Page {
     nextCursor: string;
 }
 /**
+ * Default: ON_MISSING_FAIL.
+ */
+export type ParameterActionPinOnMissing = 'ON_MISSING_UNSPECIFIED' | 'ON_MISSING_FAIL' | 'ON_MISSING_SKIP';
+/**
+ * Bind the parameter to one of the objective's pinned parameters. It is
+ *  deleted from the schema (including any `required` entry), and on every
+ *  call the pinned value is written into the arguments, overwriting
+ *  anything the model supplied.
+ *  This is the authoritative-value action: the model never sees the
+ *  parameter and cannot influence it.
+ *
+ *  `pin` differs from `set` with `{{ pinned_parameters.key }}` only in
+ *  how a missing key is handled (see `on_missing`) and in intent —
+ *  reading the tool set config, `pin` says "this comes from the caller".
+ */
+export interface ParameterAction_Pin {
+    path: string;
+    /**
+     * Key into the objective's pinned_parameters map. Need not equal the
+     *  last segment of `path` — this is how a pinned `orgId` reaches a
+     *  tool whose parameter is named `organizationId`.
+     */
+    pinnedParameter: string;
+    /**
+     * Default: ON_MISSING_FAIL.
+     */
+    onMissing: ParameterActionPinOnMissing;
+}
+/**
+ * Remove the parameter entirely. It is deleted from the schema
+ *  (including any `required` entry) and stripped from the arguments if
+ *  the model supplies it anyway. The tool receives no value for it — the
+ *  upstream default, if any, applies. Use this to save context on
+ *  parameters the model has no business setting (pagination cursors,
+ *  expansion flags, debug toggles).
+ */
+export interface ParameterAction_Remove {
+    path: string;
+}
+/**
+ * Force the parameter to a value. It is deleted from the schema
+ *  (including any `required` entry), and on every call the rendered
+ *  value is written into the arguments, overwriting anything the model
+ *  supplied.
+ *
+ *  `value_template` is a Liquid template rendered against the objective:
+ *
+ *    {{ pinned_parameters.<key> }}  the objective's pinned parameters
+ *    {{ objective.id }}             the objective's id
+ *    {{ objective.external_id }}    the objective's external id
+ *    {{ objective.labels.<key> }}   the objective's labels
+ *
+ *  Templates render with strict variables: referencing a pinned
+ *  parameter or label that does not exist fails the call rather than
+ *  rendering an empty value.
+ *
+ *  Tool set secrets are intentionally not exposed here: overlay-set
+ *  values are recorded as tool call arguments in events and tool call
+ *  history, and would leak. Use adapter headers for credentials.
+ *
+ *  The rendered string is coerced to the parameter's declared schema
+ *  type: for a non-string parameter (integer, number, boolean, object,
+ *  array) the output is parsed as JSON. A value that fails to parse
+ *  errors the tool call. Prefer `pin` when the value is simply a pinned
+ *  parameter — it fails loudly when the key is absent instead of
+ *  rendering an empty string.
+ */
+export interface ParameterAction_Set {
+    path: string;
+    valueTemplate: string;
+}
+/**
  * Pause agent schedule request.
  */
 export interface PauseAgentScheduleRequest {
@@ -2690,6 +2765,34 @@ export interface RestoreToolRequest {
     id?: string;
 }
 /**
+ * Default: ON_RENDER_ERROR_RAW_CONTENT.
+ */
+export type ResultActionTransformOnRenderError = 'ON_RENDER_ERROR_UNSPECIFIED' | 'ON_RENDER_ERROR_RAW_CONTENT' | 'ON_RENDER_ERROR_FAIL';
+/**
+ * Replace the result content with a rendered Liquid template. Used to
+ *  compact verbose responses to the fields the model actually needs.
+ *
+ *  `content_template` is rendered against the call:
+ *
+ *    {{ result }}             the result content. For HTTP and OpenAPI
+ *                             tools this is the response body, parsed
+ *                             when the response is JSON; for MCP tools it
+ *                             is the content blocks; for bare tools it is
+ *                             the content that was set.
+ *    {{ parameters }}         the final arguments the tool was called
+ *                             with, after parameter actions were applied
+ *    {{ tool.name }}          the tool's metadata.name
+ *    {{ tool.llm_tool_name }} the name the model called it by
+ *    {{ pinned_parameters }}  the objective's pinned parameters
+ */
+export interface ResultAction_Transform {
+    contentTemplate: string;
+    /**
+     * Default: ON_RENDER_ERROR_RAW_CONTENT.
+     */
+    onRenderError: ResultActionTransformOnRenderError;
+}
+/**
  * Resume agent schedule request.
  */
 export interface ResumeAgentScheduleRequest {
@@ -2784,6 +2887,21 @@ export interface SearchToolsOrToolSetsResponse {
     tools: Array<Tool>;
     toolSets: Array<ToolSet>;
     agents: Array<Agent>;
+}
+/**
+ * A single selector condition.
+ */
+export type Selector_Condition = Selector_Condition_Attribute | Selector_Condition_HasParameter | Selector_Condition_Tools;
+/**
+ * An explicit list of tools, matched on spec.llm_tool_name — the name
+ *  the model calls the tool by. It identifies a tool across versions:
+ *  just-in-time MCP sets keep one tool per signature and every version
+ *  shares the LLM name, so the condition keeps matching as the source
+ *  evolves. Any name in the list matches (OR). Names of tools not (or
+ *  not yet) present in the set are allowed and match nothing.
+ */
+export interface Selector_ToolNames {
+    names?: Array<string>;
 }
 /**
  * SetToolCallContentRequest lets an external API consumer supply the result
@@ -3145,9 +3263,156 @@ export interface ToolInfo {
      * Content signature identifying the tool within its tool set: a hash of the
      *  sanitized llm_tool_name, description, and canonical parameters. Two tools
      *  with the same llm_tool_name but different parameters or description (as
-     *  MCP servers may return per user) have distinct signatures.
+     *  MCP servers may return per user) have distinct signatures. Computed over
+     *  the raw spec — overlays do not change a tool's signature.
      */
     signature: string;
+    /**
+     * Keys of the tool set's overlays whose selectors match this tool
+     *  (ToolSetSpec.overlays), in evaluation order. Disabled overlays are
+     *  excluded. An overlay is listed when its selector matches even if none
+     *  of its actions changed this tool's schema (all its paths were absent),
+     *  so this answers "which policies apply to this tool" — diff
+     *  effective_parameters against spec.parameters for "what changed".
+     *  Empty when no overlay applies.
+     */
+    overlays?: Array<string>;
+    /**
+     * The parameter schema as presented to the model: spec.parameters after
+     *  every matching overlay's parameter actions have been applied, in order,
+     *  including maintenance of the schema's `required` list. Actions whose
+     *  outcome depends on the objective (pin with ON_MISSING_SKIP) are applied
+     *  as if the pinned key were present, so this reflects the intended steady
+     *  state rather than any one objective. Equals spec.parameters when no
+     *  overlay applies. Result actions have no effect here.
+     */
+    effectiveParameters?: Record<string, unknown>;
+}
+/**
+ * A tool overlay is a policy attached to a tool set that reshapes the tools
+ *  the model sees and calls. It pairs a selector (which tools it applies to)
+ *  with actions that run before a call — rewriting the tool's parameter
+ *  schema and the arguments the model supplied — and after a call —
+ *  rewriting the result before it enters the model's context.
+ *
+ *  Overlays exist for two reasons:
+ *
+ *    - Authority. Adapter-derived tool sets (OpenAPI especially) expose many
+ *      parameters the model must never guess — a workspace id, a tenant id,
+ *      an account scope. Overlays bind those parameters to the objective's
+ *      `pinned_parameters` (see CreateObjectiveRequest.pinned_parameters):
+ *      the parameter disappears from the schema and the value is forced
+ *      server-side, so the model has no opportunity to supply a different
+ *      one.
+ *    - Context. Large specs carry pagination cursors, expansion flags and
+ *      verbose responses that cost tokens without helping the model.
+ *      Overlays strip parameters, fix them to literals, and compact results.
+ *
+ *  Pinned parameters and overlays are complementary: pinned parameters are
+ *  *data* supplied per objective (or per widget session) by the caller;
+ *  overlays are *policy* authored once on the tool set. Pinning by name
+ *  still works without an overlay — a pinned key that matches a top-level
+ *  parameter name is applied to every tool in the objective — overlays are
+ *  for the cases that needs more: nested paths, renamed keys, a subset of
+ *  tools, or values that are literals rather than caller-supplied.
+ *
+ *  Evaluation model:
+ *
+ *    - Overlays are evaluated in list order; within an overlay, actions are
+ *      evaluated in list order. Later actions win on the same path (a `set`
+ *      followed by a `remove` leaves the parameter removed).
+ *    - The parameter schema the model sees is computed when tools are
+ *      assembled for an objective, so pre-call actions can consult that
+ *      objective's pinned parameters (this is what makes `pin` with
+ *      ON_MISSING_SKIP meaningful). Argument rewriting runs on every call.
+ *    - An action whose `path` does not exist in the tool's parameter schema
+ *      changes nothing in the schema the model sees. This is deliberate: a
+ *      broad selector (every `list_*` tool) may match tools with different
+ *      shapes, and one overlay should be able to cover all of them without
+ *      erroring on the ones that lack a given parameter. At call time the
+ *      model's arguments can still not widen what it controls: `remove`
+ *      strips the path whether or not it is declared, and `set`/`pin`
+ *      overwrite a value the model sent at an undeclared path (a schema this
+ *      evaluator cannot see through, e.g. behind $ref/allOf) while injecting
+ *      nothing into tools that lack the parameter.
+ *    - Overlays apply to just-in-time tool sets as well; the tools are
+ *      evaluated against overlays at the moment they are loaded.
+ */
+export interface ToolOverlay {
+    /**
+     * Identifies the overlay within its tool set. Unique across the tool
+     *  set's overlays (enforced by the server), stable across reorders, and
+     *  surfaced in tool call diagnostics ("parameter removed by overlay
+     *  strip-list-knobs") so an operator can trace a rewritten call back to
+     *  the policy that rewrote it. Referenced by ToolInfo.overlays and the
+     *  ListToolsRequest.overlays filter.
+     */
+    key: string;
+    /**
+     * Which tools this overlay applies to. Required; an empty selector
+     *  (no conditions) matches every tool in the set.
+     */
+    selector: ToolOverlay_Selector;
+    /**
+     * Pre-call actions, applied in order. See ParameterAction.
+     */
+    parameterActions?: Array<ToolOverlay_ParameterAction>;
+    /**
+     * Post-call actions, applied in order. See ResultAction.
+     */
+    resultActions?: Array<ToolOverlay_ResultAction>;
+    /**
+     * When true the overlay is retained in the spec but not evaluated. Lets an
+     *  operator switch a policy off to diagnose a misbehaving tool without
+     *  deleting it and losing the configuration.
+     */
+    disabled: boolean;
+}
+/**
+ * A pre-call action. Parameter actions rewrite the tool's parameter
+ *  schema as presented to the model and the arguments the model supplies
+ *  when it calls the tool. Both sides are always kept in agreement: a
+ *  parameter that is hidden from the schema is also stripped from (or
+ *  forced in) the arguments, so the model can neither see nor smuggle it.
+ */
+export type ToolOverlay_ParameterAction = ToolOverlay_ParameterAction_Remove | ToolOverlay_ParameterAction_Set | ToolOverlay_ParameterAction_Pin;
+/**
+ * A dotted path into a tool's parameter schema. Each segment is a property
+ *  name; the path `filter.workspaceId` addresses
+ *  `properties.filter.properties.workspaceId` in the schema and
+ *  `arguments.filter.workspaceId` in the call. Only object properties are
+ *  addressable — there is no array indexing, wildcarding or filtering.
+ *
+ *  This is deliberately not JSONPath: every action needs a single,
+ *  unambiguous location in both the schema and the arguments so that
+ *  removing a parameter from the schema and stripping it from the call are
+ *  guaranteed to agree.
+ */
+export interface ToolOverlay_ParameterPath {
+    path: string;
+}
+/**
+ * A post-call action. Result actions rewrite a tool call's result after
+ *  the adapter returns and before the content is handed to the model. They
+ *  do not affect what is recorded on the tool call — the raw result is
+ *  still stored; the transformed content is what the model reads.
+ */
+export type ToolOverlay_ResultAction = ToolOverlay_ResultAction_Transform;
+/**
+ * Default: OPERATOR_AND.
+ */
+export type ToolOverlaySelectorOperator = 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
+/**
+ * Which tools in the tool set an overlay applies to. Conditions are
+ *  combined with `operator`; an overlay with no conditions matches every
+ *  tool in the set.
+ */
+export interface ToolOverlay_Selector {
+    conditions?: Array<Selector_Condition>;
+    /**
+     * Default: OPERATOR_AND.
+     */
+    operator: ToolOverlaySelectorOperator;
 }
 export interface ToolResult {
     toolCallId: string;
@@ -3181,7 +3446,7 @@ export type ToolSetAdapter = ToolSetAdapter_McpVariant | ToolSetAdapter_HttpVari
  * Approval filters that will automatically set the approval requirement on tools synced from an external source
  */
 export type ToolSetAdapter_ApprovalRequirementFilter = ToolSetAdapter_ApprovalRequirementFilter_Always | ToolSetAdapter_ApprovalRequirementFilter_Only;
-export type ToolSetAdapterAttributeFilterAttribute = 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION';
+export type ToolSetAdapterAttributeFilterAttribute = 'ATTRIBUTE_UNSPECIFIED' | 'ATTRIBUTE_NAME' | 'ATTRIBUTE_TITLE' | 'ATTRIBUTE_DESCRIPTION' | 'ATTRIBUTE_LLM_TOOL_NAME';
 /**
  * Single attribute filter
  */
@@ -3305,6 +3570,15 @@ export interface ToolSetSecretSpec {
 export interface ToolSetSpec {
     description?: string;
     adapter: ToolSetAdapter;
+    /**
+     * Overlays applied to this tool set's tools, evaluated in order. See
+     *  ToolOverlay. Overlay keys must be unique within the list.
+     *
+     *  As a repeated field this is replaced wholesale on update: an
+     *  update_mask of `spec.overlays` swaps the entire list for the one in the
+     *  request. Read-modify-write to add or remove a single overlay.
+     */
+    overlays?: Array<ToolOverlay>;
 }
 /**
  * ToolSetUsage describes one agent variation that uses the tool set (or, when
@@ -3999,13 +4273,13 @@ export interface WidgetSessionSpec {
     tokenExpiresAt?: string;
     /**
      * Parameters forced onto tool calls made by this session's conversations.
-     *  A pinned parameter is an overlay on a tool's JSON schema: the parameter
-     *  is removed from what the LLM sees, and its value is always overwritten
-     *  server-side with the pinned value — so the model cannot be tricked into
-     *  calling a tool with a different id than the one the session was minted
-     *  for (e.g. pin "workspaceId" for an OpenAPI tool with a
-     *  /workspaces/{workspaceId} path). Flows to every objective the session
-     *  creates.
+     *  A pinned parameter is removed from the tool schema the LLM sees, and its
+     *  value is always overwritten server-side with the pinned value — so the
+     *  model cannot be tricked into calling a tool with a different id than the
+     *  one the session was minted for (e.g. pin "workspaceId" for an OpenAPI
+     *  tool with a /workspaces/{workspaceId} path). Flows to every objective
+     *  the session creates. See ToolSetSpec.overlays for binding pinned keys to
+     *  nested or differently named parameters.
      */
     pinnedParameters?: Record<string, string>;
 }
@@ -4274,6 +4548,48 @@ export interface ToolSetAdapter_OpenAPI_UploadId {
      *  Ignored when base_url is set.
      */
     serverName?: string;
+}
+export interface Selector_Condition_Attribute {
+    type: 'attribute';
+    /**
+     * Match on a tool attribute (name, title, description,
+     *  llm_tool_name) with a string matcher — the same filter used by
+     *  the adapter's include/exclude lists.
+     */
+    attribute: ToolSetAdapter_AttributeFilter;
+}
+export interface Selector_Condition_HasParameter {
+    type: 'hasParameter';
+    /**
+     * Match tools whose parameter schema contains the given path. This
+     *  is the usual way to target "every tool that takes a workspaceId"
+     *  without enumerating tools by name.
+     */
+    hasParameter: ToolOverlay_ParameterPath;
+}
+export interface Selector_Condition_Tools {
+    type: 'tools';
+    /**
+     * Match specific tools by LLM tool name. The direct way to assign an
+     *  overlay to one tool (or a handful) without writing a matcher.
+     */
+    tools: Selector_ToolNames;
+}
+export interface ToolOverlay_ParameterAction_Remove {
+    type: 'remove';
+    remove: ParameterAction_Remove;
+}
+export interface ToolOverlay_ParameterAction_Set {
+    type: 'set';
+    set: ParameterAction_Set;
+}
+export interface ToolOverlay_ParameterAction_Pin {
+    type: 'pin';
+    pin: ParameterAction_Pin;
+}
+export interface ToolOverlay_ResultAction_Transform {
+    type: 'transform';
+    transform: ResultAction_Transform;
 }
 export interface ToolSpec_Config_Http {
     type: 'http';
@@ -4598,13 +4914,13 @@ export interface WidgetSessionSpecParam {
     expiresAt?: string;
     /**
      * Parameters forced onto tool calls made by this session's conversations.
-     *  A pinned parameter is an overlay on a tool's JSON schema: the parameter
-     *  is removed from what the LLM sees, and its value is always overwritten
-     *  server-side with the pinned value — so the model cannot be tricked into
-     *  calling a tool with a different id than the one the session was minted
-     *  for (e.g. pin "workspaceId" for an OpenAPI tool with a
-     *  /workspaces/{workspaceId} path). Flows to every objective the session
-     *  creates.
+     *  A pinned parameter is removed from the tool schema the LLM sees, and its
+     *  value is always overwritten server-side with the pinned value — so the
+     *  model cannot be tricked into calling a tool with a different id than the
+     *  one the session was minted for (e.g. pin "workspaceId" for an OpenAPI
+     *  tool with a /workspaces/{workspaceId} path). Flows to every objective
+     *  the session creates. See ToolSetSpec.overlays for binding pinned keys to
+     *  nested or differently named parameters.
      */
     pinnedParameters?: Record<string, string>;
 }

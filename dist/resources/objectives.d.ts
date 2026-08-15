@@ -139,9 +139,12 @@ export interface ObjectiveCreateParams {
     subject?: SubjectAssertion;
     /**
      * Parameters forced onto this objective's tool calls. A pinned parameter
-     *  is an overlay on a tool's JSON schema: the parameter is removed from
-     *  what the LLM sees, and its value is always overwritten server-side with
-     *  the pinned value — the model cannot choose a different value for it.
+     *  is removed from the tool schema the LLM sees, and its value is always
+     *  overwritten server-side with the pinned value — the model cannot choose
+     *  a different value for it. By default a pinned key applies to every tool
+     *  with a top-level parameter of the same name; a tool set's overlays
+     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
+     *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
 }
