@@ -1,128 +1,69 @@
-import { castToError } from '../internal/errors';
+/** Error model. The API reports failures as a google.rpc.Status payload. */
 
-export class CadenyaError extends Error {}
+export interface ErrorStatus {
+  code?: number;
+  message?: string;
+  details?: Array<Record<string, unknown>>;
+}
 
-export class APIError<
-  TStatus extends number | undefined = number | undefined,
-  THeaders extends Headers | undefined = Headers | undefined,
-  TError extends Object | undefined = Object | undefined,
-> extends CadenyaError {
-  /** HTTP status for the response that caused the error */
-  readonly status: TStatus;
-  /** HTTP headers for the response that caused the error */
-  readonly headers: THeaders;
-  /** JSON body of the response that caused the error */
-  readonly error: TError;
+export class APIError extends Error {
+  readonly status: number;
+  readonly code: number | undefined;
+  readonly details: Array<Record<string, unknown>> | undefined;
 
-  constructor(status: TStatus, error: TError, message: string | undefined, headers: THeaders) {
-    super(`${APIError.makeMessage(status, error, message)}`);
+  constructor(status: number, body: ErrorStatus | undefined, message?: string) {
+    super(message ?? body?.message ?? `HTTP ${status}`);
+    this.name = 'APIError';
     this.status = status;
-    this.headers = headers;
-    this.error = error;
-  }
-
-  private static makeMessage(status: number | undefined, error: any, message: string | undefined) {
-    const msg =
-      error?.message ?
-        typeof error.message === 'string' ?
-          error.message
-        : JSON.stringify(error.message)
-      : error ? JSON.stringify(error)
-      : message;
-
-    if (status && msg) {
-      return `${status} ${msg}`;
-    }
-    if (status) {
-      return `${status} status code (no body)`;
-    }
-    if (msg) {
-      return msg;
-    }
-    return '(no status code or body)';
-  }
-
-  static generate(
-    status: number | undefined,
-    errorResponse: Object | undefined,
-    message: string | undefined,
-    headers: Headers | undefined,
-  ): APIError {
-    if (!status || !headers) {
-      return new APIConnectionError({ message, cause: castToError(errorResponse) });
-    }
-
-    const error = errorResponse as Record<string, any>;
-
-    if (status === 400) {
-      return new BadRequestError(status, error, message, headers);
-    }
-
-    if (status === 401) {
-      return new AuthenticationError(status, error, message, headers);
-    }
-
-    if (status === 403) {
-      return new PermissionDeniedError(status, error, message, headers);
-    }
-
-    if (status === 404) {
-      return new NotFoundError(status, error, message, headers);
-    }
-
-    if (status === 409) {
-      return new ConflictError(status, error, message, headers);
-    }
-
-    if (status === 422) {
-      return new UnprocessableEntityError(status, error, message, headers);
-    }
-
-    if (status === 429) {
-      return new RateLimitError(status, error, message, headers);
-    }
-
-    if (status >= 500) {
-      return new InternalServerError(status, error, message, headers);
-    }
-
-    return new APIError(status, error, message, headers);
+    this.code = body?.code;
+    this.details = body?.details;
   }
 }
 
-export class APIUserAbortError extends APIError<undefined, undefined, undefined> {
-  constructor({ message }: { message?: string } = {}) {
-    super(undefined, undefined, message || 'Request was aborted.', undefined);
+export class APIConnectionError extends Error {
+  constructor(cause: unknown) {
+    super('Connection error', { cause });
+    this.name = 'APIConnectionError';
   }
 }
 
-export class APIConnectionError extends APIError<undefined, undefined, undefined> {
-  constructor({ message, cause }: { message?: string | undefined; cause?: Error | undefined }) {
-    super(undefined, undefined, message || 'Connection error.', undefined);
-    // in some environments the 'cause' property is already declared
-    // @ts-ignore
-    if (cause) this.cause = cause;
+export class APIUserAbortError extends Error {
+  constructor() {
+    super('Request was aborted');
+    this.name = 'APIUserAbortError';
   }
 }
 
-export class APIConnectionTimeoutError extends APIConnectionError {
-  constructor({ message }: { message?: string } = {}) {
-    super({ message: message ?? 'Request timed out.' });
+/**
+ * The request could not be constructed locally (unserializable body, invalid
+ * argument). No network attempt was made and the call is never retried.
+ */
+export class APIRequestError extends Error {
+  constructor(message: string, cause: unknown) {
+    super(message, { cause });
+    this.name = 'APIRequestError';
   }
 }
 
-export class BadRequestError extends APIError<400, Headers> {}
+/** The configured request deadline elapsed before the response completed. */
+export class APITimeoutError extends Error {
+  constructor(timeoutMs: number) {
+    super(`Request timed out after ${timeoutMs}ms`);
+    this.name = 'APITimeoutError';
+  }
+}
 
-export class AuthenticationError extends APIError<401, Headers> {}
+/**
+ * The server answered outside the declared protocol: an empty/null body
+ * where a JSON document was promised, malformed JSON, or a 204 on an
+ * output-bearing operation.
+ */
+export class APIResponseError extends Error {
+  readonly status: number;
 
-export class PermissionDeniedError extends APIError<403, Headers> {}
-
-export class NotFoundError extends APIError<404, Headers> {}
-
-export class ConflictError extends APIError<409, Headers> {}
-
-export class UnprocessableEntityError extends APIError<422, Headers> {}
-
-export class RateLimitError extends APIError<429, Headers> {}
-
-export class InternalServerError extends APIError<number, Headers> {}
+  constructor(status: number, message: string, cause?: unknown) {
+    super(message, cause === undefined ? undefined : { cause });
+    this.name = 'APIResponseError';
+    this.status = status;
+  }
+}
