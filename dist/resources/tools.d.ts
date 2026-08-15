@@ -38,6 +38,14 @@ export interface ToolListParams {
      */
     requiresApproval?: boolean;
     /**
+     * Filter to tools matched by the tool set overlays with these keys
+     *  (ToolSetSpec.overlays), i.e. tools whose info.overlays contains the
+     *  key. Multiple values are OR'd together. Selectors are evaluated
+     *  against every tool in the set to answer this, so total counts reflect
+     *  the filtered set. An unknown overlay key matches nothing.
+     */
+    overlays?: Array<string>;
+    /**
      * Filters by metadata labels. Comma-separated key=value pairs,
      *  e.g. "env=prod,team=ai". A resource matches only if every pair
      *  matches exactly (AND semantics).
