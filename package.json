@@ -1,8 +1,8 @@
 {
   "name": "@cadenya/cadenya",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The official TypeScript SDK for the Cadenya API",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
