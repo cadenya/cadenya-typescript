@@ -8,27 +8,35 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     name: publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     environment: production
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Node
-        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '24'
+          node-version: '22'
+          registry-url: https://registry.npmjs.org
+
+      # npm's OIDC / trusted-publishing support requires a recent npm; the
+      # version bundled with the runner's Node is not always new enough.
+      - name: Ensure OIDC-capable npm
+        run: npm install -g npm@latest
 
       - name: Install dependencies
-        run: |
-          yarn install
+        run: npm install
+
+      - name: Build
+        run: npm run build
 
       - name: Publish to NPM
-        run: |
-          bash ./bin/publish-npm
+        run: npm publish
