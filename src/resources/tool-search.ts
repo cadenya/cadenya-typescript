@@ -6,9 +6,7 @@ import type { SearchToolsOrToolSetsResponse } from '../types.js';
 export interface ToolSearchSearchOrSetsParams {
   query: string;
   /**
-   * NOTE: `query` is runtime-required (buf.validate min_len), but gnostic
-   *  does not propagate message-level schema `required` to GET query
-   *  parameters — overlay.yaml marks the parameter required instead.
+   * Workspace that contains the tools and tool sets to search.
    * 
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */

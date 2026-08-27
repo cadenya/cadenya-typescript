@@ -437,7 +437,7 @@ List objective context windows
 ```ts
 client.objectives.listContextWindows(objectiveId: string, params?: ObjectiveListContextWindowsParams, options?: RequestOptions): Promise<Page<ObjectiveContextWindow>>
 ```
-Get objective context diagnostics
+Get objective context usage
 
 ```ts
 client.objectives.retrieveDiagnostics(objectiveId: string, params?: ObjectiveRetrieveDiagnosticsParams, options?: RequestOptions): APIPromise<GetObjectiveDiagnosticsResponse>

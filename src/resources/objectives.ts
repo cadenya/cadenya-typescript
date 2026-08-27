@@ -492,7 +492,7 @@ export class Objectives {
   }
 
   /**
-   * Get objective context diagnostics
+   * Get objective context usage
    * 
    * @example
    * ```ts

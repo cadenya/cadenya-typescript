@@ -79,7 +79,7 @@ export class Objectives {
         return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.listContextWindows(objectiveId, { ..._base, cursor: cursor }, options));
     }
     /**
-     * Get objective context diagnostics
+     * Get objective context usage
      *
      * @example
      * ```ts

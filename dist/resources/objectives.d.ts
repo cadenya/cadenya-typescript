@@ -440,7 +440,7 @@ export declare class Objectives {
      */
     listContextWindows(objectiveId: string, params?: ObjectiveListContextWindowsParams, options?: RequestOptions): Promise<Page<ObjectiveContextWindow>>;
     /**
-     * Get objective context diagnostics
+     * Get objective context usage
      *
      * @example
      * ```ts
