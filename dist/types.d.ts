@@ -595,10 +595,8 @@ export interface AgentVariationSpec_Constraints {
      *  When not set, objectives are still swept at the system-wide 24 hour
      *  maximum — every objective eventually reaches a terminal state.
      *
-     *  Note: no gnostic integer hint here on purpose. The Envoy gRPC-JSON
-     *  transcoder only accepts the canonical protobuf JSON form for
-     *  Durations — a "<seconds>s" string — so the SDKs must type this as a
-     *  string (like AgentScheduleSpec.every), not an integer.
+     *  SDKs represent this as a duration string, like AgentScheduleSpec.every,
+     *  rather than an integer.
      */
     inactivityTimeout?: string;
 }
@@ -614,7 +612,7 @@ export type AgentVariationSpecModelConfigReasoningEffort = 'REASONING_EFFORT_UNS
  */
 export interface AgentVariationSpec_ModelConfig {
     /**
-     * The model identifier in family/model format (e.g., "claude/opus-4.6", "claude/sonnet-4.5")
+     * The model identifier for the agent variation to use. Should be either the reference key (ai-provider.model-name) or the canonical model ID (e.g.: "model_ABC123")
      */
     modelId: string;
     /**
@@ -1426,7 +1424,7 @@ export interface EnableModelRequest {
 }
 export interface GetObjectiveDiagnosticsResponse {
     /**
-     * Diagnostics from the objective's most recent iteration.
+     * Context usage from the objective's most recent iteration.
      */
     diagnostics: ObjectiveDiagnostics;
 }
@@ -1918,7 +1916,7 @@ export interface ModelSpec {
 export type ModelSpec_Capability = ModelSpec_Capability_Temperature | ModelSpec_Capability_TopP | ModelSpec_Capability_TopK | ModelSpec_Capability_StopSequences | ModelSpec_Capability_MaxOutputTokens | ModelSpec_Capability_Reasoning | ModelSpec_Capability_Caching;
 export type NoticeLevel = 'LEVEL_UNSPECIFIED' | 'LEVEL_INFO' | 'LEVEL_WARN';
 /**
- * Notice is a non-terminal diagnostic emitted by the runtime when something
+ * Notice is a non-terminal event emitted by the runtime when something
  *  noteworthy but non-fatal happens during an objective — for example a
  *  just-in-time tool set failing to load, or a previously loaded tool being
  *  dropped because it was archived. Notices carry no structured payload; they
@@ -2083,10 +2081,10 @@ export interface ObjectiveContextWindowInfo {
     createdBy?: Profile;
 }
 /**
- * ObjectiveDiagnostics is the context-usage breakdown measured for a single
- *  iteration at request-assembly time. It reports how much of the context
- *  window each component occupies so tool parameters, memory cascades, and
- *  prompts can be tuned against real token usage.
+ * Context-usage breakdown measured for a single iteration at request-assembly
+ *  time. It reports how much of the context window each component occupies so
+ *  tool parameters, memory cascades, and prompts can be tuned against real
+ *  token usage.
  */
 export interface ObjectiveDiagnostics {
     /**
@@ -3395,7 +3393,7 @@ export interface ToolOverlay {
     /**
      * Identifies the overlay within its tool set. Unique across the tool
      *  set's overlays (enforced by the server), stable across reorders, and
-     *  surfaced in tool call diagnostics ("parameter removed by overlay
+     *  surfaced in tool call messages ("parameter removed by overlay
      *  strip-list-knobs") so an operator can trace a rewritten call back to
      *  the policy that rewrote it. Referenced by ToolInfo.overlays and the
      *  ListToolsRequest.overlays filter.
@@ -3715,8 +3713,9 @@ export interface ToolSpec {
      */
     parameters: Record<string, unknown>;
     /**
-     * Configuration for this specific tool. Transport/Protocol are derived from the tool set adapter, while specifics
-     *  such as endpoint, method, etc, are stored on the tool itself.
+     * Configuration for this specific tool. Its transport is derived from the
+     *  tool set adapter, while details such as endpoint and method are stored on
+     *  the tool itself.
      *
      *  Required, and exactly one adapter must be set.
      */
