@@ -3,7 +3,7 @@
 import { HttpClient, RequestOptions, RequestSpec, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { Stream } from '../core/sse.js';
-import type { AgentVariationSpec_CompactionConfig, CompactObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveTasksResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTask, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
+import type { AgentVariationSpec_CompactionConfig, CompactObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
 import { wireObjectiveEpisodicConfig } from '../types.js';
 
 export interface ObjectiveListParams {
@@ -261,32 +261,6 @@ export interface ObjectiveListFeedbackParams {
 export interface ObjectiveCreateFeedbackParams {
   metadata: CreateOperationMetadata;
   data: ObjectiveFeedbackData;
-  /**
-   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-   */
-  workspaceId?: string;
-}
-
-export interface ObjectiveListTasksParams {
-  /**
-   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-   */
-  workspaceId?: string;
-  /**
-   * Maximum number of results to return
-   */
-  limit?: number;
-  /**
-   * Pagination cursor from previous response
-   */
-  cursor?: string;
-  /**
-   * Sort order for results
-   */
-  sortOrder?: string;
-}
-
-export interface ObjectiveRetrieveTaskParams {
   /**
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
@@ -577,41 +551,6 @@ export class Objectives {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
       return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/feedback`, body: { metadata: params.metadata, data: params.data } };
-    }, options);
-  }
-
-  /**
-   * List objective tasks
-   * 
-   * @example
-   * ```ts
-   * const page = await client.objectives.listTasks('objective_123');
-   * for await (const item of page) {
-   *   // auto-fetches every page
-   * }
-   * ```
-   */
-  async listTasks(objectiveId: string, params?: ObjectiveListTasksParams, options?: RequestOptions): Promise<Page<ObjectiveTask>> {
-    const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-    if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-    const _base = snapshotParams(params);
-    const response = await this._client.request<ListObjectiveTasksResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/tasks`, query: { limit: params?.limit, cursor: params?.cursor, sortOrder: params?.sortOrder } }, options);
-    return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.listTasks(objectiveId, { ..._base, cursor: cursor }, options));
-  }
-
-  /**
-   * Get an objective task by ID
-   * 
-   * @example
-   * ```ts
-   * const objectiveTask = await client.objectives.retrieveTask('objective_123', '_123');
-   * ```
-   */
-  retrieveTask(objectiveId: string, id: string, params?: ObjectiveRetrieveTaskParams, options?: RequestOptions): APIPromise<ObjectiveTask> {
-    return this._client.requestAPI<ObjectiveTask>(() => {
-      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/tasks/${pathSegment('id', id)}` };
     }, options);
   }
 

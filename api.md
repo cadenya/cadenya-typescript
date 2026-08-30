@@ -462,16 +462,6 @@ Submit feedback for an objective
 ```ts
 client.objectives.createFeedback(objectiveId: string, params: ObjectiveCreateFeedbackParams, options?: RequestOptions): APIPromise<ObjectiveFeedback>
 ```
-List objective tasks
-
-```ts
-client.objectives.listTasks(objectiveId: string, params?: ObjectiveListTasksParams, options?: RequestOptions): Promise<Page<ObjectiveTask>>
-```
-Get an objective task by ID
-
-```ts
-client.objectives.retrieveTask(objectiveId: string, id: string, params?: ObjectiveRetrieveTaskParams, options?: RequestOptions): APIPromise<ObjectiveTask>
-```
 List objective tool calls
 
 ```ts
