@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/cadenya/cadenya-typescript/compare/v1.0.2...v1.0.3) (2026-08-30)
+
+
+### Chores
+
+* assorted updates ([#166](https://github.com/cadenya/cadenya-typescript/issues/166)) ([3e57512](https://github.com/cadenya/cadenya-typescript/commit/3e575128e9c050996f0813364f5c190566efdddd))
+
 ## [1.0.2](https://github.com/cadenya/cadenya-typescript/compare/v1.0.1...v1.0.2) (2026-08-27)
 
 
