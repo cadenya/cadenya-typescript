@@ -37,7 +37,7 @@ export class Agents {
      *
      * @example
      * ```ts
-     * const agent = await client.agents.create({ metadata: { name: 'sample' }, spec: { variationSelectionMode: 'VARIATION_SELECTION_MODE_UNSPECIFIED' } });
+     * const agent = await client.agents.create({ metadata: { name: 'sample' }, spec: { variationSelectionMode: 'VARIATION_SELECTION_MODE_RANDOM' } });
      * ```
      */
     create(params, options) {

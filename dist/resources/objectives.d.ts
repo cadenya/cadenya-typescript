@@ -1,7 +1,7 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { Stream } from '../core/sse.js';
-import type { AgentVariationSpec_CompactionConfig, CompactObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTask, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
+import type { AgentVariationSpec_CompactionConfig, CompactObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
 export interface ObjectiveListParams {
     /**
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
@@ -254,30 +254,6 @@ export interface ObjectiveCreateFeedbackParams {
      */
     workspaceId?: string;
 }
-export interface ObjectiveListTasksParams {
-    /**
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
-    /**
-     * Maximum number of results to return
-     */
-    limit?: number;
-    /**
-     * Pagination cursor from previous response
-     */
-    cursor?: string;
-    /**
-     * Sort order for results
-     */
-    sortOrder?: string;
-}
-export interface ObjectiveRetrieveTaskParams {
-    /**
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
-}
 export interface ObjectiveListToolCallsParams {
     /**
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
@@ -493,27 +469,6 @@ export declare class Objectives {
      * ```
      */
     createFeedback(objectiveId: string, params: ObjectiveCreateFeedbackParams, options?: RequestOptions): APIPromise<ObjectiveFeedback>;
-    /**
-     * List objective tasks
-     *
-     * @example
-     * ```ts
-     * const page = await client.objectives.listTasks('objective_123');
-     * for await (const item of page) {
-     *   // auto-fetches every page
-     * }
-     * ```
-     */
-    listTasks(objectiveId: string, params?: ObjectiveListTasksParams, options?: RequestOptions): Promise<Page<ObjectiveTask>>;
-    /**
-     * Get an objective task by ID
-     *
-     * @example
-     * ```ts
-     * const objectiveTask = await client.objectives.retrieveTask('objective_123', '_123');
-     * ```
-     */
-    retrieveTask(objectiveId: string, id: string, params?: ObjectiveRetrieveTaskParams, options?: RequestOptions): APIPromise<ObjectiveTask>;
     /**
      * List objective tool calls
      *

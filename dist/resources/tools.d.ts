@@ -133,7 +133,7 @@ export declare class Tools {
      *
      * @example
      * ```ts
-     * const tool = await client.toolSets.tools.create('tool_set_123', { metadata: { name: 'sample' }, spec: { config: { http: { requestMethod: 'HTTP_METHOD_UNSPECIFIED' }, type: 'http' }, description: 'sample', parameters: {  }, requiresApproval: true } });
+     * const tool = await client.toolSets.tools.create('tool_set_123', { metadata: { name: 'sample' }, spec: { config: { http: { requestMethod: 'GET' }, type: 'http' }, description: 'sample', parameters: {  }, requiresApproval: true } });
      * ```
      */
     create(toolSetId: string, params: ToolCreateParams, options?: RequestOptions): APIPromise<Tool>;

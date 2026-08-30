@@ -102,7 +102,7 @@ export declare class MemoryLayers {
      *
      * @example
      * ```ts
-     * const memoryLayer = await client.memoryLayers.create({ metadata: { name: 'sample' }, spec: { type: 'MEMORY_LAYER_TYPE_UNSPECIFIED' } });
+     * const memoryLayer = await client.memoryLayers.create({ metadata: { name: 'sample' }, spec: { type: 'MEMORY_LAYER_TYPE_EPISODIC' } });
      * ```
      */
     create(params: MemoryLayerCreateParams, options?: RequestOptions): APIPromise<MemoryLayer>;

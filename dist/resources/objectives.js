@@ -168,41 +168,6 @@ export class Objectives {
         }, options);
     }
     /**
-     * List objective tasks
-     *
-     * @example
-     * ```ts
-     * const page = await client.objectives.listTasks('objective_123');
-     * for await (const item of page) {
-     *   // auto-fetches every page
-     * }
-     * ```
-     */
-    async listTasks(objectiveId, params, options) {
-        const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-        if (workspaceId === undefined)
-            throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-        const _base = snapshotParams(params);
-        const response = await this._client.request({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/tasks`, query: { limit: params?.limit, cursor: params?.cursor, sortOrder: params?.sortOrder } }, options);
-        return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.listTasks(objectiveId, { ..._base, cursor: cursor }, options));
-    }
-    /**
-     * Get an objective task by ID
-     *
-     * @example
-     * ```ts
-     * const objectiveTask = await client.objectives.retrieveTask('objective_123', '_123');
-     * ```
-     */
-    retrieveTask(objectiveId, id, params, options) {
-        return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/tasks/${pathSegment('id', id)}` };
-        }, options);
-    }
-    /**
      * List objective tool calls
      *
      * @example

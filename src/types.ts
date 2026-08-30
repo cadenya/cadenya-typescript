@@ -823,7 +823,7 @@ export interface BareMetadata {
   /**
    * Human-readable name of the referenced resource, populated by the server
    *  on reads for convenience. Absent on references to resources that do not
-   *  have a name (e.g., objective tasks).
+   *  have a name.
    */
   name?: string;
 }
@@ -1646,11 +1646,6 @@ export interface ListObjectiveFeedbackResponse {
   pagination?: Page;
 }
 
-export interface ListObjectiveTasksResponse {
-  items: Array<ObjectiveTask>;
-  pagination?: Page;
-}
-
 export interface ListObjectiveToolCallsResponse {
   items: Array<ObjectiveToolCall>;
   pagination?: Page;
@@ -2464,34 +2459,6 @@ export interface ObjectiveInfo {
    *  created via a widget session.
    */
   widget?: BareMetadata;
-}
-
-/**
- * ObjectiveTask represents a task within an objective, typically created and managed by an AI agent
- *  to track progress toward completing the objective.
- */
-export interface ObjectiveTask {
-  metadata: BareMetadata;
-  data: ObjectiveTaskData;
-}
-
-export interface ObjectiveTaskData {
-  /**
-   * The sequential number of this task within the objective (auto-assigned, 1-based)
-   */
-  number: number;
-  /**
-   * Description of the task to be completed
-   */
-  task: string;
-  /**
-   * Whether the task has been completed
-   */
-  completed: boolean;
-  /**
-   * Timestamp when the task was marked as completed
-   */
-  completedAt?: string;
 }
 
 /**
