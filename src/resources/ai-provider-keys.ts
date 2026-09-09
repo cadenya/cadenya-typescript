@@ -2,7 +2,7 @@
 
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { AIProviderKey, AIProviderKeySpec, CreateResourceMetadata, ListAIProviderKeysResponse, UpdateResourceMetadata } from '../types.js';
+import type { AIProviderCredentialPatch, AIProviderKey, AIProviderKeySpec, CreateResourceMetadata, ListAIProviderKeysResponse, UpdateResourceMetadata } from '../types.js';
 
 export interface AiProviderKeyListParams {
   /**
@@ -68,6 +68,11 @@ export interface AiProviderKeyRetrieveParams {
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
+  /**
+   * When true, populate info (model counts, promotional status, model
+   *  management), at the cost of extra lookups.
+   */
+  includeInfo?: boolean;
 }
 
 export interface AiProviderKeyDeleteParams {
@@ -92,6 +97,11 @@ export interface AiProviderKeyUpdateParams {
    * Fields to update.
    */
   updateMask?: string;
+  /**
+   * Field-level credential changes. This is independent of update_mask;
+   *  legacy clients may continue replacing spec.credentials atomically.
+   */
+  credentialPatch?: AIProviderCredentialPatch;
 }
 
 export class AiProviderKeys {
@@ -144,7 +154,7 @@ export class AiProviderKeys {
     return this._client.requestAPI<AIProviderKey>(() => {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}` };
+      return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, query: { includeInfo: params?.includeInfo } };
     }, options);
   }
 
@@ -176,7 +186,7 @@ export class AiProviderKeys {
     return this._client.requestAPI<AIProviderKey>(() => {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, updateMask: params?.updateMask } };
+      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, updateMask: params?.updateMask, credentialPatch: params?.credentialPatch } };
     }, options);
   }
 }

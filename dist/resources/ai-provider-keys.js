@@ -54,7 +54,7 @@ export class AiProviderKeys {
             const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
             if (workspaceId === undefined)
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}` };
+            return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, query: { includeInfo: params?.includeInfo } };
         }, options);
     }
     /**
@@ -86,7 +86,7 @@ export class AiProviderKeys {
             const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
             if (workspaceId === undefined)
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, updateMask: params?.updateMask } };
+            return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, updateMask: params?.updateMask, credentialPatch: params?.credentialPatch } };
         }, options);
     }
 }

@@ -331,6 +331,44 @@ Update an AI provider key
 client.aiProviderKeys.update(id: string, params?: AiProviderKeyUpdateParams, options?: RequestOptions): APIPromise<AIProviderKey>
 ```
 
+## models
+
+Create a model
+
+```ts
+client.models.create(aiProviderKeyId: string, params: ModelCreateParams, options?: RequestOptions): APIPromise<Model>
+```
+List models
+
+```ts
+client.models.list(params?: ModelListParams, options?: RequestOptions): Promise<Page<Model>>
+```
+Get a model by ID
+
+```ts
+client.models.retrieve(id: string, params?: ModelRetrieveParams, options?: RequestOptions): APIPromise<Model>
+```
+Update a model
+
+```ts
+client.models.update(id: string, params?: ModelUpdateParams, options?: RequestOptions): APIPromise<Model>
+```
+Disable a model
+
+```ts
+client.models.disable(id: string, params?: ModelDisableParams, options?: RequestOptions): APIPromise<Model>
+```
+Enable a model
+
+```ts
+client.models.enable(id: string, params?: ModelEnableParams, options?: RequestOptions): APIPromise<Model>
+```
+Swap models on agent variations
+
+```ts
+client.models.swapOnVariations(params?: ModelSwapOnVariationsParams, options?: RequestOptions): APIPromise<void>
+```
+
 ## memoryLayers
 
 List memory layers
@@ -385,34 +423,6 @@ Update a memory entry
 
 ```ts
 client.memoryLayers.entries.update(memoryLayerId: string, id: string, params?: MemoryEntryUpdateParams, options?: RequestOptions): APIPromise<MemoryEntryDetail>
-```
-
-## models
-
-List models
-
-```ts
-client.models.list(params?: ModelListParams, options?: RequestOptions): Promise<Page<Model>>
-```
-Get a model by ID
-
-```ts
-client.models.retrieve(id: string, params?: ModelRetrieveParams, options?: RequestOptions): APIPromise<Model>
-```
-Disable a model
-
-```ts
-client.models.disable(id: string, params?: ModelDisableParams, options?: RequestOptions): APIPromise<Model>
-```
-Enable a model
-
-```ts
-client.models.enable(id: string, params?: ModelEnableParams, options?: RequestOptions): APIPromise<Model>
-```
-Swap models on agent variations
-
-```ts
-client.models.swapOnVariations(params?: ModelSwapOnVariationsParams, options?: RequestOptions): APIPromise<void>
 ```
 
 ## objectives

@@ -1,6 +1,6 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { AIProviderKey, AIProviderKeySpec, CreateResourceMetadata, UpdateResourceMetadata } from '../types.js';
+import type { AIProviderCredentialPatch, AIProviderKey, AIProviderKeySpec, CreateResourceMetadata, UpdateResourceMetadata } from '../types.js';
 export interface AiProviderKeyListParams {
     /**
      * The workspace whose keys will be listed.
@@ -63,6 +63,11 @@ export interface AiProviderKeyRetrieveParams {
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
      */
     workspaceId?: string;
+    /**
+     * When true, populate info (model counts, promotional status, model
+     *  management), at the cost of extra lookups.
+     */
+    includeInfo?: boolean;
 }
 export interface AiProviderKeyDeleteParams {
     /**
@@ -85,6 +90,11 @@ export interface AiProviderKeyUpdateParams {
      * Fields to update.
      */
     updateMask?: string;
+    /**
+     * Field-level credential changes. This is independent of update_mask;
+     *  legacy clients may continue replacing spec.credentials atomically.
+     */
+    credentialPatch?: AIProviderCredentialPatch;
 }
 export declare class AiProviderKeys {
     private readonly _client;

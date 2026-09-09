@@ -223,7 +223,7 @@ export declare class Agents {
      *
      * @example
      * ```ts
-     * const agent = await client.agents.create({ metadata: { name: 'sample' }, spec: { variationSelectionMode: 'VARIATION_SELECTION_MODE_RANDOM' } });
+     * const agent = await client.agents.create({ metadata: { name: 'sample' }, spec: {  } });
      * ```
      */
     create(params: AgentCreateParams, options?: RequestOptions): APIPromise<Agent>;
