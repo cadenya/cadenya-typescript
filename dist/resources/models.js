@@ -7,6 +7,22 @@ export class Models {
         this._client = _client;
     }
     /**
+     * Create a model
+     *
+     * @example
+     * ```ts
+     * const model = await client.models.create('ai_provider_key_123', { metadata: { name: 'sample' }, spec: { capabilities: [{ temperature: {  }, type: 'temperature' }], family: 'sample', inputPricePerMillionTokens: 'sample', maxInputTokens: 1, maxOutputTokens: 1, outputPricePerMillionTokens: 'sample', provider: 'sample', providerModelId: 'sample' } });
+     * ```
+     */
+    create(aiProviderKeyId, params, options) {
+        return this._client.requestAPI(() => {
+            const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+            if (workspaceId === undefined)
+                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('aiProviderKeyId', aiProviderKeyId)}/models`, body: { metadata: params.metadata, spec: params.spec } };
+        }, options);
+    }
+    /**
      * List models
      *
      * @example
@@ -39,6 +55,22 @@ export class Models {
             if (workspaceId === undefined)
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
             return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/models/${pathSegment('id', id)}` };
+        }, options);
+    }
+    /**
+     * Update a model
+     *
+     * @example
+     * ```ts
+     * const model = await client.models.update('_123');
+     * ```
+     */
+    update(id, params, options) {
+        return this._client.requestAPI(() => {
+            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+            if (workspaceId === undefined)
+                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+            return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/models/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, pricingOverride: params?.pricingOverride, updateMask: params?.updateMask } };
         }, options);
     }
     /**

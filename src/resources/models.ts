@@ -2,7 +2,18 @@
 
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { ListModelsResponse, Model, ModelServiceListModelsState, SwapModelOnVariationsRequest_ModelSwap } from '../types.js';
+import type { CreateResourceMetadata, ListModelsResponse, Model, ModelPricingOverride, ModelServiceListModelsState, ModelSpec, SwapModelOnVariationsRequest_ModelSwap, UpdateResourceMetadata } from '../types.js';
+
+export interface ModelCreateParams {
+  metadata: CreateResourceMetadata;
+  spec: ModelSpec;
+  /**
+   * Workspace ID.
+   * 
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+}
 
 export interface ModelListParams {
   /**
@@ -70,6 +81,29 @@ export interface ModelRetrieveParams {
   workspaceId?: string;
 }
 
+export interface ModelUpdateParams {
+  /**
+   * Workspace ID.
+   * 
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+  metadata?: UpdateResourceMetadata;
+  /**
+   * When any spec.* path is masked, send the complete spec (current values
+   *  plus edits); it is validated as a whole.
+   */
+  spec?: ModelSpec;
+  /**
+   * Customer price overrides, applied per masked path.
+   */
+  pricingOverride?: ModelPricingOverride;
+  /**
+   * Fields to update. Required; leaf paths only.
+   */
+  updateMask?: string;
+}
+
 export interface ModelDisableParams {
   /**
    * Workspace ID.
@@ -105,6 +139,22 @@ export class Models {
   constructor(private readonly _client: HttpClient) {}
 
   /**
+   * Create a model
+   * 
+   * @example
+   * ```ts
+   * const model = await client.models.create('ai_provider_key_123', { metadata: { name: 'sample' }, spec: { capabilities: [{ temperature: {  }, type: 'temperature' }], family: 'sample', inputPricePerMillionTokens: 'sample', maxInputTokens: 1, maxOutputTokens: 1, outputPricePerMillionTokens: 'sample', provider: 'sample', providerModelId: 'sample' } });
+   * ```
+   */
+  create(aiProviderKeyId: string, params: ModelCreateParams, options?: RequestOptions): APIPromise<Model> {
+    return this._client.requestAPI<Model>(() => {
+      const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/ai_provider_keys/${pathSegment('aiProviderKeyId', aiProviderKeyId)}/models`, body: { metadata: params.metadata, spec: params.spec } };
+    }, options);
+  }
+
+  /**
    * List models
    * 
    * @example
@@ -136,6 +186,22 @@ export class Models {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
       return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/models/${pathSegment('id', id)}` };
+    }, options);
+  }
+
+  /**
+   * Update a model
+   * 
+   * @example
+   * ```ts
+   * const model = await client.models.update('_123');
+   * ```
+   */
+  update(id: string, params?: ModelUpdateParams, options?: RequestOptions): APIPromise<Model> {
+    return this._client.requestAPI<Model>(() => {
+      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/models/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, pricingOverride: params?.pricingOverride, updateMask: params?.updateMask } };
     }, options);
   }
 

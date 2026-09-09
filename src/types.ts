@@ -10,16 +10,52 @@
 export type AIProviderConfig =
   | AIProviderConfig_Openrouter
   | AIProviderConfig_Openai
-  | AIProviderConfig_OpenaiCompatible;
+  | AIProviderConfig_OpenaiCompatible
+  | AIProviderConfig_Vertex
+  | AIProviderConfig_Bedrock;
 
 /**
  * AIProviderCredential is the secret material used to authenticate with a
  *  provider. The set case must correspond to AIProviderKeySpec.provider. The
- *  server encrypts the serialized message at rest and never returns it on reads.
+ *  server classifies and encrypts sensitive fields at rest and never returns
+ *  secret values on reads.
  */
 export type AIProviderCredential =
   | AIProviderCredential_ApiKey
-  | AIProviderCredential_Headers;
+  | AIProviderCredential_Headers
+  | AIProviderCredential_GoogleServiceAccount
+  | AIProviderCredential_AwsAccessKey;
+
+/**
+ * AIProviderCredentialFieldStatus is the safe read representation of one
+ *  credential field. Value is populated only when sensitive is false.
+ */
+export interface AIProviderCredentialFieldStatus {
+  name?: string;
+  sensitive?: boolean;
+  configured?: boolean;
+  value?: string;
+}
+
+/**
+ * AIProviderCredentialPatch changes selected fields of the current credential.
+ *  Omitted values are retained and clear_fields explicitly removes optional
+ *  fields. Changing type replaces the credential and requires all mandatory
+ *  fields for the new type.
+ */
+export interface AIProviderCredentialPatch {
+  credentials?: AIProviderCredential;
+  clearFields?: Array<string>;
+}
+
+/**
+ * AIProviderCredentialStatus describes the stored authentication method and
+ *  its fields without returning secret material.
+ */
+export interface AIProviderCredentialStatus {
+  type?: string;
+  fields?: Array<AIProviderCredentialFieldStatus>;
+}
 
 /**
  * AIProviderKey is a credential for an AI provider, scoped to a workspace.
@@ -39,6 +75,11 @@ export interface AIProviderKey {
 }
 
 /**
+ * How models on this key are maintained; see ModelManagement.
+ */
+export type AiProviderKeyInfoModelManagement = 'MODEL_MANAGEMENT_UNSPECIFIED' | 'MODEL_MANAGEMENT_CADENYA' | 'MODEL_MANAGEMENT_SYNCED' | 'MODEL_MANAGEMENT_CUSTOMIZABLE' | 'MODEL_MANAGEMENT_MANUAL';
+
+/**
  * AIProviderKeyInfo carries server-derived, read-only details about a key, for
  *  AI provider management UIs.
  */
@@ -56,12 +97,21 @@ export interface AIProviderKeyInfo {
    *  These are not added or maintained by account administrators.
    */
   isPromotional: boolean;
+  /**
+   * Safe-to-display credential state. Secret values are never populated;
+   *  configured reports whether a value is present without revealing it.
+   */
+  credentialStatus?: AIProviderCredentialStatus;
+  /**
+   * How models on this key are maintained; see ModelManagement.
+   */
+  modelManagement: AiProviderKeyInfoModelManagement;
 }
 
 /**
  * The AI provider this key authenticates against.
  */
-export type AiProviderKeySpecProvider = 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER' | 'AI_PROVIDER_OPENAI' | 'AI_PROVIDER_ANTHROPIC' | 'AI_PROVIDER_GEMINI' | 'AI_PROVIDER_OPENAI_COMPATIBLE';
+export type AiProviderKeySpecProvider = 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER' | 'AI_PROVIDER_OPENAI' | 'AI_PROVIDER_ANTHROPIC' | 'AI_PROVIDER_GEMINI' | 'AI_PROVIDER_OPENAI_COMPATIBLE' | 'AI_PROVIDER_VERTEX' | 'AI_PROVIDER_BEDROCK';
 
 export interface AIProviderKeySpec {
   /**
@@ -75,8 +125,9 @@ export interface AIProviderKeySpec {
   credentials?: AIProviderCredential;
   /**
    * Non-secret, provider-specific settings (OpenAI org/project, OpenRouter
-   *  region, OpenAI-compatible base URL). The set case must correspond to
-   *  `provider`. Returned on reads. Optional: omit to accept provider defaults.
+   *  region, OpenAI-compatible base URL, Vertex project/location, or Bedrock
+   *  Region). The set case must correspond to `provider`. Returned on reads.
+   *  Optional for providers that have usable defaults.
    */
   config?: AIProviderConfig;
 }
@@ -442,7 +493,7 @@ export interface AgentScheduleSpec_Schedule {
 
 /**
  * Controls how variations are automatically selected when creating objectives
- *  Defaults to RANDOM when unspecified
+ *  Defaults to WEIGHTED when unspecified
  */
 export type AgentSpecVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 
@@ -460,9 +511,9 @@ export interface AgentSpec {
   webhookEventsUrl?: string;
   /**
    * Controls how variations are automatically selected when creating objectives
-   *  Defaults to RANDOM when unspecified
+   *  Defaults to WEIGHTED when unspecified
    */
-  variationSelectionMode: AgentSpecVariationSelectionMode;
+  variationSelectionMode?: AgentSpecVariationSelectionMode;
   /**
    * SystemPromptDataSchema enforces the shape of system_prompt_data when objectives are created. This is valuable when using liquid formatting in agent
    *  variation system prompt templates. The schema is also used when the agent is attached as a sub-agent, as it becomes the tool's input parameter schema.
@@ -826,6 +877,13 @@ export interface BareMetadata {
    *  have a name.
    */
   name?: string;
+}
+
+/**
+ * BedrockConfig selects the AWS source Region used for Bedrock Runtime calls.
+ */
+export interface BedrockConfig {
+  region?: string;
 }
 
 /**
@@ -1196,6 +1254,26 @@ export interface CreateMemoryLayerRequest {
 }
 
 /**
+ * Create model request. The model is created on the given AI provider key with
+ *  PROVENANCE_MANUALLY_ENTERED and STATE_ENABLED. The key must be customer
+ *  provided and its provider must accept manual definitions (see
+ *  AIProviderKeyInfo.model_management).
+ */
+export interface CreateModelRequest {
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * The AI provider key the model routes through. Accepts the canonical
+   *  `aipk_…` form or the `external_id:<value>` form.
+   */
+  aiProviderKeyId?: string;
+  metadata: CreateResourceMetadata;
+  spec: ModelSpec;
+}
+
+/**
  * Request to submit feedback for an objective
  */
 export interface CreateObjectiveFeedbackRequest {
@@ -1441,6 +1519,24 @@ export interface CreateWorkspaceSecretRequest {
  */
 export interface CredentialAPIKey {
   apiKey?: string;
+}
+
+/**
+ * CredentialAWSAccessKey carries AWS SigV4 credentials. Optional presence is
+ *  used by credential patches so omitted values remain unchanged.
+ */
+export interface CredentialAWSAccessKey {
+  accessKeyId?: string;
+  secretAccessKey?: string;
+  sessionToken?: string;
+}
+
+/**
+ * CredentialGoogleServiceAccount carries an in-memory Google service-account
+ *  credential document.
+ */
+export interface CredentialGoogleServiceAccount {
+  json?: string;
 }
 
 /**
@@ -1989,6 +2085,13 @@ export interface MemoryReference {
  */
 export type ModelState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 
+/**
+ * Where this definition came from. Output only; set at creation. Synced
+ *  models reject edits to metadata.name and spec, manually entered models
+ *  accept them.
+ */
+export type ModelProvenance = 'PROVENANCE_UNSPECIFIED' | 'PROVENANCE_SYNCED_FROM_PROVIDER' | 'PROVENANCE_MANUALLY_ENTERED';
+
 export interface Model {
   /**
    * Resource metadata
@@ -2008,6 +2111,40 @@ export interface Model {
    *  :enable and :disable actions to transition.
    */
   state: ModelState;
+  /**
+   * Where this definition came from. Output only; set at creation. Synced
+   *  models reject edits to metadata.name and spec, manually entered models
+   *  accept them.
+   */
+  provenance: ModelProvenance;
+  /**
+   * Customer price overrides. Output only here; set through UpdateModel with
+   *  pricing_override.* mask paths. When an override is present, spec's price
+   *  fields already reflect it (they are the effective prices).
+   */
+  pricingOverride?: ModelPricingOverride;
+  /**
+   * The rates before any customer override: the catalog rate for a synced
+   *  model, the entered rate for a manually entered one. Output only. When a
+   *  side matches the spec price, an override may still be present; inspect
+   *  pricing_override field presence to determine whether an override is set.
+   */
+  basePricing: ModelBasePricing;
+}
+
+/**
+ * ModelBasePricing is a model's default rates in cents per million tokens,
+ *  unaffected by pricing overrides. Zero means the rate is not known.
+ */
+export interface ModelBasePricing {
+  /**
+   * Default input token rate, in cents per million tokens.
+   */
+  inputPricePerMillionTokens: string;
+  /**
+   * Default output token rate, in cents per million tokens.
+   */
+  outputPricePerMillionTokens: string;
 }
 
 /**
@@ -2032,6 +2169,22 @@ export interface ModelInfo {
   lastUsedAt?: string;
 }
 
+/**
+ * ModelPricingOverride replaces the catalog prices for a model. Each field is
+ *  independent: an absent field keeps the catalog price, a present field (zero
+ *  included) replaces it. Prices are cents per million tokens.
+ */
+export interface ModelPricingOverride {
+  /**
+   * Override for input token price, in cents per million tokens.
+   */
+  inputPricePerMillionTokens?: string;
+  /**
+   * Override for output token price, in cents per million tokens.
+   */
+  outputPricePerMillionTokens?: string;
+}
+
 export interface ModelSpec {
   /**
    * The model provider (e.g., "anthropic", "openai", "google")
@@ -2050,11 +2203,16 @@ export interface ModelSpec {
    */
   maxOutputTokens: number;
   /**
-   * Cost per million input tokens in cents (e.g., 300 = $3.00)
+   * Cost per million input tokens in cents (e.g., 300 = $3.00). On reads this
+   *  is the effective price: the catalog price unless
+   *  Model.pricing_override replaces it. Writes only apply to manually
+   *  entered models; use UpdateModel's pricing_override paths to override a
+   *  synced model's price.
    */
   inputPricePerMillionTokens: string;
   /**
-   * Cost per million output tokens in cents (e.g., 1500 = $15.00)
+   * Cost per million output tokens in cents (e.g., 1500 = $15.00). Effective
+   *  price on reads, see input_price_per_million_tokens.
    */
   outputPricePerMillionTokens: string;
   /**
@@ -2063,6 +2221,15 @@ export interface ModelSpec {
    *  (and its mode) lives here too, as the "reasoning" capability.
    */
   capabilities: Array<ModelSpec_Capability>;
+  /**
+   * The identifier the provider expects in inference requests, exactly as the
+   *  provider spells it: an OpenAI model name, a Vertex publisher model
+   *  resource, a Bedrock inference-profile ID or ARN, or an OpenAI-compatible
+   *  endpoint's model ID. Distinct from metadata.external_id, which is
+   *  Cadenya's slug. Verified with a minimal provider completion on creation
+   *  and whenever the identifier changes.
+   */
+  providerModelId: string;
 }
 
 /**
@@ -2606,6 +2773,11 @@ export interface ObjectiveToolCallResult_ImageBlock {
 
 export interface ObjectiveToolCallResult_TextBlock {
   text: string;
+  /**
+   * Size of the stored text in bytes. Filled by the server at record time;
+   *  zero on results recorded before this field existed.
+   */
+  sizeBytes?: string;
 }
 
 /**
@@ -4130,6 +4302,11 @@ export interface UpdateAIProviderKeyRequest {
    * Fields to update.
    */
   updateMask?: string;
+  /**
+   * Field-level credential changes. This is independent of update_mask;
+   *  legacy clients may continue replacing spec.credentials atomically.
+   */
+  credentialPatch?: AIProviderCredentialPatch;
 }
 
 export interface UpdateAPIKeyRequest {
@@ -4286,6 +4463,42 @@ export interface UpdateMemoryLayerRequest {
   id?: string;
   metadata?: UpdateResourceMetadata;
   spec?: MemoryLayerSpec;
+  updateMask?: string;
+}
+
+/**
+ * Update model request. update_mask must list leaf paths: metadata.name,
+ *  metadata.external_id, metadata.labels, spec.provider_model_id,
+ *  spec.provider, spec.family, spec.max_input_tokens, spec.max_output_tokens,
+ *  spec.capabilities, pricing_override.input_price_per_million_tokens, and
+ *  pricing_override.output_price_per_million_tokens. Synced models
+ *  (PROVENANCE_SYNCED_FROM_PROVIDER) reject metadata.name and spec.* paths.
+ *  spec price fields are never writable; price changes go through
+ *  pricing_override, where a masked-but-absent field clears the override.
+ *  Metadata and spec must be present when their respective paths are masked.
+ */
+export interface UpdateModelRequest {
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * Model ID. Accepts the canonical `model_…` form or the `external_id:<value>` form.
+   */
+  id?: string;
+  metadata?: UpdateResourceMetadata;
+  /**
+   * When any spec.* path is masked, send the complete spec (current values
+   *  plus edits); it is validated as a whole.
+   */
+  spec?: ModelSpec;
+  /**
+   * Customer price overrides, applied per masked path.
+   */
+  pricingOverride?: ModelPricingOverride;
+  /**
+   * Fields to update. Required; leaf paths only.
+   */
   updateMask?: string;
 }
 
@@ -4527,6 +4740,15 @@ export interface VariationMemoryLayerAssignment {
    *  InvalidArgument.
    */
   position: number;
+}
+
+/**
+ * VertexConfig configures the Google Cloud project and location used by the
+ *  Vertex AI backend. Both are required for service-account authentication.
+ */
+export interface VertexConfig {
+  projectId?: string;
+  location?: string;
 }
 
 export interface WebhookDelivery {
@@ -5358,6 +5580,24 @@ export interface AIProviderCredential_Headers {
   headers: CredentialHeaders;
 }
 
+export interface AIProviderCredential_GoogleServiceAccount {
+  type: 'googleServiceAccount';
+  /**
+   * Google service-account JSON for Vertex AI. The server accepts only the
+   *  service_account credential type and never writes the JSON to plaintext
+   *  storage.
+   */
+  googleServiceAccount: CredentialGoogleServiceAccount;
+}
+
+export interface AIProviderCredential_AwsAccessKey {
+  type: 'awsAccessKey';
+  /**
+   * AWS access credentials for Bedrock SigV4 authentication.
+   */
+  awsAccessKey: CredentialAWSAccessKey;
+}
+
 export interface AIProviderConfig_Openrouter {
   type: 'openrouter';
   openrouter: OpenRouterConfig;
@@ -5371,6 +5611,16 @@ export interface AIProviderConfig_Openai {
 export interface AIProviderConfig_OpenaiCompatible {
   type: 'openaiCompatible';
   openaiCompatible: OpenAICompatibleConfig;
+}
+
+export interface AIProviderConfig_Vertex {
+  type: 'vertex';
+  vertex: VertexConfig;
+}
+
+export interface AIProviderConfig_Bedrock {
+  type: 'bedrock';
+  bedrock: BedrockConfig;
 }
 
 export interface ModelSpec_Capability_Temperature {
