@@ -280,27 +280,27 @@ client.agents.variations.update(agentId: string, id: string, params?: AgentVaria
 Add an assignment to a variation
 
 ```ts
-client.agents.variations.addAssignment(agentId: string, variationId: string, params: AgentVariationAddAssignmentParams, options?: RequestOptions): APIPromise<VariationAssignment>
-```
-Remove an assignment from a variation
-
-```ts
-client.agents.variations.removeAssignment(agentId: string, variationId: string, id: string, params?: AgentVariationRemoveAssignmentParams, options?: RequestOptions): APIPromise<void>
+client.agents.variations.addAssignment(agentId: string, variationId: string, params: AgentVariationAddAssignmentParams, options?: RequestOptions): APIPromise<AgentVariation>
 ```
 Attach a memory layer to a variation
 
 ```ts
-client.agents.variations.addMemoryLayer(agentId: string, variationId: string, params: AgentVariationAddMemoryLayerParams, options?: RequestOptions): APIPromise<VariationMemoryLayerAssignment>
+client.agents.variations.addMemoryLayer(agentId: string, variationId: string, params: AgentVariationAddMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation>
+```
+Remove an assignment from a variation
+
+```ts
+client.agents.variations.removeAssignment(agentId: string, variationId: string, params: AgentVariationRemoveAssignmentParams, options?: RequestOptions): APIPromise<AgentVariation>
 ```
 Remove a memory layer assignment from a variation
 
 ```ts
-client.agents.variations.removeMemoryLayer(agentId: string, variationId: string, id: string, params?: AgentVariationRemoveMemoryLayerParams, options?: RequestOptions): APIPromise<void>
+client.agents.variations.removeMemoryLayer(agentId: string, variationId: string, params: AgentVariationRemoveMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation>
 ```
 Update a variation's memory layer assignment
 
 ```ts
-client.agents.variations.updateMemoryLayer(agentId: string, variationId: string, id: string, params?: AgentVariationUpdateMemoryLayerParams, options?: RequestOptions): APIPromise<VariationMemoryLayerAssignment>
+client.agents.variations.updateMemoryLayer(agentId: string, variationId: string, params: AgentVariationUpdateMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation>
 ```
 
 ## aiProviderKeys

@@ -68,6 +68,11 @@ export type ObjectiveEventMemoryReadWebhookEvent = ObjectiveEventWebhookData & {
  */
 export type ObjectiveEventReasoningWebhookEvent = ObjectiveEventWebhookData & { type: 'objective_event.reasoning' };
 
+/**
+ * Objective state changed event
+ */
+export type ObjectiveEventStateChangedWebhookEvent = ObjectiveEventWebhookData & { type: 'objective_event.state_changed' };
+
 export type UnwrapWebhookEvent =
   | ObjectiveEventUserMessageWebhookEvent
   | ObjectiveEventAssistantMessageWebhookEvent
@@ -81,7 +86,8 @@ export type UnwrapWebhookEvent =
   | ObjectiveEventSubAgentUpdatedWebhookEvent
   | ObjectiveEventErrorWebhookEvent
   | ObjectiveEventMemoryReadWebhookEvent
-  | ObjectiveEventReasoningWebhookEvent;
+  | ObjectiveEventReasoningWebhookEvent
+  | ObjectiveEventStateChangedWebhookEvent;
 
 export class Webhooks {
   constructor(private readonly secret: string | undefined) {}

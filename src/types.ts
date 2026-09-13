@@ -274,7 +274,8 @@ export interface AccountSpec {
 /**
  * Attach a single tool, tool set, or sub-agent to a variation. Exactly one
  *  of the target fields must be set; the assignment kind is inferred from the
- *  populated field.
+ *  populated field. Adding an existing target returns AlreadyExists.
+ *  All targets must be in the variation's workspace and eligible for assignment.
  */
 export type AddAgentVariationAssignmentRequest =
   | AddAgentVariationAssignmentRequest_ToolId
@@ -282,9 +283,10 @@ export type AddAgentVariationAssignmentRequest =
   | AddAgentVariationAssignmentRequest_SubAgentId;
 
 /**
- * Attach a memory layer to a variation. The request is rejected when:
+ * Attach a memory layer to a variation. Use UpdateAgentVariationMemoryLayer or
+ *  replace the spec list to reposition an existing layer. Rejected when:
+ *    - the layer is already assigned, regardless of position (AlreadyExists)
  *    - the layer is system-managed (FailedPrecondition)
- *    - the layer is already assigned to this variation (AlreadyExists)
  *    - the variation is already at the 10-assignment cap (FailedPrecondition)
  *    - the position is already in use on this variation (InvalidArgument)
  */
@@ -592,25 +594,26 @@ export interface AgentVariationInfo {
    */
   feedbackCount: number;
   /**
-   * All tools, tool sets, and sub-agents assigned to this variation.
-   *  Populated on reads so clients can render a variation's full assignment
-   *  list without calling the add/remove endpoints just to enumerate.
-   */
-  assignments: Array<VariationAssignment>;
-  /**
-   * Read-only list of memory layer assignments for this variation,
-   *  returned in ascending `position` (most specific first — resolution
-   *  order). Capped at 10 entries.
-   */
-  memoryLayerAssignments: Array<VariationMemoryLayerAssignment>;
-  /**
    * Count of memory layer assignments.
    */
   memoryLayerCount: number;
+  /**
+   * Number of distinct callable tools available through this variation's
+   *  assignments after normalization. Expands tool sets and deduplicates tools
+   *  also assigned directly. Each sub-agent contributes one callable tool;
+   *  its own assignments are not expanded. Counts the full normalized set,
+   *  regardless of which tools progressive discovery has loaded.
+   */
+  effectiveToolCount: number;
 }
 
 /**
- * AgentVariationSpec defines the operational configuration for a variation
+ * AgentVariationSpec defines the complete operational configuration for a
+ *  variation, including assignments. Reads always populate both assignment lists,
+ *  even when include_info is false. Create and update validate and persist the
+ *  configuration atomically: any invalid target or cascade rejects the entire
+ *  request. Targets must belong to the variation's workspace and pass the same
+ *  eligibility checks as the dedicated add methods.
  */
 export interface AgentVariationSpec {
   /**
@@ -651,6 +654,22 @@ export interface AgentVariationSpec {
    *  creation is rejected with InvalidArgument.
    */
   firstUserMessageTemplate?: string;
+  /**
+   * Complete set of assigned tools, tool sets, and sub-agents. Order has no
+   *  meaning. Duplicate (target kind, canonical target ID) pairs are collapsed.
+   *  On create, omitted or empty means no assignments. On update, selecting
+   *  spec.assignments in update_mask replaces the entire set; empty clears it.
+   */
+  assignments?: Array<VariationAssignment>;
+  /**
+   * Complete baseline memory cascade, returned in ascending position. At most
+   *  10 whole layers; system-managed layers cannot be assigned. Duplicate layer
+   *  IDs (after alias resolution) or positions are InvalidArgument. Validate the
+   *  final cascade, so swapping two positions in one update is supported.
+   *  On create, omitted or empty means no layers. On update, selecting
+   *  spec.memory_layer_assignments replaces the entire list; empty clears it.
+   */
+  memoryLayerAssignments?: Array<VariationMemoryLayerAssignment>;
 }
 
 /**
@@ -1200,7 +1219,9 @@ export interface CreateAgentRequest {
   metadata: CreateResourceMetadata;
   spec: AgentSpec;
   /**
-   * Optional default variation to add to the agent on create
+   * Optional default variation to add to the agent on create. Its spec accepts
+   *  assignments and memory_layer_assignments using the same atomic validation
+   *  as CreateAgentVariation. Failure rejects the entire agent creation.
    */
   defaultVariation?: CreateAgentVariationRequest;
 }
@@ -2272,7 +2293,7 @@ export interface Notice {
 /**
  * The current lifecycle state of the objective.
  */
-export type ObjectiveState = 'STATE_UNSPECIFIED' | 'STATE_PENDING' | 'STATE_RUNNING' | 'STATE_WAITING' | 'STATE_FAILED' | 'STATE_CANCELLED' | 'STATE_FINALIZED' | 'STATE_TIMED_OUT';
+export type ObjectiveState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
 
 /**
  * Objective is the data for an objective. It contains the snapshotted fields for the selected agent and variation. Secrets are returned
@@ -2339,7 +2360,7 @@ export interface Objective {
   memoryCascade: Array<MemoryReference>;
   /**
    * The output of the objective, populated when the objective completes. Will match the schema of output_json_schema or output_json_inferred.
-   *  This will only be set if the state of the objective is set to STATE_FINALIZED
+   *  This will only be set if the state of the objective is set to OBJECTIVE_STATE_FINALIZED
    */
   output?: Record<string, unknown>;
   /**
@@ -2504,7 +2525,8 @@ export type ObjectiveEventData =
   | ObjectiveEventData_Finalized
   | ObjectiveEventData_Notice
   | ObjectiveEventData_TimedOut
-  | ObjectiveEventData_Reasoning;
+  | ObjectiveEventData_Reasoning
+  | ObjectiveEventData_StateChanged;
 
 export interface ObjectiveEventInfo {
   objective?: OperationMetadata;
@@ -2626,6 +2648,41 @@ export interface ObjectiveInfo {
    *  created via a widget session.
    */
   widget?: BareMetadata;
+}
+
+/**
+ * The state before this write. OBJECTIVE_STATE_UNSPECIFIED when the
+ *  objective was just created.
+ */
+export type ObjectiveStateChangedFromState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+
+/**
+ * The state after this write.
+ */
+export type ObjectiveStateChangedToState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+
+/**
+ * ObjectiveStateChanged is written every time the objective's lifecycle state
+ *  is set, including the initial move into OBJECTIVE_STATE_PENDING at creation. Terminal
+ *  transitions also write their dedicated event (cancelled, timedOut,
+ *  finalized, error) immediately before this one, so consumers that only care
+ *  about the outcome can keep listening for those.
+ */
+export interface ObjectiveStateChanged {
+  /**
+   * The state before this write. OBJECTIVE_STATE_UNSPECIFIED when the
+   *  objective was just created.
+   */
+  fromState: ObjectiveStateChangedFromState;
+  /**
+   * The state after this write.
+   */
+  toState: ObjectiveStateChangedToState;
+  /**
+   * The status message recorded with the transition, if any (e.g.
+   *  "Continued", or the error summary on a failure).
+   */
+  message?: string;
 }
 
 /**
@@ -3073,6 +3130,38 @@ export interface Reasoning {
    *  provider-generated summary depending on the model.
    */
   content: string;
+}
+
+/**
+ * Detach a target by its foreign key. Removing an unassigned target returns
+ *  NotFound. The parent variation must exist and be accessible.
+ */
+export type RemoveAgentVariationAssignmentRequest =
+  | RemoveAgentVariationAssignmentRequest_ToolId
+  | RemoveAgentVariationAssignmentRequest_ToolSetId
+  | RemoveAgentVariationAssignmentRequest_SubAgentId;
+
+/**
+ * Remove by memory layer ID. An unassigned layer returns NotFound.
+ *  The parent variation must still exist and be accessible.
+ */
+export interface RemoveAgentVariationMemoryLayerRequest {
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+   */
+  agentId?: string;
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+   */
+  variationId?: string;
+  /**
+   * Layer to detach. Accepts memlyr_… or external_id:<value>.
+   */
+  memoryLayerId: string;
 }
 
 export type ResolvedSecretSource = 'RESOLVED_SECRET_SOURCE_UNSPECIFIED' | 'RESOLVED_SECRET_SOURCE_WORKSPACE' | 'RESOLVED_SECRET_SOURCE_TOOLSET' | 'RESOLVED_SECRET_SOURCE_OBJECTIVE';
@@ -4397,7 +4486,7 @@ export interface UpdateAgentScheduleRequest {
 /**
  * Update an existing memory layer assignment. Only `position` is mutable.
  *  A new position that collides with another assignment on the same variation
- *  is rejected with InvalidArgument.
+ *  is rejected with InvalidArgument. An unassigned layer returns NotFound.
  */
 export interface UpdateAgentVariationMemoryLayerRequest {
   /**
@@ -4412,11 +4501,14 @@ export interface UpdateAgentVariationMemoryLayerRequest {
    * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
    */
   variationId?: string;
-  id?: string;
+  /**
+   * Layer to reposition. Accepts memlyr_… or external_id:<value>.
+   */
+  memoryLayerId: string;
   /**
    * New position. Only field currently updatable on an assignment.
    */
-  position?: number;
+  position: number;
 }
 
 /**
@@ -4438,7 +4530,13 @@ export interface UpdateAgentVariationRequest {
   metadata?: UpdateResourceMetadata;
   spec?: AgentVariationSpec;
   /**
-   * Fields to update
+   * Fields to update. Assignment lists are replaced as a whole, never merged.
+   *  Select spec.assignments or spec.memory_layer_assignments to replace/clear
+   *  one list. Selecting spec replaces the entire spec (including omitted lists);
+   *  * replaces all mutable fields. Element/index paths are not supported.
+   *  Without a mask, infer paths from non-empty fields: non-empty assignment
+   *  lists replace existing lists, while omitted/empty lists remain unchanged.
+   *  To clear a list, explicitly include its path in the mask.
    */
   updateMask?: string;
 }
@@ -4699,45 +4797,31 @@ export interface UserMessage {
 }
 
 /**
- * A read-only reference to a single tool, tool set, or sub-agent attached to
- *  a variation. Read the full set of assignments via `AgentVariationInfo.assignments`;
- *  mutations go through the dedicated add/remove assignment endpoints.
- * 
- *  The `id` identifies the assignment itself (not the referenced resource) and
- *  is the handle used to remove the assignment. It is returned by the add
- *  endpoint and present on every entry in `AgentVariationInfo.assignments`.
+ * A tool, tool set, or sub-agent assigned to a variation, identified only by
+ *  the target resource ID. The same shape is accepted in a spec and returned
+ *  on reads. Assignment junction records are an internal implementation detail.
  */
 export type VariationAssignment =
-  | VariationAssignment_Tool
-  | VariationAssignment_ToolSet
-  | VariationAssignment_Agent;
+  | VariationAssignment_ToolId
+  | VariationAssignment_ToolSetId
+  | VariationAssignment_SubAgentId;
 
 /**
- * VariationMemoryLayerAssignment attaches a single MemoryLayer to a
- *  variation at a given position in the variation's baseline memory
- *  cascade. A variation has at most one assignment per memory_layer_id.
- * 
- *  Variations only support whole-layer attachments — entry pinning is an
- *  objective-level capability.
+ * A whole memory layer in a variation's baseline memory cascade. Identified
+ *  by the memory layer ID; no assignment junction ID is exposed. Entry pinning
+ *  remains an objective-level capability.
  */
 export interface VariationMemoryLayerAssignment {
   /**
-   * Assignment row id — handle for removing the assignment. Distinct
-   *  from the referenced memory layer's id.
+   * Accepts the canonical memlyr_… ID or external_id:<value> on input.
+   *  Reads always return the canonical ID.
    */
-  id: string;
+  memoryLayerId: string;
   /**
-   * The attached memory layer.
-   */
-  memoryLayer: BareMetadata;
-  /**
-   * Position in the variation's baseline cascade. Position is
-   *  specificity, CSS-style: a LOWER position is more specific and is
-   *  consulted first; the highest-position assignment is the most
-   *  general fallback. Gaps are fine — only relative position matters.
-   *  Positions must be unique within a variation; a request that would
-   *  collide with an existing assignment's position is rejected with
-   *  InvalidArgument.
+   * Position is specificity: lower positions are consulted first; the highest
+   *  position is the most general fallback. Gaps and zero are valid. Positions
+   *  must be unique within a variation. Explicitly required in a full spec;
+   *  only AddAgentVariationMemoryLayer can choose an append position for you.
    */
   position: number;
 }
@@ -4764,7 +4848,7 @@ export type WebhookDeliveryDataStatus = 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED' | 
 /**
  * The type of objective event that triggered this webhook delivery
  */
-export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING';
+export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED';
 
 export interface WebhookDeliveryData {
   /**
@@ -5109,22 +5193,28 @@ export interface ObjectiveEventWebhookData {
   data: ObjectiveEventWebhookDataData;
 }
 
-export interface VariationAssignment_Tool {
-  type: 'tool';
-  tool: BareMetadata;
-  id: string;
+export interface VariationAssignment_ToolId {
+  type: 'toolId';
+  /**
+   * Canonical tool ID.
+   */
+  toolId: string;
 }
 
-export interface VariationAssignment_ToolSet {
-  type: 'toolSet';
-  toolSet: BareMetadata;
-  id: string;
+export interface VariationAssignment_ToolSetId {
+  type: 'toolSetId';
+  /**
+   * Canonical tool set ID.
+   */
+  toolSetId: string;
 }
 
-export interface VariationAssignment_Agent {
-  type: 'agent';
-  agent: BareMetadata;
-  id: string;
+export interface VariationAssignment_SubAgentId {
+  type: 'subAgentId';
+  /**
+   * Canonical sub-agent ID.
+   */
+  subAgentId: string;
 }
 
 export interface ObjectiveToolCallResult_ContentBlock_Text {
@@ -5452,6 +5542,11 @@ export interface ObjectiveEventData_Reasoning {
   reasoning: Reasoning;
 }
 
+export interface ObjectiveEventData_StateChanged {
+  type: 'stateChanged';
+  stateChanged: ObjectiveStateChanged;
+}
+
 export interface CallableTool_Tool {
   type: 'tool';
   tool: ResourceMetadata;
@@ -5546,6 +5641,57 @@ export interface AddAgentVariationAssignmentRequest_ToolSetId {
 }
 
 export interface AddAgentVariationAssignmentRequest_SubAgentId {
+  type: 'subAgentId';
+  subAgentId: string;
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+   */
+  agentId?: string;
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+   */
+  variationId?: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_ToolId {
+  type: 'toolId';
+  toolId: string;
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+   */
+  agentId?: string;
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+   */
+  variationId?: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_ToolSetId {
+  type: 'toolSetId';
+  toolSetId: string;
+  /**
+   * Workspace ID.
+   */
+  workspaceId?: string;
+  /**
+   * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+   */
+  agentId?: string;
+  /**
+   * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+   */
+  variationId?: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_SubAgentId {
   type: 'subAgentId';
   subAgentId: string;
   /**
@@ -5664,13 +5810,13 @@ export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_
 
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
 
-export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING';
+export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED';
 
 export type MemoryServiceListMemoryLayersType = 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 
 export type ModelServiceListModelsState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 
-export type ObjectiveServiceListObjectivesState = 'STATE_UNSPECIFIED' | 'STATE_PENDING' | 'STATE_RUNNING' | 'STATE_WAITING' | 'STATE_FAILED' | 'STATE_CANCELLED' | 'STATE_FINALIZED' | 'STATE_TIMED_OUT';
+export type ObjectiveServiceListObjectivesState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
 
 export type ObjectiveServiceListObjectiveToolCallsStatus = 'TOOL_CALL_STATUS_UNSPECIFIED' | 'TOOL_CALL_STATUS_AUTO_APPROVED' | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL' | 'TOOL_CALL_STATUS_APPROVED' | 'TOOL_CALL_STATUS_DENIED';
 
@@ -5731,6 +5877,8 @@ export interface ObjectiveEpisodicConfigParam {
   key: string;
 }
 
+export type RemoveAgentVariationAssignmentRequestParam = RemoveAgentVariationAssignmentRequest_ToolIdParam | RemoveAgentVariationAssignmentRequest_ToolSetIdParam | RemoveAgentVariationAssignmentRequest_SubAgentIdParam;
+
 export interface WidgetSessionSpecParam {
   /**
    * Widget this session is minted against. Accepts the canonical `wgt_…` form
@@ -5780,6 +5928,21 @@ export interface AddAgentVariationAssignmentRequest_ToolSetIdParam {
 }
 
 export interface AddAgentVariationAssignmentRequest_SubAgentIdParam {
+  type: 'subAgentId';
+  subAgentId: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_ToolIdParam {
+  type: 'toolId';
+  toolId: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_ToolSetIdParam {
+  type: 'toolSetId';
+  toolSetId: string;
+}
+
+export interface RemoveAgentVariationAssignmentRequest_SubAgentIdParam {
   type: 'subAgentId';
   subAgentId: string;
 }
@@ -5836,6 +5999,16 @@ export function wireObjectiveEpisodicConfig(value: ObjectiveEpisodicConfigParam 
   return out;
 }
 
+export function wireRemoveAgentVariationAssignmentRequest(value: RemoveAgentVariationAssignmentRequestParam | null | undefined): unknown {
+  if (value == null || typeof value !== 'object') return value;
+  switch ((value as never as Record<string, unknown>)["type"]) {
+    case "toolId": return wireRemoveAgentVariationAssignmentRequest_ToolId((value as never));
+    case "toolSetId": return wireRemoveAgentVariationAssignmentRequest_ToolSetId((value as never));
+    case "subAgentId": return wireRemoveAgentVariationAssignmentRequest_SubAgentId((value as never));
+    default: return value;
+  }
+}
+
 export function wireWidgetSessionSpec(value: WidgetSessionSpecParam | null | undefined): unknown {
   if (value == null || typeof value !== 'object') return value;
   const out: Record<string, unknown> = {};
@@ -5864,6 +6037,30 @@ export function wireAddAgentVariationAssignmentRequest_ToolSetId(value: AddAgent
 }
 
 export function wireAddAgentVariationAssignmentRequest_SubAgentId(value: AddAgentVariationAssignmentRequest_SubAgentIdParam | null | undefined): unknown {
+  if (value == null || typeof value !== 'object') return value;
+  const out: Record<string, unknown> = {};
+  if (value.type !== undefined) out["type"] = value.type;
+  if (value.subAgentId !== undefined) out["subAgentId"] = value.subAgentId;
+  return out;
+}
+
+export function wireRemoveAgentVariationAssignmentRequest_ToolId(value: RemoveAgentVariationAssignmentRequest_ToolIdParam | null | undefined): unknown {
+  if (value == null || typeof value !== 'object') return value;
+  const out: Record<string, unknown> = {};
+  if (value.type !== undefined) out["type"] = value.type;
+  if (value.toolId !== undefined) out["toolId"] = value.toolId;
+  return out;
+}
+
+export function wireRemoveAgentVariationAssignmentRequest_ToolSetId(value: RemoveAgentVariationAssignmentRequest_ToolSetIdParam | null | undefined): unknown {
+  if (value == null || typeof value !== 'object') return value;
+  const out: Record<string, unknown> = {};
+  if (value.type !== undefined) out["type"] = value.type;
+  if (value.toolSetId !== undefined) out["toolSetId"] = value.toolSetId;
+  return out;
+}
+
+export function wireRemoveAgentVariationAssignmentRequest_SubAgentId(value: RemoveAgentVariationAssignmentRequest_SubAgentIdParam | null | undefined): unknown {
   if (value == null || typeof value !== 'object') return value;
   const out: Record<string, unknown> = {};
   if (value.type !== undefined) out["type"] = value.type;
