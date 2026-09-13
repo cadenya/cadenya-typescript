@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/cadenya/cadenya-typescript/compare/v1.1.0...v1.2.0) (2026-09-13)
+
+
+### Features
+
+* add declarative variation assignments and direct union params ([0d2f77f](https://github.com/cadenya/cadenya-typescript/commit/0d2f77ff0c8e94f498e0898310d69257c2f1016a))
+
+
+### Bug Fixes
+
+* align generated client metadata with version 1.2.0 ([e4d31a2](https://github.com/cadenya/cadenya-typescript/commit/e4d31a246f7ebcd005362a87d3fb8ad5d2f09d82))
+
 ## [1.1.0](https://github.com/cadenya/cadenya-typescript/compare/v1.0.2...v1.1.0) (2026-09-09)
 
 
