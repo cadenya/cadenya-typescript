@@ -54,6 +54,16 @@ export function wireObjectiveEpisodicConfig(value) {
         out["key"] = value.key;
     return out;
 }
+export function wireRemoveAgentVariationAssignmentRequest(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    switch (value["type"]) {
+        case "toolId": return wireRemoveAgentVariationAssignmentRequest_ToolId(value);
+        case "toolSetId": return wireRemoveAgentVariationAssignmentRequest_ToolSetId(value);
+        case "subAgentId": return wireRemoveAgentVariationAssignmentRequest_SubAgentId(value);
+        default: return value;
+    }
+}
 export function wireWidgetSessionSpec(value) {
     if (value == null || typeof value !== 'object')
         return value;
@@ -91,6 +101,36 @@ export function wireAddAgentVariationAssignmentRequest_ToolSetId(value) {
     return out;
 }
 export function wireAddAgentVariationAssignmentRequest_SubAgentId(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.subAgentId !== undefined)
+        out["subAgentId"] = value.subAgentId;
+    return out;
+}
+export function wireRemoveAgentVariationAssignmentRequest_ToolId(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.toolId !== undefined)
+        out["toolId"] = value.toolId;
+    return out;
+}
+export function wireRemoveAgentVariationAssignmentRequest_ToolSetId(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.toolSetId !== undefined)
+        out["toolSetId"] = value.toolSetId;
+    return out;
+}
+export function wireRemoveAgentVariationAssignmentRequest_SubAgentId(value) {
     if (value == null || typeof value !== 'object')
         return value;
     const out = {};

@@ -17,7 +17,7 @@ export declare class ToolSearch {
      *
      * @example
      * ```ts
-     * const searchToolsOrToolSetsResponse = await client.toolSearch.searchOrSets({ query: 'query_123' });
+     * const searchToolsOrToolSetsResponse = await client.toolSearch.searchOrSets({ query: 'sample' });
      * ```
      */
     searchOrSets(params: ToolSearchSearchOrSetsParams, options?: RequestOptions): APIPromise<SearchToolsOrToolSetsResponse>;

@@ -2,8 +2,8 @@
 
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { AddAgentVariationAssignmentRequestParam, AgentVariation, AgentVariationSpec, CreateResourceMetadata, ListAgentVariationsResponse, UpdateResourceMetadata, VariationAssignment, VariationMemoryLayerAssignment } from '../types.js';
-import { wireAddAgentVariationAssignmentRequest } from '../types.js';
+import type { AddAgentVariationAssignmentRequestParam, AgentVariation, AgentVariationSpec, CreateResourceMetadata, ListAgentVariationsResponse, RemoveAgentVariationAssignmentRequestParam, UpdateResourceMetadata } from '../types.js';
+import { wireAddAgentVariationAssignmentRequest, wireRemoveAgentVariationAssignmentRequest } from '../types.js';
 
 export interface AgentVariationListParams {
   /**
@@ -76,32 +76,25 @@ export interface AgentVariationUpdateParams {
   metadata?: UpdateResourceMetadata;
   spec?: AgentVariationSpec;
   /**
-   * Fields to update
+   * Fields to update. Assignment lists are replaced as a whole, never merged.
+   *  Select spec.assignments or spec.memory_layer_assignments to replace/clear
+   *  one list. Selecting spec replaces the entire spec (including omitted lists);
+   *  * replaces all mutable fields. Element/index paths are not supported.
+   *  Without a mask, infer paths from non-empty fields: non-empty assignment
+   *  lists replace existing lists, while omitted/empty lists remain unchanged.
+   *  To clear a list, explicitly include its path in the mask.
    */
   updateMask?: string;
 }
 
-export interface AgentVariationAddAssignmentParams {
-  /**
-   * The request body, sent as-is.
-   */
-  body: AddAgentVariationAssignmentRequestParam;
+export type AgentVariationAddAssignmentParams = AddAgentVariationAssignmentRequestParam & {
   /**
    * Workspace ID.
    * 
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
-}
-
-export interface AgentVariationRemoveAssignmentParams {
-  /**
-   * Workspace ID.
-   * 
-   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-   */
-  workspaceId?: string;
-}
+};
 
 export interface AgentVariationAddMemoryLayerParams {
   /**
@@ -122,7 +115,20 @@ export interface AgentVariationAddMemoryLayerParams {
   position?: number;
 }
 
+export type AgentVariationRemoveAssignmentParams = RemoveAgentVariationAssignmentRequestParam & {
+  /**
+   * Workspace ID.
+   * 
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+};
+
 export interface AgentVariationRemoveMemoryLayerParams {
+  /**
+   * Layer to detach. Accepts memlyr_… or external_id:<value>.
+   */
+  memoryLayerId: string;
   /**
    * Workspace ID.
    * 
@@ -133,15 +139,19 @@ export interface AgentVariationRemoveMemoryLayerParams {
 
 export interface AgentVariationUpdateMemoryLayerParams {
   /**
+   * Layer to reposition. Accepts memlyr_… or external_id:<value>.
+   */
+  memoryLayerId: string;
+  /**
+   * New position. Only field currently updatable on an assignment.
+   */
+  position: number;
+  /**
    * Workspace ID.
    * 
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
-  /**
-   * New position. Only field currently updatable on an assignment.
-   */
-  position?: number;
 }
 
 export class AgentVariations {
@@ -235,30 +245,15 @@ export class AgentVariations {
    * 
    * @example
    * ```ts
-   * const variationAssignment = await client.agents.variations.addAssignment('agent_123', 'variation_123', { body: { toolId: 'sample', type: 'toolId' } });
+   * const agentVariation = await client.agents.variations.addAssignment('agent_123', 'variation_123', { toolId: 'sample', type: 'toolId' });
    * ```
    */
-  addAssignment(agentId: string, variationId: string, params: AgentVariationAddAssignmentParams, options?: RequestOptions): APIPromise<VariationAssignment> {
-    return this._client.requestAPI<VariationAssignment>(() => {
+  addAssignment(agentId: string, variationId: string, params: AgentVariationAddAssignmentParams, options?: RequestOptions): APIPromise<AgentVariation> {
+    return this._client.requestAPI<AgentVariation>(() => {
+      const { workspaceId: _bodyParam0, ..._body } = params;
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}/assignments`, body: wireAddAgentVariationAssignmentRequest(params.body) };
-    }, options);
-  }
-
-  /**
-   * Remove an assignment from a variation
-   * 
-   * @example
-   * ```ts
-   * await client.agents.variations.removeAssignment('agent_123', 'variation_123', '_123');
-   * ```
-   */
-  removeAssignment(agentId: string, variationId: string, id: string, params?: AgentVariationRemoveAssignmentParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.requestAPI<void>(() => {
-      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'DELETE', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}/assignments/${pathSegment('id', id)}`, void: true };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}:addAssignment`, body: wireAddAgentVariationAssignmentRequest(_body) };
     }, options);
   }
 
@@ -267,14 +262,31 @@ export class AgentVariations {
    * 
    * @example
    * ```ts
-   * const variationMemoryLayerAssignment = await client.agents.variations.addMemoryLayer('agent_123', 'variation_123', { memoryLayerId: 'sample' });
+   * const agentVariation = await client.agents.variations.addMemoryLayer('agent_123', 'variation_123', { memoryLayerId: 'sample' });
    * ```
    */
-  addMemoryLayer(agentId: string, variationId: string, params: AgentVariationAddMemoryLayerParams, options?: RequestOptions): APIPromise<VariationMemoryLayerAssignment> {
-    return this._client.requestAPI<VariationMemoryLayerAssignment>(() => {
+  addMemoryLayer(agentId: string, variationId: string, params: AgentVariationAddMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation> {
+    return this._client.requestAPI<AgentVariation>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}/memory_layer_assignments`, body: { memoryLayerId: params.memoryLayerId, position: params.position } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}:addMemoryLayer`, body: { memoryLayerId: params.memoryLayerId, position: params.position } };
+    }, options);
+  }
+
+  /**
+   * Remove an assignment from a variation
+   * 
+   * @example
+   * ```ts
+   * const agentVariation = await client.agents.variations.removeAssignment('agent_123', 'variation_123', { toolId: 'sample', type: 'toolId' });
+   * ```
+   */
+  removeAssignment(agentId: string, variationId: string, params: AgentVariationRemoveAssignmentParams, options?: RequestOptions): APIPromise<AgentVariation> {
+    return this._client.requestAPI<AgentVariation>(() => {
+      const { workspaceId: _bodyParam0, ..._body } = params;
+      const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}:removeAssignment`, body: wireRemoveAgentVariationAssignmentRequest(_body) };
     }, options);
   }
 
@@ -283,14 +295,14 @@ export class AgentVariations {
    * 
    * @example
    * ```ts
-   * await client.agents.variations.removeMemoryLayer('agent_123', 'variation_123', '_123');
+   * const agentVariation = await client.agents.variations.removeMemoryLayer('agent_123', 'variation_123', { memoryLayerId: 'sample' });
    * ```
    */
-  removeMemoryLayer(agentId: string, variationId: string, id: string, params?: AgentVariationRemoveMemoryLayerParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.requestAPI<void>(() => {
-      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+  removeMemoryLayer(agentId: string, variationId: string, params: AgentVariationRemoveMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation> {
+    return this._client.requestAPI<AgentVariation>(() => {
+      const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'DELETE', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}/memory_layer_assignments/${pathSegment('id', id)}`, void: true };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}:removeMemoryLayer`, body: { memoryLayerId: params.memoryLayerId } };
     }, options);
   }
 
@@ -299,14 +311,14 @@ export class AgentVariations {
    * 
    * @example
    * ```ts
-   * const variationMemoryLayerAssignment = await client.agents.variations.updateMemoryLayer('agent_123', 'variation_123', '_123');
+   * const agentVariation = await client.agents.variations.updateMemoryLayer('agent_123', 'variation_123', { memoryLayerId: 'sample', position: 1 });
    * ```
    */
-  updateMemoryLayer(agentId: string, variationId: string, id: string, params?: AgentVariationUpdateMemoryLayerParams, options?: RequestOptions): APIPromise<VariationMemoryLayerAssignment> {
-    return this._client.requestAPI<VariationMemoryLayerAssignment>(() => {
-      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+  updateMemoryLayer(agentId: string, variationId: string, params: AgentVariationUpdateMemoryLayerParams, options?: RequestOptions): APIPromise<AgentVariation> {
+    return this._client.requestAPI<AgentVariation>(() => {
+      const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}/memory_layer_assignments/${pathSegment('id', id)}`, body: { position: params?.position } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/agents/${pathSegment('agentId', agentId)}/variations/${pathSegment('variationId', variationId)}:updateMemoryLayer`, body: { memoryLayerId: params.memoryLayerId, position: params.position } };
     }, options);
   }
 }

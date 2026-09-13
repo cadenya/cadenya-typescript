@@ -60,7 +60,9 @@ export interface AgentCreateParams {
      */
     workspaceId?: string;
     /**
-     * Optional default variation to add to the agent on create
+     * Optional default variation to add to the agent on create. Its spec accepts
+     *  assignments and memory_layer_assignments using the same atomic validation
+     *  as CreateAgentVariation. Failure rejects the entire agent creation.
      */
     defaultVariation?: CreateAgentVariationRequestParam;
 }

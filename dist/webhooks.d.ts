@@ -78,7 +78,13 @@ export type ObjectiveEventMemoryReadWebhookEvent = ObjectiveEventWebhookData & {
 export type ObjectiveEventReasoningWebhookEvent = ObjectiveEventWebhookData & {
     type: 'objective_event.reasoning';
 };
-export type UnwrapWebhookEvent = ObjectiveEventUserMessageWebhookEvent | ObjectiveEventAssistantMessageWebhookEvent | ObjectiveEventToolResultWebhookEvent | ObjectiveEventToolApprovalRequestedWebhookEvent | ObjectiveEventToolCalledWebhookEvent | ObjectiveEventToolApprovedWebhookEvent | ObjectiveEventToolDeniedWebhookEvent | ObjectiveEventToolErrorWebhookEvent | ObjectiveEventSubAgentSpawnedWebhookEvent | ObjectiveEventSubAgentUpdatedWebhookEvent | ObjectiveEventErrorWebhookEvent | ObjectiveEventMemoryReadWebhookEvent | ObjectiveEventReasoningWebhookEvent;
+/**
+ * Objective state changed event
+ */
+export type ObjectiveEventStateChangedWebhookEvent = ObjectiveEventWebhookData & {
+    type: 'objective_event.state_changed';
+};
+export type UnwrapWebhookEvent = ObjectiveEventUserMessageWebhookEvent | ObjectiveEventAssistantMessageWebhookEvent | ObjectiveEventToolResultWebhookEvent | ObjectiveEventToolApprovalRequestedWebhookEvent | ObjectiveEventToolCalledWebhookEvent | ObjectiveEventToolApprovedWebhookEvent | ObjectiveEventToolDeniedWebhookEvent | ObjectiveEventToolErrorWebhookEvent | ObjectiveEventSubAgentSpawnedWebhookEvent | ObjectiveEventSubAgentUpdatedWebhookEvent | ObjectiveEventErrorWebhookEvent | ObjectiveEventMemoryReadWebhookEvent | ObjectiveEventReasoningWebhookEvent | ObjectiveEventStateChangedWebhookEvent;
 export declare class Webhooks {
     private readonly secret;
     constructor(secret: string | undefined);
