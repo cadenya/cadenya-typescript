@@ -605,6 +605,18 @@ export interface AgentVariationInfo {
    *  regardless of which tools progressive discovery has loaded.
    */
   effectiveToolCount: number;
+  /**
+   * Current display metadata for targets explicitly referenced by
+   *  spec.assignments and spec.memory_layer_assignments, keyed by canonical
+   *  resource ID. Includes tools, tool sets, sub-agents, and memory layers in
+   *  one map; each value's id equals its key. Does not expand tools within
+   *  assigned tool sets or assignments within sub-agents.
+   *  Populated whenever info is returned; empty when there are no assignments.
+   *  Missing or inaccessible targets are omitted, and names may be absent.
+   *  Clients use spec for assignment type/order and fall back to the ID when
+   *  display metadata is unavailable. This map never accepts assignment writes.
+   */
+  assignmentMetadata: Record<string, BareMetadata>;
 }
 
 /**
@@ -883,7 +895,7 @@ export interface AssistantToolCall {
  * BareMetadata contains the minimal metadata for a resource: the ID and an
  *  optional human-readable name. These are used for reference fields where the
  *  full metadata (account scoping, timestamps, labels, external IDs) is not
- *  needed — e.g., the tool references inside an agent variation spec or the
+ *  needed — e.g., the assignment metadata inside agent variation info or the
  *  tools assigned to an objective. Both fields are server-populated; clients
  *  provide IDs through sibling fields rather than by constructing a
  *  BareMetadata themselves.
