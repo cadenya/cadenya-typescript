@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/cadenya/cadenya-typescript/compare/v1.2.0...v1.3.0) (2026-09-14)
+
+
+### Features
+
+* expose variation assignment metadata ([5385283](https://github.com/cadenya/cadenya-typescript/commit/53852835b21085abba798f24317fa12b43f2843f))
+
 ## [1.2.0](https://github.com/cadenya/cadenya-typescript/compare/v1.1.0...v1.2.0) (2026-09-13)
 
 
