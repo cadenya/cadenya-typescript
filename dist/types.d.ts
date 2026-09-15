@@ -2303,6 +2303,10 @@ export interface ObjectiveError {
     message: string;
 }
 export interface ObjectiveEvent {
+    /**
+     * Durable events use objevt_ IDs, the only IDs accepted as reconnect
+     *  cursors. Live-only heartbeats use hb_ IDs and have no SSE id: field.
+     */
     metadata: OperationMetadata;
     data: ObjectiveEventData;
     contextWindowId: string;
@@ -2322,7 +2326,7 @@ export interface ObjectiveEvent {
      */
     startedAt?: string;
 }
-export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged;
+export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat;
 export interface ObjectiveEventInfo {
     objective?: OperationMetadata;
     createdBy: Profile;
@@ -2373,6 +2377,14 @@ export interface ObjectiveFinalized {
      *  structured output of the objective.
      */
     output?: Record<string, unknown>;
+}
+/**
+ * ObjectiveHeartbeat reports recent execution liveness. It is transient:
+ *  delivered only on live streams, never stored in event history or delivered
+ *  to webhooks. Its hb_ event ID is not a reconnect cursor. Heartbeats do not
+ *  change objective state or promise progress from the model.
+ */
+export interface ObjectiveHeartbeat {
 }
 /**
  * ObjectiveInfo provides read-only aggregated statistics about an objective's execution
@@ -4448,7 +4460,7 @@ export type WebhookDeliveryDataStatus = 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED' | 
 /**
  * The type of objective event that triggered this webhook delivery
  */
-export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED';
+export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT';
 export interface WebhookDeliveryData {
     /**
      * Related resources
@@ -5074,6 +5086,10 @@ export interface ObjectiveEventData_StateChanged {
     type: 'stateChanged';
     stateChanged: ObjectiveStateChanged;
 }
+export interface ObjectiveEventData_Heartbeat {
+    type: 'heartbeat';
+    heartbeat: ObjectiveHeartbeat;
+}
 export interface CallableTool_Tool {
     type: 'tool';
     tool: ResourceMetadata;
@@ -5304,7 +5320,7 @@ export interface ModelSpec_Capability_Caching {
 export type AgentServiceListAgentsState = 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
-export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED';
+export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT';
 export type MemoryServiceListMemoryLayersType = 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 export type ModelServiceListModelsState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 export type ObjectiveServiceListObjectivesState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
