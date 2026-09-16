@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/cadenya/cadenya-typescript/compare/v1.3.1...v1.4.0) (2026-09-16)
+
+
+### Features
+
+* support objective heartbeat events ([d2a3ecc](https://github.com/cadenya/cadenya-typescript/commit/d2a3ecc27707129b74f2792371584fb6381b0cf8))
+
 ## [1.3.1](https://github.com/cadenya/cadenya-typescript/compare/v1.3.0...v1.3.1) (2026-09-14)
 
 
