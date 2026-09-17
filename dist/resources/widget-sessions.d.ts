@@ -124,7 +124,7 @@ export declare class WidgetSessions {
      *
      * @example
      * ```ts
-     * const widgetSession = await client.widgetSessions.create({ spec: { widgetId: 'sample' } });
+     * const widgetSession = await client.widgetSessions.create({ spec: { subject: { id: 'sample' }, tenant: { id: 'sample' }, widgetId: 'sample' } });
      * ```
      */
     create(params: WidgetSessionCreateParams, options?: RequestOptions): APIPromise<WidgetSession>;
