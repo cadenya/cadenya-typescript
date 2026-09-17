@@ -3220,6 +3220,7 @@ export interface SetToolCallContentRequest_ImageBlock {
 export interface SetToolCallContentRequest_TextBlock {
     text: string;
 }
+export type StatusDetails = WidgetSessionErrorInfo | GoogleProtobufAny;
 /**
  * The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
  */
@@ -3235,7 +3236,7 @@ export interface Status {
     /**
      * A list of messages that carry the error details.  There is a common set of message types for APIs to use.
      */
-    details?: Array<GoogleProtobufAny>;
+    details?: Array<StatusDetails>;
 }
 export interface SubAgentSpawned {
     agent: ResourceMetadata;
@@ -4550,8 +4551,9 @@ export type WidgetSessionState = 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_E
  *  a widget, minted server-to-server by the customer's backend. The session
  *  carries all customer-asserted context — tenant, subject, labels, secrets —
  *  and every conversation (objective) created through the widget inherits it.
- *  The bearer token returned at mint is short-lived and refreshed at the
- *  widget host; the session row is what makes revocation possible.
+ *  The browser renews short-lived bearer tokens at the widget host with
+ *  RenewWidgetSession, authenticated by its existing token. Renewal preserves
+ *  this bounded grant and does not extend its hard expiry.
  */
 export interface WidgetSession {
     metadata: OperationMetadata;
@@ -4568,6 +4570,44 @@ export interface WidgetSession {
      *  headers server-side — never returned by any API.
      */
     secrets: Array<WidgetSession_Secret>;
+    /**
+     * Present only on creation. The same envelope is returned by
+     *  RenewWidgetSession on the widget host. Omitted on reads, lists, and revocation.
+     *  Existing spec.token/spec.token_expires_at and info.host remain populated
+     *  on creation for v1 compatibility and agree with these credentials.
+     */
+    credentials?: WidgetSessionCredentials;
+}
+/**
+ * WidgetSessionCredentials is the only credential envelope the customer's
+ *  backend forwards to the browser. Never log or persist its token. Responses
+ *  containing credentials use Cache-Control: no-store. Both initial and later
+ *  issuance use the same schema; no refresh token or management key is included.
+ */
+export interface WidgetSessionCredentials {
+    /**
+     * Canonical wsess_ identifier. Ordinary renewal cannot change the session.
+     */
+    sessionId: string;
+    /**
+     * Authoritative hostname, without a scheme or path. Use HTTPS with this
+     *  host; never construct it or accept a host change during renewal.
+     */
+    host: string;
+    /**
+     * Short-lived bearer credential for the widget host only.
+     */
+    token: string;
+    /**
+     * Exact token expiry, at most 15 minutes after issuance and never later
+     *  than session_expires_at. Equals JWT exp without the 60-second validation
+     *  tolerance added. Renew proactively before this timestamp.
+     */
+    tokenExpiresAt: string;
+    /**
+     * Immutable hard session expiry. Issuance never extends this deadline.
+     */
+    sessionExpiresAt: string;
 }
 /**
  * WidgetSessionInfo provides read-only server-derived data about a session.
@@ -4603,7 +4643,7 @@ export interface WidgetSessionInfo {
     messageCount: number;
     /**
      * When the session last created a conversation, sent a message, or
-     *  refreshed a token.
+     *  received a newly issued token.
      */
     lastActiveAt?: string;
 }
@@ -4617,18 +4657,19 @@ export interface WidgetSessionSpec {
      */
     widgetId: string;
     /**
-     * Optional tenant assertion — the customer's org/company identifier for the
-     *  visitor. Upserts the tenant record in the workspace and tags the session
-     *  and every conversation it creates. Conversation listing at the widget
-     *  host is scoped to this tenant.
+     * Required tenant assertion — the customer's organization identifier.
+     *  Upserts the tenant record in the workspace. Every conversation created
+     *  through this session inherits the tenant and subject identity.
      */
-    tenant?: TenantAssertion;
+    tenant: TenantAssertion;
     /**
-     * Optional subject assertion — the visitor within the tenant (e.g. their
-     *  user id in the customer's namespace). Requires `tenant`; a subject
-     *  asserted without a tenant is rejected with InvalidArgument.
+     * Required subject assertion — the visitor's ID within the tenant.
+     *  Sessions with the same tenant and subject share conversation history on
+     *  the same widget and agent, subject to the current session's permissions.
+     *  A static ID deliberately shares that history; use a distinct ID per
+     *  visitor when their conversations should be separate.
      */
-    subject?: SubjectAssertion;
+    subject: SubjectAssertion;
     /**
      * Hard session expiry. Tokens never outlive it; after it passes the session
      *  transitions to STATE_EXPIRED. Defaults to a server-chosen horizon when
@@ -4636,14 +4677,14 @@ export interface WidgetSessionSpec {
      */
     expiresAt?: string;
     /**
-     * The session bearer token. Returned only on creation — subsequent reads
-     *  omit it. The token is short-lived; the widget refreshes it at the widget
-     *  host without involving the customer's backend.
+     * Legacy creation-only alias of credentials.token; omitted on reads.
+     *  Supported throughout v1. New clients should consume credentials.
+     *  The browser obtains replacements with RenewWidgetSession at the widget host.
      */
     token: string;
     /**
-     * Expiry of the token returned in `token`. Distinct from `expires_at`,
-     *  which bounds the session itself.
+     * Legacy creation-only alias of credentials.token_expires_at, supported
+     *  throughout v1. Distinct from expires_at, which bounds the session itself.
      */
     tokenExpiresAt?: string;
     /**
@@ -5317,6 +5358,22 @@ export interface ModelSpec_Capability_Caching {
     type: 'caching';
     caching: Capability_Caching;
 }
+/**
+ * TOKEN_EXPIRED identifies access-token expiry beyond the 60-second clock-skew tolerance. That token cannot renew; use already-installed newer credentials or require explicit app reauthentication. SESSION_* reasons are terminal. Never infer renewability from HTTP status alone.
+ */
+export type WidgetSessionErrorReason = 'TOKEN_EXPIRED' | 'SESSION_REVOKED' | 'SESSION_EXPIRED' | 'SESSION_EXHAUSTED';
+/**
+ * google.rpc.ErrorInfo detail for widget lifecycle failures. Match both domain and reason; ignore unknown reasons rather than renewing automatically.
+ */
+export interface WidgetSessionErrorInfo {
+    '@type': 'type.googleapis.com/google.rpc.ErrorInfo';
+    domain: 'api.cadenya.com';
+    reason: WidgetSessionErrorReason;
+    /**
+     * Optional non-sensitive context. Never contains tokens or secrets.
+     */
+    metadata?: Record<string, string>;
+}
 export type AgentServiceListAgentsState = 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
@@ -5378,18 +5435,19 @@ export interface WidgetSessionSpecParam {
      */
     widgetId: string;
     /**
-     * Optional tenant assertion — the customer's org/company identifier for the
-     *  visitor. Upserts the tenant record in the workspace and tags the session
-     *  and every conversation it creates. Conversation listing at the widget
-     *  host is scoped to this tenant.
+     * Required tenant assertion — the customer's organization identifier.
+     *  Upserts the tenant record in the workspace. Every conversation created
+     *  through this session inherits the tenant and subject identity.
      */
-    tenant?: TenantAssertion;
+    tenant: TenantAssertion;
     /**
-     * Optional subject assertion — the visitor within the tenant (e.g. their
-     *  user id in the customer's namespace). Requires `tenant`; a subject
-     *  asserted without a tenant is rejected with InvalidArgument.
+     * Required subject assertion — the visitor's ID within the tenant.
+     *  Sessions with the same tenant and subject share conversation history on
+     *  the same widget and agent, subject to the current session's permissions.
+     *  A static ID deliberately shares that history; use a distinct ID per
+     *  visitor when their conversations should be separate.
      */
-    subject?: SubjectAssertion;
+    subject: SubjectAssertion;
     /**
      * Hard session expiry. Tokens never outlive it; after it passes the session
      *  transitions to STATE_EXPIRED. Defaults to a server-chosen horizon when
