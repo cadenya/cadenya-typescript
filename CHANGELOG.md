@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/cadenya/cadenya-typescript/compare/v1.4.0...v1.5.0) (2026-09-17)
+
+
+### Features
+
+* require widget session tenant and subject identity and expose expiring credentials ([31e5f6f](https://github.com/cadenya/cadenya-typescript/commit/31e5f6f76495a574789207795de219c828adce0d))
+
 ## [1.4.0](https://github.com/cadenya/cadenya-typescript/compare/v1.3.1...v1.4.0) (2026-09-16)
 
 
