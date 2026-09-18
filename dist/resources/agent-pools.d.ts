@@ -1,0 +1,214 @@
+import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
+import { Page } from '../core/pagination.js';
+import type { AgentPool, AgentPoolServiceListAgentPoolsState, AgentPoolSpec, AgentPoolUpdateSpec, CreateResourceMetadata, UpdateResourceMetadata } from '../types.js';
+export interface AgentPoolListParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+    /**
+     * Maximum number of results to return
+     */
+    limit?: number;
+    /**
+     * Pagination cursor from previous response
+     */
+    cursor?: string;
+    /**
+     * Filter expression (query param: prefix)
+     */
+    prefix?: string;
+    /**
+     * Free-form search query
+     */
+    query?: string;
+    /**
+     * Filter by lifecycle state. Unspecified returns active and inactive pools;
+     *  explicitly select ARCHIVED to list archived pools.
+     */
+    state?: AgentPoolServiceListAgentPoolsState;
+    /**
+     * Filters by metadata labels. Comma-separated key=value pairs,
+     *  e.g. "env=prod,team=ai". A resource matches only if every pair
+     *  matches exactly (AND semantics).
+     */
+    labels?: string;
+    /**
+     * Sort order for results (asc or desc by creation time)
+     */
+    sortOrder?: string;
+    /**
+     * When true, the `info` field on each returned agent pool is populated. Requests
+     *  with this flag count more against your rate limit.
+     */
+    includeInfo?: boolean;
+}
+export interface AgentPoolCreateParams {
+    metadata: CreateResourceMetadata;
+    spec: AgentPoolSpec;
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolRetrieveParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolDeleteParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolUpdateParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+    metadata?: UpdateResourceMetadata;
+    spec?: AgentPoolUpdateSpec;
+    /**
+     * Fields to update. Only metadata and spec are mutable; top-level state and info
+     *  paths are invalid. spec.assignments replaces the entire membership list.
+     *  A spec mask replaces the full spec; * replaces all mutable fields.
+     *  Without a mask, infer paths from non-empty fields. Empty or omitted
+     *  membership then leaves the existing list unchanged. Element/index paths
+     *  are invalid. Validate the merged pool atomically: an empty description
+     *  or membership (including an explicitly masked empty list) is invalid.
+     */
+    updateMask?: string;
+}
+export interface AgentPoolActivateParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolArchiveParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolDeactivateParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export interface AgentPoolUnarchiveParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
+export declare class AgentPools {
+    private readonly _client;
+    constructor(_client: HttpClient);
+    /**
+     * List agent pools
+     *
+     * @example
+     * ```ts
+     * const page = await client.agentPools.list();
+     * for await (const item of page) {
+     *   // auto-fetches every page
+     * }
+     * ```
+     */
+    list(params?: AgentPoolListParams, options?: RequestOptions): Promise<Page<AgentPool>>;
+    /**
+     * Create a new agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.create({ metadata: { name: 'sample' }, spec: { assignments: [{ agentId: 'sample' }], description: 'sample' } });
+     * ```
+     */
+    create(params: AgentPoolCreateParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Get an agent pool by ID
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.retrieve('_123');
+     * ```
+     */
+    retrieve(id: string, params?: AgentPoolRetrieveParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Delete an agent pool
+     *
+     * @example
+     * ```ts
+     * await client.agentPools.delete('_123');
+     * ```
+     */
+    delete(id: string, params?: AgentPoolDeleteParams, options?: RequestOptions): APIPromise<void>;
+    /**
+     * Update an agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.update('_123');
+     * ```
+     */
+    update(id: string, params?: AgentPoolUpdateParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Activate an agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.activate('_123');
+     * ```
+     */
+    activate(id: string, params?: AgentPoolActivateParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Archive an agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.archive('_123');
+     * ```
+     */
+    archive(id: string, params?: AgentPoolArchiveParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Deactivate an agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.deactivate('_123');
+     * ```
+     */
+    deactivate(id: string, params?: AgentPoolDeactivateParams, options?: RequestOptions): APIPromise<AgentPool>;
+    /**
+     * Unarchive an agent pool
+     *
+     * @example
+     * ```ts
+     * const agentPool = await client.agentPools.unarchive('_123');
+     * ```
+     */
+    unarchive(id: string, params?: AgentPoolUnarchiveParams, options?: RequestOptions): APIPromise<AgentPool>;
+}
+//# sourceMappingURL=agent-pools.d.ts.map

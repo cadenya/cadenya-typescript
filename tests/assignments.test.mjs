@@ -21,7 +21,7 @@ test('assignment variants narrow and invalid shapes fail TypeScript checks', () 
       'declare const client: Cadenya;',
     ];
     for (const [type, method] of [['Add', 'addAssignment'], ['Remove', 'removeAssignment']]) {
-      for (const field of ['toolId', 'toolSetId', 'subAgentId']) {
+      for (const field of ['toolId', 'toolSetId', 'subAgentId', 'agentPoolId']) {
         const other = field === 'toolId' ? 'toolSetId' : 'toolId';
         lines.push(`const ${type}_${field}: ${type} = { type: '${field}', ${field}: 'target', workspaceId: 'workspace_override' };`);
         lines.push(`const result_${type}_${field}: PromiseLike<AgentVariation> = client.agents.variations.${method}('agent', 'variation', ${type}_${field});`);
@@ -32,7 +32,7 @@ test('assignment variants narrow and invalid shapes fail TypeScript checks', () 
       lines.push('// @ts-expect-error discriminator is required', `const noType_${type}: ${type} = { toolId: 'target' };`);
       lines.push('// @ts-expect-error obsolete body wrapper is rejected', `const wrapped_${type}: ${type} = { body: { type: 'toolSetId', toolSetId: 'target' } };`);
       lines.push(`function narrow${type}(value: ${type}) { switch (value.type) {`);
-      for (const field of ['toolId', 'toolSetId', 'subAgentId']) {
+      for (const field of ['toolId', 'toolSetId', 'subAgentId', 'agentPoolId']) {
         const other = field === 'toolId' ? 'toolSetId' : 'toolId';
         lines.push(`case '${field}': { const id: string = value.${field};`, '// @ts-expect-error other variant fields are unavailable after narrowing', `value.${other}; return id; }`);
       }
@@ -43,7 +43,7 @@ test('assignment variants narrow and invalid shapes fail TypeScript checks', () 
     const result = spawnSync('tsc', ['--noEmit', '--strict', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', file], { encoding: 'utf8' });
     assert.ifError(result.error);
     assert.equal(result.status, 0, result.stdout + result.stderr);
-    assert.equal(lines.filter(line => line.startsWith('// @ts-expect-error')).length, 28);
+    assert.equal(lines.filter(line => line.startsWith('// @ts-expect-error')).length, 36);
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
@@ -62,7 +62,7 @@ test('add/remove use direct bodies, workspace defaults/overrides, and revised ac
     const match = req.url.match(/^\/v1\/workspaces\/([^/]+)\/agents\/agent_123\/variations\/agentvar_456:(addAssignment|removeAssignment)$/);
     const send = (status, value) => { res.writeHead(status, { 'Content-Type': 'application/json' }); res.end(JSON.stringify(value)); };
     if (!match || req.method !== 'POST') return send(404, { code: 5, message: 'unknown route' });
-    if (!['toolId', 'toolSetId', 'subAgentId'].includes(body.type) || !body[body.type] || Object.keys(body).sort().join(',') !== [body.type, 'type'].sort().join(',')) return send(400, { code: 3, message: 'invalid body' });
+    if (!['toolId', 'toolSetId', 'subAgentId', 'agentPoolId'].includes(body.type) || !body[body.type] || Object.keys(body).sort().join(',') !== [body.type, 'type'].sort().join(',')) return send(400, { code: 3, message: 'invalid body' });
     const [, workspace, action] = match;
     const assigned = state.get(workspace) ?? new Map();
     state.set(workspace, assigned);
@@ -80,7 +80,7 @@ test('add/remove use direct bodies, workspace defaults/overrides, and revised ac
   await once(server, 'listening');
   const client = new Cadenya({ apiKey: 'local-test-only', baseURL: `http://127.0.0.1:${server.address().port}`, workspaceId: 'workspace_default', maxRetries: 0 });
   try {
-    for (const field of ['toolId', 'toolSetId', 'subAgentId']) {
+    for (const field of ['toolId', 'toolSetId', 'subAgentId', 'agentPoolId']) {
       for (const override of [undefined, 'workspace_override']) {
         const workspace = override ?? 'workspace_default';
         const body = { type: field, [field]: `target_${field}` };
@@ -96,7 +96,7 @@ test('add/remove use direct bodies, workspace defaults/overrides, and revised ac
         await assert.rejects(client.agents.variations.removeAssignment('agent_123', 'agentvar_456', params), error => error.status === 404);
       }
     }
-    assert.equal(requests.length, 24);
+    assert.equal(requests.length, 32);
   } finally {
     server.closeAllConnections();
     await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));

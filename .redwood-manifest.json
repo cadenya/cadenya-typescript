@@ -10,6 +10,7 @@
   "src/core/webhooks.ts",
   "src/index.ts",
   "src/resources/accounts.ts",
+  "src/resources/agent-pools.ts",
   "src/resources/agent-schedules.ts",
   "src/resources/agent-variations.ts",
   "src/resources/agents.ts",

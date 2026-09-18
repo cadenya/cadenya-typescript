@@ -243,12 +243,25 @@ export interface AccountSpec {
     workspaces: Array<Workspace>;
 }
 /**
- * Attach a single tool, tool set, or sub-agent to a variation. Exactly one
+ * Activate an inactive pool.
+ */
+export interface ActivateAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+}
+/**
+ * Attach a single tool, tool set, sub-agent, or agent pool to a variation. Exactly one
  *  of the target fields must be set; the assignment kind is inferred from the
  *  populated field. Adding an existing target returns AlreadyExists.
  *  All targets must be in the variation's workspace and eligible for assignment.
  */
-export type AddAgentVariationAssignmentRequest = AddAgentVariationAssignmentRequest_ToolId | AddAgentVariationAssignmentRequest_ToolSetId | AddAgentVariationAssignmentRequest_SubAgentId;
+export type AddAgentVariationAssignmentRequest = AddAgentVariationAssignmentRequest_ToolId | AddAgentVariationAssignmentRequest_ToolSetId | AddAgentVariationAssignmentRequest_SubAgentId | AddAgentVariationAssignmentRequest_AgentPoolId;
 /**
  * Attach a memory layer to a variation. Use UpdateAgentVariationMemoryLayer or
  *  replace the spec list to reposition an existing layer. Rejected when:
@@ -336,6 +349,97 @@ export interface Agent {
 export interface AgentInfo {
     variationCount: number;
     createdBy?: Profile;
+}
+/**
+ * Output only. Pools are created INACTIVE. Use :activate, :deactivate,
+ *  :archive, and :unarchive to transition states. Unarchive returns INACTIVE.
+ */
+export type AgentPoolState = 'AGENT_POOL_STATE_UNSPECIFIED' | 'AGENT_POOL_STATE_ACTIVE' | 'AGENT_POOL_STATE_INACTIVE' | 'AGENT_POOL_STATE_ARCHIVED';
+/**
+ * A workspace-scoped group of agents. When assigned to a variation, the pool
+ *  exposes one callable target that routes a request to a member agent.
+ *  Pool membership references agents; variation assignments reference the pool.
+ */
+export interface AgentPool {
+    metadata: ResourceMetadata;
+    spec: AgentPoolSpec;
+    info?: AgentPoolInfo;
+    /**
+     * Output only. Pools are created INACTIVE. Use :activate, :deactivate,
+     *  :archive, and :unarchive to transition states. Unarchive returns INACTIVE.
+     */
+    state: AgentPoolState;
+}
+/**
+ * A member of a pool, identified by its agent ID. This is distinct from a
+ *  VariationAssignment, which attaches the entire pool to a variation.
+ */
+export interface AgentPoolAssignment {
+    /**
+     * Canonical ID of an agent in the pool's workspace.
+     */
+    agentId: string;
+}
+/**
+ * AgentPoolInfo represents the information of an agent pool.
+ */
+export interface AgentPoolInfo {
+    /**
+     * Number of member agents in spec.assignments.
+     */
+    assignedAgents: number;
+    createdBy: Profile;
+}
+/**
+ * AgentPoolSpec describes the pool's purpose, membership, input schema, and routing instructions.
+ */
+export interface AgentPoolSpec {
+    /**
+     * Describes when a calling agent should use this pool.
+     */
+    description: string;
+    /**
+     * JSON Schema defining the input arguments for this pool's callable tool.
+     *  When the pool is assigned to an agent variation, this schema tells the LLM
+     *  what arguments to supply. The supplied arguments provide the context used
+     *  to route the request to an agent in the pool.
+     */
+    state?: Record<string, unknown>;
+    /**
+     * Complete set of member agents, all in the pool's workspace. At least one
+     *  member is required. Order has no meaning; duplicate agent IDs are invalid.
+     */
+    assignments: Array<AgentPoolAssignment>;
+    /**
+     * Instructions for routing requests to an agent in the pool.
+     *  If empty, defaults to "Which agent is best suited to handle this request?".
+     */
+    instructions?: string;
+}
+/**
+ * Partial input for UpdateAgentPool. The server applies update_mask, then
+ *  validates the resulting AgentPoolSpec before persisting any changes.
+ */
+export interface AgentPoolUpdateSpec {
+    /**
+     * Omit to leave unchanged, unless the mask selects this field or all of spec.
+     */
+    description?: string;
+    /**
+     * JSON Schema for the pool's callable input arguments. Update through
+     *  spec.state in the update mask.
+     */
+    state?: Record<string, unknown>;
+    /**
+     * Replacement membership. A selected empty list is invalid because a pool
+     *  must retain at least one member. Unselected fields remain unchanged.
+     */
+    assignments?: Array<AgentPoolAssignment>;
+    /**
+     * Routing instructions to update through spec.instructions in the update
+     *  mask. Selecting this field with an empty value restores the default question.
+     */
+    instructions?: string;
 }
 /**
  * The current lifecycle state of the schedule. Output only. Schedules are
@@ -553,23 +657,27 @@ export interface AgentVariationInfo {
     /**
      * Number of distinct callable tools available through this variation's
      *  assignments after normalization. Expands tool sets and deduplicates tools
-     *  also assigned directly. Each sub-agent contributes one callable tool;
-     *  its own assignments are not expanded. Counts the full normalized set,
-     *  regardless of which tools progressive discovery has loaded.
+     *  also assigned directly. Each sub-agent or pool contributes one callable
+     *  tool; sub-agent assignments and pool members are not expanded. Counts the
+     *  full normalized set, regardless of which tools progressive discovery has loaded.
      */
     effectiveToolCount: number;
     /**
      * Current display metadata for targets explicitly referenced by
      *  spec.assignments and spec.memory_layer_assignments, keyed by canonical
-     *  resource ID. Includes tools, tool sets, sub-agents, and memory layers in
-     *  one map; each value's id equals its key. Does not expand tools within
-     *  assigned tool sets or assignments within sub-agents.
+     *  resource ID. Includes tools, tool sets, sub-agents, agent pools,
+     *  and memory layers in one map; each value's id equals its key. Does not expand
+     *  tools within assigned tool sets, assignments within sub-agents, or pool members.
      *  Populated whenever info is returned; empty when there are no assignments.
      *  Missing or inaccessible targets are omitted, and names may be absent.
      *  Clients use spec for assignment type/order and fall back to the ID when
      *  display metadata is unavailable. This map never accepts assignment writes.
      */
     assignmentMetadata: Record<string, BareMetadata>;
+    /**
+     * Number of agent pools assigned to this variation.
+     */
+    agentPoolCount: number;
 }
 /**
  * AgentVariationSpec defines the complete operational configuration for a
@@ -589,7 +697,7 @@ export interface AgentVariationSpec {
      * ProgressiveDiscovery is an optional config that, when set, will load a Cadenya provided tool that
      *  can search for tools in the assigned tool sets or tools.
      *
-     *  Note: Sub-agents are always loaded as a tool regardless of this value.
+     *  Note: Sub-agents and agent pools are always loaded as tools regardless of this value.
      */
     progressiveDiscovery?: AgentVariationSpec_ProgressiveDiscovery;
     /**
@@ -619,7 +727,7 @@ export interface AgentVariationSpec {
      */
     firstUserMessageTemplate?: string;
     /**
-     * Complete set of assigned tools, tool sets, and sub-agents. Order has no
+     * Complete set of assigned tools, tool sets, sub-agents, and agent pools. Order has no
      *  meaning. Duplicate (target kind, canonical target ID) pairs are collapsed.
      *  On create, omitted or empty means no assignments. On update, selecting
      *  spec.assignments in update_mask replaces the entire set; empty clears it.
@@ -765,6 +873,19 @@ export interface ApproveToolCallRequest {
     toolCallId?: string;
 }
 /**
+ * Archive an active or inactive pool, preserving membership and assignments.
+ */
+export interface ArchiveAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+}
+/**
  * Archive agent request
  */
 export interface ArchiveAgentRequest {
@@ -858,7 +979,7 @@ export interface BedrockConfig {
  * CallableTool is a union that represents a tool that can be called by an agent. In Cadenya, a tool that is used within an agent objective
  *  might be a user-defined tool (IE: MCP, HTTP), another Agent (useful to separate context), or a Cadenya Tool (one Cadenya provides).
  */
-export type CallableTool = CallableTool_Tool | CallableTool_Agent | CallableTool_CadenyaProvidedTool;
+export type CallableTool = CallableTool_Tool | CallableTool_Agent | CallableTool_CadenyaProvidedTool | CallableTool_AgentPool;
 export interface CancelObjectiveRequest {
     workspaceId?: string;
     /**
@@ -1128,6 +1249,17 @@ export interface CreateAccountResourceMetadata {
      *  Examples: {"environment": "production", "team": "platform", "version": "v2"}
      */
     labels?: Record<string, string>;
+}
+/**
+ * Create a pool in INACTIVE state. Validate and persist membership atomically.
+ */
+export interface CreateAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    metadata: CreateResourceMetadata;
+    spec: AgentPoolSpec;
 }
 /**
  * Create agent request
@@ -1466,6 +1598,19 @@ export interface CredentialHeaders {
     headers?: Record<string, string>;
 }
 /**
+ * Deactivate an active pool.
+ */
+export interface DeactivateAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+}
+/**
  * Delete tenant widget sessions response.
  */
 export interface DeleteTenantWidgetSessionsResponse {
@@ -1577,6 +1722,13 @@ export interface ListAccountWorkspacesResponse {
  */
 export interface ListAgentFeedbackResponse {
     items: Array<ObjectiveFeedback>;
+    pagination?: Page;
+}
+/**
+ * List agent pools response
+ */
+export interface ListAgentPoolsResponse {
+    items: Array<AgentPool>;
     pagination?: Page;
 }
 /**
@@ -2899,7 +3051,7 @@ export interface Reasoning {
  * Detach a target by its foreign key. Removing an unassigned target returns
  *  NotFound. The parent variation must exist and be accessible.
  */
-export type RemoveAgentVariationAssignmentRequest = RemoveAgentVariationAssignmentRequest_ToolId | RemoveAgentVariationAssignmentRequest_ToolSetId | RemoveAgentVariationAssignmentRequest_SubAgentId;
+export type RemoveAgentVariationAssignmentRequest = RemoveAgentVariationAssignmentRequest_ToolId | RemoveAgentVariationAssignmentRequest_ToolSetId | RemoveAgentVariationAssignmentRequest_SubAgentId | RemoveAgentVariationAssignmentRequest_AgentPoolId;
 /**
  * Remove by memory layer ID. An unassigned layer returns NotFound.
  *  The parent variation must still exist and be accessible.
@@ -3967,6 +4119,19 @@ export interface ToolSpec {
  */
 export type ToolSpec_Config = ToolSpec_Config_Http | ToolSpec_Config_Mcp | ToolSpec_Config_Openapi | ToolSpec_Config_Bare;
 /**
+ * Restore an archived pool to INACTIVE; activate it separately to route requests.
+ */
+export interface UnarchiveAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+}
+/**
  * Unarchive agent request
  */
 export interface UnarchiveAgentRequest {
@@ -4078,6 +4243,31 @@ export interface UpdateAccountResourceMetadata {
      *  Examples: {"environment": "production", "team": "platform", "version": "v2"}
      */
     labels?: Record<string, string>;
+}
+/**
+ * Update agent pool request
+ */
+export interface UpdateAgentPoolRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+    metadata?: UpdateResourceMetadata;
+    spec?: AgentPoolUpdateSpec;
+    /**
+     * Fields to update. Only metadata and spec are mutable; top-level state and info
+     *  paths are invalid. spec.assignments replaces the entire membership list.
+     *  A spec mask replaces the full spec; * replaces all mutable fields.
+     *  Without a mask, infer paths from non-empty fields. Empty or omitted
+     *  membership then leaves the existing list unchanged. Element/index paths
+     *  are invalid. Validate the merged pool atomically: an empty description
+     *  or membership (including an explicitly masked empty list) is invalid.
+     */
+    updateMask?: string;
 }
 /**
  * Update agent request
@@ -4418,11 +4608,11 @@ export interface UserMessage {
     content: string;
 }
 /**
- * A tool, tool set, or sub-agent assigned to a variation, identified only by
+ * A tool, tool set, sub-agent, or agent pool assigned to a variation, identified only by
  *  the target resource ID. The same shape is accepted in a spec and returned
  *  on reads. Assignment junction records are an internal implementation detail.
  */
-export type VariationAssignment = VariationAssignment_ToolId | VariationAssignment_ToolSetId | VariationAssignment_SubAgentId;
+export type VariationAssignment = VariationAssignment_ToolId | VariationAssignment_ToolSetId | VariationAssignment_SubAgentId | VariationAssignment_AgentPoolId;
 /**
  * A whole memory layer in a variation's baseline memory cascade. Identified
  *  by the memory layer ID; no assignment junction ID is exposed. Entry pinning
@@ -4846,6 +5036,13 @@ export interface VariationAssignment_SubAgentId {
      */
     subAgentId: string;
 }
+export interface VariationAssignment_AgentPoolId {
+    type: 'agentPoolId';
+    /**
+     * Canonical agent pool ID. Attaches the pool as a single callable target.
+     */
+    agentPoolId: string;
+}
 export interface ObjectiveToolCallResult_ContentBlock_Text {
     type: 'text';
     text: ObjectiveToolCallResult_TextBlock;
@@ -5143,6 +5340,13 @@ export interface CallableTool_CadenyaProvidedTool {
     type: 'cadenyaProvidedTool';
     cadenyaProvidedTool: ResourceMetadata;
 }
+export interface CallableTool_AgentPool {
+    type: 'agentPool';
+    /**
+     * Agent pool responsible for routing this call to a member agent.
+     */
+    agentPool: ResourceMetadata;
+}
 export interface MemoryEntryCreateSpec_Content {
     type: 'content';
     /**
@@ -5230,6 +5434,25 @@ export interface AddAgentVariationAssignmentRequest_SubAgentId {
      */
     variationId?: string;
 }
+export interface AddAgentVariationAssignmentRequest_AgentPoolId {
+    type: 'agentPoolId';
+    /**
+     * Canonical agent pool ID in the variation's workspace.
+     */
+    agentPoolId: string;
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+     */
+    agentId?: string;
+    /**
+     * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+     */
+    variationId?: string;
+}
 export interface RemoveAgentVariationAssignmentRequest_ToolId {
     type: 'toolId';
     toolId: string;
@@ -5265,6 +5488,25 @@ export interface RemoveAgentVariationAssignmentRequest_ToolSetId {
 export interface RemoveAgentVariationAssignmentRequest_SubAgentId {
     type: 'subAgentId';
     subAgentId: string;
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * Agent ID. Accepts the canonical `agent_…` form or the `external_id:<value>` form.
+     */
+    agentId?: string;
+    /**
+     * Variation ID. Accepts the canonical `agentvar_…` form or the `external_id:<value>` form.
+     */
+    variationId?: string;
+}
+export interface RemoveAgentVariationAssignmentRequest_AgentPoolId {
+    type: 'agentPoolId';
+    /**
+     * Canonical agent pool ID in the variation's workspace.
+     */
+    agentPoolId: string;
     /**
      * Workspace ID.
      */
@@ -5374,6 +5616,7 @@ export interface WidgetSessionErrorInfo {
      */
     metadata?: Record<string, string>;
 }
+export type AgentPoolServiceListAgentPoolsState = 'AGENT_POOL_STATE_UNSPECIFIED' | 'AGENT_POOL_STATE_ACTIVE' | 'AGENT_POOL_STATE_INACTIVE' | 'AGENT_POOL_STATE_ARCHIVED';
 export type AgentServiceListAgentsState = 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
@@ -5407,7 +5650,7 @@ export interface APIKeySpecParam {
      */
     permissions?: Array<string>;
 }
-export type AddAgentVariationAssignmentRequestParam = AddAgentVariationAssignmentRequest_ToolIdParam | AddAgentVariationAssignmentRequest_ToolSetIdParam | AddAgentVariationAssignmentRequest_SubAgentIdParam;
+export type AddAgentVariationAssignmentRequestParam = AddAgentVariationAssignmentRequest_ToolIdParam | AddAgentVariationAssignmentRequest_ToolSetIdParam | AddAgentVariationAssignmentRequest_SubAgentIdParam | AddAgentVariationAssignmentRequest_AgentPoolIdParam;
 export interface CreateAgentVariationRequestParam {
     metadata: CreateResourceMetadata;
     spec: AgentVariationSpec;
@@ -5427,7 +5670,7 @@ export interface ObjectiveEpisodicConfigParam {
      */
     key: string;
 }
-export type RemoveAgentVariationAssignmentRequestParam = RemoveAgentVariationAssignmentRequest_ToolIdParam | RemoveAgentVariationAssignmentRequest_ToolSetIdParam | RemoveAgentVariationAssignmentRequest_SubAgentIdParam;
+export type RemoveAgentVariationAssignmentRequestParam = RemoveAgentVariationAssignmentRequest_ToolIdParam | RemoveAgentVariationAssignmentRequest_ToolSetIdParam | RemoveAgentVariationAssignmentRequest_SubAgentIdParam | RemoveAgentVariationAssignmentRequest_AgentPoolIdParam;
 export interface WidgetSessionSpecParam {
     /**
      * Widget this session is minted against. Accepts the canonical `wgt_…` form
@@ -5478,6 +5721,13 @@ export interface AddAgentVariationAssignmentRequest_SubAgentIdParam {
     type: 'subAgentId';
     subAgentId: string;
 }
+export interface AddAgentVariationAssignmentRequest_AgentPoolIdParam {
+    type: 'agentPoolId';
+    /**
+     * Canonical agent pool ID in the variation's workspace.
+     */
+    agentPoolId: string;
+}
 export interface RemoveAgentVariationAssignmentRequest_ToolIdParam {
     type: 'toolId';
     toolId: string;
@@ -5489,6 +5739,13 @@ export interface RemoveAgentVariationAssignmentRequest_ToolSetIdParam {
 export interface RemoveAgentVariationAssignmentRequest_SubAgentIdParam {
     type: 'subAgentId';
     subAgentId: string;
+}
+export interface RemoveAgentVariationAssignmentRequest_AgentPoolIdParam {
+    type: 'agentPoolId';
+    /**
+     * Canonical agent pool ID in the variation's workspace.
+     */
+    agentPoolId: string;
 }
 export declare function wireArray<T>(value: Array<T> | null | undefined, fn: (v: T) => unknown): unknown;
 export declare function wireMap<T>(value: Record<string, T> | null | undefined, fn: (v: T) => unknown): unknown;
@@ -5502,7 +5759,9 @@ export declare function wireWidgetSessionSpec(value: WidgetSessionSpecParam | nu
 export declare function wireAddAgentVariationAssignmentRequest_ToolId(value: AddAgentVariationAssignmentRequest_ToolIdParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest_ToolSetId(value: AddAgentVariationAssignmentRequest_ToolSetIdParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest_SubAgentId(value: AddAgentVariationAssignmentRequest_SubAgentIdParam | null | undefined): unknown;
+export declare function wireAddAgentVariationAssignmentRequest_AgentPoolId(value: AddAgentVariationAssignmentRequest_AgentPoolIdParam | null | undefined): unknown;
 export declare function wireRemoveAgentVariationAssignmentRequest_ToolId(value: RemoveAgentVariationAssignmentRequest_ToolIdParam | null | undefined): unknown;
 export declare function wireRemoveAgentVariationAssignmentRequest_ToolSetId(value: RemoveAgentVariationAssignmentRequest_ToolSetIdParam | null | undefined): unknown;
 export declare function wireRemoveAgentVariationAssignmentRequest_SubAgentId(value: RemoveAgentVariationAssignmentRequest_SubAgentIdParam | null | undefined): unknown;
+export declare function wireRemoveAgentVariationAssignmentRequest_AgentPoolId(value: RemoveAgentVariationAssignmentRequest_AgentPoolIdParam | null | undefined): unknown;
 //# sourceMappingURL=types.d.ts.map

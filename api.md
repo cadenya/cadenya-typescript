@@ -149,6 +149,54 @@ List workspaces
 client.workspaces.list(params?: WorkspaceListParams, options?: RequestOptions): Promise<Page<Workspace>>
 ```
 
+## agentPools
+
+List agent pools
+
+```ts
+client.agentPools.list(params?: AgentPoolListParams, options?: RequestOptions): Promise<Page<AgentPool>>
+```
+Create a new agent pool
+
+```ts
+client.agentPools.create(params: AgentPoolCreateParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Get an agent pool by ID
+
+```ts
+client.agentPools.retrieve(id: string, params?: AgentPoolRetrieveParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Delete an agent pool
+
+```ts
+client.agentPools.delete(id: string, params?: AgentPoolDeleteParams, options?: RequestOptions): APIPromise<void>
+```
+Update an agent pool
+
+```ts
+client.agentPools.update(id: string, params?: AgentPoolUpdateParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Activate an agent pool
+
+```ts
+client.agentPools.activate(id: string, params?: AgentPoolActivateParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Archive an agent pool
+
+```ts
+client.agentPools.archive(id: string, params?: AgentPoolArchiveParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Deactivate an agent pool
+
+```ts
+client.agentPools.deactivate(id: string, params?: AgentPoolDeactivateParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+Unarchive an agent pool
+
+```ts
+client.agentPools.unarchive(id: string, params?: AgentPoolUnarchiveParams, options?: RequestOptions): APIPromise<AgentPool>
+```
+
 ## agents
 
 List agents
