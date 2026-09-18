@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/cadenya/cadenya-typescript/compare/v1.5.0...v1.6.0) (2026-09-18)
+
+
+### Features
+
+* add agent pools and callable identity ([d5a0c06](https://github.com/cadenya/cadenya-typescript/commit/d5a0c06c273f5eececb164bebaecd1d94483fcab))
+
 ## [1.5.0](https://github.com/cadenya/cadenya-typescript/compare/v1.4.0...v1.5.0) (2026-09-17)
 
 
