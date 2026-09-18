@@ -23,6 +23,7 @@ export function wireAddAgentVariationAssignmentRequest(value) {
         case "toolId": return wireAddAgentVariationAssignmentRequest_ToolId(value);
         case "toolSetId": return wireAddAgentVariationAssignmentRequest_ToolSetId(value);
         case "subAgentId": return wireAddAgentVariationAssignmentRequest_SubAgentId(value);
+        case "agentPoolId": return wireAddAgentVariationAssignmentRequest_AgentPoolId(value);
         default: return value;
     }
 }
@@ -61,6 +62,7 @@ export function wireRemoveAgentVariationAssignmentRequest(value) {
         case "toolId": return wireRemoveAgentVariationAssignmentRequest_ToolId(value);
         case "toolSetId": return wireRemoveAgentVariationAssignmentRequest_ToolSetId(value);
         case "subAgentId": return wireRemoveAgentVariationAssignmentRequest_SubAgentId(value);
+        case "agentPoolId": return wireRemoveAgentVariationAssignmentRequest_AgentPoolId(value);
         default: return value;
     }
 }
@@ -110,6 +112,16 @@ export function wireAddAgentVariationAssignmentRequest_SubAgentId(value) {
         out["subAgentId"] = value.subAgentId;
     return out;
 }
+export function wireAddAgentVariationAssignmentRequest_AgentPoolId(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.agentPoolId !== undefined)
+        out["agentPoolId"] = value.agentPoolId;
+    return out;
+}
 export function wireRemoveAgentVariationAssignmentRequest_ToolId(value) {
     if (value == null || typeof value !== 'object')
         return value;
@@ -138,6 +150,16 @@ export function wireRemoveAgentVariationAssignmentRequest_SubAgentId(value) {
         out["type"] = value.type;
     if (value.subAgentId !== undefined)
         out["subAgentId"] = value.subAgentId;
+    return out;
+}
+export function wireRemoveAgentVariationAssignmentRequest_AgentPoolId(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.agentPoolId !== undefined)
+        out["agentPoolId"] = value.agentPoolId;
     return out;
 }
 //# sourceMappingURL=types.js.map

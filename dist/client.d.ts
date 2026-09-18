@@ -5,6 +5,7 @@ import { ApiKeys } from './resources/api-keys.js';
 import { WorkspaceAdmin } from './resources/workspace-admin.js';
 import { Profiles } from './resources/profiles.js';
 import { Workspaces } from './resources/workspaces.js';
+import { AgentPools } from './resources/agent-pools.js';
 import { Agents } from './resources/agents.js';
 import { AiProviderKeys } from './resources/ai-provider-keys.js';
 import { Models } from './resources/models.js';
@@ -50,6 +51,7 @@ export declare class Cadenya {
     readonly workspaceAdmin: WorkspaceAdmin;
     readonly profiles: Profiles;
     readonly workspaces: Workspaces;
+    readonly agentPools: AgentPools;
     readonly agents: Agents;
     readonly aiProviderKeys: AiProviderKeys;
     readonly models: Models;

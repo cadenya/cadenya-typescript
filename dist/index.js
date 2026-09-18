@@ -12,6 +12,7 @@ export * from './resources/api-keys.js';
 export * from './resources/workspace-admin.js';
 export * from './resources/profiles.js';
 export * from './resources/workspaces.js';
+export * from './resources/agent-pools.js';
 export * from './resources/agents.js';
 export * from './resources/agent-schedules.js';
 export * from './resources/agent-variations.js';
