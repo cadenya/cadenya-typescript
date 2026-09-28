@@ -138,7 +138,7 @@ client.workspaceAdmin.removeMember(profileId: string, params?: WorkspaceAdminRem
 Retrieves the profile for the credentials accessing the API
 
 ```ts
-client.profiles.whoami(options?: RequestOptions): APIPromise<Profile>
+client.profiles.whoami(options?: RequestOptions): APIPromise<WhoamiResponse>
 ```
 
 ## workspaces
@@ -520,6 +520,16 @@ Submit feedback for an objective
 ```ts
 client.objectives.createFeedback(objectiveId: string, params: ObjectiveCreateFeedbackParams, options?: RequestOptions): APIPromise<ObjectiveFeedback>
 ```
+List objective queued actions
+
+```ts
+client.objectives.listQueuedActions(objectiveId: string, params?: ObjectiveListQueuedActionsParams, options?: RequestOptions): Promise<Page<ObjectiveQueuedAction>>
+```
+Remove a queued action
+
+```ts
+client.objectives.removeQueuedAction(objectiveId: string, params: ObjectiveRemoveQueuedActionParams, options?: RequestOptions): APIPromise<ObjectiveQueuedAction>
+```
 List objective tool calls
 
 ```ts
@@ -558,12 +568,22 @@ client.objectives.cancel(objectiveId: string, params?: ObjectiveCancelParams, op
 Compact an objective
 
 ```ts
-client.objectives.compact(objectiveId: string, params?: ObjectiveCompactParams, options?: RequestOptions): APIPromise<CompactObjectiveResponse>
+client.objectives.compact(objectiveId: string, params?: ObjectiveCompactParams, options?: RequestOptions): APIPromise<ObjectiveQueuedAction>
 ```
 Continue an objective
 
 ```ts
-client.objectives.continue(objectiveId: string, params: ObjectiveContinueParams, options?: RequestOptions): APIPromise<ObjectiveEvent>
+client.objectives.continue(objectiveId: string, params: ObjectiveContinueParams, options?: RequestOptions): APIPromise<ContinueObjectiveResponse>
+```
+Interrupt an objective
+
+```ts
+client.objectives.interrupt(objectiveId: string, params?: ObjectiveInterruptParams, options?: RequestOptions): APIPromise<ObjectiveEvent>
+```
+Create an objective and stream its events
+
+```ts
+client.objectives.createAndStream(params: ObjectiveCreateAndStreamParams, options?: RequestOptions): Promise<Stream<CreateAndStreamObjectiveResponse>>
 ```
 
 ## toolSearch

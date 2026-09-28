@@ -9,7 +9,7 @@ export class Profiles {
      *
      * @example
      * ```ts
-     * const profile = await client.profiles.whoami();
+     * const whoamiResponse = await client.profiles.whoami();
      * ```
      */
     whoami(options) {

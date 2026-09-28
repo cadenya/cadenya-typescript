@@ -3,7 +3,7 @@
 import { HttpClient, RequestOptions, RequestSpec, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { Stream } from '../core/sse.js';
-import type { AgentVariationSpec_CompactionConfig, CompactObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
+import type { AgentVariationSpec_CompactionConfig, ContinueObjectiveResponse, CreateAndStreamObjectiveRequest_Metadata, CreateAndStreamObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveQueuedActionsResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveQueuedAction, ObjectiveServiceListObjectiveQueuedActionsState, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
 import { wireObjectiveEpisodicConfig } from '../types.js';
 
 export interface ObjectiveListParams {
@@ -76,12 +76,6 @@ export interface ObjectiveListParams {
 export interface ObjectiveCreateParams {
   agentId: string;
   /**
-   * Arbitrary data rendered into the selected variation's system_prompt_template
-   *  (liquid) to produce the objective's system prompt. If the agent has a
-   *  system_prompt_data_schema, this must satisfy it.
-   */
-  systemPromptData: Record<string, unknown>;
-  /**
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
@@ -90,6 +84,12 @@ export interface ObjectiveCreateParams {
    */
   variationId?: string;
   metadata?: CreateOperationMetadata;
+  /**
+   * Arbitrary data rendered into the selected variation's system_prompt_template
+   *  (liquid) to produce the objective's system prompt. If the agent has a
+   *  system_prompt_data_schema, this must satisfy it.
+   */
+  systemPromptData?: Record<string, unknown>;
   /**
    * Optional explicit first user message for the LLM chat history. When not set,
    *  the selected variation's first_user_message_template is rendered with
@@ -267,6 +267,36 @@ export interface ObjectiveCreateFeedbackParams {
   workspaceId?: string;
 }
 
+export interface ObjectiveListQueuedActionsParams {
+  /**
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+  /**
+   * Maximum number of results to return
+   */
+  limit?: number;
+  /**
+   * Pagination cursor from previous response
+   */
+  cursor?: string;
+  /**
+   * Only return actions in this state. When unset, actions in every state are returned.
+   */
+  state?: ObjectiveServiceListObjectiveQueuedActionsState;
+}
+
+export interface ObjectiveRemoveQueuedActionParams {
+  /**
+   * The ID of the queued action to remove.
+   */
+  queuedActionId: string;
+  /**
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+}
+
 export interface ObjectiveListToolCallsParams {
   /**
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
@@ -379,7 +409,7 @@ export interface ObjectiveCompactParams {
 
 export interface ObjectiveContinueParams {
   /**
-   * The message to continue an objective that has completed (or you are enqueing)
+   * The user message to send to the objective.
    */
   message: string;
   /**
@@ -387,9 +417,106 @@ export interface ObjectiveContinueParams {
    */
   workspaceId?: string;
   /**
-   * When set to true, the message will be enqueued for when the agent loop is available to process it.
+   * When false, the objective must be waiting and the message is sent immediately.
+   *  When true, a waiting objective still receives the message immediately; an
+   *  objective whose agent loop is busy queues it instead, and the agent picks it
+   *  up before its next assistant turn. Queued messages can be listed and removed
+   *  until then.
    */
   enqueue?: boolean;
+}
+
+export interface ObjectiveInterruptParams {
+  /**
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+}
+
+export interface ObjectiveCreateAndStreamParams {
+  agentId: string;
+  /**
+   * Required here, though Create objective leaves it optional: the external
+   *  ID inside it is the idempotency key that makes a retry of this request
+   *  resume the objective instead of starting another.
+   */
+  metadata: CreateAndStreamObjectiveRequest_Metadata;
+  /**
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+  /**
+   * Optional explicit variation selection. Overrides the agent's variation_selection_mode.
+   */
+  variationId?: string;
+  /**
+   * Arbitrary data rendered into the selected variation's system_prompt_template
+   *  (liquid) to produce the objective's system prompt. If the agent has a
+   *  system_prompt_data_schema, this must satisfy it.
+   */
+  systemPromptData?: Record<string, unknown>;
+  /**
+   * Optional explicit first user message for the LLM chat history. When not set,
+   *  the selected variation's first_user_message_template is rendered with
+   *  first_user_message_data instead. If neither this field nor a
+   *  first_user_message_template is present, the request is rejected with InvalidArgument.
+   */
+  firstUserMessage?: string;
+  /**
+   * Secrets that can be used in the headers for tool calls using the secret interpolation format.
+   */
+  secrets?: Array<CreateObjectiveRequest_Secret>;
+  /**
+   * Memory layers/entries layered over the baseline cascade inherited
+   *  from the selected variation — element-level rules over inherited
+   *  styles, in CSS terms.
+   * 
+   *  Array order is resolution order: EARLIER elements are more specific
+   *  and are consulted first. Entries pinned via memory_entry_id behave
+   *  as single-entry layers at their position.
+   * 
+   *  System-managed layers (e.g., episodic) cannot be referenced here;
+   *  they attach themselves automatically based on the episodic key.
+   * 
+   *  Size cap: the TOTAL effective cascade (this field + the variation's
+   *  memory layer assignments) must not exceed 10 entries. A request
+   *  that would produce a larger cascade is rejected with
+   *  InvalidArgument.
+   */
+  memoryCascade?: Array<MemoryReference>;
+  /**
+   * Arbitrary data rendered into the selected variation's first_user_message_template
+   *  (liquid) to produce the first user message. Separate from `system_prompt_data`,
+   *  which renders the system prompt template.
+   */
+  firstUserMessageData?: Record<string, unknown>;
+  /**
+   * If the agent variation that is selected has episodic memory enabled, then this key is used to create/update a memory layer
+   *  specific to the episodic memory. The layer may have a TTL configured by the variation.
+   */
+  episodicMemory?: ObjectiveEpisodicConfigParam;
+  /**
+   * Optional tenant assertion — the customer's org/company identifier for the
+   *  end user this objective serves. Upserts the tenant record in the
+   *  workspace and associates the objective with it.
+   */
+  tenant?: TenantAssertion;
+  /**
+   * Optional subject assertion — the person within the tenant this objective
+   *  serves. Requires `tenant`; a subject asserted without a tenant is
+   *  rejected with InvalidArgument.
+   */
+  subject?: SubjectAssertion;
+  /**
+   * Parameters forced onto this objective's tool calls. A pinned parameter
+   *  is removed from the tool schema the LLM sees, and its value is always
+   *  overwritten server-side with the pinned value — the model cannot choose
+   *  a different value for it. By default a pinned key applies to every tool
+   *  with a top-level parameter of the same name; a tool set's overlays
+   *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
+   *  named parameters, or a subset of tools.
+   */
+  pinnedParameters?: Record<string, string>;
 }
 
 export class Objectives {
@@ -419,7 +546,7 @@ export class Objectives {
    * 
    * @example
    * ```ts
-   * const objective = await client.objectives.create({ agentId: 'sample', systemPromptData: {  } });
+   * const objective = await client.objectives.create({ agentId: 'sample' });
    * ```
    */
   create(params: ObjectiveCreateParams, options?: RequestOptions): APIPromise<Objective> {
@@ -555,6 +682,41 @@ export class Objectives {
   }
 
   /**
+   * List objective queued actions
+   * 
+   * @example
+   * ```ts
+   * const page = await client.objectives.listQueuedActions('objective_123');
+   * for await (const item of page) {
+   *   // auto-fetches every page
+   * }
+   * ```
+   */
+  async listQueuedActions(objectiveId: string, params?: ObjectiveListQueuedActionsParams, options?: RequestOptions): Promise<Page<ObjectiveQueuedAction>> {
+    const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+    if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+    const _base = snapshotParams(params);
+    const response = await this._client.request<ListObjectiveQueuedActionsResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/queued_actions`, query: { limit: params?.limit, cursor: params?.cursor, state: params?.state } }, options);
+    return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.listQueuedActions(objectiveId, { ..._base, cursor: cursor }, options));
+  }
+
+  /**
+   * Remove a queued action
+   * 
+   * @example
+   * ```ts
+   * const objectiveQueuedAction = await client.objectives.removeQueuedAction('objective_123', { queuedActionId: 'queued_action_123' });
+   * ```
+   */
+  removeQueuedAction(objectiveId: string, params: ObjectiveRemoveQueuedActionParams, options?: RequestOptions): APIPromise<ObjectiveQueuedAction> {
+    return this._client.requestAPI<ObjectiveQueuedAction>(() => {
+      const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/queued_actions/${pathSegment('queuedActionId', params.queuedActionId)}:remove` };
+    }, options);
+  }
+
+  /**
    * List objective tool calls
    * 
    * @example
@@ -677,11 +839,11 @@ export class Objectives {
    * 
    * @example
    * ```ts
-   * const compactObjectiveResponse = await client.objectives.compact('objective_123');
+   * const objectiveQueuedAction = await client.objectives.compact('objective_123');
    * ```
    */
-  compact(objectiveId: string, params?: ObjectiveCompactParams, options?: RequestOptions): APIPromise<CompactObjectiveResponse> {
-    return this._client.requestAPI<CompactObjectiveResponse>(() => {
+  compact(objectiveId: string, params?: ObjectiveCompactParams, options?: RequestOptions): APIPromise<ObjectiveQueuedAction> {
+    return this._client.requestAPI<ObjectiveQueuedAction>(() => {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
       return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}:compact`, body: { compactionConfig: params?.compactionConfig } };
@@ -693,14 +855,49 @@ export class Objectives {
    * 
    * @example
    * ```ts
-   * const objectiveEvent = await client.objectives.continue('objective_123', { message: 'sample' });
+   * const continueObjectiveResponse = await client.objectives.continue('objective_123', { message: 'sample' });
    * ```
    */
-  continue(objectiveId: string, params: ObjectiveContinueParams, options?: RequestOptions): APIPromise<ObjectiveEvent> {
-    return this._client.requestAPI<ObjectiveEvent>(() => {
+  continue(objectiveId: string, params: ObjectiveContinueParams, options?: RequestOptions): APIPromise<ContinueObjectiveResponse> {
+    return this._client.requestAPI<ContinueObjectiveResponse>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
       return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}:continue`, body: { message: params.message, enqueue: params.enqueue } };
     }, options);
+  }
+
+  /**
+   * Interrupt an objective
+   * 
+   * @example
+   * ```ts
+   * const objectiveEvent = await client.objectives.interrupt('objective_123');
+   * ```
+   */
+  interrupt(objectiveId: string, params?: ObjectiveInterruptParams, options?: RequestOptions): APIPromise<ObjectiveEvent> {
+    return this._client.requestAPI<ObjectiveEvent>(() => {
+      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}:interrupt` };
+    }, options);
+  }
+
+  /**
+   * Create an objective and stream its events
+   * 
+   * @example
+   * ```ts
+   * const stream = await client.objectives.createAndStream({ agentId: 'sample', metadata: { externalId: 'sample' } });
+   * for await (const event of stream) {
+   *   // typed event payloads; housekeeping frames are skipped
+   * }
+   * ```
+   */
+  async createAndStream(params: ObjectiveCreateAndStreamParams, options?: RequestOptions): Promise<Stream<CreateAndStreamObjectiveResponse>> {
+    const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+    if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+    const _spec: RequestSpec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters }, stream: true };
+    const response = await this._client.rawRequest(_spec, options);
+    return new Stream<CreateAndStreamObjectiveResponse>(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
   }
 }

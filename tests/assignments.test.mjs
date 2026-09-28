@@ -40,7 +40,7 @@ test('assignment variants narrow and invalid shapes fail TypeScript checks', () 
     }
     const file = join(temp, 'assignments.mts');
     writeFileSync(file, lines.join('\n'));
-    const result = spawnSync('tsc', ['--noEmit', '--strict', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', file], { encoding: 'utf8' });
+    const result = spawnSync('tsc', ['--noEmit', '--strict', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', file], { encoding: 'utf8', cwd: temp });
     assert.ifError(result.error);
     assert.equal(result.status, 0, result.stdout + result.stderr);
     assert.equal(lines.filter(line => line.startsWith('// @ts-expect-error')).length, 36);

@@ -1047,7 +1047,7 @@ export interface Capability_TopK {
 export interface Capability_TopP {
 }
 /**
- * Compact objective request — triggers compaction on a running objective.
+ * Compact objective request. Compaction is queued for a busy agent loop and starts immediately for a waiting objective.
  */
 export interface CompactObjectiveRequest {
     workspaceId?: string;
@@ -1059,15 +1059,6 @@ export interface CompactObjectiveRequest {
      * Optional compaction config override. When not set, uses the variation's compaction_config.
      */
     compactionConfig?: AgentVariationSpec_CompactionConfig;
-}
-/**
- * Compact objective response
- */
-export interface CompactObjectiveResponse {
-    /**
-     * The new context window created by the compaction
-     */
-    contextWindow?: ObjectiveContextWindowData;
 }
 /**
  * SummarizationStrategy configures LLM-powered summarization of older conversation turns.
@@ -1203,14 +1194,23 @@ export interface ContinueObjectiveRequest {
      */
     objectiveId?: string;
     /**
-     * The message to continue an objective that has completed (or you are enqueing)
+     * The user message to send to the objective.
      */
     message: string;
     /**
-     * When set to true, the message will be enqueued for when the agent loop is available to process it.
+     * When false, the objective must be waiting and the message is sent immediately.
+     *  When true, a waiting objective still receives the message immediately; an
+     *  objective whose agent loop is busy queues it instead, and the agent picks it
+     *  up before its next assistant turn. Queued messages can be listed and removed
+     *  until then.
      */
     enqueue?: boolean;
 }
+/**
+ * ContinueObjectiveResponse reports whether the message joined the conversation
+ *  immediately or was queued for the agent loop.
+ */
+export type ContinueObjectiveResponse = ContinueObjectiveResponse_Event | ContinueObjectiveResponse_QueuedAction;
 export interface CreateAIProviderKeyRequest {
     /**
      * The workspace that will own this key.
@@ -1308,6 +1308,124 @@ export interface CreateAgentVariationRequest {
     metadata: CreateResourceMetadata;
     spec: AgentVariationSpec;
 }
+/**
+ * The request body for creating an objective and streaming its events.
+ *  Accepts everything Create objective accepts, and additionally requires
+ *  `metadata.externalId`, which is the idempotency key for the stream.
+ */
+export interface CreateAndStreamObjectiveRequest {
+    workspaceId: string;
+    agentId: string;
+    /**
+     * Optional explicit variation selection. Overrides the agent's variation_selection_mode.
+     */
+    variationId?: string;
+    /**
+     * Required here, though Create objective leaves it optional: the external
+     *  ID inside it is the idempotency key that makes a retry of this request
+     *  resume the objective instead of starting another.
+     */
+    metadata: CreateAndStreamObjectiveRequest_Metadata;
+    /**
+     * Arbitrary data rendered into the selected variation's system_prompt_template
+     *  (liquid) to produce the objective's system prompt. If the agent has a
+     *  system_prompt_data_schema, this must satisfy it.
+     */
+    systemPromptData?: Record<string, unknown>;
+    /**
+     * Optional explicit first user message for the LLM chat history. When not set,
+     *  the selected variation's first_user_message_template is rendered with
+     *  first_user_message_data instead. If neither this field nor a
+     *  first_user_message_template is present, the request is rejected with InvalidArgument.
+     */
+    firstUserMessage?: string;
+    /**
+     * Secrets that can be used in the headers for tool calls using the secret interpolation format.
+     */
+    secrets?: Array<CreateObjectiveRequest_Secret>;
+    /**
+     * Memory layers/entries layered over the baseline cascade inherited
+     *  from the selected variation — element-level rules over inherited
+     *  styles, in CSS terms.
+     *
+     *  Array order is resolution order: EARLIER elements are more specific
+     *  and are consulted first. Entries pinned via memory_entry_id behave
+     *  as single-entry layers at their position.
+     *
+     *  System-managed layers (e.g., episodic) cannot be referenced here;
+     *  they attach themselves automatically based on the episodic key.
+     *
+     *  Size cap: the TOTAL effective cascade (this field + the variation's
+     *  memory layer assignments) must not exceed 10 entries. A request
+     *  that would produce a larger cascade is rejected with
+     *  InvalidArgument.
+     */
+    memoryCascade?: Array<MemoryReference>;
+    /**
+     * Arbitrary data rendered into the selected variation's first_user_message_template
+     *  (liquid) to produce the first user message. Separate from `system_prompt_data`,
+     *  which renders the system prompt template.
+     */
+    firstUserMessageData?: Record<string, unknown>;
+    /**
+     * If the agent variation that is selected has episodic memory enabled, then this key is used to create/update a memory layer
+     *  specific to the episodic memory. The layer may have a TTL configured by the variation.
+     */
+    episodicMemory?: ObjectiveEpisodicConfig;
+    /**
+     * Optional tenant assertion — the customer's org/company identifier for the
+     *  end user this objective serves. Upserts the tenant record in the
+     *  workspace and associates the objective with it.
+     */
+    tenant?: TenantAssertion;
+    /**
+     * Optional subject assertion — the person within the tenant this objective
+     *  serves. Requires `tenant`; a subject asserted without a tenant is
+     *  rejected with InvalidArgument.
+     */
+    subject?: SubjectAssertion;
+    /**
+     * Parameters forced onto this objective's tool calls. A pinned parameter
+     *  is removed from the tool schema the LLM sees, and its value is always
+     *  overwritten server-side with the pinned value — the model cannot choose
+     *  a different value for it. By default a pinned key applies to every tool
+     *  with a top-level parameter of the same name; a tool set's overlays
+     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
+     *  named parameters, or a subset of tools.
+     */
+    pinnedParameters?: Record<string, string>;
+}
+/**
+ * Objective metadata, with an external ID that is required here because
+ *  it is the request's idempotency key: repeating a request that carries
+ *  an external ID already in use attaches to that objective instead of
+ *  starting a second one.
+ */
+export interface CreateAndStreamObjectiveRequest_Metadata {
+    /**
+     * Key-value pairs for categorization and filtering. Values are 0-63
+     *  alphanumeric characters with "-", "_", or "." allowed between; keys
+     *  follow the same shape and additionally accept an optional DNS-subdomain
+     *  prefix (e.g. "cadenya.com/") of at most 253 characters.
+     *  Examples: {"priority": "high", "source": "api", "workflow": "onboarding"}
+     */
+    labels?: Record<string, string>;
+    /**
+     * External ID for the objective (e.g., a workflow ID from an external
+     *  system), and this request's idempotency key. Required here, though
+     *  Create objective leaves it optional. Reusing a value that already
+     *  exists in the workspace attaches to that objective and streams it
+     *  rather than creating another; Create objective instead rejects a
+     *  duplicate with AlreadyExists.
+     */
+    externalId: string;
+}
+/**
+ * One message on the create-and-stream feed. The first message is always
+ *  the `objective` variant, sent as soon as the objective exists; every
+ *  message after it is an `event`.
+ */
+export type CreateAndStreamObjectiveResponse = CreateAndStreamObjectiveResponse_Objective | CreateAndStreamObjectiveResponse_Event;
 export interface CreateMemoryEntryRequest {
     workspaceId?: string;
     /**
@@ -1366,7 +1484,7 @@ export interface CreateObjectiveRequest {
      *  (liquid) to produce the objective's system prompt. If the agent has a
      *  system_prompt_data_schema, this must satisfy it.
      */
-    systemPromptData: Record<string, unknown>;
+    systemPromptData?: Record<string, unknown>;
     /**
      * Optional explicit first user message for the LLM chat history. When not set,
      *  the selected variation's first_user_message_template is rendered with
@@ -1705,6 +1823,16 @@ export interface GoogleProtobufAny {
      */
     '@type'?: string;
 }
+/**
+ * InterruptObjectiveRequest stops a running objective without cancelling background agents.
+ */
+export interface InterruptObjectiveRequest {
+    workspaceId?: string;
+    /**
+     * Supports the "external_id:" prefix.
+     */
+    objectiveId?: string;
+}
 export interface ListAIProviderKeysResponse {
     items: Array<AIProviderKey>;
     pagination?: Page;
@@ -1787,6 +1915,13 @@ export interface ListObjectiveEventsResponse {
  */
 export interface ListObjectiveFeedbackResponse {
     items: Array<ObjectiveFeedback>;
+    pagination?: Page;
+}
+export interface ListObjectiveQueuedActionsResponse {
+    /**
+     * Queued actions in the order they were sent, oldest first.
+     */
+    items: Array<ObjectiveQueuedAction>;
     pagination?: Page;
 }
 export interface ListObjectiveToolCallsResponse {
@@ -2158,6 +2293,10 @@ export interface ModelBasePricing {
      * Default output token rate, in cents per million tokens.
      */
     outputPricePerMillionTokens: string;
+    /**
+     * Default cached input token rate, in cents per million tokens.
+     */
+    cachedInputPricePerMillionTokens: string;
 }
 /**
  * ModelInfo carries server-derived, read-only details about a model.
@@ -2194,6 +2333,10 @@ export interface ModelPricingOverride {
      * Override for output token price, in cents per million tokens.
      */
     outputPricePerMillionTokens?: string;
+    /**
+     * Override for cached input token price, in cents per million tokens.
+     */
+    cachedInputPricePerMillionTokens?: string;
 }
 export interface ModelSpec {
     /**
@@ -2225,6 +2368,14 @@ export interface ModelSpec {
      *  price on reads, see input_price_per_million_tokens.
      */
     outputPricePerMillionTokens: string;
+    /**
+     * Cost per million input tokens served from the provider's prompt cache, in
+     *  cents (e.g., 30 = $0.30). Cached tokens are a subset of the input tokens
+     *  and are billed at this rate instead of the input rate. Zero means the rate
+     *  is not known and cached tokens are costed at the input rate. Effective
+     *  price on reads, see input_price_per_million_tokens.
+     */
+    cachedInputPricePerMillionTokens?: string;
     /**
      * The inference knobs this model supports. Catalog data; drives which
      *  ModelConfig fields a variation on this model may set. Reasoning support
@@ -2271,7 +2422,7 @@ export interface Notice {
 /**
  * The current lifecycle state of the objective.
  */
-export type ObjectiveState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+export type ObjectiveState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT' | 'OBJECTIVE_STATE_INTERRUPTING';
 /**
  * Objective is the data for an objective. It contains the snapshotted fields for the selected agent and variation. Secrets are returned
  *  only with their names, and the output definition is copied from the agent's configuration.
@@ -2478,7 +2629,7 @@ export interface ObjectiveEvent {
      */
     startedAt?: string;
 }
-export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat;
+export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat | ObjectiveEventData_Interrupted;
 export interface ObjectiveEventInfo {
     objective?: OperationMetadata;
     createdBy: Profile;
@@ -2604,14 +2755,50 @@ export interface ObjectiveInfo {
     widget?: BareMetadata;
 }
 /**
+ * ObjectiveInterrupted confirms that foreground execution stopped and the objective is waiting.
+ */
+export interface ObjectiveInterrupted {
+    message: string;
+}
+export type ObjectiveQueuedActionState = 'STATE_UNSPECIFIED' | 'STATE_QUEUED' | 'STATE_SENT' | 'STATE_REMOVED' | 'STATE_DISCARDED';
+/**
+ * ObjectiveQueuedAction is work sent to an objective while its agent loop was
+ *  busy. The agent picks queued actions up in order at the next boundary where
+ *  it can act on them: after its current tool calls settle, before its next
+ *  assistant turn. Until then a queued action can be removed and the agent never
+ *  learns about it.
+ */
+export interface ObjectiveQueuedAction {
+    metadata: OperationMetadata;
+    /**
+     * The objective this action was sent to.
+     */
+    objectiveId: string;
+    data: ObjectiveQueuedActionData;
+    state: ObjectiveQueuedActionState;
+    /**
+     * When the agent loop picked the action up. Unset until the action is sent.
+     */
+    sentAt?: string;
+    /**
+     * The conversation event a sent user message became. Unset for other
+     *  actions and for user messages that have not been sent.
+     */
+    objectiveEventId?: string;
+}
+/**
+ * ObjectiveQueuedActionData is the action to perform.
+ */
+export type ObjectiveQueuedActionData = ObjectiveQueuedActionData_UserMessage | ObjectiveQueuedActionData_Compaction;
+/**
  * The state before this write. OBJECTIVE_STATE_UNSPECIFIED when the
  *  objective was just created.
  */
-export type ObjectiveStateChangedFromState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+export type ObjectiveStateChangedFromState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT' | 'OBJECTIVE_STATE_INTERRUPTING';
 /**
  * The state after this write.
  */
-export type ObjectiveStateChangedToState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+export type ObjectiveStateChangedToState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT' | 'OBJECTIVE_STATE_INTERRUPTING';
 /**
  * ObjectiveStateChanged is written every time the objective's lifecycle state
  *  is set, including the initial move into OBJECTIVE_STATE_PENDING at creation. Terminal
@@ -2665,7 +2852,7 @@ export interface ObjectiveTool {
  * Current status of the tool call
  */
 export type ObjectiveToolCallStatus = 'TOOL_CALL_STATUS_UNSPECIFIED' | 'TOOL_CALL_STATUS_AUTO_APPROVED' | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL' | 'TOOL_CALL_STATUS_APPROVED' | 'TOOL_CALL_STATUS_DENIED';
-export type ObjectiveToolCallExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
+export type ObjectiveToolCallExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT' | 'TOOL_CALL_EXECUTION_STATUS_INTERRUPTED';
 /**
  * ObjectiveToolCall is a record of a tool call made during an objective's execution.
  *  Tool calls are mutable — their status changes as they are approved, denied, or executed.
@@ -2776,7 +2963,7 @@ export interface ObjectiveToolCallResult_TextBlock {
  * Current status of the tool call
  */
 export type ObjectiveToolCallWithResultStatus = 'TOOL_CALL_STATUS_UNSPECIFIED' | 'TOOL_CALL_STATUS_AUTO_APPROVED' | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL' | 'TOOL_CALL_STATUS_APPROVED' | 'TOOL_CALL_STATUS_DENIED';
-export type ObjectiveToolCallWithResultExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
+export type ObjectiveToolCallWithResultExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT' | 'TOOL_CALL_EXECUTION_STATUS_INTERRUPTED';
 /**
  * ObjectiveToolCallWithResult is an ObjectiveToolCall plus the content the
  *  tool returned. Returned by GetObjectiveToolCall.
@@ -3034,6 +3221,21 @@ export interface PublishAgentRequest {
     id?: string;
 }
 /**
+ * QueuedCompaction is a compaction waiting to run.
+ */
+export interface QueuedCompaction {
+    /**
+     * Optional compaction config override. When not set, uses the variation's compaction_config.
+     */
+    compactionConfig?: AgentVariationSpec_CompactionConfig;
+}
+/**
+ * QueuedUserMessage is a user message waiting to join the conversation.
+ */
+export interface QueuedUserMessage {
+    content: string;
+}
+/**
  * Reasoning carries the human-readable reasoning text a model produced while
  *  working on an iteration — extended thinking (Anthropic, Gemini) or reasoning
  *  summaries (OpenAI). It is emitted alongside the assistant message from the
@@ -3073,6 +3275,17 @@ export interface RemoveAgentVariationMemoryLayerRequest {
      * Layer to detach. Accepts memlyr_… or external_id:<value>.
      */
     memoryLayerId: string;
+}
+export interface RemoveObjectiveQueuedActionRequest {
+    workspaceId?: string;
+    /**
+     * The ID of the objective. Supports "external_id:" prefix for external IDs.
+     */
+    objectiveId?: string;
+    /**
+     * The ID of the queued action to remove.
+     */
+    queuedActionId?: string;
 }
 export type ResolvedSecretSource = 'RESOLVED_SECRET_SOURCE_UNSPECIFIED' | 'RESOLVED_SECRET_SOURCE_WORKSPACE' | 'RESOLVED_SECRET_SOURCE_TOOLSET' | 'RESOLVED_SECRET_SOURCE_OBJECTIVE';
 /**
@@ -4063,6 +4276,38 @@ export interface ToolSetSpec {
      *  request. Read-modify-write to add or remove a single overlay.
      */
     overlays?: Array<ToolOverlay>;
+    /**
+     * The tool set's secrets, identified by normalized name. Order has no
+     *  meaning. Values are write-only; reads return names only.
+     *
+     *  On create, the tool set and its secrets are written together, so the first
+     *  sync and source validation already use them. On update, selecting
+     *  spec.secrets in update_mask replaces the set: names not listed are
+     *  deleted, listed names are created or have their value replaced, and a
+     *  listed name without a value keeps its stored value. An empty masked list
+     *  deletes every secret. Without a mask, a non-empty list creates or updates
+     *  the listed secrets and deletes nothing.
+     */
+    secrets?: Array<ToolSetSpec_Secret>;
+}
+/**
+ * A secret scoped to this tool set. Adapter headers and tool configuration
+ *  reference it as `{{ secrets.NAME }}`. The same secrets are managed one at
+ *  a time through the tool set secret operations.
+ */
+export interface ToolSetSpec_Secret {
+    /**
+     * Secret name, normalized to upper case with characters outside A-Z, 0-9
+     *  and _ replaced by _. It is also the secret's external id, so
+     *  `{{ secrets.<name> }}` resolves to it.
+     */
+    name: string;
+    /**
+     * Secret value. Write-only: never returned by any API, so reads list names
+     *  with an empty value. Required for a secret the tool set does not have
+     *  yet; on update, an entry without a value keeps the stored value.
+     */
+    value?: string;
 }
 /**
  * ToolSetUsage describes one agent variation that uses the tool set (or, when
@@ -4392,8 +4637,9 @@ export interface UpdateMemoryLayerRequest {
  * Update model request. update_mask must list leaf paths: metadata.name,
  *  metadata.external_id, metadata.labels, spec.provider_model_id,
  *  spec.provider, spec.family, spec.max_input_tokens, spec.max_output_tokens,
- *  spec.capabilities, pricing_override.input_price_per_million_tokens, and
- *  pricing_override.output_price_per_million_tokens. Synced models
+ *  spec.capabilities, pricing_override.input_price_per_million_tokens,
+ *  pricing_override.output_price_per_million_tokens, and
+ *  pricing_override.cached_input_price_per_million_tokens. Synced models
  *  (PROVENANCE_SYNCED_FROM_PROVIDER) reject metadata.name and spec.* paths.
  *  spec price fields are never writable; price changes go through
  *  pricing_override, where a masked-but-absent field clears the override.
@@ -4651,7 +4897,7 @@ export type WebhookDeliveryDataStatus = 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED' | 
 /**
  * The type of objective event that triggered this webhook delivery
  */
-export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT';
+export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED';
 export interface WebhookDeliveryData {
     /**
      * Related resources
@@ -4685,6 +4931,21 @@ export interface WebhookDeliveryData {
      * Content length of the response body in bytes
      */
     responseContentLength: string;
+}
+/**
+ * WhoamiResponse describes the authenticated caller.
+ */
+export interface WhoamiResponse {
+    /**
+     * The caller's profile.
+     */
+    profile: Profile;
+    /**
+     * Metadata of the caller's default workspace: the one they chose, while
+     *  they can still access it, otherwise the first workspace they can access.
+     *  Unset when the caller can access no workspace.
+     */
+    defaultWorkspace?: AccountResourceMetadata;
 }
 /**
  * The current lifecycle state of the widget. Output only. Widgets are
@@ -5328,6 +5589,10 @@ export interface ObjectiveEventData_Heartbeat {
     type: 'heartbeat';
     heartbeat: ObjectiveHeartbeat;
 }
+export interface ObjectiveEventData_Interrupted {
+    type: 'interrupted';
+    interrupted: ObjectiveInterrupted;
+}
 export interface CallableTool_Tool {
     type: 'tool';
     tool: ResourceMetadata;
@@ -5373,6 +5638,34 @@ export interface MemoryEntryCreateSpec_UploadId {
      */
     key: string;
     description?: string;
+}
+export interface ObjectiveQueuedActionData_UserMessage {
+    type: 'userMessage';
+    /**
+     * A user message appended to the conversation before the next assistant turn.
+     */
+    userMessage: QueuedUserMessage;
+}
+export interface ObjectiveQueuedActionData_Compaction {
+    type: 'compaction';
+    /**
+     * A compaction of the conversation run before the next assistant turn.
+     */
+    compaction: QueuedCompaction;
+}
+export interface ContinueObjectiveResponse_Event {
+    type: 'event';
+    /**
+     * The user message event, when the objective was waiting and the message was sent immediately.
+     */
+    event: ObjectiveEvent;
+}
+export interface ContinueObjectiveResponse_QueuedAction {
+    type: 'queuedAction';
+    /**
+     * The queued action, when the agent loop was busy and the message was queued.
+     */
+    queuedAction: ObjectiveQueuedAction;
 }
 export interface SetToolCallContentRequest_ContentBlock_Text {
     type: 'text';
@@ -5600,6 +5893,23 @@ export interface ModelSpec_Capability_Caching {
     type: 'caching';
     caching: Capability_Caching;
 }
+export interface CreateAndStreamObjectiveResponse_Objective {
+    type: 'objective';
+    /**
+     * The objective. Sent exactly once, as the first message. On a repeated
+     *  request that attached to an existing objective, this is that
+     *  objective rather than a newly created one.
+     */
+    objective: Objective;
+}
+export interface CreateAndStreamObjectiveResponse_Event {
+    type: 'event';
+    /**
+     * An objective event, identical to the payloads Stream objective events
+     *  yields — including transient hb_ heartbeats.
+     */
+    event: ObjectiveEvent;
+}
 /**
  * TOKEN_EXPIRED identifies access-token expiry beyond the 60-second clock-skew tolerance. That token cannot renew; use already-installed newer credentials or require explicit app reauthentication. SESSION_* reasons are terminal. Never infer renewability from HTTP status alone.
  */
@@ -5620,12 +5930,13 @@ export type AgentPoolServiceListAgentPoolsState = 'AGENT_POOL_STATE_UNSPECIFIED'
 export type AgentServiceListAgentsState = 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
-export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT';
+export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED';
 export type MemoryServiceListMemoryLayersType = 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 export type ModelServiceListModelsState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
-export type ObjectiveServiceListObjectivesState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT';
+export type ObjectiveServiceListObjectivesState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT' | 'OBJECTIVE_STATE_INTERRUPTING';
+export type ObjectiveServiceListObjectiveQueuedActionsState = 'STATE_UNSPECIFIED' | 'STATE_QUEUED' | 'STATE_SENT' | 'STATE_REMOVED' | 'STATE_DISCARDED';
 export type ObjectiveServiceListObjectiveToolCallsStatus = 'TOOL_CALL_STATUS_UNSPECIFIED' | 'TOOL_CALL_STATUS_AUTO_APPROVED' | 'TOOL_CALL_STATUS_WAITING_FOR_APPROVAL' | 'TOOL_CALL_STATUS_APPROVED' | 'TOOL_CALL_STATUS_DENIED';
-export type ObjectiveServiceListObjectiveToolCallsExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT';
+export type ObjectiveServiceListObjectiveToolCallsExecutionStatus = 'TOOL_CALL_EXECUTION_STATUS_UNSPECIFIED' | 'TOOL_CALL_EXECUTION_STATUS_PENDING' | 'TOOL_CALL_EXECUTION_STATUS_RUNNING' | 'TOOL_CALL_EXECUTION_STATUS_COMPLETED' | 'TOOL_CALL_EXECUTION_STATUS_ERRORED' | 'TOOL_CALL_EXECUTION_STATUS_WAITING_FOR_CONTENT' | 'TOOL_CALL_EXECUTION_STATUS_INTERRUPTED';
 export type ToolServiceListToolSetsState = 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_ARCHIVED';
 export type ToolServiceListToolsStates = 'STATE_UNSPECIFIED' | 'STATE_AVAILABLE' | 'STATE_OMITTED' | 'STATE_ARCHIVED';
 export type WidgetSessionServiceListWidgetSessionsState = 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_EXPIRED' | 'STATE_REVOKED' | 'STATE_EXHAUSTED';
