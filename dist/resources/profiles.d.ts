@@ -1,5 +1,5 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
-import type { Profile } from '../types.js';
+import type { WhoamiResponse } from '../types.js';
 export declare class Profiles {
     private readonly _client;
     constructor(_client: HttpClient);
@@ -8,9 +8,9 @@ export declare class Profiles {
      *
      * @example
      * ```ts
-     * const profile = await client.profiles.whoami();
+     * const whoamiResponse = await client.profiles.whoami();
      * ```
      */
-    whoami(options?: RequestOptions): APIPromise<Profile>;
+    whoami(options?: RequestOptions): APIPromise<WhoamiResponse>;
 }
 //# sourceMappingURL=profiles.d.ts.map

@@ -32,7 +32,7 @@ export class Objectives {
      *
      * @example
      * ```ts
-     * const objective = await client.objectives.create({ agentId: 'sample', systemPromptData: {  } });
+     * const objective = await client.objectives.create({ agentId: 'sample' });
      * ```
      */
     create(params, options) {
@@ -168,6 +168,41 @@ export class Objectives {
         }, options);
     }
     /**
+     * List objective queued actions
+     *
+     * @example
+     * ```ts
+     * const page = await client.objectives.listQueuedActions('objective_123');
+     * for await (const item of page) {
+     *   // auto-fetches every page
+     * }
+     * ```
+     */
+    async listQueuedActions(objectiveId, params, options) {
+        const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+        if (workspaceId === undefined)
+            throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+        const _base = snapshotParams(params);
+        const response = await this._client.request({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/queued_actions`, query: { limit: params?.limit, cursor: params?.cursor, state: params?.state } }, options);
+        return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.listQueuedActions(objectiveId, { ..._base, cursor: cursor }, options));
+    }
+    /**
+     * Remove a queued action
+     *
+     * @example
+     * ```ts
+     * const objectiveQueuedAction = await client.objectives.removeQueuedAction('objective_123', { queuedActionId: 'queued_action_123' });
+     * ```
+     */
+    removeQueuedAction(objectiveId, params, options) {
+        return this._client.requestAPI(() => {
+            const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+            if (workspaceId === undefined)
+                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/queued_actions/${pathSegment('queuedActionId', params.queuedActionId)}:remove` };
+        }, options);
+    }
+    /**
      * List objective tool calls
      *
      * @example
@@ -290,7 +325,7 @@ export class Objectives {
      *
      * @example
      * ```ts
-     * const compactObjectiveResponse = await client.objectives.compact('objective_123');
+     * const objectiveQueuedAction = await client.objectives.compact('objective_123');
      * ```
      */
     compact(objectiveId, params, options) {
@@ -306,7 +341,7 @@ export class Objectives {
      *
      * @example
      * ```ts
-     * const objectiveEvent = await client.objectives.continue('objective_123', { message: 'sample' });
+     * const continueObjectiveResponse = await client.objectives.continue('objective_123', { message: 'sample' });
      * ```
      */
     continue(objectiveId, params, options) {
@@ -316,6 +351,41 @@ export class Objectives {
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
             return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}:continue`, body: { message: params.message, enqueue: params.enqueue } };
         }, options);
+    }
+    /**
+     * Interrupt an objective
+     *
+     * @example
+     * ```ts
+     * const objectiveEvent = await client.objectives.interrupt('objective_123');
+     * ```
+     */
+    interrupt(objectiveId, params, options) {
+        return this._client.requestAPI(() => {
+            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+            if (workspaceId === undefined)
+                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}:interrupt` };
+        }, options);
+    }
+    /**
+     * Create an objective and stream its events
+     *
+     * @example
+     * ```ts
+     * const stream = await client.objectives.createAndStream({ agentId: 'sample', metadata: { externalId: 'sample' } });
+     * for await (const event of stream) {
+     *   // typed event payloads; housekeeping frames are skipped
+     * }
+     * ```
+     */
+    async createAndStream(params, options) {
+        const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+        if (workspaceId === undefined)
+            throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+        const _spec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters }, stream: true };
+        const response = await this._client.rawRequest(_spec, options);
+        return new Stream(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
     }
 }
 //# sourceMappingURL=objectives.js.map
