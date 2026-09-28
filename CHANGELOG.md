@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/cadenya/cadenya-typescript/compare/v1.6.0...v1.7.0) (2026-09-28)
+
+
+### Features
+
+* default workspace in whoami, objective queued actions and interrupts ([c53dbe8](https://github.com/cadenya/cadenya-typescript/commit/c53dbe8b9797ef0d96351bf2f72501d7bae87f06))
+
 ## [1.6.0](https://github.com/cadenya/cadenya-typescript/compare/v1.5.0...v1.6.0) (2026-09-18)
 
 
