@@ -1,6 +1,6 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { CreateResourceMetadata, Tool, ToolServiceListToolsStates, ToolSpec, UpdateResourceMetadata } from '../types.js';
+import type { CreateResourceMetadata, Tool, ToolServiceListToolsStates, ToolSpecParam, UpdateResourceMetadata } from '../types.js';
 export interface ToolListParams {
     /**
      * Workspace ID.
@@ -62,7 +62,7 @@ export interface ToolListParams {
 }
 export interface ToolCreateParams {
     metadata: CreateResourceMetadata;
-    spec: ToolSpec;
+    spec: ToolSpecParam;
     /**
      * Workspace ID.
      *
@@ -94,7 +94,7 @@ export interface ToolUpdateParams {
      */
     workspaceId?: string;
     metadata?: UpdateResourceMetadata;
-    spec?: ToolSpec;
+    spec?: ToolSpecParam;
     updateMask?: string;
 }
 export interface ToolOmitParams {

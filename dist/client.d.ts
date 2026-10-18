@@ -3,6 +3,7 @@ import { Webhooks } from './webhooks.js';
 import { Accounts } from './resources/accounts.js';
 import { ApiKeys } from './resources/api-keys.js';
 import { WorkspaceAdmin } from './resources/workspace-admin.js';
+import { TrustedEndpoints } from './resources/trusted-endpoints.js';
 import { Profiles } from './resources/profiles.js';
 import { Workspaces } from './resources/workspaces.js';
 import { AgentPools } from './resources/agent-pools.js';
@@ -49,6 +50,7 @@ export declare class Cadenya {
     readonly accounts: Accounts;
     readonly apiKeys: ApiKeys;
     readonly workspaceAdmin: WorkspaceAdmin;
+    readonly trustedEndpoints: TrustedEndpoints;
     readonly profiles: Profiles;
     readonly workspaces: Workspaces;
     readonly agentPools: AgentPools;
