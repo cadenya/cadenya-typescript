@@ -3,7 +3,8 @@ import { Page } from '../core/pagination.js';
 import type { APIKey, APIKeySpecParam, CreateAccountResourceMetadata, UpdateAccountResourceMetadata } from '../types.js';
 export interface ApiKeyListParams {
     /**
-     * The workspace whose API keys will be listed (path).
+     * Lists only keys that can reach this workspace (query parameter). Accepts
+     *  the canonical ID or the `external_id:<value>` form.
      *
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
      */
@@ -43,106 +44,34 @@ export interface ApiKeyListParams {
 export interface ApiKeyCreateParams {
     metadata: CreateAccountResourceMetadata;
     spec: APIKeySpecParam;
-    /**
-     * The workspace this API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
-}
-export interface ApiKeyRetrieveParams {
-    /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
-}
-export interface ApiKeyDeleteParams {
-    /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
 }
 export interface ApiKeyUpdateParams {
-    /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
     metadata?: UpdateAccountResourceMetadata;
     spec?: APIKeySpecParam;
     /**
-     * Fields to update.
+     * Fields to update. Selecting spec.workspace_assignments replaces the whole
+     *  set; selecting spec.all_workspaces turns the all-workspaces grant on or
+     *  off. Turning it off keeps the workspaces the key currently reaches.
      */
     updateMask?: string;
 }
-export interface ApiKeyDisableParams {
+export interface ApiKeyAddWorkspaceParams {
     /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     * The workspace to assign. Accepts the canonical ID or the
+     *  `external_id:<value>` form.
      */
-    workspaceId?: string;
+    workspaceId: string;
 }
-export interface ApiKeyEnableParams {
+export interface ApiKeyRemoveWorkspaceParams {
     /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     * The workspace to remove. Accepts the canonical ID or the
+     *  `external_id:<value>` form.
      */
-    workspaceId?: string;
-}
-export interface ApiKeyRotateParams {
-    /**
-     * The workspace the API key belongs to (path).
-     *
-     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
-     */
-    workspaceId?: string;
+    workspaceId: string;
 }
 export declare class ApiKeys {
     private readonly _client;
     constructor(_client: HttpClient);
-    /**
-     * Get the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.retrieveGlobal();
-     * ```
-     */
-    retrieveGlobal(options?: RequestOptions): APIPromise<APIKey>;
-    /**
-     * Disable the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.disableGlobal();
-     * ```
-     */
-    disableGlobal(options?: RequestOptions): APIPromise<APIKey>;
-    /**
-     * Enable the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.enableGlobal();
-     * ```
-     */
-    enableGlobal(options?: RequestOptions): APIPromise<APIKey>;
-    /**
-     * Rotate the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.rotateGlobal();
-     * ```
-     */
-    rotateGlobal(options?: RequestOptions): APIPromise<APIKey>;
     /**
      * List API keys
      *
@@ -160,7 +89,7 @@ export declare class ApiKeys {
      *
      * @example
      * ```ts
-     * const apiKey = await client.apiKeys.create({ metadata: { name: 'sample' }, spec: {  } });
+     * const apiKey = await client.apiKeys.create({ metadata: { name: 'sample' }, spec: { allWorkspaces: true, workspaceAssignments: [{ workspaceId: 'sample' }] } });
      * ```
      */
     create(params: ApiKeyCreateParams, options?: RequestOptions): APIPromise<APIKey>;
@@ -172,7 +101,7 @@ export declare class ApiKeys {
      * const apiKey = await client.apiKeys.retrieve('_123');
      * ```
      */
-    retrieve(id: string, params?: ApiKeyRetrieveParams, options?: RequestOptions): APIPromise<APIKey>;
+    retrieve(id: string, options?: RequestOptions): APIPromise<APIKey>;
     /**
      * Delete an API key
      *
@@ -181,7 +110,7 @@ export declare class ApiKeys {
      * await client.apiKeys.delete('_123');
      * ```
      */
-    delete(id: string, params?: ApiKeyDeleteParams, options?: RequestOptions): APIPromise<void>;
+    delete(id: string, options?: RequestOptions): APIPromise<void>;
     /**
      * Update an API key
      *
@@ -192,6 +121,15 @@ export declare class ApiKeys {
      */
     update(id: string, params?: ApiKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey>;
     /**
+     * Assign a workspace to an API key
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.addWorkspace('_123', { workspaceId: 'sample' });
+     * ```
+     */
+    addWorkspace(id: string, params: ApiKeyAddWorkspaceParams, options?: RequestOptions): APIPromise<APIKey>;
+    /**
      * Disable an API key
      *
      * @example
@@ -199,7 +137,7 @@ export declare class ApiKeys {
      * const apiKey = await client.apiKeys.disable('_123');
      * ```
      */
-    disable(id: string, params?: ApiKeyDisableParams, options?: RequestOptions): APIPromise<APIKey>;
+    disable(id: string, options?: RequestOptions): APIPromise<APIKey>;
     /**
      * Enable an API key
      *
@@ -208,7 +146,25 @@ export declare class ApiKeys {
      * const apiKey = await client.apiKeys.enable('_123');
      * ```
      */
-    enable(id: string, params?: ApiKeyEnableParams, options?: RequestOptions): APIPromise<APIKey>;
+    enable(id: string, options?: RequestOptions): APIPromise<APIKey>;
+    /**
+     * Remove a workspace from an API key
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.removeWorkspace('_123', { workspaceId: 'sample' });
+     * ```
+     */
+    removeWorkspace(id: string, params: ApiKeyRemoveWorkspaceParams, options?: RequestOptions): APIPromise<APIKey>;
+    /**
+     * Reveal an API key's token
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.reveal('_123');
+     * ```
+     */
+    reveal(id: string, options?: RequestOptions): APIPromise<APIKey>;
     /**
      * Rotate an API key
      *
@@ -217,6 +173,6 @@ export declare class ApiKeys {
      * const apiKey = await client.apiKeys.rotate('_123');
      * ```
      */
-    rotate(id: string, params?: ApiKeyRotateParams, options?: RequestOptions): APIPromise<APIKey>;
+    rotate(id: string, options?: RequestOptions): APIPromise<APIKey>;
 }
 //# sourceMappingURL=api-keys.d.ts.map

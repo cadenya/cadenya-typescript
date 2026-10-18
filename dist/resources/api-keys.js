@@ -8,58 +8,6 @@ export class ApiKeys {
         this._client = _client;
     }
     /**
-     * Get the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.retrieveGlobal();
-     * ```
-     */
-    retrieveGlobal(options) {
-        return this._client.requestAPI(() => {
-            return { method: 'GET', path: `/v1/account/global_api_key` };
-        }, options);
-    }
-    /**
-     * Disable the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.disableGlobal();
-     * ```
-     */
-    disableGlobal(options) {
-        return this._client.requestAPI(() => {
-            return { method: 'POST', path: `/v1/account/global_api_key:disable` };
-        }, options);
-    }
-    /**
-     * Enable the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.enableGlobal();
-     * ```
-     */
-    enableGlobal(options) {
-        return this._client.requestAPI(() => {
-            return { method: 'POST', path: `/v1/account/global_api_key:enable` };
-        }, options);
-    }
-    /**
-     * Rotate the global API key
-     *
-     * @example
-     * ```ts
-     * const apiKey = await client.apiKeys.rotateGlobal();
-     * ```
-     */
-    rotateGlobal(options) {
-        return this._client.requestAPI(() => {
-            return { method: 'POST', path: `/v1/account/global_api_key:rotate` };
-        }, options);
-    }
-    /**
      * List API keys
      *
      * @example
@@ -72,10 +20,8 @@ export class ApiKeys {
      */
     async list(params, options) {
         const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-        if (workspaceId === undefined)
-            throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
         const _base = snapshotParams(params);
-        const response = await this._client.request({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
+        const response = await this._client.request({ method: 'GET', path: `/v1/account/api_keys`, query: { workspaceId: workspaceId, limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
         return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.list({ ..._base, cursor: cursor }, options));
     }
     /**
@@ -83,15 +29,12 @@ export class ApiKeys {
      *
      * @example
      * ```ts
-     * const apiKey = await client.apiKeys.create({ metadata: { name: 'sample' }, spec: {  } });
+     * const apiKey = await client.apiKeys.create({ metadata: { name: 'sample' }, spec: { allWorkspaces: true, workspaceAssignments: [{ workspaceId: 'sample' }] } });
      * ```
      */
     create(params, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys`, body: { metadata: params.metadata, spec: wireAPIKeySpec(params.spec) } };
+            return { method: 'POST', path: `/v1/account/api_keys`, body: { metadata: params.metadata, spec: wireAPIKeySpec(params.spec) } };
         }, options);
     }
     /**
@@ -102,12 +45,9 @@ export class ApiKeys {
      * const apiKey = await client.apiKeys.retrieve('_123');
      * ```
      */
-    retrieve(id, params, options) {
+    retrieve(id, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}` };
+            return { method: 'GET', path: `/v1/account/api_keys/${pathSegment('id', id)}` };
         }, options);
     }
     /**
@@ -118,12 +58,9 @@ export class ApiKeys {
      * await client.apiKeys.delete('_123');
      * ```
      */
-    delete(id, params, options) {
+    delete(id, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'DELETE', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}`, void: true };
+            return { method: 'DELETE', path: `/v1/account/api_keys/${pathSegment('id', id)}`, void: true };
         }, options);
     }
     /**
@@ -136,10 +73,20 @@ export class ApiKeys {
      */
     update(id, params, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: wireAPIKeySpec(params?.spec), updateMask: params?.updateMask } };
+            return { method: 'PATCH', path: `/v1/account/api_keys/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: wireAPIKeySpec(params?.spec), updateMask: params?.updateMask } };
+        }, options);
+    }
+    /**
+     * Assign a workspace to an API key
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.addWorkspace('_123', { workspaceId: 'sample' });
+     * ```
+     */
+    addWorkspace(id, params, options) {
+        return this._client.requestAPI(() => {
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:addWorkspace`, body: { workspaceId: params.workspaceId } };
         }, options);
     }
     /**
@@ -150,12 +97,9 @@ export class ApiKeys {
      * const apiKey = await client.apiKeys.disable('_123');
      * ```
      */
-    disable(id, params, options) {
+    disable(id, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}:disable` };
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:disable` };
         }, options);
     }
     /**
@@ -166,12 +110,35 @@ export class ApiKeys {
      * const apiKey = await client.apiKeys.enable('_123');
      * ```
      */
-    enable(id, params, options) {
+    enable(id, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}:enable` };
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:enable` };
+        }, options);
+    }
+    /**
+     * Remove a workspace from an API key
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.removeWorkspace('_123', { workspaceId: 'sample' });
+     * ```
+     */
+    removeWorkspace(id, params, options) {
+        return this._client.requestAPI(() => {
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:removeWorkspace`, body: { workspaceId: params.workspaceId } };
+        }, options);
+    }
+    /**
+     * Reveal an API key's token
+     *
+     * @example
+     * ```ts
+     * const apiKey = await client.apiKeys.reveal('_123');
+     * ```
+     */
+    reveal(id, options) {
+        return this._client.requestAPI(() => {
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:reveal` };
         }, options);
     }
     /**
@@ -182,12 +149,9 @@ export class ApiKeys {
      * const apiKey = await client.apiKeys.rotate('_123');
      * ```
      */
-    rotate(id, params, options) {
+    rotate(id, options) {
         return this._client.requestAPI(() => {
-            const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
-            if (workspaceId === undefined)
-                throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/api_keys/${pathSegment('id', id)}:rotate` };
+            return { method: 'POST', path: `/v1/account/api_keys/${pathSegment('id', id)}:rotate` };
         }, options);
     }
 }

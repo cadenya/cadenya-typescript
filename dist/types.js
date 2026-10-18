@@ -14,6 +14,10 @@ export function wireAPIKeySpec(value) {
         out["description"] = value.description;
     if (value.permissions !== undefined)
         out["permissions"] = value.permissions;
+    if (value.allWorkspaces !== undefined)
+        out["allWorkspaces"] = value.allWorkspaces;
+    if (value.workspaceAssignments !== undefined)
+        out["workspaceAssignments"] = value.workspaceAssignments;
     return out;
 }
 export function wireAddAgentVariationAssignmentRequest(value) {
@@ -26,6 +30,16 @@ export function wireAddAgentVariationAssignmentRequest(value) {
         case "agentPoolId": return wireAddAgentVariationAssignmentRequest_AgentPoolId(value);
         default: return value;
     }
+}
+export function wireConfig_OpenAPI(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.path !== undefined)
+        out["path"] = value.path;
+    if (value.method !== undefined)
+        out["method"] = value.method;
+    return out;
 }
 export function wireCreateAgentVariationRequest(value) {
     if (value == null || typeof value !== 'object')
@@ -66,6 +80,30 @@ export function wireRemoveAgentVariationAssignmentRequest(value) {
         default: return value;
     }
 }
+export function wireToolSpec(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.description !== undefined)
+        out["description"] = value.description;
+    if (value.requiresApproval !== undefined)
+        out["requiresApproval"] = value.requiresApproval;
+    if (value.parameters !== undefined)
+        out["parameters"] = value.parameters;
+    if (value.config !== undefined)
+        out["config"] = wireToolSpec_Config(value.config);
+    if (value.llmToolName !== undefined)
+        out["llmToolName"] = value.llmToolName;
+    return out;
+}
+export function wireToolSpec_Config(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    switch (value["type"]) {
+        case "openapi": return wireToolSpec_Config_Openapi(value);
+        default: return value;
+    }
+}
 export function wireWidgetSessionSpec(value) {
     if (value == null || typeof value !== 'object')
         return value;
@@ -80,6 +118,16 @@ export function wireWidgetSessionSpec(value) {
         out["expiresAt"] = value.expiresAt;
     if (value.pinnedParameters !== undefined)
         out["pinnedParameters"] = value.pinnedParameters;
+    return out;
+}
+export function wireToolSpec_Config_Openapi(value) {
+    if (value == null || typeof value !== 'object')
+        return value;
+    const out = {};
+    if (value.type !== undefined)
+        out["type"] = value.type;
+    if (value.openapi !== undefined)
+        out["openapi"] = wireConfig_OpenAPI(value.openapi);
     return out;
 }
 export function wireAddAgentVariationAssignmentRequest_ToolId(value) {

@@ -26,6 +26,7 @@
   "src/resources/tool-set-secrets.ts",
   "src/resources/tool-sets.ts",
   "src/resources/tools.ts",
+  "src/resources/trusted-endpoints.ts",
   "src/resources/uploads.ts",
   "src/resources/widget-sessions.ts",
   "src/resources/widgets.ts",

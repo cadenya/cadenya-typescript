@@ -26,7 +26,7 @@ export class MemoryLayers {
         if (workspaceId === undefined)
             throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
         const _base = snapshotParams(params);
-        const response = await this._client.request({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, type: params?.type, agentId: params?.agentId, episodicKeyPrefix: params?.episodicKeyPrefix, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
+        const response = await this._client.request({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, type: params?.type, agentId: params?.agentId, episodicKeyPrefix: params?.episodicKeyPrefix, labels: params?.labels, tenantId: params?.tenantId, subjectId: params?.subjectId, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
         return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.list({ ..._base, cursor: cursor }, options));
     }
     /**
@@ -42,7 +42,7 @@ export class MemoryLayers {
             const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
             if (workspaceId === undefined)
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, body: { metadata: params.metadata, spec: wireMemoryLayerSpec(params.spec) } };
+            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, body: { metadata: params.metadata, spec: wireMemoryLayerSpec(params.spec), tenant: params.tenant, subject: params.subject } };
         }, options);
     }
     /**

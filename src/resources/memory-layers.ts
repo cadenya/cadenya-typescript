@@ -3,7 +3,7 @@
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { MemoryEntries } from './memory-entries.js';
-import type { CreateResourceMetadata, ListMemoryLayersResponse, MemoryLayer, MemoryLayerSpecParam, MemoryServiceListMemoryLayersType, UpdateResourceMetadata } from '../types.js';
+import type { CreateResourceMetadata, ListMemoryLayersResponse, MemoryLayer, MemoryLayerSpecParam, MemoryServiceListMemoryLayersType, SubjectAssertion, TenantAssertion, UpdateResourceMetadata } from '../types.js';
 import { wireMemoryLayerSpec } from '../types.js';
 
 export interface MemoryLayerListParams {
@@ -48,6 +48,17 @@ export interface MemoryLayerListParams {
    */
   labels?: string;
   /**
+   * Filter to episodic layers scoped to a tenant. Accepts the canonical
+   *  `tenant_…` form or the `external_id:<value>` form.
+   */
+  tenantId?: string;
+  /**
+   * Filter to episodic layers scoped to a subject. Accepts the canonical
+   *  `subj_…` form or the `external_id:<value>` form; the external_id form is
+   *  scoped within a tenant and requires `tenant_id` to also be set.
+   */
+  subjectId?: string;
+  /**
    * Sort order for results (asc or desc by creation time)
    */
   sortOrder?: string;
@@ -64,6 +75,18 @@ export interface MemoryLayerCreateParams {
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
+  /**
+   * Optional tenant assertion: the customer's org or company identifier for
+   *  the end users this layer serves. Upserts the tenant record, the same way
+   *  as on CreateObjectiveRequest, so a layer can be prepared for a tenant
+   *  before any of its objectives exist.
+   */
+  tenant?: TenantAssertion;
+  /**
+   * Optional subject assertion: the person within the tenant this layer
+   *  serves. Requires `tenant`.
+   */
+  subject?: SubjectAssertion;
 }
 
 export interface MemoryLayerRetrieveParams {
@@ -111,7 +134,7 @@ export class MemoryLayers {
     const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
     if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
     const _base = snapshotParams(params);
-    const response = await this._client.request<ListMemoryLayersResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, type: params?.type, agentId: params?.agentId, episodicKeyPrefix: params?.episodicKeyPrefix, labels: params?.labels, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
+    const response = await this._client.request<ListMemoryLayersResponse>({ method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, query: { limit: params?.limit, cursor: params?.cursor, prefix: params?.prefix, query: params?.query, type: params?.type, agentId: params?.agentId, episodicKeyPrefix: params?.episodicKeyPrefix, labels: params?.labels, tenantId: params?.tenantId, subjectId: params?.subjectId, sortOrder: params?.sortOrder, includeInfo: params?.includeInfo } }, options);
     return new Page(response.items ?? [], response.pagination?.nextCursor, (cursor) => this.list({ ..._base, cursor: cursor }, options));
   }
 
@@ -127,7 +150,7 @@ export class MemoryLayers {
     return this._client.requestAPI<MemoryLayer>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, body: { metadata: params.metadata, spec: wireMemoryLayerSpec(params.spec) } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/memory_layers`, body: { metadata: params.metadata, spec: wireMemoryLayerSpec(params.spec), tenant: params.tenant, subject: params.subject } };
     }, options);
   }
 

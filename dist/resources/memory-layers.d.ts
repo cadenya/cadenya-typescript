@@ -1,7 +1,7 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { MemoryEntries } from './memory-entries.js';
-import type { CreateResourceMetadata, MemoryLayer, MemoryLayerSpecParam, MemoryServiceListMemoryLayersType, UpdateResourceMetadata } from '../types.js';
+import type { CreateResourceMetadata, MemoryLayer, MemoryLayerSpecParam, MemoryServiceListMemoryLayersType, SubjectAssertion, TenantAssertion, UpdateResourceMetadata } from '../types.js';
 export interface MemoryLayerListParams {
     /**
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
@@ -44,6 +44,17 @@ export interface MemoryLayerListParams {
      */
     labels?: string;
     /**
+     * Filter to episodic layers scoped to a tenant. Accepts the canonical
+     *  `tenant_…` form or the `external_id:<value>` form.
+     */
+    tenantId?: string;
+    /**
+     * Filter to episodic layers scoped to a subject. Accepts the canonical
+     *  `subj_…` form or the `external_id:<value>` form; the external_id form is
+     *  scoped within a tenant and requires `tenant_id` to also be set.
+     */
+    subjectId?: string;
+    /**
      * Sort order for results (asc or desc by creation time)
      */
     sortOrder?: string;
@@ -59,6 +70,18 @@ export interface MemoryLayerCreateParams {
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
      */
     workspaceId?: string;
+    /**
+     * Optional tenant assertion: the customer's org or company identifier for
+     *  the end users this layer serves. Upserts the tenant record, the same way
+     *  as on CreateObjectiveRequest, so a layer can be prepared for a tenant
+     *  before any of its objectives exist.
+     */
+    tenant?: TenantAssertion;
+    /**
+     * Optional subject assertion: the person within the tenant this layer
+     *  serves. Requires `tenant`.
+     */
+    subject?: SubjectAssertion;
 }
 export interface MemoryLayerRetrieveParams {
     /**
