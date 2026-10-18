@@ -6,6 +6,7 @@ import { Webhooks } from './webhooks.js';
 import { Accounts } from './resources/accounts.js';
 import { ApiKeys } from './resources/api-keys.js';
 import { WorkspaceAdmin } from './resources/workspace-admin.js';
+import { TrustedEndpoints } from './resources/trusted-endpoints.js';
 import { Profiles } from './resources/profiles.js';
 import { Workspaces } from './resources/workspaces.js';
 import { AgentPools } from './resources/agent-pools.js';
@@ -54,6 +55,7 @@ export class Cadenya {
   readonly accounts: Accounts;
   readonly apiKeys: ApiKeys;
   readonly workspaceAdmin: WorkspaceAdmin;
+  readonly trustedEndpoints: TrustedEndpoints;
   readonly profiles: Profiles;
   readonly workspaces: Workspaces;
   readonly agentPools: AgentPools;
@@ -87,7 +89,7 @@ export class Cadenya {
       authHeader: () => ({ Authorization: `Bearer ${apiKey}` }),
       maxRetries: options.maxRetries ?? 0,
       timeout: options.timeout,
-      defaultHeaders: { ...nodeUserAgent('cadenya-typescript/1.6.0 (api 1.0)'), ...options.defaultHeaders },
+      defaultHeaders: { ...nodeUserAgent('cadenya-typescript/1.7.0 (api 1.0)'), ...options.defaultHeaders },
       fetch: options.fetch,
       logger: options.logger,
       logLevel: options.logLevel,
@@ -97,6 +99,7 @@ export class Cadenya {
     this.accounts = new Accounts(this._client);
     this.apiKeys = new ApiKeys(this._client);
     this.workspaceAdmin = new WorkspaceAdmin(this._client);
+    this.trustedEndpoints = new TrustedEndpoints(this._client);
     this.profiles = new Profiles(this._client);
     this.workspaces = new Workspaces(this._client);
     this.agentPools = new AgentPools(this._client);

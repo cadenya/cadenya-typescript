@@ -24,26 +24,6 @@ client.accounts.rotateWebhookSigningKey(options?: RequestOptions): APIPromise<Ro
 
 ## apiKeys
 
-Get the global API key
-
-```ts
-client.apiKeys.retrieveGlobal(options?: RequestOptions): APIPromise<APIKey>
-```
-Disable the global API key
-
-```ts
-client.apiKeys.disableGlobal(options?: RequestOptions): APIPromise<APIKey>
-```
-Enable the global API key
-
-```ts
-client.apiKeys.enableGlobal(options?: RequestOptions): APIPromise<APIKey>
-```
-Rotate the global API key
-
-```ts
-client.apiKeys.rotateGlobal(options?: RequestOptions): APIPromise<APIKey>
-```
 List API keys
 
 ```ts
@@ -57,32 +37,47 @@ client.apiKeys.create(params: ApiKeyCreateParams, options?: RequestOptions): API
 Get an API key by ID
 
 ```ts
-client.apiKeys.retrieve(id: string, params?: ApiKeyRetrieveParams, options?: RequestOptions): APIPromise<APIKey>
+client.apiKeys.retrieve(id: string, options?: RequestOptions): APIPromise<APIKey>
 ```
 Delete an API key
 
 ```ts
-client.apiKeys.delete(id: string, params?: ApiKeyDeleteParams, options?: RequestOptions): APIPromise<void>
+client.apiKeys.delete(id: string, options?: RequestOptions): APIPromise<void>
 ```
 Update an API key
 
 ```ts
 client.apiKeys.update(id: string, params?: ApiKeyUpdateParams, options?: RequestOptions): APIPromise<APIKey>
 ```
+Assign a workspace to an API key
+
+```ts
+client.apiKeys.addWorkspace(id: string, params: ApiKeyAddWorkspaceParams, options?: RequestOptions): APIPromise<APIKey>
+```
 Disable an API key
 
 ```ts
-client.apiKeys.disable(id: string, params?: ApiKeyDisableParams, options?: RequestOptions): APIPromise<APIKey>
+client.apiKeys.disable(id: string, options?: RequestOptions): APIPromise<APIKey>
 ```
 Enable an API key
 
 ```ts
-client.apiKeys.enable(id: string, params?: ApiKeyEnableParams, options?: RequestOptions): APIPromise<APIKey>
+client.apiKeys.enable(id: string, options?: RequestOptions): APIPromise<APIKey>
+```
+Remove a workspace from an API key
+
+```ts
+client.apiKeys.removeWorkspace(id: string, params: ApiKeyRemoveWorkspaceParams, options?: RequestOptions): APIPromise<APIKey>
+```
+Reveal an API key's token
+
+```ts
+client.apiKeys.reveal(id: string, options?: RequestOptions): APIPromise<APIKey>
 ```
 Rotate an API key
 
 ```ts
-client.apiKeys.rotate(id: string, params?: ApiKeyRotateParams, options?: RequestOptions): APIPromise<APIKey>
+client.apiKeys.rotate(id: string, options?: RequestOptions): APIPromise<APIKey>
 ```
 
 ## workspaceAdmin
@@ -131,6 +126,34 @@ Remove a member from a workspace
 
 ```ts
 client.workspaceAdmin.removeMember(profileId: string, params?: WorkspaceAdminRemoveMemberParams, options?: RequestOptions): APIPromise<void>
+```
+
+## trustedEndpoints
+
+List trusted endpoints
+
+```ts
+client.trustedEndpoints.list(params?: TrustedEndpointListParams, options?: RequestOptions): Promise<Page<TrustedEndpoint>>
+```
+Create a trusted endpoint
+
+```ts
+client.trustedEndpoints.create(params: TrustedEndpointCreateParams, options?: RequestOptions): APIPromise<TrustedEndpoint>
+```
+Get a trusted endpoint by ID
+
+```ts
+client.trustedEndpoints.retrieve(id: string, options?: RequestOptions): APIPromise<TrustedEndpoint>
+```
+Delete a trusted endpoint
+
+```ts
+client.trustedEndpoints.delete(id: string, options?: RequestOptions): APIPromise<void>
+```
+Verify a URL against the trusted endpoints
+
+```ts
+client.trustedEndpoints.verify(params: TrustedEndpointVerifyParams, options?: RequestOptions): APIPromise<VerifyTrustedEndpointResponse>
 ```
 
 ## profiles
