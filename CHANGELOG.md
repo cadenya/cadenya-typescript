@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/cadenya/cadenya-typescript/compare/v1.7.0...v1.8.0) (2026-10-18)
+
+
+### Features
+
+* trusted endpoints, API key workspace management, remove global API key service ([#186](https://github.com/cadenya/cadenya-typescript/issues/186)) ([4040b3e](https://github.com/cadenya/cadenya-typescript/commit/4040b3e10872e12aa06c8632ee2c66ced41ee708))
+
 ## [1.7.0](https://github.com/cadenya/cadenya-typescript/compare/v1.6.0...v1.7.0) (2026-09-28)
 
 
