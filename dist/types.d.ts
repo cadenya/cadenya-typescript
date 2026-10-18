@@ -118,10 +118,10 @@ export interface AIProviderKeySpec {
  */
 export type ApiKeyState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 /**
- * An API key. Every key belongs to exactly one workspace and is managed via
- *  the workspace-scoped API key routes. The only exception is the
- *  system-managed global account key, which spans all workspaces and is
- *  managed via the account global_api_key routes.
+ * An API key. Keys belong to the account and are managed by account
+ *  administrators. A key reaches the workspaces it is assigned to, or every
+ *  workspace (present and future) when all_workspaces is set. Its scopes are
+ *  the same in every workspace it reaches.
  */
 export interface APIKey {
     metadata: AccountResourceMetadata;
@@ -139,6 +139,10 @@ export interface APIKeyInfo {
      * The profile that created the key.
      */
     createdBy?: Profile;
+    /**
+     * The workspaces the key can currently reach, with their names.
+     */
+    workspaces?: Array<AccountResourceMetadata>;
 }
 /**
  * Configuration for an API key.
@@ -158,21 +162,59 @@ export interface APIKeySpec {
      *  resource:verb string (e.g. "objectives:manage").
      *
      *  Resources: agents, objectives, tools, memory, api_keys, workspaces,
-     *  widgets, widget_sessions, secrets, account.
+     *  widgets, widget_sessions, tenants, endpoints (trusted endpoints),
+     *  secrets, account.
      *  Verbs: read and manage, where manage implies read — a stored scope set
      *  is normalized to drop "x:read" when "x:manage" is present. The secrets
      *  and account resources support only manage. "*" is an explicit
      *  full-access grant.
+     *
+     *  api_keys also has the verb admin ("api_keys:admin"), which implies
+     *  manage. It is required to create or change a key that reaches every
+     *  workspace, and to manage keys created by other members; without it a
+     *  caller manages only its own keys.
+     *
+     *  Some scopes depend on another: "tools:manage" cannot be granted
+     *  without "secrets:manage", because tool set headers and base URLs
+     *  resolve workspace secrets ({{ secrets.NAME }}) before the source is
+     *  validated, synced, or called. A set that holds a scope without its
+     *  dependency is rejected as invalid.
      *
      *  Scopes are deny-by-default: a key with an empty list can call only
      *  scope-free endpoints. Full access is always an explicit "*" grant.
      */
     permissions?: Array<string>;
     /**
-     * True when this key is managed by the system (i.e. the auto-provisioned
-     *  global account key). System keys cannot be deleted but can be rotated.
+     * When true the key reaches every workspace in the account, including
+     *  workspaces created later, and workspace_assignments is ignored on
+     *  requests. Reads then list every workspace the key currently reaches.
      */
-    system: boolean;
+    allWorkspaces: boolean;
+    /**
+     * Complete set of workspaces the key is assigned to. Order has no meaning
+     *  and duplicates are collapsed. On create, at least one assignment is
+     *  required unless all_workspaces is set. On update, selecting
+     *  spec.workspace_assignments in update_mask replaces the entire set. Use
+     *  the :addWorkspace and :removeWorkspace actions to change one workspace.
+     */
+    workspaceAssignments: Array<APIKeyWorkspaceAssignment>;
+    /**
+     * True for the account's default key, created at signup with the external
+     *  ID "default" and all_workspaces. Retrieve it with
+     *  /v1/account/api_keys/external_id:default; a NotFound response means it
+     *  was deleted. Output only.
+     */
+    default: boolean;
+}
+/**
+ * A workspace an API key is assigned to. The same shape is accepted in a spec
+ *  and returned on reads.
+ */
+export interface APIKeyWorkspaceAssignment {
+    /**
+     * Canonical workspace ID, or the `external_id:<value>` form.
+     */
+    workspaceId: string;
 }
 /**
  * An account, the top-level organizational unit. Contains workspaces and
@@ -254,6 +296,17 @@ export interface ActivateAgentPoolRequest {
      * AgentPool ID. Accepts the canonical `apool_…` form or the `external_id:<value>` form.
      */
     id?: string;
+}
+export interface AddAPIKeyWorkspaceRequest {
+    /**
+     * The API key to assign the workspace to. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+    /**
+     * The workspace to assign. Accepts the canonical ID or the
+     *  `external_id:<value>` form.
+     */
+    workspaceId: string;
 }
 /**
  * Attach a single tool, tool set, sub-agent, or agent pool to a variation. Exactly one
@@ -589,9 +642,10 @@ export interface AgentSpec {
     outputDefinition?: Record<string, unknown>;
     /**
      * Enable episodic memory for objectives created for this agent.
-     *  When true, objective creation requires an episodic_memory key and the
-     *  system finds or creates a memory layer for that (agent, key) pair, letting
-     *  the agent store and retrieve memories across objectives that share the key.
+     *  When true, objective creation requires an episodic_memory key (unless
+     *  always_include_subject_memories covers it) and the system finds or creates
+     *  a memory layer for that (agent, tenant, subject, key), letting the agent
+     *  store and retrieve memories across objectives that share them.
      *  Memory is agent-level so all variations of the agent share the same layers.
      */
     enableEpisodicMemory?: boolean;
@@ -602,6 +656,21 @@ export interface AgentSpec {
      *  If not set, episodic memories are retained indefinitely.
      */
     episodicMemoryTtl?: number;
+    /**
+     * Always load the asserted subject's memories. Requires
+     *  enable_episodic_memory. When an objective asserts a subject:
+     *
+     *  * Every memory layer scoped to that subject loads into the cascade,
+     *    followed by the tenant's layers that have no subject (tenant-wide
+     *    defaults). They rank below the objective's own memory_cascade
+     *    references and above the variation's layers.
+     *  * The episodic_memory key becomes optional. Without one, the agent stores
+     *    memories in a system-managed episodic layer for (agent, tenant, subject),
+     *    so it remembers the person across objectives with no key from the
+     *    caller. With one, the keyed layer receives writes and the subject's
+     *    other layers, including that keyless one, still load beneath it.
+     */
+    alwaysIncludeSubjectMemories?: boolean;
 }
 /**
  * AgentVariation resource
@@ -945,11 +1014,55 @@ export interface ArchiveWidgetRequest {
 export interface AssistantMessage {
     content?: string;
     toolCalls: Array<AssistantToolCall>;
+    /**
+     * Token usage of the LLM completion that produced this message. Unset on
+     *  messages recorded before usage was tracked per completion.
+     */
+    usage?: TokenUsage;
+    /**
+     * The model that produced this message, as resolved at call time. A
+     *  variation's model can change while an objective runs, so the objective's
+     *  config snapshot does not answer this on its own.
+     */
+    model?: ResourceMetadata;
 }
 export interface AssistantToolCall {
     tool?: CallableTool;
     arguments: string;
     functionName: string;
+    /**
+     * The ID of the objective tool call record created for this call. Matches
+     *  tool_call_id on the ToolCalled, ToolApprovalRequested, ToolResult and
+     *  ToolError events that follow. Empty on assistant messages recorded
+     *  before this field existed.
+     */
+    toolCallId?: string;
+}
+export type AutoModeConfigPassingMode = 'PASSING_MODE_UNSPECIFIED' | 'PASSING_MODE_ALL' | 'PASSING_MODE_NONE' | 'PASSING_MODE_MOST';
+/**
+ * AutoModeConfig configures the questions and passing mode for automatic approval.
+ */
+export interface AutoModeConfig {
+    questions: Array<AutoModeQuestion>;
+    passingMode: AutoModeConfigPassingMode;
+    /**
+     * Optional guidance returned to the agent when the decision thresholds fail.
+     *  When empty, a default denial message is used. Client errors never use this message.
+     */
+    failureMessage?: string;
+}
+/**
+ * AutoModeQuestion defines a question and confidence threshold for automatic approval.
+ */
+export interface AutoModeQuestion {
+    /**
+     * Question is the prompt evaluated by the decision model.
+     */
+    question: string;
+    /**
+     * Threshold is the confidence score that the decision model must exceed to pass.
+     */
+    threshold: number;
 }
 /**
  * BareMetadata contains the minimal metadata for a resource: the ID and an
@@ -1121,6 +1234,17 @@ export interface Config_MCP {
 export interface Config_OpenAPI {
     path?: string;
     method?: string;
+    /**
+     * The server URL this operation's requests are sent to when the tool set has
+     *  no base_url, resolved from the spec on every sync: the operation's
+     *  servers, else its path's, else the spec's top-level servers (the entry
+     *  named by the tool set's server_name, else the first), with server
+     *  variables set to their defaults and a relative URL resolved against the
+     *  spec URL. A spec without servers resolves to the spec URL's origin.
+     *  Empty when it cannot be resolved, such as a relative server in an
+     *  uploaded spec. Set by sync.
+     */
+    serverUrl?: string;
 }
 /**
  * ContextLengths is the measured character length of each distinct component
@@ -1222,10 +1346,6 @@ export interface CreateAIProviderKeyRequest {
 export interface CreateAPIKeyRequest {
     metadata: CreateAccountResourceMetadata;
     spec: APIKeySpec;
-    /**
-     * The workspace this API key belongs to (path).
-     */
-    workspaceId?: string;
 }
 /**
  * CreateAccountResourceMetadata contains the user-provided fields for creating
@@ -1439,6 +1559,18 @@ export interface CreateMemoryLayerRequest {
     workspaceId?: string;
     metadata: CreateResourceMetadata;
     spec: MemoryLayerSpec;
+    /**
+     * Optional tenant assertion: the customer's org or company identifier for
+     *  the end users this layer serves. Upserts the tenant record, the same way
+     *  as on CreateObjectiveRequest, so a layer can be prepared for a tenant
+     *  before any of its objectives exist.
+     */
+    tenant?: TenantAssertion;
+    /**
+     * Optional subject assertion: the person within the tenant this layer
+     *  serves. Requires `tenant`.
+     */
+    subject?: SubjectAssertion;
 }
 /**
  * Create model request. The model is created on the given AI provider key with
@@ -1628,6 +1760,10 @@ export interface CreateToolSetSecretRequest {
     metadata: CreateResourceMetadata;
     spec: ToolSetSecretSpec;
 }
+export interface CreateTrustedEndpointRequest {
+    metadata: CreateAccountResourceMetadata;
+    spec: TrustedEndpointSpec;
+}
 export interface CreateUploadRequest {
     /**
      * Workspace ID.
@@ -1758,11 +1894,7 @@ export interface DenyToolCallRequest {
 }
 export interface DisableAPIKeyRequest {
     /**
-     * The workspace the API key belongs to (path).
-     */
-    workspaceId?: string;
-    /**
-     * The API key to disable.
+     * The API key to disable. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
      */
     id?: string;
 }
@@ -1781,11 +1913,7 @@ export interface DisableModelRequest {
 }
 export interface EnableAPIKeyRequest {
     /**
-     * The workspace the API key belongs to (path).
-     */
-    workspaceId?: string;
-    /**
-     * The API key to enable.
+     * The API key to enable. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
      */
     id?: string;
 }
@@ -1974,6 +2102,10 @@ export interface ListToolsResponse {
     items: Array<Tool>;
     pagination?: Page;
 }
+export interface ListTrustedEndpointsResponse {
+    items: Array<TrustedEndpoint>;
+    pagination?: Page;
+}
 /**
  * List widget sessions response.
  */
@@ -2154,6 +2286,15 @@ export interface MemoryLayerInfo {
      *  (resolved from MemoryLayerSpec.agent_id). Unset for non-episodic layers.
      */
     agent?: ResourceMetadata;
+    /**
+     * The tenant this layer belongs to (resolved from MemoryLayerSpec.tenant_id).
+     */
+    tenant?: TenantReference;
+    /**
+     * The subject this layer belongs to (resolved from
+     *  MemoryLayerSpec.subject_id).
+     */
+    subject?: SubjectReference;
 }
 export type MemoryLayerSpecType = 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 export interface MemoryLayerSpec {
@@ -2186,6 +2327,19 @@ export interface MemoryLayerSpec {
      *  was created for. Unset for non-episodic layers.
      */
     episodicKey: string;
+    /**
+     * The tenant this layer belongs to: asserted on the objectives that use an
+     *  episodic layer, or on CreateMemoryLayerRequest for a layer created ahead of
+     *  time. Unset when none was asserted. Episodic layers are scoped by agent,
+     *  tenant, subject and episodic key, so the same key under different tenants
+     *  never shares memory.
+     */
+    tenantId?: string;
+    /**
+     * The subject (person within the tenant) this layer belongs to, asserted the
+     *  same way as tenant_id. Unset when none was asserted.
+     */
+    subjectId?: string;
 }
 /**
  * MemoryRead is emitted each time the agent resolves a key against the
@@ -2592,14 +2746,26 @@ export interface ObjectiveDiagnostics {
 export interface ObjectiveEpisodicConfig {
     /**
      * The caller-supplied episodic key. Objectives created with the same key
-     *  (for the same agent) share one episodic memory layer.
+     *  (for the same agent, tenant and subject) share one episodic memory layer.
+     *  Empty on a response when the agent's always_include_subject_memories let
+     *  the objective rely on its subject instead of a key.
      */
     key: string;
     /**
      * The episodic memory layer resolved (created or reused) for this
-     *  objective's key. Populated by the system at objective creation.
+     *  objective's key, or for its subject when no key was given. The agent's
+     *  store_memory writes go here. Populated by the system at objective creation.
      */
     memoryLayerId: string;
+    /**
+     * Layers loaded because the agent has always_include_subject_memories on and
+     *  the objective asserted a subject: the subject's layers, then its tenant's
+     *  layers that have no subject, in resolution order and excluding
+     *  memory_layer_id. They sit after Objective.memory_cascade and before the
+     *  variation's layers in effective_memory_cascade. Snapshotted at creation,
+     *  and capped at 25 layers.
+     */
+    includedMemoryLayerIds?: Array<string>;
 }
 export interface ObjectiveError {
     type: string;
@@ -2717,8 +2883,9 @@ export interface ObjectiveInfo {
     createdBy: Profile;
     /**
      * The effective memory cascade at objective creation time: the
-     *  episodic layer (when present), then Objective.memory_cascade, then
-     *  the variation's baseline layers by ascending position. Order is
+     *  episodic layer (when present), then Objective.memory_cascade, then the
+     *  subject and tenant layers in episodic_memory.included_memory_layer_ids,
+     *  then the variation's baseline layers by ascending position. Order is
      *  resolution order — index 0 is the most specific and is consulted
      *  first; the first layer containing a key wins. Returned on reads so
      *  clients can see exactly what the objective resolves against without
@@ -2888,6 +3055,10 @@ export interface ObjectiveToolCallData {
      * List of resolved secrets used by the tool call
      */
     resolvedSecrets: Array<ResolvedSecret>;
+    /**
+     * Snapshot of a completed auto-mode evaluation; absent for unevaluated calls.
+     */
+    decisionScores?: ToolCallDecisionScores;
 }
 export interface ObjectiveToolCallInfo {
     objective: OperationMetadata;
@@ -3249,6 +3420,17 @@ export interface Reasoning {
      */
     content: string;
 }
+export interface RemoveAPIKeyWorkspaceRequest {
+    /**
+     * The API key to remove the workspace from. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+    /**
+     * The workspace to remove. Accepts the canonical ID or the
+     *  `external_id:<value>` form.
+     */
+    workspaceId: string;
+}
 /**
  * Detach a target by its foreign key. Removing an unassigned target returns
  *  NotFound. The parent variation must exist and be accessible.
@@ -3440,6 +3622,12 @@ export interface ResumeAgentScheduleRequest {
      */
     id?: string;
 }
+export interface RevealAPIKeyRequest {
+    /**
+     * The API key whose token to reveal. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
+     */
+    id?: string;
+}
 /**
  * Revoke widget session request.
  */
@@ -3455,12 +3643,7 @@ export interface RevokeWidgetSessionRequest {
 }
 export interface RotateAPIKeyRequest {
     /**
-     * The workspace the API key belongs to (path).
-     */
-    workspaceId?: string;
-    /**
-     * The API key to rotate. A new token is issued and any existing token is
-     *  invalidated.
+     * The API key to rotate. A new token is issued and any existing token is invalidated. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
      */
     id?: string;
 }
@@ -3699,7 +3882,9 @@ export interface SwapModelOnVariationsRequest_ModelSwap {
      */
     nextModelId?: string;
     /**
-     * Whether to disable the current model after the swap.
+     * Whether to disable the current model after the swap. Disabling a model
+     *  requires the models:manage scope in addition to agents:manage; a request
+     *  that sets this without it is denied before any swap starts.
      */
     disableCurrentAfterSwap?: boolean;
 }
@@ -3824,6 +4009,36 @@ export interface TenantReference {
     name?: string;
 }
 /**
+ * TokenUsage reports the tokens one LLM completion consumed, as the model's
+ *  provider reported them.
+ */
+export interface TokenUsage {
+    /**
+     * Total input tokens, including tokens read from or written to the
+     *  provider's prompt cache.
+     */
+    inputTokens: number;
+    /**
+     * Input tokens served from the provider's prompt cache. Unset when the
+     *  provider reported none or does not report them.
+     */
+    cacheReadInputTokens?: number;
+    /**
+     * Input tokens written to the provider's prompt cache. Unset when the
+     *  provider reported none or does not report them.
+     */
+    cacheWriteInputTokens?: number;
+    /**
+     * Total output tokens, including reasoning tokens.
+     */
+    outputTokens: number;
+    /**
+     * Output tokens spent on reasoning. Unset when the provider reported none
+     *  or does not report them separately.
+     */
+    reasoningOutputTokens?: number;
+}
+/**
  * The current lifecycle state of the tool. Output only. Use the :omit and
  *  :restore actions to transition; tool set syncs may also update it.
  */
@@ -3849,6 +4064,37 @@ export interface ToolApproved {
      * The ID of the objective tool call record that was approved via the ApproveToolCall RPC.
      */
     toolCallId: string;
+}
+/**
+ * ToolCallDecisionScore records a confidence score and its threshold result.
+ */
+export interface ToolCallDecisionScore {
+    /**
+     * The raw confidence score, in the inclusive range [0, 1].
+     */
+    score: number;
+    /**
+     * Whether this score passed its question's threshold under the selected mode.
+     *  Equality never passes; None requires a lower score, All and Most a higher one.
+     */
+    passed: boolean;
+}
+/**
+ * ToolCallDecisionScores records a completed automatic approval evaluation.
+ */
+export interface ToolCallDecisionScores {
+    /**
+     * The complete policy as it was configured at evaluation time.
+     */
+    autoMode: AutoModeConfig;
+    /**
+     * One result per question, in the same order as auto_mode.questions.
+     */
+    scores: Array<ToolCallDecisionScore>;
+    /**
+     * Whether the results satisfied the policy's passing mode.
+     */
+    approved: boolean;
 }
 export interface ToolCalled {
     /**
@@ -4025,6 +4271,11 @@ export interface ToolOverlay {
      *  Disabled overlays never participate.
      */
     widgetArgumentExposure?: ToolOverlay_WidgetArgumentExposure;
+    /**
+     * Optional automatic approval configuration. Omit to disable auto mode.
+     *  The last enabled, matching overlay that supplies a policy wins.
+     */
+    autoMode?: AutoModeConfig;
 }
 /**
  * A pre-call action. Parameter actions rewrite the tool's parameter
@@ -4364,6 +4615,41 @@ export interface ToolSpec {
  */
 export type ToolSpec_Config = ToolSpec_Config_Http | ToolSpec_Config_Mcp | ToolSpec_Config_Openapi | ToolSpec_Config_Bare;
 /**
+ * A host that tool sets in the account may send requests to.
+ *
+ *  Tool sets attach their configured credentials, such as secrets rendered
+ *  into headers, to every request they make. Every outbound tool set request
+ *  (source validation, sync, preview and tool calls, including redirects) is
+ *  checked against the account's trusted endpoints after all templates are
+ *  resolved, and a request to any other host is refused. This keeps a tool
+ *  set or a pinned parameter from pointing those credentials at a host the
+ *  account never chose.
+ */
+export interface TrustedEndpoint {
+    metadata: AccountResourceMetadata;
+    spec: TrustedEndpointSpec;
+    info?: TrustedEndpointInfo;
+}
+export interface TrustedEndpointInfo {
+    /**
+     * The profile that added the trusted endpoint.
+     */
+    createdBy?: Profile;
+}
+export interface TrustedEndpointSpec {
+    /**
+     * The trusted host, with an optional port (default 443). Either an exact
+     *  host such as "api.stripe.com", or a wildcard covering exactly one label,
+     *  such as "*.acme.com", which matches "t1.acme.com" but not "acme.com" or
+     *  "a.t1.acme.com". A scheme, path or credentials are not allowed. The host
+     *  must be fully qualified and end in a known top-level domain (.com, .io),
+     *  and neither it nor a wildcard's domain may be a public suffix such as
+     *  "com", "co.uk" or "vercel.app".
+     *  The host is normalized (lowercased, converted to ASCII) when saved.
+     */
+    host: string;
+}
+/**
  * Restore an archived pool to INACTIVE; activate it separately to route requests.
  */
 export interface UnarchiveAgentPoolRequest {
@@ -4452,17 +4738,15 @@ export interface UpdateAIProviderKeyRequest {
 }
 export interface UpdateAPIKeyRequest {
     /**
-     * The workspace the API key belongs to (path).
-     */
-    workspaceId?: string;
-    /**
-     * The API key to update.
+     * The API key to update. Accepts the canonical `apikey_…` form or the `external_id:<value>` form.
      */
     id?: string;
     metadata?: UpdateAccountResourceMetadata;
     spec?: APIKeySpec;
     /**
-     * Fields to update.
+     * Fields to update. Selecting spec.workspace_assignments replaces the whole
+     *  set; selecting spec.all_workspaces turns the all-workspaces grant on or
+     *  off. Turning it off keeps the workspaces the key currently reaches.
      */
     updateMask?: string;
 }
@@ -4877,6 +5161,28 @@ export interface VariationMemoryLayerAssignment {
      *  only AddAgentVariationMemoryLayer can choose an append position for you.
      */
     position: number;
+}
+export interface VerifyTrustedEndpointRequest {
+    /**
+     * The URL a tool set would send requests to, such as an MCP server URL or
+     *  an OpenAPI specification URL. A bare host is also accepted. Only its host
+     *  and port are checked.
+     */
+    url: string;
+}
+export type VerifyTrustedEndpointResponseResult = 'RESULT_UNSPECIFIED' | 'RESULT_TRUSTED' | 'RESULT_UNTRUSTED' | 'RESULT_TEMPLATED';
+export interface VerifyTrustedEndpointResponse {
+    result: VerifyTrustedEndpointResponseResult;
+    /**
+     * The normalized host, with a port when it is not 443, that was checked.
+     *  Empty when the result is RESULT_TEMPLATED.
+     */
+    host: string;
+    /**
+     * The trusted endpoint that matched, when the result is RESULT_TRUSTED. Unset
+     *  for a host Cadenya trusts for every account.
+     */
+    trustedEndpoint?: TrustedEndpoint;
 }
 /**
  * VertexConfig configures the Google Cloud project and location used by the
@@ -5950,18 +6256,48 @@ export interface APIKeySpecParam {
      *  resource:verb string (e.g. "objectives:manage").
      *
      *  Resources: agents, objectives, tools, memory, api_keys, workspaces,
-     *  widgets, widget_sessions, secrets, account.
+     *  widgets, widget_sessions, tenants, endpoints (trusted endpoints),
+     *  secrets, account.
      *  Verbs: read and manage, where manage implies read — a stored scope set
      *  is normalized to drop "x:read" when "x:manage" is present. The secrets
      *  and account resources support only manage. "*" is an explicit
      *  full-access grant.
      *
+     *  api_keys also has the verb admin ("api_keys:admin"), which implies
+     *  manage. It is required to create or change a key that reaches every
+     *  workspace, and to manage keys created by other members; without it a
+     *  caller manages only its own keys.
+     *
+     *  Some scopes depend on another: "tools:manage" cannot be granted
+     *  without "secrets:manage", because tool set headers and base URLs
+     *  resolve workspace secrets ({{ secrets.NAME }}) before the source is
+     *  validated, synced, or called. A set that holds a scope without its
+     *  dependency is rejected as invalid.
+     *
      *  Scopes are deny-by-default: a key with an empty list can call only
      *  scope-free endpoints. Full access is always an explicit "*" grant.
      */
     permissions?: Array<string>;
+    /**
+     * When true the key reaches every workspace in the account, including
+     *  workspaces created later, and workspace_assignments is ignored on
+     *  requests. Reads then list every workspace the key currently reaches.
+     */
+    allWorkspaces: boolean;
+    /**
+     * Complete set of workspaces the key is assigned to. Order has no meaning
+     *  and duplicates are collapsed. On create, at least one assignment is
+     *  required unless all_workspaces is set. On update, selecting
+     *  spec.workspace_assignments in update_mask replaces the entire set. Use
+     *  the :addWorkspace and :removeWorkspace actions to change one workspace.
+     */
+    workspaceAssignments: Array<APIKeyWorkspaceAssignment>;
 }
 export type AddAgentVariationAssignmentRequestParam = AddAgentVariationAssignmentRequest_ToolIdParam | AddAgentVariationAssignmentRequest_ToolSetIdParam | AddAgentVariationAssignmentRequest_SubAgentIdParam | AddAgentVariationAssignmentRequest_AgentPoolIdParam;
+export interface Config_OpenAPIParam {
+    path?: string;
+    method?: string;
+}
 export interface CreateAgentVariationRequestParam {
     metadata: CreateResourceMetadata;
     spec: AgentVariationSpec;
@@ -5977,11 +6313,39 @@ export interface MemoryLayerSpecParam {
 export interface ObjectiveEpisodicConfigParam {
     /**
      * The caller-supplied episodic key. Objectives created with the same key
-     *  (for the same agent) share one episodic memory layer.
+     *  (for the same agent, tenant and subject) share one episodic memory layer.
+     *  Empty on a response when the agent's always_include_subject_memories let
+     *  the objective rely on its subject instead of a key.
      */
     key: string;
 }
 export type RemoveAgentVariationAssignmentRequestParam = RemoveAgentVariationAssignmentRequest_ToolIdParam | RemoveAgentVariationAssignmentRequest_ToolSetIdParam | RemoveAgentVariationAssignmentRequest_SubAgentIdParam | RemoveAgentVariationAssignmentRequest_AgentPoolIdParam;
+export interface ToolSpecParam {
+    description: string;
+    requiresApproval: boolean;
+    /**
+     * The tool's JSON Schema, as handed to the LLM. Required, but may be the
+     *  empty object `{}` for a tool that takes no arguments. Requiring it rather
+     *  than defaulting it means a misspelled field name (`inputSchema`, say) is a
+     *  400 instead of a silently parameterless tool.
+     */
+    parameters: Record<string, unknown>;
+    /**
+     * Configuration for this specific tool. Its transport is derived from the
+     *  tool set adapter, while details such as endpoint and method are stored on
+     *  the tool itself.
+     *
+     *  Required, and exactly one adapter must be set.
+     */
+    config: ToolSpec_ConfigParam;
+    /**
+     * The name provided to the LLM, which may differ from the metadata.name on the tool.
+     *  LLMs have specific length and format requirements, and tool set sources may not comply
+     *  with them, so Cadenya does its best to format names into a usable format.
+     */
+    llmToolName?: string;
+}
+export type ToolSpec_ConfigParam = ToolSpec_Config_Http | ToolSpec_Config_Mcp | ToolSpec_Config_OpenapiParam | ToolSpec_Config_Bare;
 export interface WidgetSessionSpecParam {
     /**
      * Widget this session is minted against. Accepts the canonical `wgt_…` form
@@ -6019,6 +6383,10 @@ export interface WidgetSessionSpecParam {
      *  nested or differently named parameters.
      */
     pinnedParameters?: Record<string, string>;
+}
+export interface ToolSpec_Config_OpenapiParam {
+    type: 'openapi';
+    openapi: Config_OpenAPIParam;
 }
 export interface AddAgentVariationAssignmentRequest_ToolIdParam {
     type: 'toolId';
@@ -6062,11 +6430,15 @@ export declare function wireArray<T>(value: Array<T> | null | undefined, fn: (v:
 export declare function wireMap<T>(value: Record<string, T> | null | undefined, fn: (v: T) => unknown): unknown;
 export declare function wireAPIKeySpec(value: APIKeySpecParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest(value: AddAgentVariationAssignmentRequestParam | null | undefined): unknown;
+export declare function wireConfig_OpenAPI(value: Config_OpenAPIParam | null | undefined): unknown;
 export declare function wireCreateAgentVariationRequest(value: CreateAgentVariationRequestParam | null | undefined): unknown;
 export declare function wireMemoryLayerSpec(value: MemoryLayerSpecParam | null | undefined): unknown;
 export declare function wireObjectiveEpisodicConfig(value: ObjectiveEpisodicConfigParam | null | undefined): unknown;
 export declare function wireRemoveAgentVariationAssignmentRequest(value: RemoveAgentVariationAssignmentRequestParam | null | undefined): unknown;
+export declare function wireToolSpec(value: ToolSpecParam | null | undefined): unknown;
+export declare function wireToolSpec_Config(value: ToolSpec_ConfigParam | null | undefined): unknown;
 export declare function wireWidgetSessionSpec(value: WidgetSessionSpecParam | null | undefined): unknown;
+export declare function wireToolSpec_Config_Openapi(value: ToolSpec_Config_OpenapiParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest_ToolId(value: AddAgentVariationAssignmentRequest_ToolIdParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest_ToolSetId(value: AddAgentVariationAssignmentRequest_ToolSetIdParam | null | undefined): unknown;
 export declare function wireAddAgentVariationAssignmentRequest_SubAgentId(value: AddAgentVariationAssignmentRequest_SubAgentIdParam | null | undefined): unknown;

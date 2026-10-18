@@ -15,6 +15,7 @@ export type { WebhookHeaders, WebhookVerifyOptions } from './core/webhooks.js';
 export * from './resources/accounts.js';
 export * from './resources/api-keys.js';
 export * from './resources/workspace-admin.js';
+export * from './resources/trusted-endpoints.js';
 export * from './resources/profiles.js';
 export * from './resources/workspaces.js';
 export * from './resources/agent-pools.js';

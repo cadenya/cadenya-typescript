@@ -2,7 +2,8 @@
 
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { CreateResourceMetadata, ListToolsResponse, Tool, ToolServiceListToolsStates, ToolSpec, UpdateResourceMetadata } from '../types.js';
+import type { CreateResourceMetadata, ListToolsResponse, Tool, ToolServiceListToolsStates, ToolSpecParam, UpdateResourceMetadata } from '../types.js';
+import { wireToolSpec } from '../types.js';
 
 export interface ToolListParams {
   /**
@@ -66,7 +67,7 @@ export interface ToolListParams {
 
 export interface ToolCreateParams {
   metadata: CreateResourceMetadata;
-  spec: ToolSpec;
+  spec: ToolSpecParam;
   /**
    * Workspace ID.
    * 
@@ -101,7 +102,7 @@ export interface ToolUpdateParams {
    */
   workspaceId?: string;
   metadata?: UpdateResourceMetadata;
-  spec?: ToolSpec;
+  spec?: ToolSpecParam;
   updateMask?: string;
 }
 
@@ -157,7 +158,7 @@ export class Tools {
     return this._client.requestAPI<Tool>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools`, body: { metadata: params.metadata, spec: params.spec } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools`, body: { metadata: params.metadata, spec: wireToolSpec(params.spec) } };
     }, options);
   }
 
@@ -205,7 +206,7 @@ export class Tools {
     return this._client.requestAPI<Tool>(() => {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: params?.spec, updateMask: params?.updateMask } };
+      return { method: 'PATCH', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('toolSetId', toolSetId)}/tools/${pathSegment('id', id)}`, body: { metadata: params?.metadata, spec: wireToolSpec(params?.spec), updateMask: params?.updateMask } };
     }, options);
   }
 
