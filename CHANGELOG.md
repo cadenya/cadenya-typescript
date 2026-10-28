@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/cadenya/cadenya-typescript/compare/v1.8.0...v1.9.0) (2026-10-28)
+
+
+### Features
+
+* accept client tools when an objective is created ([1d60dc0](https://github.com/cadenya/cadenya-typescript/commit/1d60dc08c6c3ff86f5c1a3b9784377f56236505e))
+
 ## [1.8.0](https://github.com/cadenya/cadenya-typescript/compare/v1.7.0...v1.8.0) (2026-10-18)
 
 
