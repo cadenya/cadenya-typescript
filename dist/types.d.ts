@@ -908,6 +908,15 @@ export interface AgentVariationSpec_ModelConfig {
      *  out; true is an explicit opt-in (equivalent to unset).
      */
     cachingEnabled?: boolean;
+    /**
+     * Token streaming. Requires the model's "streaming" capability.
+     *  Presence-tracked tri-state: unset means the default — completions
+     *  stream whenever the model has the capability, so live streams that
+     *  set includeDeltas receive text as it is generated; false opts this
+     *  variation out (for example, for a provider credential that is not
+     *  allowed to stream); true is an explicit opt-in (equivalent to unset).
+     */
+    streamingEnabled?: boolean;
 }
 /**
  * ProgressiveDiscovery is used to indicate that the agent should automatically discover tools that are not explicitly assigned to it.
@@ -1025,6 +1034,51 @@ export interface AssistantMessage {
      *  config snapshot does not answer this on its own.
      */
     model?: ResourceMetadata;
+    /**
+     * Identifies the LLM completion that produced this message. Streamed
+     *  AssistantMessageDelta fragments carry the same value. Empty on messages
+     *  recorded before completions were identified.
+     */
+    completionId?: string;
+}
+/**
+ * AssistantMessageDelta is a fragment of assistant text as the model generates
+ *  it. It is transient: delivered only on live streams that opt in with
+ *  includeDeltas, never stored in event history or delivered to webhooks, and
+ *  its dlt_ event ID is not a reconnect cursor.
+ *
+ *  A stream delivers a completion's fragments only when it can deliver all of
+ *  them: it must receive the first fragment (offset 0), and once a fragment is
+ *  missing it sends no more for that completion. A client that connects in the
+ *  middle of a completion therefore sees no fragments for it and renders the
+ *  durable AssistantMessage when it arrives. Fragments always arrive after the
+ *  event whose sequence is after_sequence.
+ *
+ *  Concatenate the fragments that share a completion_id in arrival order. The
+ *  durable AssistantMessage that follows carries the same completion_id and is
+ *  authoritative: replace the accumulated text with it. A retried completion
+ *  gets a new completion_id, so drop fragments whose completion_id never
+ *  receives a final message.
+ */
+export interface AssistantMessageDelta {
+    /**
+     * Identifies the LLM completion this fragment belongs to.
+     */
+    completionId: string;
+    /**
+     * The text generated since the previous fragment for this completion.
+     */
+    text: string;
+    /**
+     * The objective's latest committed event sequence when the completion
+     *  started. The fragment is delivered after the event with this sequence.
+     */
+    afterSequence: number;
+    /**
+     * Where this fragment starts within the completion's assistant text, in
+     *  UTF-8 bytes. The first fragment of a completion has offset 0.
+     */
+    offset: number;
 }
 export interface AssistantToolCall {
     tool?: CallableTool;
@@ -1145,6 +1199,14 @@ export interface Capability_StopSequences {
     limit: number;
 }
 /**
+ * Token streaming (ModelConfig.streaming_enabled). Advertised only where
+ *  Cadenya streams completions for the model's provider. When the
+ *  capability is present, streaming defaults to ON — a variation opts out
+ *  by setting streaming_enabled to false.
+ */
+export interface Capability_Streaming {
+}
+/**
  * Sampling temperature (ModelConfig.temperature).
  */
 export interface Capability_Temperature {
@@ -1158,6 +1220,48 @@ export interface Capability_TopK {
  * Nucleus sampling (ModelConfig.top_p).
  */
 export interface Capability_TopP {
+}
+/**
+ * A tool defined by the caller when an objective is created and executed by
+ *  the caller. Cadenya stores it as a bare tool in the agent's client tools
+ *  tool set and hands each call back over the event stream (a ToolCalled
+ *  event with the call waiting for content); the caller reports the result
+ *  with SetToolCallContent. Only the client tools sent with a create request
+ *  are loaded into that objective.
+ */
+export interface ClientToolDefinition {
+    /**
+     * The function name the model calls, also the name callers match calls
+     *  on. Letters, digits, "_" and "-", at most 64 characters, neither starting
+     *  nor ending with "_". A client tool takes precedence over a tool from the
+     *  agent variation with the same function name; names reserved by
+     *  Cadenya-provided tools are rejected.
+     */
+    name: string;
+    /**
+     * What the tool does, shown to the model.
+     */
+    description?: string;
+    /**
+     * JSON Schema for the tool's arguments. Omitted means the tool takes no
+     *  arguments.
+     */
+    parameters?: Record<string, unknown>;
+    /**
+     * When true, each call waits for ApproveToolCall before it is handed to
+     *  the caller to execute.
+     */
+    requiresApproval?: boolean;
+}
+/**
+ * The tools a caller defines and executes for one objective, and the
+ *  settings that apply to them.
+ */
+export interface ClientTools {
+    /**
+     * The tool definitions. Names must be unique within the list.
+     */
+    definitions: Array<ClientToolDefinition>;
 }
 /**
  * Compact objective request. Compaction is queued for a busy agent loop and starts immediately for a waiting objective.
@@ -1431,7 +1535,8 @@ export interface CreateAgentVariationRequest {
 /**
  * The request body for creating an objective and streaming its events.
  *  Accepts everything Create objective accepts, and additionally requires
- *  `metadata.externalId`, which is the idempotency key for the stream.
+ *  `metadata.externalId`, which is the idempotency key for the stream, and
+ *  accepts the stream-only `includeDeltas` flag.
  */
 export interface CreateAndStreamObjectiveRequest {
     workspaceId: string;
@@ -1514,6 +1619,21 @@ export interface CreateAndStreamObjectiveRequest {
      *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
+    /**
+     * Tools the caller defines and executes for this objective. Each
+     *  definition is upserted into the agent's client tools tool set, and only
+     *  the definitions listed here are loaded into this objective, always in
+     *  its context window. A client tool replaces a variation tool with the
+     *  same function name.
+     */
+    clientTools?: ClientTools;
+    /**
+     * Also stream transient assistantMessageDelta and reasoningDelta events:
+     *  text fragments as the model generates them, ahead of the durable
+     *  assistantMessage and reasoning events. Off by default. Applies only to
+     *  the stream, so Create objective has no equivalent field.
+     */
+    includeDeltas?: boolean;
 }
 /**
  * Objective metadata, with an external ID that is required here because
@@ -1679,6 +1799,14 @@ export interface CreateObjectiveRequest {
      *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
+    /**
+     * Tools the caller defines and executes for this objective. Each
+     *  definition is upserted into the agent's client tools tool set, and only
+     *  the definitions listed here are loaded into this objective, always in
+     *  its context window. A client tool replaces a variation tool with the
+     *  same function name.
+     */
+    clientTools?: ClientTools;
 }
 export interface CreateObjectiveRequest_Secret {
     name?: string;
@@ -2551,7 +2679,7 @@ export interface ModelSpec {
  *  model-specific parameters for it. A variation's ModelConfig may only
  *  set a knob whose capability is listed on the model's spec.
  */
-export type ModelSpec_Capability = ModelSpec_Capability_Temperature | ModelSpec_Capability_TopP | ModelSpec_Capability_TopK | ModelSpec_Capability_StopSequences | ModelSpec_Capability_MaxOutputTokens | ModelSpec_Capability_Reasoning | ModelSpec_Capability_Caching;
+export type ModelSpec_Capability = ModelSpec_Capability_Temperature | ModelSpec_Capability_TopP | ModelSpec_Capability_TopK | ModelSpec_Capability_StopSequences | ModelSpec_Capability_MaxOutputTokens | ModelSpec_Capability_Reasoning | ModelSpec_Capability_Caching | ModelSpec_Capability_Streaming;
 export type NoticeLevel = 'LEVEL_UNSPECIFIED' | 'LEVEL_INFO' | 'LEVEL_WARN';
 /**
  * Notice is a non-terminal event emitted by the runtime when something
@@ -2774,7 +2902,8 @@ export interface ObjectiveError {
 export interface ObjectiveEvent {
     /**
      * Durable events use objevt_ IDs, the only IDs accepted as reconnect
-     *  cursors. Live-only heartbeats use hb_ IDs and have no SSE id: field.
+     *  cursors. Live-only heartbeats use hb_ IDs and live-only text deltas use
+     *  dlt_ IDs; neither has an SSE id: field.
      */
     metadata: OperationMetadata;
     data: ObjectiveEventData;
@@ -2794,8 +2923,14 @@ export interface ObjectiveEvent {
      *  event's created_at remains the time the event was persisted.
      */
     startedAt?: string;
+    /**
+     * The event's commit-ordered position in its objective, starting at 1.
+     *  Sequences are per objective and gapless. History and stream backlogs
+     *  return events in sequence order. Unset on live-only heartbeats.
+     */
+    sequence?: number;
 }
-export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat | ObjectiveEventData_Interrupted;
+export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat | ObjectiveEventData_Interrupted | ObjectiveEventData_AssistantMessageDelta | ObjectiveEventData_ReasoningDelta;
 export interface ObjectiveEventInfo {
     objective?: OperationMetadata;
     createdBy: Profile;
@@ -2854,6 +2989,12 @@ export interface ObjectiveFinalized {
  *  change objective state or promise progress from the model.
  */
 export interface ObjectiveHeartbeat {
+    /**
+     * The objective's latest committed event sequence when the pulse was
+     *  emitted. A stream that has not yet delivered this sequence is missing
+     *  events and reads them from history.
+     */
+    lastSequence?: number;
 }
 /**
  * ObjectiveInfo provides read-only aggregated statistics about an objective's execution
@@ -2956,7 +3097,7 @@ export interface ObjectiveQueuedAction {
 /**
  * ObjectiveQueuedActionData is the action to perform.
  */
-export type ObjectiveQueuedActionData = ObjectiveQueuedActionData_UserMessage | ObjectiveQueuedActionData_Compaction;
+export type ObjectiveQueuedActionData = ObjectiveQueuedActionData_UserMessage | ObjectiveQueuedActionData_Compaction | ObjectiveQueuedActionData_SubAgentUpdated;
 /**
  * The state before this write. OBJECTIVE_STATE_UNSPECIFIED when the
  *  objective was just created.
@@ -3419,6 +3560,38 @@ export interface Reasoning {
      *  provider-generated summary depending on the model.
      */
     content: string;
+    /**
+     * Identifies the LLM completion that produced this reasoning. Streamed
+     *  ReasoningDelta fragments carry the same value. Empty on reasoning
+     *  recorded before completions were identified.
+     */
+    completionId?: string;
+}
+/**
+ * ReasoningDelta is a fragment of reasoning text as the model generates it.
+ *  It follows the same transient delivery rules as AssistantMessageDelta; the
+ *  durable Reasoning event with the same completion_id is authoritative.
+ */
+export interface ReasoningDelta {
+    /**
+     * Identifies the LLM completion this fragment belongs to.
+     */
+    completionId: string;
+    /**
+     * The reasoning text generated since the previous fragment for this
+     *  completion.
+     */
+    text: string;
+    /**
+     * The objective's latest committed event sequence when the completion
+     *  started. The fragment is delivered after the event with this sequence.
+     */
+    afterSequence: number;
+    /**
+     * Where this fragment starts within the completion's reasoning text, in
+     *  UTF-8 bytes. The first fragment of a completion has offset 0.
+     */
+    offset: number;
 }
 export interface RemoveAPIKeyWorkspaceRequest {
     /**
@@ -3791,7 +3964,7 @@ export interface SubAgentSpawned {
     objective: OperationMetadata;
     task: string;
 }
-export type SubAgentUpdatedStatus = 'STATUS_UNSPECIFIED' | 'STATUS_PENDING' | 'STATUS_RUNNING' | 'STATUS_COMPLETED' | 'STATUS_FAILED' | 'STATUS_CANCELLED';
+export type SubAgentUpdatedStatus = 'STATUS_UNSPECIFIED' | 'STATUS_PENDING' | 'STATUS_RUNNING' | 'STATUS_COMPLETED' | 'STATUS_FAILED' | 'STATUS_CANCELLED' | 'STATUS_WAITING' | 'STATUS_TIMED_OUT';
 export interface SubAgentUpdated {
     agent?: BareMetadata;
     objective?: BareMetadata;
@@ -4058,12 +4231,34 @@ export interface ToolApprovalRequested {
      * The ID of the objective tool call record. Use this ID with the ApproveToolCall or DenyToolCall RPCs to approve or deny the tool call.
      */
     toolCallId: string;
+    /**
+     * The tool awaiting approval.
+     */
+    tool?: CallableTool;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName.
+     */
+    llmToolName: string;
+    /**
+     * The arguments the tool will be called with once approved.
+     */
+    arguments?: Record<string, unknown>;
 }
 export interface ToolApproved {
     /**
      * The ID of the objective tool call record that was approved via the ApproveToolCall RPC.
      */
     toolCallId: string;
+    /**
+     * The tool that was approved.
+     */
+    tool?: CallableTool;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName.
+     */
+    llmToolName: string;
 }
 /**
  * ToolCallDecisionScore records a confidence score and its threshold result.
@@ -4122,6 +4317,12 @@ export interface ToolCalled {
      *  consumers do not need to re-evaluate the tool set's current overlays.
      */
     argumentsExposedInWidgets?: boolean;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName. It can differ from the tool's own
+     *  name, which Cadenya sanitizes for the model.
+     */
+    llmToolName: string;
 }
 export interface ToolDenied {
     /**
@@ -4132,6 +4333,15 @@ export interface ToolDenied {
      * The memo provided by the reviewer when denying the tool call. This is passed to the agent to provide further instructions.
      */
     memo: string;
+    /**
+     * The tool that was denied.
+     */
+    tool?: CallableTool;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName.
+     */
+    llmToolName: string;
 }
 export interface ToolError {
     /**
@@ -4139,6 +4349,15 @@ export interface ToolError {
      */
     toolCallId: string;
     message: string;
+    /**
+     * The tool that failed.
+     */
+    tool?: CallableTool;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName.
+     */
+    llmToolName: string;
 }
 export interface ToolInfo {
     toolSet?: ResourceMetadata;
@@ -4344,9 +4563,19 @@ export interface ToolOverlay_WidgetArgumentExposure {
 export interface ToolResult {
     toolCallId: string;
     /**
-     * The content returned by the tool.
+     * The content returned by the tool. Live streams carry it too, with media
+     *  blocks as short-lived signed URLs, exactly as ListObjectiveEvents does.
      */
     result: ObjectiveToolCallResult;
+    /**
+     * The tool that returned the result.
+     */
+    tool?: CallableTool;
+    /**
+     * The name the model called the tool by, as it appears in the assistant
+     *  message's toolCalls[].functionName.
+     */
+    llmToolName: string;
 }
 /**
  * The current lifecycle state of the tool set. Output only. Tool sets are
@@ -4367,6 +4596,14 @@ export interface ToolSet {
      *  transition between states.
      */
     state: ToolSetState;
+    /**
+     * Set when this is the agent's client tools tool set: the bare tool set
+     *  Cadenya manages to hold the client tools sent when objectives for that
+     *  agent are created. Such a tool set is read-only: it cannot be updated,
+     *  archived, deleted, have tools added or changed, or be assigned to a
+     *  variation. Output only.
+     */
+    clientToolsAgentId?: string;
 }
 export type ToolSetAdapter = ToolSetAdapter_McpVariant | ToolSetAdapter_HttpVariant | ToolSetAdapter_OpenapiVariant | ToolSetAdapter_BareVariant;
 /**
@@ -5203,7 +5440,7 @@ export type WebhookDeliveryDataStatus = 'WEBHOOK_DELIVERY_STATUS_UNSPECIFIED' | 
 /**
  * The type of objective event that triggered this webhook delivery
  */
-export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED';
+export type WebhookDeliveryDataEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE_DELTA' | 'OBJECTIVE_EVENT_TYPE_REASONING_DELTA';
 export interface WebhookDeliveryData {
     /**
      * Related resources
@@ -5899,17 +6136,43 @@ export interface ObjectiveEventData_Interrupted {
     type: 'interrupted';
     interrupted: ObjectiveInterrupted;
 }
+export interface ObjectiveEventData_AssistantMessageDelta {
+    type: 'assistantMessageDelta';
+    assistantMessageDelta: AssistantMessageDelta;
+}
+export interface ObjectiveEventData_ReasoningDelta {
+    type: 'reasoningDelta';
+    reasoningDelta: ReasoningDelta;
+}
 export interface CallableTool_Tool {
     type: 'tool';
     tool: ResourceMetadata;
+    /**
+     * Whether the tool is a client tool: one the caller defined when creating
+     *  the objective and executes itself, reporting each result with
+     *  SetToolCallContent.
+     */
+    clientTool?: boolean;
 }
 export interface CallableTool_Agent {
     type: 'agent';
     agent: ResourceMetadata;
+    /**
+     * Whether the tool is a client tool: one the caller defined when creating
+     *  the objective and executes itself, reporting each result with
+     *  SetToolCallContent.
+     */
+    clientTool?: boolean;
 }
 export interface CallableTool_CadenyaProvidedTool {
     type: 'cadenyaProvidedTool';
     cadenyaProvidedTool: ResourceMetadata;
+    /**
+     * Whether the tool is a client tool: one the caller defined when creating
+     *  the objective and executes itself, reporting each result with
+     *  SetToolCallContent.
+     */
+    clientTool?: boolean;
 }
 export interface CallableTool_AgentPool {
     type: 'agentPool';
@@ -5917,6 +6180,12 @@ export interface CallableTool_AgentPool {
      * Agent pool responsible for routing this call to a member agent.
      */
     agentPool: ResourceMetadata;
+    /**
+     * Whether the tool is a client tool: one the caller defined when creating
+     *  the objective and executes itself, reporting each result with
+     *  SetToolCallContent.
+     */
+    clientTool?: boolean;
 }
 export interface MemoryEntryCreateSpec_Content {
     type: 'content';
@@ -5958,6 +6227,14 @@ export interface ObjectiveQueuedActionData_Compaction {
      * A compaction of the conversation run before the next assistant turn.
      */
     compaction: QueuedCompaction;
+}
+export interface ObjectiveQueuedActionData_SubAgentUpdated {
+    type: 'subAgentUpdated';
+    /**
+     * A sub-agent stopped running; the parent reads the notice before its next
+     *  assistant turn.
+     */
+    subAgentUpdated: SubAgentUpdated;
 }
 export interface ContinueObjectiveResponse_Event {
     type: 'event';
@@ -6199,6 +6476,10 @@ export interface ModelSpec_Capability_Caching {
     type: 'caching';
     caching: Capability_Caching;
 }
+export interface ModelSpec_Capability_Streaming {
+    type: 'streaming';
+    streaming: Capability_Streaming;
+}
 export interface CreateAndStreamObjectiveResponse_Objective {
     type: 'objective';
     /**
@@ -6212,7 +6493,8 @@ export interface CreateAndStreamObjectiveResponse_Event {
     type: 'event';
     /**
      * An objective event, identical to the payloads Stream objective events
-     *  yields — including transient hb_ heartbeats.
+     *  yields — including transient hb_ heartbeats, and dlt_ text deltas when
+     *  includeDeltas is set.
      */
     event: ObjectiveEvent;
 }
@@ -6236,7 +6518,7 @@ export type AgentPoolServiceListAgentPoolsState = 'AGENT_POOL_STATE_UNSPECIFIED'
 export type AgentServiceListAgentsState = 'STATE_UNSPECIFIED' | 'STATE_DRAFT' | 'STATE_PUBLISHED' | 'STATE_ARCHIVED';
 export type AgentServiceListAgentsVariationSelectionMode = 'VARIATION_SELECTION_MODE_UNSPECIFIED' | 'VARIATION_SELECTION_MODE_RANDOM' | 'VARIATION_SELECTION_MODE_WEIGHTED';
 export type AgentServiceListAgentFeedbackSentiment = 'FEEDBACK_SENTIMENT_UNSPECIFIED' | 'FEEDBACK_SENTIMENT_POSITIVE' | 'FEEDBACK_SENTIMENT_NEGATIVE';
-export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED';
+export type AgentServiceListAgentWebhookDeliveriesEventType = 'OBJECTIVE_EVENT_TYPE_UNSPECIFIED' | 'OBJECTIVE_EVENT_TYPE_USER_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVAL_REQUESTED' | 'OBJECTIVE_EVENT_TYPE_TOOL_APPROVED' | 'OBJECTIVE_EVENT_TYPE_TOOL_DENIED' | 'OBJECTIVE_EVENT_TYPE_TOOL_CALLED' | 'OBJECTIVE_EVENT_TYPE_ERROR' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE' | 'OBJECTIVE_EVENT_TYPE_TOOL_RESULT' | 'OBJECTIVE_EVENT_TYPE_TOOL_ERROR' | 'OBJECTIVE_EVENT_TYPE_CONTEXT_WINDOW_COMPACTED' | 'OBJECTIVE_EVENT_TYPE_MEMORY_READ' | 'OBJECTIVE_EVENT_TYPE_CANCELLED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_SPAWNED' | 'OBJECTIVE_EVENT_TYPE_SUB_AGENT_UPDATED' | 'OBJECTIVE_EVENT_TYPE_FINALIZED' | 'OBJECTIVE_EVENT_TYPE_NOTICE' | 'OBJECTIVE_EVENT_TYPE_TIMED_OUT' | 'OBJECTIVE_EVENT_TYPE_REASONING' | 'OBJECTIVE_EVENT_TYPE_STATE_CHANGED' | 'OBJECTIVE_EVENT_TYPE_HEARTBEAT' | 'OBJECTIVE_EVENT_TYPE_INTERRUPTED' | 'OBJECTIVE_EVENT_TYPE_ASSISTANT_MESSAGE_DELTA' | 'OBJECTIVE_EVENT_TYPE_REASONING_DELTA';
 export type MemoryServiceListMemoryLayersType = 'MEMORY_LAYER_TYPE_UNSPECIFIED' | 'MEMORY_LAYER_TYPE_EPISODIC' | 'MEMORY_LAYER_TYPE_SKILLS';
 export type ModelServiceListModelsState = 'STATE_UNSPECIFIED' | 'STATE_ENABLED' | 'STATE_DISABLED';
 export type ObjectiveServiceListObjectivesState = 'OBJECTIVE_STATE_UNSPECIFIED' | 'OBJECTIVE_STATE_PENDING' | 'OBJECTIVE_STATE_RUNNING' | 'OBJECTIVE_STATE_WAITING' | 'OBJECTIVE_STATE_FAILED' | 'OBJECTIVE_STATE_CANCELLED' | 'OBJECTIVE_STATE_FINALIZED' | 'OBJECTIVE_STATE_TIMED_OUT' | 'OBJECTIVE_STATE_INTERRUPTING';

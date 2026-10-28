@@ -1,7 +1,7 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { Stream } from '../core/sse.js';
-import type { AgentVariationSpec_CompactionConfig, ContinueObjectiveResponse, CreateAndStreamObjectiveRequest_Metadata, CreateAndStreamObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveQueuedAction, ObjectiveServiceListObjectiveQueuedActionsState, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
+import type { AgentVariationSpec_CompactionConfig, ClientTools, ContinueObjectiveResponse, CreateAndStreamObjectiveRequest_Metadata, CreateAndStreamObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveQueuedAction, ObjectiveServiceListObjectiveQueuedActionsState, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
 export interface ObjectiveListParams {
     /**
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
@@ -147,6 +147,14 @@ export interface ObjectiveCreateParams {
      *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
+    /**
+     * Tools the caller defines and executes for this objective. Each
+     *  definition is upserted into the agent's client tools tool set, and only
+     *  the definitions listed here are loaded into this objective, always in
+     *  its context window. A client tool replaces a variation tool with the
+     *  same function name.
+     */
+    clientTools?: ClientTools;
 }
 export interface ObjectiveRetrieveParams {
     /**
@@ -198,7 +206,7 @@ export interface ObjectiveListEventsParams {
      */
     cursor?: string;
     /**
-     * Sort order for results (asc or desc by creation time)
+     * Sort order for results (asc or desc by event sequence)
      */
     sortOrder?: string;
     /**
@@ -210,7 +218,8 @@ export interface ObjectiveListEventsParams {
      */
     windowId?: string;
     /**
-     * Optional string to fetch events since an ID
+     * Optional event ID to list from. Returns the events after it in
+     *  sequence order (before it when sort_order is desc).
      */
     sinceEventId?: string;
     /**
@@ -225,6 +234,12 @@ export interface ObjectiveStreamEventsParams {
      * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
      */
     workspaceId?: string;
+    /**
+     * Also stream transient assistantMessageDelta and reasoningDelta events:
+     *  text fragments as the model generates them, ahead of the durable
+     *  assistantMessage and reasoning events. Off by default.
+     */
+    includeDeltas?: boolean;
 }
 export interface ObjectiveListFeedbackParams {
     /**
@@ -492,6 +507,21 @@ export interface ObjectiveCreateAndStreamParams {
      *  named parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
+    /**
+     * Tools the caller defines and executes for this objective. Each
+     *  definition is upserted into the agent's client tools tool set, and only
+     *  the definitions listed here are loaded into this objective, always in
+     *  its context window. A client tool replaces a variation tool with the
+     *  same function name.
+     */
+    clientTools?: ClientTools;
+    /**
+     * Also stream transient assistantMessageDelta and reasoningDelta events:
+     *  text fragments as the model generates them, ahead of the durable
+     *  assistantMessage and reasoning events. Off by default. Applies only to
+     *  the stream, so Create objective has no equivalent field.
+     */
+    includeDeltas?: boolean;
 }
 export declare class Objectives {
     private readonly _client;
