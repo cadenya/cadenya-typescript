@@ -40,7 +40,7 @@ export class Objectives {
             const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
             if (workspaceId === undefined)
                 throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters } };
+            return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools } };
         }, options);
     }
     /**
@@ -128,7 +128,7 @@ export class Objectives {
         const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
         if (workspaceId === undefined)
             throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-        const _spec = { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/events:stream`, stream: true };
+        const _spec = { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/events:stream`, query: { includeDeltas: params?.includeDeltas }, stream: true };
         const response = await this._client.rawRequest(_spec, options);
         return new Stream(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
     }
@@ -383,7 +383,7 @@ export class Objectives {
         const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
         if (workspaceId === undefined)
             throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-        const _spec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters }, stream: true };
+        const _spec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools, includeDeltas: params.includeDeltas }, stream: true };
         const response = await this._client.rawRequest(_spec, options);
         return new Stream(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
     }

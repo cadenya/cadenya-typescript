@@ -3,7 +3,7 @@
 import { HttpClient, RequestOptions, RequestSpec, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
 import { Stream } from '../core/sse.js';
-import type { AgentVariationSpec_CompactionConfig, ContinueObjectiveResponse, CreateAndStreamObjectiveRequest_Metadata, CreateAndStreamObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveQueuedActionsResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveQueuedAction, ObjectiveServiceListObjectiveQueuedActionsState, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
+import type { AgentVariationSpec_CompactionConfig, ClientTools, ContinueObjectiveResponse, CreateAndStreamObjectiveRequest_Metadata, CreateAndStreamObjectiveResponse, CreateObjectiveRequest_Secret, CreateOperationMetadata, GetObjectiveDiagnosticsResponse, ListObjectiveContextWindowsResponse, ListObjectiveEventsResponse, ListObjectiveFeedbackResponse, ListObjectiveQueuedActionsResponse, ListObjectiveToolCallsResponse, ListObjectiveToolsResponse, ListObjectivesResponse, MemoryReference, Objective, ObjectiveContextWindow, ObjectiveEpisodicConfigParam, ObjectiveEvent, ObjectiveFeedback, ObjectiveFeedbackData, ObjectiveQueuedAction, ObjectiveServiceListObjectiveQueuedActionsState, ObjectiveServiceListObjectiveToolCallsExecutionStatus, ObjectiveServiceListObjectiveToolCallsStatus, ObjectiveServiceListObjectivesState, ObjectiveTool, ObjectiveToolCall, ObjectiveToolCallWithResult, SetToolCallContentRequest_ContentBlock, SubjectAssertion, TenantAssertion } from '../types.js';
 import { wireObjectiveEpisodicConfig } from '../types.js';
 
 export interface ObjectiveListParams {
@@ -152,6 +152,14 @@ export interface ObjectiveCreateParams {
    *  named parameters, or a subset of tools.
    */
   pinnedParameters?: Record<string, string>;
+  /**
+   * Tools the caller defines and executes for this objective. Each
+   *  definition is upserted into the agent's client tools tool set, and only
+   *  the definitions listed here are loaded into this objective, always in
+   *  its context window. A client tool replaces a variation tool with the
+   *  same function name.
+   */
+  clientTools?: ClientTools;
 }
 
 export interface ObjectiveRetrieveParams {
@@ -207,7 +215,7 @@ export interface ObjectiveListEventsParams {
    */
   cursor?: string;
   /**
-   * Sort order for results (asc or desc by creation time)
+   * Sort order for results (asc or desc by event sequence)
    */
   sortOrder?: string;
   /**
@@ -219,7 +227,8 @@ export interface ObjectiveListEventsParams {
    */
   windowId?: string;
   /**
-   * Optional string to fetch events since an ID
+   * Optional event ID to list from. Returns the events after it in
+   *  sequence order (before it when sort_order is desc).
    */
   sinceEventId?: string;
   /**
@@ -235,6 +244,12 @@ export interface ObjectiveStreamEventsParams {
    * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
    */
   workspaceId?: string;
+  /**
+   * Also stream transient assistantMessageDelta and reasoningDelta events:
+   *  text fragments as the model generates them, ahead of the durable
+   *  assistantMessage and reasoning events. Off by default.
+   */
+  includeDeltas?: boolean;
 }
 
 export interface ObjectiveListFeedbackParams {
@@ -517,6 +532,21 @@ export interface ObjectiveCreateAndStreamParams {
    *  named parameters, or a subset of tools.
    */
   pinnedParameters?: Record<string, string>;
+  /**
+   * Tools the caller defines and executes for this objective. Each
+   *  definition is upserted into the agent's client tools tool set, and only
+   *  the definitions listed here are loaded into this objective, always in
+   *  its context window. A client tool replaces a variation tool with the
+   *  same function name.
+   */
+  clientTools?: ClientTools;
+  /**
+   * Also stream transient assistantMessageDelta and reasoningDelta events:
+   *  text fragments as the model generates them, ahead of the durable
+   *  assistantMessage and reasoning events. Off by default. Applies only to
+   *  the stream, so Create objective has no equivalent field.
+   */
+  includeDeltas?: boolean;
 }
 
 export class Objectives {
@@ -553,7 +583,7 @@ export class Objectives {
     return this._client.requestAPI<Objective>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools } };
     }, options);
   }
 
@@ -641,7 +671,7 @@ export class Objectives {
   async streamEvents(objectiveId: string, params?: ObjectiveStreamEventsParams, options?: RequestOptions): Promise<Stream<ObjectiveEvent>> {
     const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
     if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-    const _spec: RequestSpec = { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/events:stream`, stream: true };
+    const _spec: RequestSpec = { method: 'GET', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives/${pathSegment('objectiveId', objectiveId)}/events:stream`, query: { includeDeltas: params?.includeDeltas }, stream: true };
     const response = await this._client.rawRequest(_spec, options);
     return new Stream<ObjectiveEvent>(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
   }
@@ -896,7 +926,7 @@ export class Objectives {
   async createAndStream(params: ObjectiveCreateAndStreamParams, options?: RequestOptions): Promise<Stream<CreateAndStreamObjectiveResponse>> {
     const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
     if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-    const _spec: RequestSpec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters }, stream: true };
+    const _spec: RequestSpec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools, includeDeltas: params.includeDeltas }, stream: true };
     const response = await this._client.rawRequest(_spec, options);
     return new Stream<CreateAndStreamObjectiveResponse>(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
   }
