@@ -1,6 +1,6 @@
-import { HttpClient, RequestOptions } from '../core/http.js';
+import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
-import type { Workspace } from '../types.js';
+import type { TemporaryWorkspace, Workspace } from '../types.js';
 export interface WorkspaceListParams {
     /**
      * Maximum number of results to return
@@ -40,5 +40,14 @@ export declare class Workspaces {
      * ```
      */
     list(params?: WorkspaceListParams, options?: RequestOptions): Promise<Page<Workspace>>;
+    /**
+     * Get temporary workspace claim status
+     *
+     * @example
+     * ```ts
+     * const temporaryWorkspace = await client.workspaces.retrieveTemporary('workspace_123');
+     * ```
+     */
+    retrieveTemporary(workspaceId: string, options?: RequestOptions): APIPromise<TemporaryWorkspace>;
 }
 //# sourceMappingURL=workspaces.d.ts.map
