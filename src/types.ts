@@ -111,7 +111,7 @@ export interface AIProviderKeyInfo {
 /**
  * The AI provider this key authenticates against.
  */
-export type AiProviderKeySpecProvider = 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER' | 'AI_PROVIDER_OPENAI' | 'AI_PROVIDER_ANTHROPIC' | 'AI_PROVIDER_GEMINI' | 'AI_PROVIDER_OPENAI_COMPATIBLE' | 'AI_PROVIDER_VERTEX' | 'AI_PROVIDER_BEDROCK';
+export type AiProviderKeySpecProvider = 'AI_PROVIDER_UNSPECIFIED' | 'AI_PROVIDER_OPENROUTER' | 'AI_PROVIDER_OPENAI' | 'AI_PROVIDER_ANTHROPIC' | 'AI_PROVIDER_GEMINI' | 'AI_PROVIDER_OPENAI_COMPATIBLE' | 'AI_PROVIDER_VERTEX' | 'AI_PROVIDER_BEDROCK' | 'AI_PROVIDER_DEMO';
 
 export interface AIProviderKeySpec {
   /**
@@ -709,8 +709,9 @@ export interface AgentSpec {
    *  Each new objective slides the layer's expiry forward by this duration, and
    *  stored entries expire this long after they are written.
    *  If not set, episodic memories are retained indefinitely.
+   *  A duration string in seconds, such as "604800s".
    */
-  episodicMemoryTtl?: number;
+  episodicMemoryTtl?: string;
   /**
    * Always load the asserted subject's memories. Requires
    *  enable_episodic_memory. When an objective asserts a subject:
@@ -4471,6 +4472,41 @@ export interface SyncStarted {
 }
 
 /**
+ * Claim state. PENDING while the claimant's account is set up, then
+ *  CLAIMED.
+ */
+export type TemporaryWorkspaceState = 'STATE_UNSPECIFIED' | 'STATE_UNCLAIMED' | 'STATE_PENDING' | 'STATE_CLAIMED' | 'STATE_EXPIRED';
+
+/**
+ * TemporaryWorkspace is the claim status of a workspace created without an
+ *  account. A temporary workspace is permanently deleted at expires_at unless
+ *  a person claims it first.
+ */
+export interface TemporaryWorkspace {
+  /**
+   * The temporary workspace.
+   */
+  workspaceId: string;
+  /**
+   * Claim state. PENDING while the claimant's account is set up, then
+   *  CLAIMED.
+   */
+  state: TemporaryWorkspaceState;
+  /**
+   * When the workspace is deleted unless claimed. Unset once claimed.
+   */
+  expiresAt?: string;
+  /**
+   * When the claim was made. Set while PENDING and once CLAIMED.
+   */
+  claimedAt?: string;
+  /**
+   * How long clients waiting for a claim should wait between polls.
+   */
+  pollInterval: string;
+}
+
+/**
  * The current lifecycle state of the tenant. Output only.
  */
 export type TenantState = 'STATE_UNSPECIFIED' | 'STATE_ACTIVE' | 'STATE_ERASING';
@@ -5034,8 +5070,9 @@ export interface ToolSetAdapter_Bare {
   /**
    * How long to wait for content to be set before the tool call errors.
    *  If unset, the call waits indefinitely.
+   *  A duration string in seconds, such as "3600s".
    */
-  contentTimeout?: number;
+  contentTimeout?: string;
 }
 
 export interface ToolSetAdapter_HTTP {
@@ -6237,6 +6274,11 @@ export interface Workspace {
    * The workspace information
    */
   info?: WorkspaceInfo;
+  /**
+   * When a temporary workspace is permanently deleted unless claimed. Unset
+   *  for every other workspace, and once a temporary workspace is claimed.
+   */
+  expiresAt?: string;
 }
 
 /**

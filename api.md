@@ -171,6 +171,11 @@ List workspaces
 ```ts
 client.workspaces.list(params?: WorkspaceListParams, options?: RequestOptions): Promise<Page<Workspace>>
 ```
+Get temporary workspace claim status
+
+```ts
+client.workspaces.retrieveTemporary(workspaceId: string, options?: RequestOptions): APIPromise<TemporaryWorkspace>
+```
 
 ## agentPools
 
