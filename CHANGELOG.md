@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://github.com/cadenya/cadenya-typescript/compare/v1.9.0...v1.10.0) (2026-11-23)
+
+
+### Features
+
+* temporary workspace claim status, duration fields typed as strings ([#190](https://github.com/cadenya/cadenya-typescript/issues/190)) ([24eca35](https://github.com/cadenya/cadenya-typescript/commit/24eca35d983fc7c7b4788924b26f6fa293d87f6a))
+* tool set rules, tool set sync, and iteration ids on objective events ([#189](https://github.com/cadenya/cadenya-typescript/issues/189)) ([73c0571](https://github.com/cadenya/cadenya-typescript/commit/73c057112fcbeba2138c2c4c560c10e1601032be))
+
 ## [1.9.0](https://github.com/cadenya/cadenya-typescript/compare/v1.8.0...v1.9.0) (2026-10-28)
 
 
