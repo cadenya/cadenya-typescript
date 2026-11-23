@@ -2,6 +2,7 @@
 
 import { HttpClient, RequestOptions, APIPromise, pathSegment, snapshotParams } from '../core/http.js';
 import { Page } from '../core/pagination.js';
+import { ToolSetRules } from './tool-set-rules.js';
 import { ToolSetSecrets } from './tool-set-secrets.js';
 import { Tools } from './tools.js';
 import type { CreateResourceMetadata, GetToolSetOpenAPISpecResponse, ListToolSetEventsResponse, ListToolSetUsageResponse, ListToolSetsResponse, ToolServiceListToolSetsState, ToolSet, ToolSetEvent, ToolSetSpec, ToolSetUsage, UpdateResourceMetadata } from '../types.js';
@@ -100,6 +101,15 @@ export interface ToolSetArchiveParams {
   workspaceId?: string;
 }
 
+export interface ToolSetSyncParams {
+  /**
+   * Workspace ID.
+   * 
+   * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+   */
+  workspaceId?: string;
+}
+
 export interface ToolSetUnarchiveParams {
   /**
    * Workspace ID.
@@ -177,9 +187,11 @@ export interface ToolSetListUsageParams {
 }
 
 export class ToolSets {
+  readonly rules: ToolSetRules;
   readonly secrets: ToolSetSecrets;
   readonly tools: Tools;
   constructor(private readonly _client: HttpClient) {
+    this.rules = new ToolSetRules(_client);
     this.secrets = new ToolSetSecrets(_client);
     this.tools = new Tools(_client);
   }
@@ -280,6 +292,22 @@ export class ToolSets {
       const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
       return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('id', id)}:archive` };
+    }, options);
+  }
+
+  /**
+   * Sync a tool set
+   * 
+   * @example
+   * ```ts
+   * await client.toolSets.sync('_123');
+   * ```
+   */
+  sync(id: string, params?: ToolSetSyncParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.requestAPI<void>(() => {
+      const workspaceId = String(params?.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
+      if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/tool_sets/${pathSegment('id', id)}:sync`, void: true };
     }, options);
   }
 

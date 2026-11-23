@@ -142,9 +142,9 @@ export interface ObjectiveCreateParams {
      *  is removed from the tool schema the LLM sees, and its value is always
      *  overwritten server-side with the pinned value — the model cannot choose
      *  a different value for it. By default a pinned key applies to every tool
-     *  with a top-level parameter of the same name; a tool set's overlays
-     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-     *  named parameters, or a subset of tools.
+     *  with a top-level parameter of the same name; a tool set's rules
+     *  (ToolRule) can bind pinned keys to nested paths, differently named
+     *  parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
     /**
@@ -155,6 +155,14 @@ export interface ObjectiveCreateParams {
      *  same function name.
      */
     clientTools?: ClientTools;
+    /**
+     * Replaces the selected variation's system_prompt_template for this
+     *  objective only. Rendered as Liquid with system_prompt_data (for example,
+     *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+     *  means the variation's template is used. The agent's system_prompt_data_schema
+     *  still applies. Requires the same scope as creating objectives.
+     */
+    systemPrompt?: string;
 }
 export interface ObjectiveRetrieveParams {
     /**
@@ -502,9 +510,9 @@ export interface ObjectiveCreateAndStreamParams {
      *  is removed from the tool schema the LLM sees, and its value is always
      *  overwritten server-side with the pinned value — the model cannot choose
      *  a different value for it. By default a pinned key applies to every tool
-     *  with a top-level parameter of the same name; a tool set's overlays
-     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-     *  named parameters, or a subset of tools.
+     *  with a top-level parameter of the same name; a tool set's rules
+     *  (ToolRule) can bind pinned keys to nested paths, differently named
+     *  parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
     /**
@@ -515,6 +523,14 @@ export interface ObjectiveCreateAndStreamParams {
      *  same function name.
      */
     clientTools?: ClientTools;
+    /**
+     * Replaces the selected variation's system_prompt_template for this
+     *  objective only. Rendered as Liquid with system_prompt_data (for example,
+     *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+     *  means the variation's template is used. The agent's system_prompt_data_schema
+     *  still applies. Requires the same scope as creating objectives.
+     */
+    systemPrompt?: string;
     /**
      * Also stream transient assistantMessageDelta and reasoningDelta events:
      *  text fragments as the model generates them, ahead of the durable

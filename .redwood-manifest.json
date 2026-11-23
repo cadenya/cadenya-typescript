@@ -23,6 +23,7 @@
   "src/resources/profiles.ts",
   "src/resources/tenants.ts",
   "src/resources/tool-search.ts",
+  "src/resources/tool-set-rules.ts",
   "src/resources/tool-set-secrets.ts",
   "src/resources/tool-sets.ts",
   "src/resources/tools.ts",

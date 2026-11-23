@@ -147,9 +147,9 @@ export interface ObjectiveCreateParams {
    *  is removed from the tool schema the LLM sees, and its value is always
    *  overwritten server-side with the pinned value — the model cannot choose
    *  a different value for it. By default a pinned key applies to every tool
-   *  with a top-level parameter of the same name; a tool set's overlays
-   *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-   *  named parameters, or a subset of tools.
+   *  with a top-level parameter of the same name; a tool set's rules
+   *  (ToolRule) can bind pinned keys to nested paths, differently named
+   *  parameters, or a subset of tools.
    */
   pinnedParameters?: Record<string, string>;
   /**
@@ -160,6 +160,14 @@ export interface ObjectiveCreateParams {
    *  same function name.
    */
   clientTools?: ClientTools;
+  /**
+   * Replaces the selected variation's system_prompt_template for this
+   *  objective only. Rendered as Liquid with system_prompt_data (for example,
+   *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+   *  means the variation's template is used. The agent's system_prompt_data_schema
+   *  still applies. Requires the same scope as creating objectives.
+   */
+  systemPrompt?: string;
 }
 
 export interface ObjectiveRetrieveParams {
@@ -527,9 +535,9 @@ export interface ObjectiveCreateAndStreamParams {
    *  is removed from the tool schema the LLM sees, and its value is always
    *  overwritten server-side with the pinned value — the model cannot choose
    *  a different value for it. By default a pinned key applies to every tool
-   *  with a top-level parameter of the same name; a tool set's overlays
-   *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-   *  named parameters, or a subset of tools.
+   *  with a top-level parameter of the same name; a tool set's rules
+   *  (ToolRule) can bind pinned keys to nested paths, differently named
+   *  parameters, or a subset of tools.
    */
   pinnedParameters?: Record<string, string>;
   /**
@@ -540,6 +548,14 @@ export interface ObjectiveCreateAndStreamParams {
    *  same function name.
    */
   clientTools?: ClientTools;
+  /**
+   * Replaces the selected variation's system_prompt_template for this
+   *  objective only. Rendered as Liquid with system_prompt_data (for example,
+   *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+   *  means the variation's template is used. The agent's system_prompt_data_schema
+   *  still applies. Requires the same scope as creating objectives.
+   */
+  systemPrompt?: string;
   /**
    * Also stream transient assistantMessageDelta and reasoningDelta events:
    *  text fragments as the model generates them, ahead of the durable
@@ -583,7 +599,7 @@ export class Objectives {
     return this._client.requestAPI<Objective>(() => {
       const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
       if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools } };
+      return { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools, systemPrompt: params.systemPrompt } };
     }, options);
   }
 
@@ -926,7 +942,7 @@ export class Objectives {
   async createAndStream(params: ObjectiveCreateAndStreamParams, options?: RequestOptions): Promise<Stream<CreateAndStreamObjectiveResponse>> {
     const workspaceId = String(params.workspaceId ?? this._client.defaults['workspaceId'] ?? '').trim() || undefined;
     if (workspaceId === undefined) throw new Error("Missing 'workspaceId': pass it in params, set it on the client, or set the CADENYA_WORKSPACE_ID environment variable.");
-    const _spec: RequestSpec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools, includeDeltas: params.includeDeltas }, stream: true };
+    const _spec: RequestSpec = { method: 'POST', path: `/v1/workspaces/${pathSegment('workspaceId', workspaceId)}/objectives:stream`, body: { agentId: params.agentId, variationId: params.variationId, metadata: params.metadata, systemPromptData: params.systemPromptData, firstUserMessage: params.firstUserMessage, secrets: params.secrets, memoryCascade: params.memoryCascade, firstUserMessageData: params.firstUserMessageData, episodicMemory: wireObjectiveEpisodicConfig(params.episodicMemory), tenant: params.tenant, subject: params.subject, pinnedParameters: params.pinnedParameters, clientTools: params.clientTools, systemPrompt: params.systemPrompt, includeDeltas: params.includeDeltas }, stream: true };
     const response = await this._client.rawRequest(_spec, options);
     return new Stream<CreateAndStreamObjectiveResponse>(response, options?.signal, options?.lastEventId, ['ping', 'open'], options?.reconnect === false ? undefined : (lastEventId, signal) => this._client.rawRequest(_spec, { ...options, lastEventId, signal }));
   }

@@ -1,5 +1,6 @@
 import { HttpClient, RequestOptions, APIPromise } from '../core/http.js';
 import { Page } from '../core/pagination.js';
+import { ToolSetRules } from './tool-set-rules.js';
 import { ToolSetSecrets } from './tool-set-secrets.js';
 import { Tools } from './tools.js';
 import type { CreateResourceMetadata, GetToolSetOpenAPISpecResponse, ToolServiceListToolSetsState, ToolSet, ToolSetEvent, ToolSetSpec, ToolSetUsage, UpdateResourceMetadata } from '../types.js';
@@ -91,6 +92,14 @@ export interface ToolSetArchiveParams {
      */
     workspaceId?: string;
 }
+export interface ToolSetSyncParams {
+    /**
+     * Workspace ID.
+     *
+     * Defaults to the client-level `workspaceId` option or the CADENYA_WORKSPACE_ID environment variable.
+     */
+    workspaceId?: string;
+}
 export interface ToolSetUnarchiveParams {
     /**
      * Workspace ID.
@@ -165,6 +174,7 @@ export interface ToolSetListUsageParams {
 }
 export declare class ToolSets {
     private readonly _client;
+    readonly rules: ToolSetRules;
     readonly secrets: ToolSetSecrets;
     readonly tools: Tools;
     constructor(_client: HttpClient);
@@ -225,6 +235,15 @@ export declare class ToolSets {
      * ```
      */
     archive(id: string, params?: ToolSetArchiveParams, options?: RequestOptions): APIPromise<ToolSet>;
+    /**
+     * Sync a tool set
+     *
+     * @example
+     * ```ts
+     * await client.toolSets.sync('_123');
+     * ```
+     */
+    sync(id: string, params?: ToolSetSyncParams, options?: RequestOptions): APIPromise<void>;
     /**
      * Unarchive a tool set
      *
