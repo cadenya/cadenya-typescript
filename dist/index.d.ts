@@ -28,6 +28,7 @@ export * from './resources/objectives.js';
 export * from './resources/tool-search.js';
 export * from './resources/tenants.js';
 export * from './resources/tool-sets.js';
+export * from './resources/tool-set-rules.js';
 export * from './resources/tool-set-secrets.js';
 export * from './resources/tools.js';
 export * from './resources/uploads.js';

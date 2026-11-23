@@ -94,6 +94,8 @@ export function wireToolSpec(value) {
         out["config"] = wireToolSpec_Config(value.config);
     if (value.llmToolName !== undefined)
         out["llmToolName"] = value.llmToolName;
+    if (value.actions !== undefined)
+        out["actions"] = value.actions;
     return out;
 }
 export function wireToolSpec_Config(value) {

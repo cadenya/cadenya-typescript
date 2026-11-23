@@ -677,6 +677,11 @@ Archive a tool set
 ```ts
 client.toolSets.archive(id: string, params?: ToolSetArchiveParams, options?: RequestOptions): APIPromise<ToolSet>
 ```
+Sync a tool set
+
+```ts
+client.toolSets.sync(id: string, params?: ToolSetSyncParams, options?: RequestOptions): APIPromise<void>
+```
 Unarchive a tool set
 
 ```ts
@@ -696,6 +701,34 @@ List tool set usage
 
 ```ts
 client.toolSets.listUsage(toolSetId: string, params?: ToolSetListUsageParams, options?: RequestOptions): Promise<Page<ToolSetUsage>>
+```
+
+## toolSets.rules
+
+List tool set rules
+
+```ts
+client.toolSets.rules.list(toolSetId: string, params?: ToolSetRuleListParams, options?: RequestOptions): APIPromise<ListToolSetRulesResponse>
+```
+Create a tool set rule
+
+```ts
+client.toolSets.rules.create(toolSetId: string, params: ToolSetRuleCreateParams, options?: RequestOptions): APIPromise<ToolRule>
+```
+Get a tool set rule by ID
+
+```ts
+client.toolSets.rules.retrieve(toolSetId: string, id: string, params?: ToolSetRuleRetrieveParams, options?: RequestOptions): APIPromise<ToolRule>
+```
+Delete a tool set rule
+
+```ts
+client.toolSets.rules.delete(toolSetId: string, id: string, params?: ToolSetRuleDeleteParams, options?: RequestOptions): APIPromise<void>
+```
+Update a tool set rule
+
+```ts
+client.toolSets.rules.update(toolSetId: string, id: string, params?: ToolSetRuleUpdateParams, options?: RequestOptions): APIPromise<ToolRule>
 ```
 
 ## toolSets.secrets

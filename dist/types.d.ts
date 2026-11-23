@@ -1615,9 +1615,9 @@ export interface CreateAndStreamObjectiveRequest {
      *  is removed from the tool schema the LLM sees, and its value is always
      *  overwritten server-side with the pinned value — the model cannot choose
      *  a different value for it. By default a pinned key applies to every tool
-     *  with a top-level parameter of the same name; a tool set's overlays
-     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-     *  named parameters, or a subset of tools.
+     *  with a top-level parameter of the same name; a tool set's rules
+     *  (ToolRule) can bind pinned keys to nested paths, differently named
+     *  parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
     /**
@@ -1628,6 +1628,14 @@ export interface CreateAndStreamObjectiveRequest {
      *  same function name.
      */
     clientTools?: ClientTools;
+    /**
+     * Replaces the selected variation's system_prompt_template for this
+     *  objective only. Rendered as Liquid with system_prompt_data (for example,
+     *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+     *  means the variation's template is used. The agent's system_prompt_data_schema
+     *  still applies. Requires the same scope as creating objectives.
+     */
+    systemPrompt?: string;
     /**
      * Also stream transient assistantMessageDelta and reasoningDelta events:
      *  text fragments as the model generates them, ahead of the durable
@@ -1795,9 +1803,9 @@ export interface CreateObjectiveRequest {
      *  is removed from the tool schema the LLM sees, and its value is always
      *  overwritten server-side with the pinned value — the model cannot choose
      *  a different value for it. By default a pinned key applies to every tool
-     *  with a top-level parameter of the same name; a tool set's overlays
-     *  (ToolSetSpec.overlays) can bind pinned keys to nested paths, differently
-     *  named parameters, or a subset of tools.
+     *  with a top-level parameter of the same name; a tool set's rules
+     *  (ToolRule) can bind pinned keys to nested paths, differently named
+     *  parameters, or a subset of tools.
      */
     pinnedParameters?: Record<string, string>;
     /**
@@ -1808,6 +1816,14 @@ export interface CreateObjectiveRequest {
      *  same function name.
      */
     clientTools?: ClientTools;
+    /**
+     * Replaces the selected variation's system_prompt_template for this
+     *  objective only. Rendered as Liquid with system_prompt_data (for example,
+     *  {{ system_prompt_data.role }}), the same way the template is. Omitted
+     *  means the variation's template is used. The agent's system_prompt_data_schema
+     *  still applies. Requires the same scope as creating objectives.
+     */
+    systemPrompt?: string;
 }
 export interface CreateObjectiveRequest_Secret {
     name?: string;
@@ -1875,6 +1891,42 @@ export interface CreateToolSetRequest {
     workspaceId?: string;
     metadata: CreateResourceMetadata;
     spec: ToolSetSpec;
+}
+export interface CreateToolSetRuleRequest {
+    /**
+     * The workspace that owns the tool set.
+     */
+    workspaceId?: string;
+    /**
+     * The tool set that will own this rule. Accepts the canonical id or the
+     *  external_id:<value> form.
+     */
+    toolSetId?: string;
+    /**
+     * A short name for the rule. Unique within the tool set, ignoring case.
+     */
+    name: string;
+    /**
+     * Why the rule exists.
+     */
+    description?: string;
+    /**
+     * CEL expression over `tool`. Empty matches every tool in the set.
+     */
+    when?: string;
+    /**
+     * What the rule does to the tools it applies to.
+     */
+    actions?: ToolActions;
+    /**
+     * Create the rule switched off.
+     */
+    disabled?: boolean;
+    /**
+     * Zero-based place to insert the rule at. Rules at and after it move down
+     *  by one. Omit to append the rule to the end of the list.
+     */
+    position?: number;
 }
 export interface CreateToolSetSecretRequest {
     /**
@@ -2213,6 +2265,14 @@ export interface ListTenantsResponse {
 }
 export interface ListToolSetEventsResponse {
     items: Array<ToolSetEvent>;
+    pagination?: Page;
+}
+/**
+ * A tool set holds a small, capped number of rules, so the list is returned
+ *  whole, in evaluation order.
+ */
+export interface ListToolSetRulesResponse {
+    items: Array<ToolRule>;
     pagination?: Page;
 }
 export interface ListToolSetSecretsResponse {
@@ -2731,7 +2791,8 @@ export interface Objective {
      */
     info?: ObjectiveInfo;
     /**
-     * system_prompt is read-only, derived from the selected variation's prompt
+     * The rendered system prompt snapshotted at creation, from the variation's
+     *  template or the caller's system_prompt override.
      */
     systemPrompt: string;
     /**
@@ -2788,6 +2849,10 @@ export interface Objective {
      *  creation. See CreateObjectiveRequest.pinned_parameters for semantics.
      */
     pinnedParameters: Record<string, string>;
+    /**
+     * Whether the caller replaced the selected variation's system prompt template.
+     */
+    systemPromptOverridden: boolean;
 }
 /**
  * ObjectiveCancelled is the terminal event written when an objective is
@@ -2930,6 +2995,14 @@ export interface ObjectiveEvent {
      *  return events in sequence order. Unset on live-only heartbeats.
      */
     sequence?: number;
+    /**
+     * ID of the agent loop iteration that produced this event. Events that
+     *  share it belong together: an assistant message, its reasoning, and
+     *  every event of the tool calls it requested. Unset on events no
+     *  iteration produced, such as user messages and state changes, and on
+     *  events recorded before this field existed.
+     */
+    iterationId?: string;
 }
 export type ObjectiveEventData = ObjectiveEventData_UserMessage | ObjectiveEventData_ToolApprovalRequested | ObjectiveEventData_ToolApproved | ObjectiveEventData_ToolDenied | ObjectiveEventData_ToolCalled | ObjectiveEventData_Error | ObjectiveEventData_AssistantMessage | ObjectiveEventData_ToolResult | ObjectiveEventData_ToolError | ObjectiveEventData_ContextWindowCompacted | ObjectiveEventData_MemoryRead | ObjectiveEventData_Cancelled | ObjectiveEventData_SubAgentSpawned | ObjectiveEventData_SubAgentUpdated | ObjectiveEventData_Finalized | ObjectiveEventData_Notice | ObjectiveEventData_TimedOut | ObjectiveEventData_Reasoning | ObjectiveEventData_StateChanged | ObjectiveEventData_Heartbeat | ObjectiveEventData_Interrupted | ObjectiveEventData_AssistantMessageDelta | ObjectiveEventData_ReasoningDelta;
 export interface ObjectiveEventInfo {
@@ -3217,8 +3290,8 @@ export interface ObjectiveToolCallInfo {
 export interface ObjectiveToolCallResult {
     /**
      * The result content as recorded — which is what the model was shown.
-     *  When a tool set overlay transformed the result (ToolOverlay
-     *  result_actions), this is the transformed content; the adapter's raw
+     *  When a tool set rule or the tool's own actions transformed the result
+     *  (ToolActions.result_actions), this is the transformed content; the adapter's raw
      *  response is kept in the tool call's debug log, not here.
      */
     content: Array<ObjectiveToolCallResult_ContentBlock>;
@@ -3397,78 +3470,6 @@ export interface OperationMetadata {
  */
 export interface Page {
     nextCursor: string;
-}
-/**
- * Default: ON_MISSING_FAIL.
- */
-export type ParameterActionPinOnMissing = 'ON_MISSING_UNSPECIFIED' | 'ON_MISSING_FAIL' | 'ON_MISSING_SKIP';
-/**
- * Bind the parameter to one of the objective's pinned parameters. It is
- *  deleted from the schema (including any `required` entry), and on every
- *  call the pinned value is written into the arguments, overwriting
- *  anything the model supplied.
- *  This is the authoritative-value action: the model never sees the
- *  parameter and cannot influence it.
- *
- *  `pin` differs from `set` with `{{ pinned_parameters.key }}` only in
- *  how a missing key is handled (see `on_missing`) and in intent —
- *  reading the tool set config, `pin` says "this comes from the caller".
- */
-export interface ParameterAction_Pin {
-    path: string;
-    /**
-     * Key into the objective's pinned_parameters map. Need not equal the
-     *  last segment of `path` — this is how a pinned `orgId` reaches a
-     *  tool whose parameter is named `organizationId`.
-     */
-    pinnedParameter: string;
-    /**
-     * Default: ON_MISSING_FAIL.
-     */
-    onMissing: ParameterActionPinOnMissing;
-}
-/**
- * Remove the parameter entirely. It is deleted from the schema
- *  (including any `required` entry) and stripped from the arguments if
- *  the model supplies it anyway. The tool receives no value for it — the
- *  upstream default, if any, applies. Use this to save context on
- *  parameters the model has no business setting (pagination cursors,
- *  expansion flags, debug toggles).
- */
-export interface ParameterAction_Remove {
-    path: string;
-}
-/**
- * Force the parameter to a value. It is deleted from the schema
- *  (including any `required` entry), and on every call the rendered
- *  value is written into the arguments, overwriting anything the model
- *  supplied.
- *
- *  `value_template` is a Liquid template rendered against the objective:
- *
- *    {{ pinned_parameters.<key> }}  the objective's pinned parameters
- *    {{ objective.id }}             the objective's id
- *    {{ objective.external_id }}    the objective's external id
- *    {{ objective.labels.<key> }}   the objective's labels
- *
- *  Templates render with strict variables: referencing a pinned
- *  parameter or label that does not exist fails the call rather than
- *  rendering an empty value.
- *
- *  Tool set secrets are intentionally not exposed here: overlay-set
- *  values are recorded as tool call arguments in events and tool call
- *  history, and would leak. Use adapter headers for credentials.
- *
- *  The rendered string is coerced to the parameter's declared schema
- *  type: for a non-string parameter (integer, number, boolean, object,
- *  array) the output is parsed as JSON. A value that fails to parse
- *  errors the tool call. Prefer `pin` when the value is simply a pinned
- *  parameter — it fails loudly when the key is absent instead of
- *  rendering an empty string.
- */
-export interface ParameterAction_Set {
-    path: string;
-    valueTemplate: string;
 }
 /**
  * Pause agent schedule request.
@@ -3721,65 +3722,6 @@ export interface RestoreToolRequest {
     id?: string;
 }
 /**
- * Default: ON_ERROR_RAW_CONTENT.
- */
-export type ResultActionTransformOnError = 'ON_ERROR_UNSPECIFIED' | 'ON_ERROR_RAW_CONTENT' | 'ON_ERROR_FAIL';
-/**
- * Replace the result's text content with a rendered Liquid template.
- *  Used to compact verbose responses to the fields the model actually
- *  needs, or to rewrite a JSON response into a smaller JSON document.
- *
- *  `content_template` is rendered against the call:
- *
- *    {{ result.text }}        the result's text content (text blocks
- *                             joined with newlines)
- *    {{ result.json }}        result.text parsed as JSON — objects and
- *                             arrays are navigable (`result.json.items`,
- *                             `| map: "id"`); absent when the text is not
- *                             valid JSON
- *    {{ result.blocks }}      every content block: [{type, text?,
- *                             mime_type?, size_bytes?}]
- *    {{ parameters }}         the arguments the tool was called with,
- *                             after parameter actions were applied
- *    {{ tool.name }}          the tool's metadata.name
- *    {{ tool.llm_tool_name }} the name the model called it by
- *    {{ pinned_parameters }}  the objective's pinned parameters
- *    {{ objective.id }} / {{ objective.external_id }} /
- *    {{ objective.labels.<key> }}
- *
- *  Templates render with strict variables: referencing `result.json` on
- *  a non-JSON result, or any other undefined variable, is a render error
- *  and `on_error` decides the outcome. The `json` filter pretty-prints a
- *  value as JSON; `sanitized_json` emits it compact and escaped for
- *  embedding.
- *
- *  Transforms are text-only. `result.text` and `result.json` are built
- *  from the result's text blocks; media blocks (images, audio) are opaque
- *  to the template and pass through unchanged. The rendered text replaces
- *  the text blocks as a single text block. A result with no text blocks
- *  at all (an image-only or audio-only result) is out of scope: the
- *  transform is skipped, the result is recorded as returned, and the
- *  skip is noted in the tool call's debug log — this is not an `on_error`
- *  case, nothing was attempted. The one exception is `expect_json`, where
- *  a result with no text is a violated precondition and `on_error`
- *  applies.
- */
-export interface ResultAction_Transform {
-    contentTemplate: string;
-    /**
-     * Default: ON_ERROR_RAW_CONTENT.
-     */
-    onError: ResultActionTransformOnError;
-    /**
-     * Require the tool result to have text content that parses as JSON
-     *  before rendering. A non-JSON (or text-less) result is then an error
-     *  subject to `on_error` even if the template never reads
-     *  `result.json`. Off by default: `result.json` is simply absent for
-     *  non-JSON results, and text-less results skip the transform.
-     */
-    expectJson: boolean;
-}
-/**
  * Resume agent schedule request.
  */
 export interface ResumeAgentScheduleRequest {
@@ -3877,21 +3819,6 @@ export interface SearchToolsOrToolSetsResponse {
     agents: Array<Agent>;
 }
 /**
- * A single selector condition.
- */
-export type Selector_Condition = Selector_Condition_Attribute | Selector_Condition_HasParameter | Selector_Condition_Tools;
-/**
- * An explicit list of tools, matched on spec.llm_tool_name — the name
- *  the model calls the tool by. It identifies a tool across versions:
- *  just-in-time MCP sets keep one tool per signature and every version
- *  shares the LLM name, so the condition keeps matching as the source
- *  evolves. Any name in the list matches (OR). Names of tools not (or
- *  not yet) present in the set are allowed and match nothing.
- */
-export interface Selector_ToolNames {
-    names?: Array<string>;
-}
-/**
  * SetToolCallContentRequest lets an external API consumer supply the result
  *  of a bare tool call (one whose tool set has no execution adapter). Used
  *  for human-in-the-loop tools and reverse harnesses that execute tools
@@ -3941,6 +3868,18 @@ export interface SetToolCallContentRequest_ImageBlock {
 }
 export interface SetToolCallContentRequest_TextBlock {
     text: string;
+}
+/**
+ * A rule on the tool's tool set.
+ */
+export interface Source_Rule {
+    id: string;
+    name: string;
+}
+/**
+ * The tool's own `spec.actions`.
+ */
+export interface Source_Tool {
 }
 export type StatusDetails = WidgetSessionErrorInfo | GoogleProtobufAny;
 /**
@@ -4082,6 +4021,15 @@ export interface SyncCompleted {
     message: string;
 }
 /**
+ * Emitted when automatic syncing stops after 24 consecutive failures.
+ */
+export interface SyncDisabled {
+    /**
+     * The last sync error. Trigger a successful sync to resume automatic syncing.
+     */
+    message: string;
+}
+/**
  * Emitted when a tool set sync operation fails.
  */
 export interface SyncFailed {
@@ -4106,6 +4054,20 @@ export interface SyncStarted {
      * Human-readable message describing the start of the sync.
      */
     message: string;
+}
+/**
+ * Queue a sync of an active, syncable tool set.
+ */
+export interface SyncToolSetRequest {
+    /**
+     * Workspace ID.
+     */
+    workspaceId?: string;
+    /**
+     * Tool set ID. Accepts the canonical ts_… form or the
+     *  external_id:<value> form.
+     */
+    id?: string;
 }
 /**
  * Claim state. PENDING while the claimant's account is set up, then
@@ -4260,6 +4222,31 @@ export interface Tool {
      */
     state: ToolState;
 }
+/**
+ * ToolActions is everything a rule can do to the tools it applies to, and
+ *  everything a tool can do to itself through its own `spec.actions`.
+ */
+export interface ToolActions {
+    /**
+     * Pre-call actions, applied in order. A later action on the same parameter
+     *  path wins.
+     */
+    parameterActions?: Array<ToolParameterAction>;
+    /**
+     * Post-call actions, applied in order. Result transforms chain: each one
+     *  reads the previous one's output. Not supported on bare tool sets.
+     */
+    resultActions?: Array<ToolResultAction>;
+    /**
+     * Whether matching tools expose their final call arguments in widget
+     *  events. Unset means no opinion.
+     */
+    widgetArgumentExposure?: ToolWidgetArgumentExposure;
+    /**
+     * Optional automatic approval policy. Unset means no opinion.
+     */
+    autoMode?: AutoModeConfig;
+}
 export interface ToolApprovalRequested {
     /**
      * The ID of the objective tool call record. Use this ID with the ApproveToolCall or DenyToolCall RPCs to approve or deny the tool call.
@@ -4348,7 +4335,7 @@ export interface ToolCalled {
     /**
      * Whether the runtime authorized this call's arguments to be exposed in
      *  public widget events. This records the resolved policy at call time so
-     *  consumers do not need to re-evaluate the tool set's current overlays.
+     *  consumers do not need to re-evaluate the tool set's current rules.
      */
     argumentsExposedInWidgets?: boolean;
     /**
@@ -4377,6 +4364,79 @@ export interface ToolDenied {
      */
     llmToolName: string;
 }
+/**
+ * ToolEffective is what a tool comes to once its tool set's rules and its own
+ *  actions are applied: the schema the model is shown and every action in
+ *  effect, each with where it came from. It is worked out on every read from
+ *  the tool and the tool set's current rules; nothing here is stored on the
+ *  tool. Pin actions are treated as satisfied, since a read has no objective.
+ */
+export interface ToolEffective {
+    /**
+     * The parameter schema the model is shown: the tool's `spec.parameters`
+     *  with the parameters hidden by the actions in effect removed.
+     */
+    parameters?: Record<string, unknown>;
+    /**
+     * The parameter actions in effect, in the order they apply. When several
+     *  rules act on the same parameter path only the winning action is listed:
+     *  the one from the lowest rule, or from the tool itself.
+     */
+    parameterActions: Array<ToolEffective_ParameterAction>;
+    /**
+     * The result actions in effect, in the order they run.
+     */
+    resultActions: Array<ToolEffective_ResultAction>;
+    /**
+     * The automatic approval policy in effect, when one is set.
+     */
+    autoMode?: ToolEffective_AutoMode;
+    /**
+     * The widget argument exposure decision in effect, when one is set.
+     */
+    widgetArgumentExposure?: ToolEffective_WidgetArgumentExposure;
+    /**
+     * Whether a call to this tool is gated, by the tool's own
+     *  `spec.requiresApproval` or by an auto mode policy.
+     */
+    requiresApproval: boolean;
+    /**
+     * Rules that failed to evaluate for this tool.
+     */
+    ruleErrors: Array<ToolEffective_RuleError>;
+}
+export interface ToolEffective_AutoMode {
+    config: AutoModeConfig;
+    source: ToolEffective_Source;
+}
+export interface ToolEffective_ParameterAction {
+    action: ToolParameterAction;
+    source: ToolEffective_Source;
+}
+export interface ToolEffective_ResultAction {
+    action: ToolResultAction;
+    source: ToolEffective_Source;
+}
+/**
+ * A rule whose `when` expression failed to evaluate for this tool.
+ */
+export interface ToolEffective_RuleError {
+    rule: Source_Rule;
+    message: string;
+    /**
+     * True when the rule was applied anyway because it carries an auto mode
+     *  policy: an approval gate fails closed.
+     */
+    applied: boolean;
+}
+/**
+ * Where an action came from.
+ */
+export type ToolEffective_Source = ToolEffective_Source_Rule | ToolEffective_Source_Tool;
+export interface ToolEffective_WidgetArgumentExposure {
+    enabled: boolean;
+    source: ToolEffective_Source;
+}
 export interface ToolError {
     /**
      * The ID of the objective tool call record that encountered an error during execution.
@@ -4401,134 +4461,14 @@ export interface ToolInfo {
      *  sanitized llm_tool_name, description, and canonical parameters. Two tools
      *  with the same llm_tool_name but different parameters or description (as
      *  MCP servers may return per user) have distinct signatures. Computed over
-     *  the raw spec — overlays do not change a tool's signature.
+     *  the raw spec — rules do not change a tool's signature.
      */
     signature: string;
     /**
-     * Keys of the tool set's overlays whose selectors match this tool
-     *  (ToolSetSpec.overlays), in evaluation order. Disabled overlays are
-     *  excluded. An overlay is listed when its selector matches even if none
-     *  of its actions changed this tool's schema (all its paths were absent),
-     *  so this answers "which policies apply to this tool" — diff
-     *  effective_parameters against spec.parameters for "what changed".
-     *  Empty when no overlay applies.
+     * What the tool comes to once its tool set's rules and its own actions are
+     *  applied, with the source of each action. Worked out on every read.
      */
-    overlays?: Array<string>;
-    /**
-     * The parameter schema as presented to the model: spec.parameters after
-     *  every matching overlay's parameter actions have been applied, in order,
-     *  including maintenance of the schema's `required` list. Actions whose
-     *  outcome depends on the objective (pin with ON_MISSING_SKIP) are applied
-     *  as if the pinned key were present, so this reflects the intended steady
-     *  state rather than any one objective. Equals spec.parameters when no
-     *  overlay applies. Result actions have no effect here.
-     */
-    effectiveParameters?: Record<string, unknown>;
-}
-/**
- * A tool overlay is a policy attached to a tool set that reshapes the tools
- *  the model sees and calls. It pairs a selector (which tools it applies to)
- *  with actions that run before a call — rewriting the tool's parameter
- *  schema and the arguments the model supplied — and after a call —
- *  rewriting the result before it enters the model's context. It can also
- *  explicitly allow the final call arguments to cross the otherwise-private
- *  widget API boundary.
- *
- *  Overlays exist for three reasons:
- *
- *    - Authority. Adapter-derived tool sets (OpenAPI especially) expose many
- *      parameters the model must never guess — a workspace id, a tenant id,
- *      an account scope. Overlays bind those parameters to the objective's
- *      `pinned_parameters` (see CreateObjectiveRequest.pinned_parameters):
- *      the parameter disappears from the schema and the value is forced
- *      server-side, so the model has no opportunity to supply a different
- *      one.
- *    - Context. Large specs carry pagination cursors, expansion flags and
- *      verbose responses that cost tokens without helping the model.
- *      Overlays strip parameters, fix them to literals, and compact results.
- *    - Widget presentation. Tool arguments are private by default. An overlay
- *      can opt matching tools into exposing their final call arguments in
- *      visitor-facing widget events so an embedding UI can select a custom
- *      renderer or presentation.
- *
- *  Pinned parameters and overlays are complementary: pinned parameters are
- *  *data* supplied per objective (or per widget session) by the caller;
- *  overlays are *policy* authored once on the tool set. Pinning by name
- *  still works without an overlay — a pinned key that matches a top-level
- *  parameter name is applied to every tool in the objective — overlays are
- *  for the cases that needs more: nested paths, renamed keys, a subset of
- *  tools, or values that are literals rather than caller-supplied.
- *
- *  Evaluation model:
- *
- *    - Overlays are evaluated in list order; within an overlay, actions are
- *      evaluated in list order. Later actions win on the same path (a `set`
- *      followed by a `remove` leaves the parameter removed).
- *    - The parameter schema the model sees is computed when tools are
- *      assembled for an objective, so pre-call actions can consult that
- *      objective's pinned parameters (this is what makes `pin` with
- *      ON_MISSING_SKIP meaningful). Argument rewriting runs on every call.
- *    - An action whose `path` does not exist in the tool's parameter schema
- *      changes nothing in the schema the model sees. This is deliberate: a
- *      broad selector (every `list_*` tool) may match tools with different
- *      shapes, and one overlay should be able to cover all of them without
- *      erroring on the ones that lack a given parameter. At call time the
- *      model's arguments can still not widen what it controls: `remove`
- *      strips the path whether or not it is declared, and `set`/`pin`
- *      overwrite a value the model sent at an undeclared path (a schema this
- *      evaluator cannot see through, e.g. behind $ref/allOf) while injecting
- *      nothing into tools that lack the parameter.
- *    - Overlays apply to just-in-time tool sets as well; the tools are
- *      evaluated against overlays at the moment they are loaded.
- *    - Result actions run once, when the tool call's result is recorded; the
- *      stored result is the transformed one, so every reader (the model,
- *      compaction, the API) sees the same content. They are not supported on
- *      bare tool sets.
- */
-export interface ToolOverlay {
-    /**
-     * Identifies the overlay within its tool set. Unique across the tool
-     *  set's overlays (enforced by the server), stable across reorders, and
-     *  surfaced in tool call messages ("parameter removed by overlay
-     *  strip-list-knobs") so an operator can trace a rewritten call back to
-     *  the policy that rewrote it. Referenced by ToolInfo.overlays and the
-     *  ListToolsRequest.overlays filter.
-     */
-    key: string;
-    /**
-     * Which tools this overlay applies to. Required; an empty selector
-     *  (no conditions) matches every tool in the set.
-     */
-    selector: ToolOverlay_Selector;
-    /**
-     * Pre-call actions, applied in order. See ParameterAction.
-     */
-    parameterActions?: Array<ToolOverlay_ParameterAction>;
-    /**
-     * Post-call actions, applied in order. See ResultAction.
-     */
-    resultActions?: Array<ToolOverlay_ResultAction>;
-    /**
-     * When true the overlay is retained in the spec but not evaluated. Lets an
-     *  operator switch a policy off to diagnose a misbehaving tool without
-     *  deleting it and losing the configuration.
-     */
-    disabled: boolean;
-    /**
-     * Arguments may carry sensitive customer data, including values injected by
-     *  parameter actions, so they stay private unless an overlay enables them.
-     *
-     *  Unset means this overlay has no opinion. When several enabled overlays
-     *  match a tool, they are evaluated in list order and the last overlay that
-     *  supplies this policy wins. If none supplies it, arguments stay private.
-     *  Disabled overlays never participate.
-     */
-    widgetArgumentExposure?: ToolOverlay_WidgetArgumentExposure;
-    /**
-     * Optional automatic approval configuration. Omit to disable auto mode.
-     *  The last enabled, matching overlay that supplies a policy wins.
-     */
-    autoMode?: AutoModeConfig;
+    effective?: ToolEffective;
 }
 /**
  * A pre-call action. Parameter actions rewrite the tool's parameter
@@ -4536,63 +4476,93 @@ export interface ToolOverlay {
  *  when it calls the tool. Both sides are always kept in agreement: a
  *  parameter that is hidden from the schema is also stripped from (or
  *  forced in) the arguments, so the model can neither see nor smuggle it.
- */
-export type ToolOverlay_ParameterAction = ToolOverlay_ParameterAction_Remove | ToolOverlay_ParameterAction_Set | ToolOverlay_ParameterAction_Pin;
-/**
- * A dotted path into a tool's parameter schema. Each segment is a property
- *  name; the path `filter.workspaceId` addresses
- *  `properties.filter.properties.workspaceId` in the schema and
- *  `arguments.filter.workspaceId` in the call. Only object properties are
- *  addressable — there is no array indexing, wildcarding or filtering.
  *
- *  This is deliberately not JSONPath: every action needs a single,
- *  unambiguous location in both the schema and the arguments so that
- *  removing a parameter from the schema and stripping it from the call are
- *  guaranteed to agree.
+ *  Actions are evaluated in order and a later action on the same path wins (a
+ *  `set` followed by a `remove` leaves the parameter removed). An action whose
+ *  `path` does not exist in a tool's parameter schema changes nothing in the
+ *  schema the model sees, so one rule can cover tools of different shapes. At
+ *  call time the model's arguments still cannot widen what it controls:
+ *  `remove` strips the path whether or not it is declared, and `set` and `pin`
+ *  overwrite a value the model sent at an undeclared path while injecting
+ *  nothing into tools that lack the parameter.
+ *
+ *  A path is dotted: each segment is a property name, so `filter.workspaceId`
+ *  addresses `properties.filter.properties.workspaceId` in the schema and
+ *  `arguments.filter.workspaceId` in the call. Only object properties are
+ *  addressable; there is no array indexing, wildcarding or filtering.
  */
-export interface ToolOverlay_ParameterPath {
+export type ToolParameterAction = ToolParameterAction_RemoveVariant | ToolParameterAction_SetVariant | ToolParameterAction_PinVariant;
+/**
+ * Default: ON_MISSING_FAIL.
+ */
+export type ToolParameterActionPinOnMissing = 'ON_MISSING_UNSPECIFIED' | 'ON_MISSING_FAIL' | 'ON_MISSING_SKIP';
+/**
+ * Bind the parameter to one of the objective's pinned parameters. It is
+ *  deleted from the schema (including any `required` entry), and on every
+ *  call the pinned value is written into the arguments, overwriting
+ *  anything the model supplied.
+ *  This is the authoritative-value action: the model never sees the
+ *  parameter and cannot influence it.
+ *
+ *  `pin` differs from `set` with `{{ pinned_parameters.key }}` only in
+ *  how a missing key is handled (see `on_missing`) and in intent —
+ *  reading the tool set config, `pin` says "this comes from the caller".
+ */
+export interface ToolParameterAction_Pin {
+    path: string;
+    /**
+     * Key into the objective's pinned_parameters map. Need not equal the
+     *  last segment of `path` — this is how a pinned `orgId` reaches a
+     *  tool whose parameter is named `organizationId`.
+     */
+    pinnedParameter: string;
+    /**
+     * Default: ON_MISSING_FAIL.
+     */
+    onMissing: ToolParameterActionPinOnMissing;
+}
+/**
+ * Remove the parameter entirely. It is deleted from the schema
+ *  (including any `required` entry) and stripped from the arguments if
+ *  the model supplies it anyway. The tool receives no value for it — the
+ *  upstream default, if any, applies. Use this to save context on
+ *  parameters the model has no business setting (pagination cursors,
+ *  expansion flags, debug toggles).
+ */
+export interface ToolParameterAction_Remove {
     path: string;
 }
 /**
- * A post-call action. Result actions rewrite a tool call's result after
- *  the adapter returns and before it is recorded: the transformed content
- *  is what is stored and what the model reads (ObjectiveToolCallResult
- *  content). The adapter's raw response is kept in the tool call's debug
- *  log for operators; it is not otherwise retained.
+ * Force the parameter to a value. It is deleted from the schema
+ *  (including any `required` entry), and on every call the rendered
+ *  value is written into the arguments, overwriting anything the model
+ *  supplied.
  *
- *  Result actions apply to MCP, OpenAPI and HTTP tool sets. They are not
- *  supported on bare tool sets — a bare tool's content is supplied by an
- *  external consumer, so there is nothing for the platform to reshape —
- *  and a tool set whose adapter is `bare` rejects overlays that carry
- *  result actions.
+ *  `value_template` is a Liquid template rendered against the objective:
  *
- *  When several matching overlays carry transforms they run in overlay
- *  order, each one reading the previous one's output.
+ *    {{ pinned_parameters.<key> }}  the objective's pinned parameters
+ *    {{ objective.id }}             the objective's id
+ *    {{ objective.external_id }}    the objective's external id
+ *    {{ objective.labels.<key> }}   the objective's labels
+ *
+ *  Templates render with strict variables: referencing a pinned
+ *  parameter or label that does not exist fails the call rather than
+ *  rendering an empty value.
+ *
+ *  Tool set secrets are intentionally not exposed here: the values an
+ *  action sets are recorded as tool call arguments in events and tool call
+ *  history, and would leak. Use adapter headers for credentials.
+ *
+ *  The rendered string is coerced to the parameter's declared schema
+ *  type: for a non-string parameter (integer, number, boolean, object,
+ *  array) the output is parsed as JSON. A value that fails to parse
+ *  errors the tool call. Prefer `pin` when the value is simply a pinned
+ *  parameter — it fails loudly when the key is absent instead of
+ *  rendering an empty string.
  */
-export type ToolOverlay_ResultAction = ToolOverlay_ResultAction_Transform;
-/**
- * Default: OPERATOR_AND.
- */
-export type ToolOverlaySelectorOperator = 'OPERATOR_UNSPECIFIED' | 'OPERATOR_AND' | 'OPERATOR_OR';
-/**
- * Which tools in the tool set an overlay applies to. Conditions are
- *  combined with `operator`; an overlay with no conditions matches every
- *  tool in the set.
- */
-export interface ToolOverlay_Selector {
-    conditions?: Array<Selector_Condition>;
-    /**
-     * Default: OPERATOR_AND.
-     */
-    operator: ToolOverlaySelectorOperator;
-}
-/**
- * Controls whether matching tool calls may expose their final arguments to
- *  visitor-facing widget events. The containing message's presence means the
- *  overlay has an opinion; enabled selects whether that opinion is on or off.
- */
-export interface ToolOverlay_WidgetArgumentExposure {
-    enabled: boolean;
+export interface ToolParameterAction_Set {
+    path: string;
+    valueTemplate: string;
 }
 export interface ToolResult {
     toolCallId: string;
@@ -4610,6 +4580,134 @@ export interface ToolResult {
      *  message's toolCalls[].functionName.
      */
     llmToolName: string;
+}
+/**
+ * A post-call action. Result actions rewrite a tool call's result after
+ *  the adapter returns and before it is recorded: the transformed content
+ *  is what is stored and what the model reads (ObjectiveToolCallResult
+ *  content). The adapter's raw response is kept in the tool call's debug
+ *  log for operators; it is not otherwise retained.
+ *
+ *  Result actions apply to MCP, OpenAPI and HTTP tool sets. They are not
+ *  supported on bare tool sets — a bare tool's content is supplied by an
+ *  external consumer, so there is nothing for the platform to reshape —
+ *  and a tool set whose adapter is `bare` rejects rules that carry
+ *  result actions.
+ *
+ *  When several matching rules carry transforms they run in rule order,
+ *  each one reading the previous one's output.
+ */
+export type ToolResultAction = ToolResultAction_TransformVariant;
+/**
+ * Default: ON_ERROR_RAW_CONTENT.
+ */
+export type ToolResultActionTransformOnError = 'ON_ERROR_UNSPECIFIED' | 'ON_ERROR_RAW_CONTENT' | 'ON_ERROR_FAIL';
+/**
+ * Replace the result's text content with a rendered Liquid template.
+ *  Used to compact verbose responses to the fields the model actually
+ *  needs, or to rewrite a JSON response into a smaller JSON document.
+ *
+ *  `content_template` is rendered against the call:
+ *
+ *    {{ result.text }}        the result's text content (text blocks
+ *                             joined with newlines)
+ *    {{ result.json }}        result.text parsed as JSON — objects and
+ *                             arrays are navigable (`result.json.items`,
+ *                             `| map: "id"`); absent when the text is not
+ *                             valid JSON
+ *    {{ result.blocks }}      every content block: [{type, text?,
+ *                             mime_type?, size_bytes?}]
+ *    {{ parameters }}         the arguments the tool was called with,
+ *                             after parameter actions were applied
+ *    {{ tool.name }}          the tool's metadata.name
+ *    {{ tool.llm_tool_name }} the name the model called it by
+ *    {{ pinned_parameters }}  the objective's pinned parameters
+ *    {{ objective.id }} / {{ objective.external_id }} /
+ *    {{ objective.labels.<key> }}
+ *
+ *  Templates render with strict variables: referencing `result.json` on
+ *  a non-JSON result, or any other undefined variable, is a render error
+ *  and `on_error` decides the outcome. The `json` filter pretty-prints a
+ *  value as JSON; `sanitized_json` emits it compact and escaped for
+ *  embedding.
+ *
+ *  Transforms are text-only. `result.text` and `result.json` are built
+ *  from the result's text blocks; media blocks (images, audio) are opaque
+ *  to the template and pass through unchanged. The rendered text replaces
+ *  the text blocks as a single text block. A result with no text blocks
+ *  at all (an image-only or audio-only result) is out of scope: the
+ *  transform is skipped, the result is recorded as returned, and the
+ *  skip is noted in the tool call's debug log — this is not an `on_error`
+ *  case, nothing was attempted. The one exception is `expect_json`, where
+ *  a result with no text is a violated precondition and `on_error`
+ *  applies.
+ */
+export interface ToolResultAction_Transform {
+    contentTemplate: string;
+    /**
+     * Default: ON_ERROR_RAW_CONTENT.
+     */
+    onError: ToolResultActionTransformOnError;
+    /**
+     * Require the tool result to have text content that parses as JSON
+     *  before rendering. A non-JSON (or text-less) result is then an error
+     *  subject to `on_error` even if the template never reads
+     *  `result.json`. Off by default: `result.json` is simply absent for
+     *  non-JSON results, and text-less results skip the transform.
+     */
+    expectJson: boolean;
+}
+/**
+ * ToolRule is a policy on a tool set: a `when` expression that selects tools
+ *  and the actions applied to every tool it selects.
+ *
+ *  A tool set's rules are an ordered list. Every enabled rule whose `when` is
+ *  true for a tool applies to that tool. When two rules disagree about the same
+ *  thing (the same parameter path, the auto mode policy, widget argument
+ *  exposure) the rule lower in the list wins. A match never stops later rules
+ *  from being evaluated. Put broad rules at the top and narrow rules at the
+ *  bottom.
+ */
+export interface ToolRule {
+    /**
+     * The rule's identifier.
+     */
+    id: string;
+    /**
+     * A short name for the rule. Unique within the tool set, compared without
+     *  regard to case, and returned as written.
+     */
+    name: string;
+    /**
+     * Why the rule exists.
+     */
+    description?: string;
+    /**
+     * A CEL expression that selects the tools this rule applies to. It must
+     *  return a boolean and is evaluated against one variable, `tool`. An empty
+     *  expression matches every tool in the set.
+     *
+     *    tool.name.startsWith("list_")
+     *    tool.hasParameter("workspaceId")
+     *    tool.openapi.method == "DELETE"
+     *
+     *  The expression is compiled and type-checked when the rule is saved.
+     */
+    when: string;
+    /**
+     * What the rule does to the tools it applies to.
+     */
+    actions?: ToolActions;
+    /**
+     * When true the rule is kept but not evaluated.
+     */
+    disabled: boolean;
+    /**
+     * Zero-based place of the rule in the tool set's evaluation order.
+     */
+    position: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
 /**
  * The current lifecycle state of the tool set. Output only. Tool sets are
@@ -4759,7 +4857,7 @@ export interface ToolSetEvent {
 /**
  * Event payload for a tool set operation.
  */
-export type ToolSetEventData = ToolSetEventData_SyncStarted | ToolSetEventData_SyncCompleted | ToolSetEventData_SyncFailed;
+export type ToolSetEventData = ToolSetEventData_SyncStarted | ToolSetEventData_SyncCompleted | ToolSetEventData_SyncFailed | ToolSetEventData_SyncDisabled;
 export interface ToolSetEventInfo {
     toolSet?: ResourceMetadata;
     createdBy?: Profile;
@@ -4771,6 +4869,19 @@ export interface ToolSetInfo {
     createdBy?: Profile;
     availableTools: number;
     omittedTools: number;
+    /**
+     * Automatic syncing stopped after 24 consecutive failures. A successful
+     *  manually triggered sync enables it again.
+     */
+    syncDisabled: boolean;
+    /**
+     * Number of consecutive failed syncs. Reset to zero on success.
+     */
+    consecutiveFailureCount: number;
+    /**
+     * The most recent sync failure, cleared on success.
+     */
+    lastSyncError: string;
 }
 export interface ToolSetSecret {
     metadata: ResourceMetadata;
@@ -4790,15 +4901,6 @@ export interface ToolSetSecretSpec {
 export interface ToolSetSpec {
     description?: string;
     adapter: ToolSetAdapter;
-    /**
-     * Overlays applied to this tool set's tools, evaluated in order. See
-     *  ToolOverlay. Overlay keys must be unique within the list.
-     *
-     *  As a repeated field this is replaced wholesale on update: an
-     *  update_mask of `spec.overlays` swaps the entire list for the one in the
-     *  request. Read-modify-write to add or remove a single overlay.
-     */
-    overlays?: Array<ToolOverlay>;
     /**
      * The tool set's secrets, identified by normalized name. Order has no
      *  meaning. Values are write-only; reads return names only.
@@ -4878,6 +4980,14 @@ export interface ToolSpec {
      *  with them, so Cadenya does its best to format names into a usable format.
      */
     llmToolName?: string;
+    /**
+     * The tool's own actions. They apply after every rule on the tool set, so
+     *  they win every conflict; the tool's result transforms run last. Only
+     *  allowed on tools managed through the API: a tool that comes from a sync
+     *  or from just-in-time loading is replaced when its upstream definition
+     *  changes, so use a rule with `tool.name == "..."` for those.
+     */
+    actions?: ToolActions;
 }
 /**
  * Config defines the adapter to use for the tool.
@@ -4886,6 +4996,14 @@ export interface ToolSpec {
  *  If the tool is an inline tool, the adapter will be Inline.
  */
 export type ToolSpec_Config = ToolSpec_Config_Http | ToolSpec_Config_Mcp | ToolSpec_Config_Openapi | ToolSpec_Config_Bare;
+/**
+ * Controls whether matching tool calls may expose their final arguments to
+ *  visitor-facing widget events. The message's presence means its rule or tool
+ *  has an opinion; enabled selects whether that opinion is on or off.
+ */
+export interface ToolWidgetArgumentExposure {
+    enabled: boolean;
+}
 /**
  * A host that tool sets in the account may send requests to.
  *
@@ -5279,6 +5397,36 @@ export interface UpdateToolSetRequest {
     id?: string;
     metadata?: UpdateResourceMetadata;
     spec?: ToolSetSpec;
+    updateMask?: string;
+}
+export interface UpdateToolSetRuleRequest {
+    /**
+     * The workspace that owns the tool set.
+     */
+    workspaceId?: string;
+    /**
+     * The tool set the rule belongs to. Accepts the canonical id or the
+     *  external_id:<value> form.
+     */
+    toolSetId?: string;
+    /**
+     * The rule to update.
+     */
+    id?: string;
+    name?: string;
+    description?: string;
+    when?: string;
+    actions?: ToolActions;
+    disabled?: boolean;
+    /**
+     * Moves the rule to this zero-based place. The rules in between shift by
+     *  one to make room.
+     */
+    position?: number;
+    /**
+     * Fields to update: any of `name`, `description`, `when`, `actions`,
+     *  `disabled` and `position`.
+     */
     updateMask?: string;
 }
 export interface UpdateToolSetSecretRequest {
@@ -5723,8 +5871,8 @@ export interface WidgetSessionSpec {
      *  model cannot be tricked into calling a tool with a different id than the
      *  one the session was minted for (e.g. pin "workspaceId" for an OpenAPI
      *  tool with a /workspaces/{workspaceId} path). Flows to every objective
-     *  the session creates. See ToolSetSpec.overlays for binding pinned keys to
-     *  nested or differently named parameters.
+     *  the session creates. See ToolRule for binding pinned keys to nested or
+     *  differently named parameters.
      */
     pinnedParameters?: Record<string, string>;
 }
@@ -5844,6 +5992,14 @@ export interface ObjectiveEventWebhookDataData {
     agentVariation: ResourceMetadata;
     objective: OperationMetadata;
     objectiveEvent: ObjectiveEvent;
+    /**
+     * The objective that spawned this one as a sub-agent. Absent when the objective was not started by another objective.
+     */
+    parentObjective?: OperationMetadata;
+    /**
+     * The top-level objective this one descends from. Equal to parentObjective for a sub-agent started directly by a top-level objective. Absent when the objective is itself top-level.
+     */
+    rootObjective?: OperationMetadata;
 }
 /**
  * The envelope for an objective event webhook delivery. Contains timestamp, event type, and the webhook data payload.
@@ -5910,6 +6066,10 @@ export interface ToolSetEventData_SyncCompleted {
 export interface ToolSetEventData_SyncFailed {
     type: 'syncFailed';
     syncFailed: SyncFailed;
+}
+export interface ToolSetEventData_SyncDisabled {
+    type: 'syncDisabled';
+    syncDisabled: SyncDisabled;
 }
 export interface ToolSetAdapter_McpVariant {
     type: 'mcp';
@@ -6034,47 +6194,29 @@ export interface ToolSetAdapter_OpenAPI_UploadId {
      */
     serverName?: string;
 }
-export interface Selector_Condition_Attribute {
-    type: 'attribute';
-    /**
-     * Match on a tool attribute (name, title, description,
-     *  llm_tool_name) with a string matcher — the same filter used by
-     *  the adapter's include/exclude lists.
-     */
-    attribute: ToolSetAdapter_AttributeFilter;
-}
-export interface Selector_Condition_HasParameter {
-    type: 'hasParameter';
-    /**
-     * Match tools whose parameter schema contains the given path. This
-     *  is the usual way to target "every tool that takes a workspaceId"
-     *  without enumerating tools by name.
-     */
-    hasParameter: ToolOverlay_ParameterPath;
-}
-export interface Selector_Condition_Tools {
-    type: 'tools';
-    /**
-     * Match specific tools by LLM tool name. The direct way to assign an
-     *  overlay to one tool (or a handful) without writing a matcher.
-     */
-    tools: Selector_ToolNames;
-}
-export interface ToolOverlay_ParameterAction_Remove {
+export interface ToolParameterAction_RemoveVariant {
     type: 'remove';
-    remove: ParameterAction_Remove;
+    remove: ToolParameterAction_Remove;
 }
-export interface ToolOverlay_ParameterAction_Set {
+export interface ToolParameterAction_SetVariant {
     type: 'set';
-    set: ParameterAction_Set;
+    set: ToolParameterAction_Set;
 }
-export interface ToolOverlay_ParameterAction_Pin {
+export interface ToolParameterAction_PinVariant {
     type: 'pin';
-    pin: ParameterAction_Pin;
+    pin: ToolParameterAction_Pin;
 }
-export interface ToolOverlay_ResultAction_Transform {
+export interface ToolResultAction_TransformVariant {
     type: 'transform';
-    transform: ResultAction_Transform;
+    transform: ToolResultAction_Transform;
+}
+export interface ToolEffective_Source_Rule {
+    type: 'rule';
+    rule: Source_Rule;
+}
+export interface ToolEffective_Source_Tool {
+    type: 'tool';
+    tool: Source_Tool;
 }
 export interface ToolSpec_Config_Http {
     type: 'http';
@@ -6666,6 +6808,14 @@ export interface ToolSpecParam {
      *  with them, so Cadenya does its best to format names into a usable format.
      */
     llmToolName?: string;
+    /**
+     * The tool's own actions. They apply after every rule on the tool set, so
+     *  they win every conflict; the tool's result transforms run last. Only
+     *  allowed on tools managed through the API: a tool that comes from a sync
+     *  or from just-in-time loading is replaced when its upstream definition
+     *  changes, so use a rule with `tool.name == "..."` for those.
+     */
+    actions?: ToolActions;
 }
 export type ToolSpec_ConfigParam = ToolSpec_Config_Http | ToolSpec_Config_Mcp | ToolSpec_Config_OpenapiParam | ToolSpec_Config_Bare;
 export interface WidgetSessionSpecParam {
@@ -6701,8 +6851,8 @@ export interface WidgetSessionSpecParam {
      *  model cannot be tricked into calling a tool with a different id than the
      *  one the session was minted for (e.g. pin "workspaceId" for an OpenAPI
      *  tool with a /workspaces/{workspaceId} path). Flows to every objective
-     *  the session creates. See ToolSetSpec.overlays for binding pinned keys to
-     *  nested or differently named parameters.
+     *  the session creates. See ToolRule for binding pinned keys to nested or
+     *  differently named parameters.
      */
     pinnedParameters?: Record<string, string>;
 }
